@@ -12,6 +12,10 @@ const nextConfig: NextConfig = {
         source: "/sitemap.xml",
         destination: `${backendApiUrl}/api/sitemap.xml`,
       },
+      {
+        source: "/sitemaps/:file",
+        destination: `${backendApiUrl}/api/sitemaps/:file`,
+      },
     ];
   },
   images: {
