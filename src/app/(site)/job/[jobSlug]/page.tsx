@@ -23,7 +23,6 @@ export async function generateMetadata({
     return {
       title: "Job Not Found — WorkWay",
       description: "Requested job does not exist.",
-      robots: { index: false, follow: true },
     };
   }
 
