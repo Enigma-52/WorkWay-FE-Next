@@ -11,6 +11,8 @@ export interface JobListing {
   location: string;
   domain: string;
   updated_at: string;
+  /** Skills matched from job description: { name, slug }[] */
+  skills?: { name: string; slug: string }[];
 }
 
 export interface Company {
