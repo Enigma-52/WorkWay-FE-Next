@@ -55,7 +55,7 @@ const Hero = () => {
           {/* CTA */}
           <div className="flex flex-col items-center gap-3 opacity-0 animate-fade-up stagger-3">
             <Button variant="hero" size="xl" asChild>
-              <Link href="/companies">
+              <Link href="/jobs">
                 Enter WorkWay
                 <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
               </Link>

@@ -53,3 +53,17 @@ export function buildItemListJsonLd(domainSlug: string, jobs: JobListing[]) {
   };
 }
 
+export function buildJobsPageItemListJsonLd(jobs: JobListing[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: jobs.slice(0, 20).map((job, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `${SITE_URL}/job/${job.slug}`,
+      name: job.title,
+    })),
+    url: `${SITE_URL}/jobs`,
+  };
+}
+

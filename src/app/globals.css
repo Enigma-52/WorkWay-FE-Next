@@ -233,4 +233,8 @@ code, pre, .font-mono {
   .text-balance {
     text-wrap: balance;
   }
+
+  .bg-gradient-hero {
+    background: var(--gradient-hero);
+  }
 }

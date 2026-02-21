@@ -1,60 +1,124 @@
 import type { Metadata } from "next";
-import { Briefcase, Sparkles } from "lucide-react";
+import { backendGet } from "@/lib/api/server-client";
 import { buildPageMetadata } from "@/lib/seo/metadata";
+import { buildJobsPageItemListJsonLd } from "@/lib/seo/jsonld";
+import type { JobListResponse } from "@/types/jobs";
+import JobsPageClient from "@/components/JobsPage/JobsPageClient";
+import JsonLd from "@/components/seo/JsonLd";
 
-export const metadata: Metadata = buildPageMetadata({
-  title: "Jobs Feed — Discover New Opportunities | WorkWay",
-  description:
-    "Explore a personalized feed of the latest job opportunities across top companies. The WorkWay jobs feed is coming soon.",
-  path: "/jobs",
-});
+type JobsPageProps = {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+};
 
-export default function JobsPage() {
+function getSingleParam(
+  value: string | string[] | undefined,
+  fallback: string
+): string {
+  if (!value) return fallback;
+  return Array.isArray(value) ? value[0] || fallback : value;
+}
+
+function buildListQuery(
+  sp: Record<string, string | string[] | undefined>
+): Record<string, string | number> {
+  const q = getSingleParam(sp.q, "");
+  const page = getSingleParam(sp.page, "1");
+  const limit = getSingleParam(sp.limit, "20");
+  const domain = getSingleParam(sp.domain, "all");
+  const employment_type = getSingleParam(sp.employment_type, "all");
+  const experience_level = getSingleParam(sp.experience_level, "all");
+  const location = getSingleParam(sp.location, "");
+  const company_slug = getSingleParam(sp.company_slug, "");
+  const sort = getSingleParam(sp.sort, "recent");
+
+  const query: Record<string, string | number> = {
+    page: Number(page) || 1,
+    limit: Math.min(50, Math.max(1, Number(limit) || 20)),
+    sort,
+    domain,
+    employment_type,
+    experience_level,
+  };
+  if (q) query.q = q;
+  if (location) query.location = location;
+  if (company_slug) query.company_slug = company_slug;
+  return query;
+}
+
+const EMPTY_LIST_RESPONSE: JobListResponse = {
+  jobs: [],
+  meta: {
+    page: 1,
+    limit: 20,
+    total: 0,
+    total_pages: 0,
+    has_next: false,
+    has_prev: false,
+  },
+  applied_filters: {},
+  facets: {
+    domains: [],
+    employment_types: [],
+    experience_levels: [],
+  },
+};
+
+export async function generateMetadata({
+  searchParams,
+}: JobsPageProps): Promise<Metadata> {
+  const sp = await searchParams;
+  const query = buildListQuery(sp);
+  const data = await backendGet<JobListResponse>("/api/job/list", {
+    query: query as Record<string, string | number>,
+  }).catch(() => null);
+
+  const total = data?.meta?.total ?? 0;
+  const title = "Find Jobs — Search Open Roles | WorkWay";
+  const description =
+    total > 0
+      ? `Search ${total.toLocaleString()} open positions across top companies. Filter by domain, experience, and location. Apply directly on WorkWay.`
+      : "Search and filter thousands of jobs across top companies. Find your next role on WorkWay.";
+
+  const qs = new URLSearchParams();
+  if (query.q) qs.set("q", String(query.q));
+  if (Number(query.page) > 1) qs.set("page", String(query.page));
+  if (query.domain && query.domain !== "all") qs.set("domain", String(query.domain));
+  if (query.employment_type && query.employment_type !== "all")
+    qs.set("employment_type", String(query.employment_type));
+  if (query.experience_level && query.experience_level !== "all")
+    qs.set("experience_level", String(query.experience_level));
+  if (query.location) qs.set("location", String(query.location));
+  const path = qs.toString() ? `/jobs?${qs.toString()}` : "/jobs";
+
+  return buildPageMetadata({
+    title,
+    description,
+    path,
+  });
+}
+
+export default async function JobsPage({ searchParams }: JobsPageProps) {
+  const sp = await searchParams;
+  const query = buildListQuery(sp);
+
+  const data = await backendGet<JobListResponse>("/api/job/list", {
+    query: query as Record<string, string | number>,
+  }).catch(() => EMPTY_LIST_RESPONSE);
+
+  const payload: JobListResponse =
+    data?.jobs && Array.isArray(data.jobs)
+      ? {
+          jobs: data.jobs,
+          meta: data.meta ?? EMPTY_LIST_RESPONSE.meta,
+          applied_filters: data.applied_filters ?? {},
+          facets: data.facets ?? EMPTY_LIST_RESPONSE.facets,
+        }
+      : EMPTY_LIST_RESPONSE;
+
   return (
-    <div className="min-h-screen bg-background">
-      {/* Hero */}
-      <section className="relative overflow-hidden border-b border-border bg-gradient-hero">
-        <div className="absolute left-1/2 top-1/2 h-[400px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/10 blur-[120px] pointer-events-none" />
-
-        <div className="container relative mx-auto py-16 md:py-24">
-          <div className="mx-auto max-w-3xl text-center">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5">
-              <Sparkles className="h-4 w-4 text-primary" />
-              <span className="font-mono text-sm text-primary">
-                WorkWay Jobs Feed
-              </span>
-            </div>
-
-            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4">
-              Your Personalized <span className="text-primary">Jobs Feed</span>
-            </h1>
-
-            <p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground">
-              A smart feed of the latest and most relevant jobs across top
-              companies — tailored for you.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Main */}
-      <main className="container mx-auto py-12">
-        <div className="mx-auto max-w-3xl">
-          <div className="rounded-xl border border-border bg-card/40 p-12 text-center">
-            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-              <Briefcase className="h-8 w-8 text-primary" />
-            </div>
-
-            <h2 className="font-display text-2xl font-semibold mb-3">Coming Soon</h2>
-
-            <p className="mx-auto max-w-md text-muted-foreground">
-              We’re building a personalized jobs feed that learns what you care
-              about and surfaces the best opportunities for you. This will be
-              available shortly.
-            </p>
-          </div>
-        </div>
-      </main>
-    </div>
+    <>
+      <JsonLd data={buildJobsPageItemListJsonLd(payload.jobs)} />
+      <JobsPageClient data={payload} />
+    </>
   );
 }

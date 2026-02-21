@@ -37,3 +37,15 @@ export type DomainJobsResponse = {
 
 export type JobDetailsResponse = Record<string, unknown>;
 export type CompanyDetailsResponse = Record<string, unknown>;
+
+export type JobListQuery = {
+  q?: string;
+  page?: number;
+  limit?: number;
+  sort?: string;
+  domain?: string;
+  employment_type?: string;
+  experience_level?: string;
+  location?: string;
+  company_slug?: string;
+};

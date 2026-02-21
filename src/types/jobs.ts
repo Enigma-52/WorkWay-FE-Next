@@ -37,3 +37,35 @@ export type JobDetails = JobListing & {
   otherJobsByCompany?: JobListing[];
 };
 
+/** Response from GET /api/job/list */
+export type JobListResponse = {
+  jobs: JobListing[];
+  meta: {
+    page: number;
+    limit: number;
+    total: number;
+    total_pages: number;
+    has_next: boolean;
+    has_prev: boolean;
+  };
+  applied_filters: {
+    q?: string;
+    domain?: string;
+    employment_type?: string;
+    experience_level?: string;
+    location?: string;
+    company_slug?: string;
+    sort?: string;
+  };
+  facets: {
+    domains: { slug: string; name: string; count: number }[];
+    employment_types: { value: string; count: number }[];
+    experience_levels: { value: string; count: number }[];
+  };
+};
+
+/** Response from GET /api/job/filters */
+export type JobFiltersResponse = {
+  facets: JobListResponse["facets"];
+};
+

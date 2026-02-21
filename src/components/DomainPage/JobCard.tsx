@@ -10,11 +10,31 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
+const DESCRIPTION_PREVIEW_MAX_CHARS = 160;
+
+function getDescriptionPreview(description: unknown): string | null {
+  if (typeof description === "string" && description.trim()) return description;
+  if (Array.isArray(description) && description.length > 0) {
+    const first = description[0];
+    return typeof first === "string" ? first : null;
+  }
+  return null;
+}
+
+function truncateDescription(text: string, maxChars: number): string {
+  const t = text.trim();
+  if (t.length <= maxChars) return t;
+  return t.slice(0, maxChars).trim().replace(/\s+\S*$/, "") + "…";
+}
+
 interface JobCardProps {
   job: any;
 }
 
 export function JobCard({ job }: JobCardProps) {
+  const descPreview = getDescriptionPreview(job.description);
+  const displayDesc = descPreview ? truncateDescription(descPreview, DESCRIPTION_PREVIEW_MAX_CHARS) : null;
+
   const daysAgo = Math.floor(
     (Date.now() - new Date(job.created_at).getTime()) / (1000 * 60 * 60 * 24),
   );
@@ -46,7 +66,7 @@ export function JobCard({ job }: JobCardProps) {
                 />
               ) : null}
               <Building2
-                className={`h-6 w-6 text-muted-foreground ${job.company_logo ? "hidden" : ""}`}
+                className={`h-6 w-6 text-muted-foreground ${job.company_logo_url ? "hidden" : ""}`}
               />
             </div>
 
@@ -109,9 +129,11 @@ export function JobCard({ job }: JobCardProps) {
         </div>
 
         {/* Description preview */}
-        <p className="mt-4 text-sm text-muted-foreground line-clamp-2">
-          {job.description}
-        </p>
+        {displayDesc ? (
+          <p className="mt-4 text-sm text-muted-foreground line-clamp-2">
+            {displayDesc}
+          </p>
+        ) : null}
       </article>
     </Link>
   );
