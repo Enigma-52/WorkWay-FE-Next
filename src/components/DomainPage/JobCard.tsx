@@ -24,14 +24,34 @@ function getDescriptionPreview(description: unknown): string | null {
 function truncateDescription(text: string, maxChars: number): string {
   const t = text.trim();
   if (t.length <= maxChars) return t;
-  return t.slice(0, maxChars).trim().replace(/\s+\S*$/, "") + "…";
+  return (
+    t
+      .slice(0, maxChars)
+      .trim()
+      .replace(/\s+\S*$/, "") + "…"
+  );
 }
 
 function normalizedSkills(skills: unknown): { name: string; slug: string }[] {
   if (!skills) return [];
-  const raw = typeof skills === "string" ? (() => { try { return JSON.parse(skills); } catch { return []; } })() : skills;
+  const raw =
+    typeof skills === "string"
+      ? (() => {
+          try {
+            return JSON.parse(skills);
+          } catch {
+            return [];
+          }
+        })()
+      : skills;
   if (!Array.isArray(raw)) return [];
-  return raw.filter((s): s is { name: string; slug: string } => s && typeof s === "object" && typeof (s as { name?: string }).name === "string" && typeof (s as { slug?: string }).slug === "string");
+  return raw.filter(
+    (s): s is { name: string; slug: string } =>
+      s &&
+      typeof s === "object" &&
+      typeof (s as { name?: string }).name === "string" &&
+      typeof (s as { slug?: string }).slug === "string",
+  );
 }
 
 interface JobCardProps {
@@ -40,7 +60,9 @@ interface JobCardProps {
 
 export function JobCard({ job }: JobCardProps) {
   const descPreview = getDescriptionPreview(job.description);
-  const displayDesc = descPreview ? truncateDescription(descPreview, DESCRIPTION_PREVIEW_MAX_CHARS) : null;
+  const displayDesc = descPreview
+    ? truncateDescription(descPreview, DESCRIPTION_PREVIEW_MAX_CHARS)
+    : null;
 
   const daysAgo = Math.floor(
     (Date.now() - new Date(job.updated_at).getTime()) / (1000 * 60 * 60 * 24),
@@ -113,11 +135,7 @@ export function JobCard({ job }: JobCardProps) {
 
         <div className="flex items-start shrink-0">
           <Button asChild variant="outline" size="sm" className="group/btn ...">
-            <a
-              href={job.url}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href={job.url} target="_blank" rel="noopener noreferrer">
               Apply
               <ExternalLink className="ml-1.5 h-3.5 w-3.5" />
             </a>
@@ -129,13 +147,12 @@ export function JobCard({ job }: JobCardProps) {
       {skillsList.length > 0 ? (
         <div className="mt-3 flex flex-wrap gap-1.5">
           {skillsList.slice(0, 6).map((s) => (
-            <Link
+            <span
               key={s.slug}
-              href={`/skills/${s.slug}`}
               className="inline-flex items-center rounded-md border border-border bg-muted/60 px-2 py-0.5 text-xs text-muted-foreground hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-colors"
             >
               {s.name}
-            </Link>
+            </span>
           ))}
           {skillsList.length > 6 ? (
             <span className="text-xs text-muted-foreground py-0.5">
