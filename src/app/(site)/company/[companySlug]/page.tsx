@@ -42,6 +42,17 @@ export async function generateMetadata({
     description,
     path: `/company/${companySlug}`,
     image: company.logo_url || "/logo.png",
+    keywords: [
+      company.name,
+      `${company.name} careers`,
+      `${company.name} jobs`,
+      `${company.name} hiring`,
+      `${company.name} job openings`,
+      `${company.name} recruitment`,
+      `${company.name} company profile`,
+      `${company.name} work culture`,
+      `${company.name} open positions`,
+    ],
   });
 }
 
