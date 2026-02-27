@@ -31,6 +31,14 @@ export async function generateMetadata({
     description: `Apply for the ${job.title} role at ${job.company} in ${job.location}. ${job.experience_level} · ${job.employment_type}. View full job details and apply.`,
     path: `/job/${jobSlug}`,
     image: job.company_logo_url || "/logo.png",
+    keywords: [
+        job.title,
+        `${job.title} jobs`,
+        `${job.title} in ${job.location}`,
+        `${job.company} careers`,
+        `${job.company} jobs`,
+        `${job.company} hiring`,
+    ]
   });
 }
 
