@@ -55,7 +55,7 @@ const Navbar = () => {
 
         {/* CTA */}
         <Button size="sm" className="gap-1" asChild>
-          <Link href="/companies">
+          <Link href="/jobs">
             Get Started
             <ArrowRight className="w-4 h-4" />
           </Link>
