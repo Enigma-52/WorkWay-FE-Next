@@ -8,6 +8,7 @@ Next.js App Router SSR frontend for WorkWay, migrated from the legacy React Rout
 - SSR data fetching against WorkWay backend APIs
 - GA4 + Mixpanel analytics
 
+
 ## Local Setup
 ```bash
 npm install
