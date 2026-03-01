@@ -40,6 +40,12 @@ const Navbar = () => {
             Domains
           </a>
           <a
+            href="/skills"
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Skills
+          </a>
+          <a
             href="/hireme"
             className="text-sm text-muted-foreground hover:text-foreground transition-colors"
           >

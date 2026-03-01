@@ -29,6 +29,24 @@ export type DomainListItem = {
   job_count: number;
 };
 
+export type SkillsPageResponse = {
+  stats: {
+    total_skills: number
+    total_jobs: number
+    total_categories: number
+  }
+  categories: {
+    category: string
+    skill_count: number
+  }[]
+  skills: {
+    skill: string
+    slug: string
+    category: string
+    job_count: number
+  }[]
+}
+
 export type DomainJobsResponse = {
   domain: { name: string; slug: string };
   jobs: Array<Record<string, unknown>>;

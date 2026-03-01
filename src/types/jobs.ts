@@ -32,6 +32,12 @@ export type DomainJobsPayload = {
   meta: { page: number; total: number; total_pages: number };
 };
 
+export type SkillJobsPayload = {
+  skill: { name: string; slug: string };
+  jobs: JobListing[];
+  meta: { page: number; total: number; total_pages: number };
+};
+
 export type JobDetails = JobListing & {
   similarJobsByDomain?: JobListing[];
   otherJobsByCompany?: JobListing[];

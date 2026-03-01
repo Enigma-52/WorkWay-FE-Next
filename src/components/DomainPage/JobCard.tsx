@@ -74,7 +74,7 @@ export function JobCard({ job }: JobCardProps) {
 
   return (
     <article className="group relative rounded-lg border border-border bg-card p-6 transition-all duration-300 hover:border-primary/40 hover:glow-subtle animate-fade-in">
-      <div className="absolute inset-0 rounded-lg bg-primary/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+      <div className="pointer-events-none absolute inset-0 rounded-lg bg-primary/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
       <div className="relative flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <Link href={`/job/${job.slug}`} className="flex gap-4 min-w-0 flex-1">
@@ -146,17 +146,18 @@ export function JobCard({ job }: JobCardProps) {
       {/* Skill tags (separate links so no nested anchors) */}
       {skillsList.length > 0 ? (
         <div className="mt-3 flex flex-wrap gap-1.5">
-          {skillsList.slice(0, 6).map((s) => (
-            <span
+          {skillsList.slice(0, 10).map((s) => (
+            <Link
               key={s.slug}
+              href={`/skill/${s.slug}`}
               className="inline-flex items-center rounded-md border border-border bg-muted/60 px-2 py-0.5 text-xs text-muted-foreground hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-colors"
             >
               {s.name}
-            </span>
+            </Link>
           ))}
-          {skillsList.length > 6 ? (
+          {skillsList.length > 10 ? (
             <span className="text-xs text-muted-foreground py-0.5">
-              +{skillsList.length - 6}
+              +{skillsList.length - 10}
             </span>
           ) : null}
         </div>

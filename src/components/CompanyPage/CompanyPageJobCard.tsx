@@ -74,18 +74,18 @@ export function JobCard({ job }: JobCardProps) {
 
       {skillsList.length > 0 ? (
         <div className="mt-2 flex flex-wrap gap-1.5">
-          {skillsList.slice(0, 5).map((s) => (
+          {skillsList.slice(0, 8).map((s) => (
             <Link
               key={s.slug}
-              href={`/skills/${s.slug}`}
+              href={`/skill/${s.slug}`}
               className="inline-flex items-center rounded-md border border-border bg-muted/60 px-2 py-0.5 text-xs text-muted-foreground hover:bg-primary/10 hover:text-primary transition-colors"
             >
               {s.name}
             </Link>
           ))}
-          {skillsList.length > 5 ? (
+          {skillsList.length > 8 ? (
             <span className="text-xs text-muted-foreground py-0.5">
-              +{skillsList.length - 5}
+              +{skillsList.length - 8}
             </span>
           ) : null}
         </div>
