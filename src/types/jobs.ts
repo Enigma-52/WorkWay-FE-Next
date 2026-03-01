@@ -14,6 +14,12 @@ export type JobListing = {
   updated_at?: string;
   created_at?: string;
   url: string;
+  skills : Skill[]
+};
+
+export type Skill = {
+  name: string;
+  slug: string;
 };
 
 export type CompanyDetails = {

@@ -116,6 +116,32 @@ export default function JobPageClient({ job }: Props) {
                   </JobBadge>
                   <JobBadge variant="muted">{job.domain}</JobBadge>
                 </motion.div>
+
+                {job.skills?.length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: 0.25 }}
+                    className="mt-6"
+                  >
+                    <h3 className="mb-3 text-sm font-medium text-muted-foreground">
+                      Skills
+                    </h3>
+
+                    <div className="flex flex-wrap gap-3">
+                      {job.skills.map((skill) => (
+                        <Link key={skill.slug} href={`/skill/${skill.slug}`}>
+                          <JobBadge
+                            variant="default"
+                            className="cursor-pointer hover:bg-primary/10 transition-colors"
+                          >
+                            {skill.name}
+                          </JobBadge>
+                        </Link>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
               </div>
 
               <motion.div
