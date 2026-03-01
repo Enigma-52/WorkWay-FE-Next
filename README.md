@@ -31,5 +31,4 @@ npm run dev
 
 ## Production
 - Primary domain: `https://www.workway.dev`
-- Backend API: `https://workway-be-4w3lv.ondigitalocean.app`
 - Deployed on Vercel
