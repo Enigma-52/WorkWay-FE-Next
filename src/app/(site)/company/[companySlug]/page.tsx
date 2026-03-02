@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import CompanyPageClient from "@/components/dynamic/CompanyPageClient";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
 import { backendGet } from "@/lib/api/server-client";
-import { buildOrganizationJsonLd } from "@/lib/seo/jsonld";
+import {
+  buildOrganizationJsonLd,
+  buildBreadcrumbJsonLd,
+} from "@/lib/seo/jsonld";
+import { buildCompanyDetailBreadcrumb } from "@/lib/seo/breadcrumbs";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import type { CompanyDetails } from "@/types/jobs";
 
@@ -66,9 +71,15 @@ export default async function CompanyPage({ params }: CompanyPageProps) {
     notFound();
   }
 
+  const breadcrumbs = buildCompanyDetailBreadcrumb(company.name);
+
   return (
     <>
       <JsonLd data={buildOrganizationJsonLd(company)} />
+      <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
+      <div className="mx-auto w-full max-w-6xl px-6 pt-10">
+        <Breadcrumbs items={breadcrumbs} />
+      </div>
       <CompanyPageClient company={company} />
     </>
   );

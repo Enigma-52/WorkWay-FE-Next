@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
 import { backendGet } from "@/lib/api/server-client";
 import { buildPageMetadata } from "@/lib/seo/metadata";
-import { buildJobsPageItemListJsonLd } from "@/lib/seo/jsonld";
+import {
+  buildBreadcrumbJsonLd,
+  buildJobsPageItemListJsonLd,
+} from "@/lib/seo/jsonld";
+import { buildJobsBreadcrumb } from "@/lib/seo/breadcrumbs";
 import type { JobListResponse } from "@/types/jobs";
 import JobsPageClient from "@/components/JobsPage/JobsPageClient";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
 
 type JobsPageProps = {
@@ -115,9 +120,15 @@ export default async function JobsPage({ searchParams }: JobsPageProps) {
         }
       : EMPTY_LIST_RESPONSE;
 
+  const breadcrumbs = buildJobsBreadcrumb();
+
   return (
     <>
       <JsonLd data={buildJobsPageItemListJsonLd(payload.jobs)} />
+      <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
+      <div className="mx-auto w-full max-w-6xl px-6 pt-6">
+        <Breadcrumbs items={breadcrumbs} />
+      </div>
       <JobsPageClient data={payload} />
     </>
   );

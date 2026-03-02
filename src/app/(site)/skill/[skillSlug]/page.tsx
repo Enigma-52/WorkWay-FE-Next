@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import SkillPageClient from "@/components/dynamic/SkillPageClient";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
 import { backendGet } from "@/lib/api/server-client";
-import { buildItemListJsonLd } from "@/lib/seo/jsonld";
+import { buildItemListJsonLd, buildBreadcrumbJsonLd } from "@/lib/seo/jsonld";
+import { buildSkillDetailBreadcrumb } from "@/lib/seo/breadcrumbs";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import type { SkillJobsPayload } from "@/types/jobs";
 
@@ -128,9 +130,15 @@ export default async function SkillPage({
     notFound();
   }
 
+  const breadcrumbs = buildSkillDetailBreadcrumb(data.skill.name);
+
   return (
     <>
       <JsonLd data={buildItemListJsonLd(skillSlug, data.jobs)} />
+      <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
+      <div className="mx-auto w-full max-w-6xl px-6 pt-10">
+        <Breadcrumbs items={breadcrumbs} />
+      </div>
       <SkillPageClient data={data} />
     </>
   );

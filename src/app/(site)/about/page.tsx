@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
+import JsonLd from "@/components/seo/JsonLd";
 import { buildPageMetadata } from "@/lib/seo/metadata";
+import { buildAboutBreadcrumb } from "@/lib/seo/breadcrumbs";
+import { buildBreadcrumbJsonLd } from "@/lib/seo/jsonld";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "About WorkWay",
@@ -10,9 +14,15 @@ export const metadata: Metadata = buildPageMetadata({
 });
 
 export default function AboutPage() {
+  const breadcrumbs = buildAboutBreadcrumb();
+
   return (
     <main className="min-h-screen bg-background text-foreground">
       <div className="mx-auto max-w-4xl px-6 py-20">
+        <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
+        <div className="mb-6">
+          <Breadcrumbs items={breadcrumbs} />
+        </div>
         <header className="mb-12">
           <h1 className="mb-4 text-4xl font-bold">About WorkWay</h1>
           <p className="text-lg text-muted-foreground">

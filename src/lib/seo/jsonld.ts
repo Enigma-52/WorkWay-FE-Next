@@ -1,4 +1,6 @@
 import type { CompanyDetails, JobDetails, JobListing } from "@/types/jobs";
+import type { BreadcrumbItem } from "@/lib/seo/breadcrumbs";
+import { getSiteUrl } from "@/lib/seo/metadata";
 
 const SITE_URL = "https://www.workway.dev";
 
@@ -63,7 +65,30 @@ export function buildJobsPageItemListJsonLd(jobs: JobListing[]) {
       url: `${SITE_URL}/job/${job.slug}`,
       name: job.title,
     })),
-    url: `${SITE_URL}/jobs`,
+    url: `${getSiteUrl()}/jobs`,
+  };
+}
+
+export function buildBreadcrumbJsonLd(items: BreadcrumbItem[]) {
+  const siteUrl = getSiteUrl();
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => {
+      const isLast = index === items.length - 1;
+      const hasHref = !!item.href;
+
+      return {
+        "@type": "ListItem",
+        position: index + 1,
+        name: item.name,
+        // For the last item we allow omitting "item" so Google uses the page URL.
+        ...(hasHref && !isLast
+          ? { item: `${siteUrl}${item.href}` }
+          : undefined),
+      };
+    }),
   };
 }
 

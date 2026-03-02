@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import JobPageClient from "@/components/dynamic/JobPageClient";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
 import { backendGet } from "@/lib/api/server-client";
-import { buildJobPostingJsonLd } from "@/lib/seo/jsonld";
+import { buildJobPostingJsonLd, buildBreadcrumbJsonLd } from "@/lib/seo/jsonld";
+import { buildJobDetailBreadcrumb } from "@/lib/seo/breadcrumbs";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import type { JobDetails } from "@/types/jobs";
 
@@ -52,9 +54,17 @@ export default async function JobPage({ params }: JobPageProps) {
     notFound();
   }
 
+  const breadcrumbs = buildJobDetailBreadcrumb(job.title);
+
   return (
     <>
       <JsonLd data={buildJobPostingJsonLd(job)} />
+      <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
+      <div className="flex justify-center bg-background">
+        <div className="w-full max-w-7xl px-4 pt-4 md:px-6 md:pt-6">
+          <Breadcrumbs items={breadcrumbs} />
+        </div>
+      </div>
       <JobPageClient job={job} />
     </>
   );

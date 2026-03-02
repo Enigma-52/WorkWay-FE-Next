@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
 import DomainCard from "@/components/DomainPage/DomainCard";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import { backendGet } from "@/lib/api/server-client";
 import type { DomainListItem } from "@/lib/api/contracts";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import { getDomainIcon } from "@/utils/domainIcons";
+import { buildDomainsBreadcrumb } from "@/lib/seo/breadcrumbs";
+import { buildBreadcrumbJsonLd } from "@/lib/seo/jsonld";
+import JsonLd from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Browse Jobs by Domain | WorkWay",
@@ -15,9 +19,15 @@ export const metadata: Metadata = buildPageMetadata({
 export default async function DomainsPage() {
   const domains = await backendGet<DomainListItem[]>("/api/filter/domain/all");
 
+  const breadcrumbs = buildDomainsBreadcrumb();
+
   return (
     <div className="min-h-screen bg-background">
       <main className="container mx-auto px-4 pb-20 pt-32">
+        <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
+        <div className="mb-6">
+          <Breadcrumbs items={breadcrumbs} />
+        </div>
         <div className="mx-auto mb-16 max-w-3xl text-center">
           <h1 className="mb-6 text-4xl font-bold tracking-tight text-foreground md:text-5xl lg:text-6xl">
             Browse Jobs by <span className="text-primary">Domain</span>

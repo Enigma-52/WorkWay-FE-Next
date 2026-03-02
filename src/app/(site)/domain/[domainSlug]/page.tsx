@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import DomainPageClient from "@/components/dynamic/DomainPageClient";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
 import { backendGet } from "@/lib/api/server-client";
-import { buildItemListJsonLd } from "@/lib/seo/jsonld";
+import { buildItemListJsonLd, buildBreadcrumbJsonLd } from "@/lib/seo/jsonld";
+import { buildDomainDetailBreadcrumb } from "@/lib/seo/breadcrumbs";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import type { DomainJobsPayload } from "@/types/jobs";
 
@@ -107,9 +109,15 @@ export default async function DomainPage({
     notFound();
   }
 
+  const breadcrumbs = buildDomainDetailBreadcrumb(data.domain.name);
+
   return (
     <>
       <JsonLd data={buildItemListJsonLd(domainSlug, data.jobs)} />
+      <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
+      <div className="mx-auto w-full max-w-6xl px-6 pt-10">
+        <Breadcrumbs items={breadcrumbs} />
+      </div>
       <DomainPageClient data={data} />
     </>
   );

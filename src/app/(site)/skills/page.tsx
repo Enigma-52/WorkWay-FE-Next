@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
 import { backendGet } from "@/lib/api/server-client";
 import AllSkillsPageClient from "@/components/dynamic/AllSkillsPageClient";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
+import JsonLd from "@/components/seo/JsonLd";
 import { buildPageMetadata } from "@/lib/seo/metadata";
-import { type  SkillsPageResponse} from "@/lib/api/contracts"
+import { buildSkillsBreadcrumb } from "@/lib/seo/breadcrumbs";
+import { buildBreadcrumbJsonLd } from "@/lib/seo/jsonld";
+import type { SkillsPageResponse } from "@/lib/api/contracts";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Browse Jobs by Skills | WorkWay",
@@ -16,5 +20,15 @@ export default async function SkillsPage() {
     "/api/filter/skills/all"
   );
 
-  return <AllSkillsPageClient data={data} />;
+  const breadcrumbs = buildSkillsBreadcrumb();
+
+  return (
+    <>
+      <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
+      <div className="mx-auto w-full max-w-6xl px-6 pt-10">
+        <Breadcrumbs items={breadcrumbs} />
+      </div>
+      <AllSkillsPageClient data={data} />
+    </>
+  );
 }

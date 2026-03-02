@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import CompaniesPageClient from "@/components/CompaniesPage/CompaniesPageClient";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import { backendGet } from "@/lib/api/server-client";
 import type {
   CompanyListResponse,
   CompanyOverview,
 } from "@/lib/api/contracts";
 import { buildPageMetadata } from "@/lib/seo/metadata";
+import { buildCompaniesBreadcrumb } from "@/lib/seo/breadcrumbs";
+import { buildBreadcrumbJsonLd } from "@/lib/seo/jsonld";
+import JsonLd from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Browse Companies Hiring on WorkWay — Find Top Employers & Open Jobs",
@@ -41,10 +45,15 @@ export default async function CompaniesPage({ searchParams }: CompaniesPageProps
     }),
   ]);
 
+  const breadcrumbs = buildCompaniesBreadcrumb();
+
   return (
-    <CompaniesPageClient
-      overview={overview}
-      list={list}
-    />
+    <>
+      <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
+      <div className="mx-auto w-full max-w-6xl px-6 pt-10">
+        <Breadcrumbs items={breadcrumbs} />
+      </div>
+      <CompaniesPageClient overview={overview} list={list} />
+    </>
   );
 }
