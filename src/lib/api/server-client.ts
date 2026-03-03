@@ -39,6 +39,16 @@ export async function backendGet<T>(
   const cookie = h.get("cookie") || "";
   const auth = h.get("authorization") || "";
 
+  const revalidateOption = options?.revalidate;
+
+  const nextOptions =
+    revalidateOption === false
+      ? undefined
+      : {
+          revalidate: revalidateOption ?? 86400,
+          tags: options?.tags,
+        };
+
   const response = await fetch(url, {
     method: "GET",
     headers: {
@@ -46,11 +56,9 @@ export async function backendGet<T>(
       authorization: auth,
       "x-workway-next-ssr": "1",
     },
-    cache: "no-store",
-    next:
-      options?.revalidate === false
-        ? undefined
-        : { revalidate: options?.revalidate, tags: options?.tags },
+    ...(revalidateOption === false
+      ? { cache: "no-store" as const }
+      : { next: nextOptions }),
   });
 
   const payload = await response.json().catch(() => null);
