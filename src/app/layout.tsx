@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
 import AppProviders from "@/components/providers/AppProviders";
@@ -84,6 +85,7 @@ export default function RootLayout({
             <Footer />
           </div>
         </AppProviders>
+        <Analytics />
       </body>
     </html>
   );
