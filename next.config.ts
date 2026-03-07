@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  output: "standalone",
   async rewrites() {
     const backendApiUrl = process.env.BACKEND_API_URL;
     if (!backendApiUrl) return [];

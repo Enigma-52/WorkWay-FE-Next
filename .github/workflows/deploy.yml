@@ -1,0 +1,32 @@
+name: Build & Push Frontend Image
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Login to GHCR
+        run: echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u Enigma-52 --password-stdin
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            --build-arg BACKEND_API_URL=https://workway.dev \
+            --build-arg NEXT_PUBLIC_SITE_URL=https://workway.dev \
+            -t ghcr.io/enigma-52/workway-frontend:latest .
+
+      - name: Push image
+        run: |
+          docker push ghcr.io/enigma-52/workway-frontend:latest
