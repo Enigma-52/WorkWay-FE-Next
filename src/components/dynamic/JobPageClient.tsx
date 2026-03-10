@@ -10,11 +10,13 @@ import {
   ExternalLink,
   ArrowLeft,
   ArrowRight,
+  Sparkles,
 } from "lucide-react";
 import { useEffect } from "react";
 import JobBadge from "@/components/JobPage/JobBadge";
 import JobSection from "@/components/JobPage/JobSection";
 import JobCard from "@/components/JobPage/JobCard";
+import JobAiChatOverlay from "@/components/JobPage/JobAiChatOverlay";
 import { Button } from "@/components/ui/button";
 import { getDomainSlug } from "@/utils/helper";
 import type { JobDetails } from "@/types/jobs";
@@ -245,7 +247,25 @@ export default function JobPageClient({ job }: Props) {
                   transition={{ duration: 0.4, delay: 0.3 }}
                   className="job-card"
                 >
-                  <h3 className="mb-6 text-lg font-semibold text-foreground">Job Summary</h3>
+                  <div className="mb-6 flex items-center justify-between gap-3">
+                    <h3 className="text-lg font-semibold text-foreground">Job Summary</h3>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        window.dispatchEvent(
+                          new CustomEvent("workway-job-ai-open", {
+                            detail: { jobSlug: job.slug },
+                          })
+                        )
+                      }
+                      className="inline-flex items-center gap-1 rounded-full border border-sky-400/60 bg-sky-500/10 px-2.5 py-1 text-xs font-semibold text-sky-400 transition hover:bg-sky-500/20"
+                      title="Ask AI about this job"
+                      aria-label="Ask AI about this job"
+                    >
+                      <Sparkles className="h-3.5 w-3.5" />
+                      AI
+                    </button>
+                  </div>
 
                   <div className="space-y-4">
                     <div className="flex items-center justify-between border-b border-border pb-4">
@@ -362,7 +382,7 @@ export default function JobPageClient({ job }: Props) {
           </div>
         </section>
       </div>
+      <JobAiChatOverlay job={job} />
     </div>
   );
 }
-
