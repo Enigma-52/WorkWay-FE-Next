@@ -122,3 +122,23 @@ export function buildChatBreadcrumb(): BreadcrumbItem[] {
   ];
 }
 
+export function buildChangelogBreadcrumb(): BreadcrumbItem[] {
+  return [
+    ...buildHomeBreadcrumb(),
+    {
+      name: "Changelog",
+      href: "/changelog",
+    },
+  ];
+}
+
+export function buildFeedbackBreadcrumb(): BreadcrumbItem[] {
+  return [
+    ...buildHomeBreadcrumb(),
+    {
+      name: "Feedback",
+      href: "/feedback",
+    },
+  ];
+}
+

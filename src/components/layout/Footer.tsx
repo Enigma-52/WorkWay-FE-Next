@@ -27,26 +27,38 @@ const Footer = () => {
 
           {/* Links Column */}
           <div className="flex flex-col items-center md:items-center text-center">
-            <h4 className="text-sm font-medium mb-4">Product</h4>
+            <h4 className="mb-4 text-sm font-medium">Product</h4>
 
             <div className="flex flex-col gap-3 text-sm text-muted-foreground">
               <a
                 href="/about"
-                className="hover:text-foreground transition-colors"
+                className="transition-colors hover:text-foreground"
               >
                 About WorkWay
               </a>
               <a
                 href="/domains"
-                className="hover:text-foreground transition-colors"
+                className="transition-colors hover:text-foreground"
               >
                 Browse Domains
               </a>
               <a
                 href="/companies"
-                className="hover:text-foreground transition-colors"
+                className="transition-colors hover:text-foreground"
               >
                 Browse Companies
+              </a>
+              <a
+                href="/changelog"
+                className="transition-colors hover:text-foreground"
+              >
+                Changelog
+              </a>
+              <a
+                href="/feedback"
+                className="transition-colors hover:text-foreground"
+              >
+                Feedback
               </a>
             </div>
           </div>

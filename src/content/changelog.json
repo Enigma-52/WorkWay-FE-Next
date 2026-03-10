@@ -1,0 +1,29 @@
+{
+  "entries": [
+    {
+      "id": "2025-03-initial-migration",
+      "date": "2025-03-01",
+      "title": "Next.js migration & new job feed",
+      "tag": "Major",
+      "icon": "/changelog/rocket.svg",
+      "highlights": [
+        "Migrated the main WorkWay experience to the new Next.js app.",
+        "Introduced the new **Jobs** feed with better filters and faster navigation.",
+        "Improved SEO and structured data for job and company pages."
+      ]
+    },
+    {
+      "id": "2025-03-feedback-launch",
+      "date": "2025-03-10",
+      "title": "Feedback page & changelog",
+      "tag": "Update",
+      "icon": "/changelog/feedback.svg",
+      "highlights": [
+        "Added a dedicated **Feedback** page so you can tell us what to improve.",
+        "Launched this public **Changelog** to track visible product changes.",
+        "You can edit this page by updating `src/content/changelog.json`."
+      ]
+    }
+  ]
+}
+
