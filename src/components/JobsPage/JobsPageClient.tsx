@@ -14,6 +14,7 @@ import { JobPagination } from "@/components/DomainPage/JobPagination";
 import { JobsListFilters } from "./JobsListFilters";
 import { JobsFacetsSidebar } from "./JobsFacetsSidebar";
 import type { JobListResponse } from "@/types/jobs";
+import JobViewFeed from "@/components/JobViewFeed/JobViewFeed";
 
 type Props = {
   data: JobListResponse;
@@ -142,7 +143,7 @@ export default function JobsPageClient({ data }: Props) {
 
       {/* Main content */}
       <main className="container mx-auto py-8 md:py-12">
-        <div className="grid gap-8 lg:grid-cols-[240px_1fr]">
+        <div className="grid gap-8 lg:grid-cols-[240px_minmax(0,1fr)_280px]">
           {/* Sidebar facets - hidden on small screens, show on lg */}
           <div className="hidden lg:block lg:sticky lg:top-24 lg:self-start">
             <JobsFacetsSidebar
@@ -246,6 +247,11 @@ export default function JobsPageClient({ data }: Props) {
                 />
               </div>
             )}
+          </div>
+
+          {/* Live activity feed - right sidebar on large screens */}
+          <div className="hidden lg:block lg:sticky lg:top-24 lg:self-start">
+            <JobViewFeed />
           </div>
         </div>
       </main>

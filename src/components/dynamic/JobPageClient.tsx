@@ -11,18 +11,78 @@ import {
   ArrowLeft,
   ArrowRight,
 } from "lucide-react";
+import { useEffect } from "react";
 import JobBadge from "@/components/JobPage/JobBadge";
 import JobSection from "@/components/JobPage/JobSection";
 import JobCard from "@/components/JobPage/JobCard";
 import { Button } from "@/components/ui/button";
 import { getDomainSlug } from "@/utils/helper";
 import type { JobDetails } from "@/types/jobs";
+import JobViewFeed from "@/components/JobViewFeed/JobViewFeed";
 
 type Props = {
   job: JobDetails;
 };
 
 export default function JobPageClient({ job }: Props) {
+  useEffect(() => {
+    const API_BASE =
+      process.env.NEXT_PUBLIC_BACKEND_API_URL ||
+      process.env.NEXT_PUBLIC_SITE_URL ||
+      "";
+    if (!API_BASE || !job?.slug) return;
+
+    let cancelled = false;
+
+    async function trackView() {
+      try {
+        let country: string | null = null;
+        let city: string | null = null;
+
+        try {
+          const geoRes = await fetch("https://ipapi.co/json/");
+          if (geoRes.ok) {
+            const geo = (await geoRes.json()) as {
+              country_name?: string;
+              city?: string;
+            };
+            country = geo.country_name ?? null;
+            city = geo.city ?? null;
+          }
+        } catch {
+          // ignore geo failures
+        }
+
+        if (cancelled) return;
+
+        const url = new URL("/api/job/view", API_BASE);
+
+        await fetch(url.toString(), {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            jobSlug: job.slug,
+            viewer_country: country,
+            viewer_city: city,
+            source_page: "job",
+          }),
+        }).catch(() => {
+          // ignore tracking failures
+        });
+      } catch {
+        // swallow errors
+      }
+    }
+
+    trackView();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [job?.slug]);
+
   const domainJobs = job.similarJobsByDomain || [];
   const companyJobs = job.otherJobsByCompany || [];
 
@@ -178,7 +238,7 @@ export default function JobPageClient({ job }: Props) {
                 ))}
               </div>
 
-              <div className="lg:sticky lg:top-24 lg:h-fit">
+              <div className="lg:sticky lg:top-24 lg:h-fit space-y-4">
                 <motion.div
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -218,6 +278,14 @@ export default function JobPageClient({ job }: Props) {
                       </Button>
                     </a>
                   </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.4, delay: 0.35 }}
+                >
+                  <JobViewFeed title="Live views on WorkWay" />
                 </motion.div>
               </div>
             </div>
