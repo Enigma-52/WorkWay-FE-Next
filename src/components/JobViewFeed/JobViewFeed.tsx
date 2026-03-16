@@ -42,7 +42,7 @@ function formatTimeAgo(iso: string) {
 
 export default function JobViewFeed({
   title = "Live job views",
-  pollIntervalMs = 10000,
+  pollIntervalMs = 60000,
   limit = 20,
 }: Props) {
   const [events, setEvents] = useState<JobViewEvent[]>([]);
@@ -88,7 +88,7 @@ export default function JobViewFeed({
   }
 
   return (
-    <div className="rounded-xl border border-border bg-card/60 p-4 shadow-sm">
+    <div className="rounded-xl border border-border bg-card/60 p-2 shadow-sm">
       <div className="mb-3 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <Globe2 className="h-4 w-4 text-primary" />

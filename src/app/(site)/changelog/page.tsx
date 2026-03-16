@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
 import { buildPageMetadata } from "@/lib/seo/metadata";
@@ -56,11 +58,7 @@ export default function ChangelogPage() {
           </h1>
           <p className="mt-3 max-w-2xl text-lg text-muted-foreground leading-relaxed">
             A running log of notable changes to WorkWay — features, fixes, and
-            polish. Edit the content in{" "}
-            <code className="rounded border border-border bg-secondary px-1 py-0.5 text-xs">
-              src/content/changelog.json
-            </code>
-            .
+            polish. 
           </p>
         </header>
 
@@ -111,7 +109,26 @@ export default function ChangelogPage() {
                     {entry.highlights && entry.highlights.length > 0 && (
                       <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
                         {entry.highlights.map((line, idx) => (
-                          <li key={idx}>{line}</li>
+                          <li key={idx}>
+                            <ReactMarkdown
+                              remarkPlugins={[remarkGfm]}
+                              components={{
+                                p: ({ children }) => <span>{children}</span>,
+                                strong: ({ children }) => (
+                                  <strong className="font-semibold text-foreground">
+                                    {children}
+                                  </strong>
+                                ),
+                                code: ({ children }) => (
+                                  <code className="rounded border border-border bg-secondary px-1 py-0.5 text-xs font-mono text-foreground">
+                                    {children}
+                                  </code>
+                                ),
+                              }}
+                            >
+                              {line}
+                            </ReactMarkdown>
+                          </li>
                         ))}
                       </ul>
                     )}

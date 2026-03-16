@@ -114,12 +114,12 @@ export default function JobPageClient({ job }: Props) {
                   className="mb-6"
                 >
                   <div className="mb-3 flex items-center gap-3">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-secondary">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-xl">
                       {job.company_logo_url ? (
                         <img
                           src={job.company_logo_url}
                           alt={`${job.company} logo`}
-                          className="max-h-10 max-w-full object-contain"
+                          className="max-h-14 max-w-full"
                         />
                       ) : (
                         <Building2 className="h-6 w-6 text-primary" />
@@ -226,8 +226,8 @@ export default function JobPageClient({ job }: Props) {
 
         <section className="py-16 md:py-24">
           <div className="container">
-            <div className="grid gap-6 lg:grid-cols-3">
-              <div className="space-y-6 lg:col-span-2">
+            <div className="grid gap-6 lg:grid-cols-[1fr_380px]">
+              <div className="space-y-6">
                 {(Array.isArray(job.description) ? job.description : []).map((section: any, index: number) => (
                   <JobSection
                     key={index}

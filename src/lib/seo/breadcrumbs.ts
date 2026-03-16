@@ -142,3 +142,43 @@ export function buildFeedbackBreadcrumb(): BreadcrumbItem[] {
   ];
 }
 
+export function buildContactBreadcrumb(): BreadcrumbItem[] {
+  return [
+    ...buildHomeBreadcrumb(),
+    {
+      name: "Contact",
+      href: "/contact",
+    },
+  ];
+}
+
+export function buildPrivacyPolicyBreadcrumb(): BreadcrumbItem[] {
+  return [
+    ...buildHomeBreadcrumb(),
+    {
+      name: "Privacy Policy",
+      href: "/privacy-policy",
+    },
+  ];
+}
+
+export function buildTermsBreadcrumb(): BreadcrumbItem[] {
+  return [
+    ...buildHomeBreadcrumb(),
+    {
+      name: "Terms of Service",
+      href: "/terms",
+    },
+  ];
+}
+
+export function buildDisclaimerBreadcrumb(): BreadcrumbItem[] {
+  return [
+    ...buildHomeBreadcrumb(),
+    {
+      name: "Disclaimer",
+      href: "/disclaimer",
+    },
+  ];
+}
+

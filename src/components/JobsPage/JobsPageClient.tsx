@@ -143,7 +143,7 @@ export default function JobsPageClient({ data }: Props) {
 
       {/* Main content */}
       <main className="container mx-auto py-8 md:py-12">
-        <div className="grid gap-8 lg:grid-cols-[240px_minmax(0,1fr)_280px]">
+        <div className="grid gap-8 lg:grid-cols-[240px_minmax(0,1fr)_360px]">
           {/* Sidebar facets - hidden on small screens, show on lg */}
           <div className="hidden lg:block lg:sticky lg:top-24 lg:self-start">
             <JobsFacetsSidebar

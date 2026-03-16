@@ -1,20 +1,20 @@
 {
   "entries": [
     {
-      "id": "2025-03-initial-migration",
-      "date": "2025-03-01",
-      "title": "Next.js migration & new job feed",
-      "tag": "Major",
+      "id": "2026-03-14-recently-viewed",
+      "date": "2026-03-14",
+      "title": "Recently viewed jobs",
+      "tag": "Feature",
       "icon": "/changelog/rocket.svg",
       "highlights": [
-        "Migrated the main WorkWay experience to the new Next.js app.",
-        "Introduced the new **Jobs** feed with better filters and faster navigation.",
-        "Improved SEO and structured data for job and company pages."
+        "Added a **Recently Viewed** section on the jobs feed — your last 10 visited job listings are saved locally and shown at the top.",
+        "Works fully client-side using `localStorage`, so your history persists across page refreshes.",
+        "Each recently viewed card shows the job title, company, and location for quick re-access."
       ]
     },
     {
-      "id": "2025-03-feedback-launch",
-      "date": "2025-03-10",
+      "id": "2026-03-10-feedback-changelog",
+      "date": "2026-03-10",
       "title": "Feedback page & changelog",
       "tag": "Update",
       "icon": "/changelog/feedback.svg",
@@ -23,7 +23,42 @@
         "Launched this public **Changelog** to track visible product changes.",
         "You can edit this page by updating `src/content/changelog.json`."
       ]
+    },
+    {
+      "id": "2026-03-07-job-page-improvements",
+      "date": "2026-03-07",
+      "title": "Job page improvements",
+      "tag": "Update",
+      "icon": "/changelog/rocket.svg",
+      "highlights": [
+        "Job detail pages now load significantly faster with improved server-side rendering.",
+        "Added **Apply** button pinned to the bottom on mobile for easier access.",
+        "Structured data (`JobPosting` schema) added to all job pages for better search visibility."
+      ]
+    },
+    {
+      "id": "2026-03-04-search-filters",
+      "date": "2026-03-04",
+      "title": "Improved search & filters",
+      "tag": "Feature",
+      "icon": "/changelog/rocket.svg",
+      "highlights": [
+        "Filter jobs by **employment type** (full-time, part-time, contract, internship).",
+        "Location filter now supports remote-first search — filter by `Remote` to find fully distributed roles.",
+        "Search queries are now reflected in the URL, making filtered results shareable."
+      ]
+    },
+    {
+      "id": "2026-03-01-nextjs-migration",
+      "date": "2026-03-01",
+      "title": "Next.js migration & new job feed",
+      "tag": "Major",
+      "icon": "/changelog/rocket.svg",
+      "highlights": [
+        "Migrated the main WorkWay experience to the new **Next.js** app.",
+        "Introduced the new **Jobs** feed with better filters and faster navigation.",
+        "Improved SEO and structured data for job and company pages."
+      ]
     }
   ]
 }
-

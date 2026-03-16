@@ -26,7 +26,7 @@ export default function LandingPage() {
     <div className="min-h-screen bg-background text-foreground">
       <main>
         <Hero />
-        <div className="mx-auto max-w-6xl space-y-32 px-6">
+        <div className="mx-auto max-w-6xl space-y-16 px-6">
           <SocialProof />
           <ProblemSection />
           <SolutionSection />

@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <footer className="border-t border-border bg-background">
       <div className="max-w-6xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 items-start">
           {/* Brand Column */}
           <div className="flex flex-col items-center md:items-start text-center md:text-left">
             <div className="flex items-center gap-3 mb-4">
@@ -59,6 +59,38 @@ const Footer = () => {
                 className="transition-colors hover:text-foreground"
               >
                 Feedback
+              </a>
+              <a
+                href="/contact"
+                className="transition-colors hover:text-foreground"
+              >
+                Contact
+              </a>
+            </div>
+          </div>
+
+          {/* Legal Column */}
+          <div className="hidden md:flex flex-col items-center md:items-end text-center md:text-right">
+            <h4 className="mb-4 text-sm font-medium">Legal</h4>
+
+            <div className="flex flex-col gap-3 text-sm text-muted-foreground">
+              <a
+                href="/privacy-policy"
+                className="transition-colors hover:text-foreground"
+              >
+                Privacy Policy
+              </a>
+              <a
+                href="/terms"
+                className="transition-colors hover:text-foreground"
+              >
+                Terms of Service
+              </a>
+              <a
+                href="/disclaimer"
+                className="transition-colors hover:text-foreground"
+              >
+                Disclaimer
               </a>
             </div>
           </div>
