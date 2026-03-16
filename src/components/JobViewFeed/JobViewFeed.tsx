@@ -94,7 +94,7 @@ export default function JobViewFeed({
           Once candidates start viewing jobs, you&apos;ll see live activity here.
         </p>
       ) : (
-        <ul className="space-y-2 max-h-80 overflow-y-auto pr-1">
+        <ul className="space-y-2">
           {events.map((e) => {
             const locationParts: string[] = [];
             if (e.viewer_city) locationParts.push(e.viewer_city);
@@ -105,10 +105,10 @@ export default function JobViewFeed({
             return (
               <li
                 key={e.id}
-                className="rounded-lg bg-background/80 px-3 py-2 text-xs text-muted-foreground"
+                className="rounded-lg bg-background/80 px-3 py-2 text-sm text-muted-foreground"
               >
                 <div className="flex items-center gap-1.5">
-                  <MapPin className="h-3 w-3 text-primary" />
+                  <MapPin className="h-3.5 w-3.5 text-primary" />
                   <span className="text-muted-foreground">
                     Someone{" "}
                     <span className="text-foreground">
@@ -133,7 +133,7 @@ export default function JobViewFeed({
                   </Link>
                   .
                 </div>
-                <div className="mt-0.5 text-[11px] text-muted-foreground/80">
+                <div className="mt-0.5 text-xs text-muted-foreground/80">
                   {formatTimeAgo(e.created_at)}
                 </div>
               </li>
