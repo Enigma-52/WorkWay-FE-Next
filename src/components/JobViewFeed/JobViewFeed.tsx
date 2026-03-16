@@ -21,10 +21,6 @@ type Props = {
   limit?: number;
 };
 
-const API_BASE =
-  process.env.NEXT_PUBLIC_BACKEND_API_URL ||
-  process.env.NEXT_PUBLIC_SITE_URL ||
-  "";
 
 function formatTimeAgo(iso: string) {
   const created = new Date(iso).getTime();
@@ -49,17 +45,13 @@ export default function JobViewFeed({
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!API_BASE) return;
-
     let isMounted = true;
     let intervalId: NodeJS.Timeout | undefined;
 
     async function fetchEvents() {
       try {
         setIsLoading((prev) => (events.length === 0 ? true : prev));
-        const url = new URL("/api/feed/job-views", API_BASE);
-        url.searchParams.set("limit", String(limit));
-        const res = await fetch(url.toString());
+        const res = await fetch(`/api/feed/job-views?limit=${limit}`);
         if (!res.ok) return;
         const payload = (await res.json()) as { events?: JobViewEvent[] };
         if (!isMounted || !payload?.events) return;
@@ -82,10 +74,6 @@ export default function JobViewFeed({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [limit, pollIntervalMs]);
-
-  if (!API_BASE) {
-    return null;
-  }
 
   return (
     <div className="rounded-xl border border-border bg-card/60 p-2 shadow-sm">

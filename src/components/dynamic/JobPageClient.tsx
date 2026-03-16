@@ -26,11 +26,7 @@ type Props = {
 
 export default function JobPageClient({ job }: Props) {
   useEffect(() => {
-    const API_BASE =
-      process.env.NEXT_PUBLIC_BACKEND_API_URL ||
-      process.env.NEXT_PUBLIC_SITE_URL ||
-      "";
-    if (!API_BASE || !job?.slug) return;
+    if (!job?.slug) return;
 
     let cancelled = false;
 
@@ -55,9 +51,7 @@ export default function JobPageClient({ job }: Props) {
 
         if (cancelled) return;
 
-        const url = new URL("/api/job/view", API_BASE);
-
-        await fetch(url.toString(), {
+        await fetch("/api/job/view", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
