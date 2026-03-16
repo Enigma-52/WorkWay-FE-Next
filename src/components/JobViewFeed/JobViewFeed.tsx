@@ -55,7 +55,13 @@ export default function JobViewFeed({
         if (!res.ok) return;
         const payload = (await res.json()) as { events?: JobViewEvent[] };
         if (!isMounted || !payload?.events) return;
-        setEvents(payload.events);
+        const isUnknown = (v: string | null | undefined) =>
+          !v || v.trim().toLowerCase() === "unknown";
+        setEvents(
+          payload.events.filter(
+            (e) => !isUnknown(e.viewer_country) || !isUnknown(e.viewer_city)
+          )
+        );
       } catch {
         // fail silently on network errors
       } finally {
