@@ -26,7 +26,7 @@ export default function DisclaimerPage() {
         <header className="mb-12">
           <h1 className="mb-4 text-4xl font-bold">Disclaimer</h1>
           <p className="text-sm text-muted-foreground">
-            Last updated: March 2025
+            Last updated: March 2026
           </p>
           <p className="mt-4 text-lg text-muted-foreground">
             Please read this disclaimer carefully before using WorkWay or
