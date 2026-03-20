@@ -26,7 +26,7 @@ export default function TermsPage() {
         <header className="mb-12">
           <h1 className="mb-4 text-4xl font-bold">Terms of Service</h1>
           <p className="text-sm text-muted-foreground">
-            Last updated: March 2025
+            Last updated: March 2026
           </p>
           <p className="mt-4 text-lg text-muted-foreground">
             By using WorkWay, you agree to the following terms. Please read
