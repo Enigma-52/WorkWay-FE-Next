@@ -101,14 +101,8 @@ export default function JobsPageClient({ data }: Props) {
       <section className="relative overflow-hidden border-b border-border bg-gradient-hero">
         <div className="absolute left-1/2 top-1/2 h-[400px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/10 blur-[120px] pointer-events-none" />
 
-        <div className="container relative mx-auto py-16 md:py-24">
+        <div className="container relative mx-auto py-12 md:py-16">
           <div className="mx-auto max-w-3xl text-center">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5">
-              <Sparkles className="h-4 w-4 text-primary" />
-              <span className="font-mono text-sm text-primary">
-                Job search
-              </span>
-            </div>
 
             <h1 className="font-display text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl mb-4">
               Find your next <span className="text-primary">role</span>

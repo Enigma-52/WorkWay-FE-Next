@@ -81,7 +81,7 @@ export default function AllSkillsPageClient({ data }: Props) {
 
       <div className="relative z-10">
         {/* HERO */}
-        <section className="border-b border-border px-4 pt-20 pb-14 md:px-8 lg:pt-28">
+        <section className="border-b border-border px-8 pt-5 pb-14 md:px-12 lg:pt-8">
           <div className="mx-auto max-w-7xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}

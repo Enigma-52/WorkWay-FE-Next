@@ -40,9 +40,9 @@ export default function CompaniesPageClient({
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="pt-16">
+      <main className="pt-2">
         <section className="border-b border-border bg-gradient-hero">
-          <div className="container mx-auto px-4 py-16">
+          <div className="container mx-auto px-4 py-4">
             <div className="mx-auto max-w-3xl text-center">
               <h1 className="font-display text-4xl font-bold text-foreground md:text-5xl">
                 Browse Companies Hiring on{" "}
@@ -58,7 +58,7 @@ export default function CompaniesPageClient({
                 </span>{" "}
                 open jobs • Startups to large tech firms
               </p>
-              <div className="mt-8">
+              <div className="mt-8 mb-4">
                 <SearchBar
                   value={q}
                   onChange={(value) => updateParams({ q: value, page: "1" })}
