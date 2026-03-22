@@ -60,7 +60,6 @@ export const ALL_LOCATIONS: SeoLocation[] = [
   { name: "Sydney", slug: "sydney" },
   { name: "Tokyo", slug: "tokyo" },
   { name: "Dublin", slug: "dublin" },
-  { name: "Bengaluru", slug: "bengaluru" },
 ];
 
 // Pre-compute all valid slug combinations — O(1) lookup at request time
