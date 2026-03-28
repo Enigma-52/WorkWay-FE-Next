@@ -1,6 +1,7 @@
 "use client";
 
 import { Building2 } from "lucide-react";
+import { useCallback, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import SearchBar from "@/components/CompaniesPage/SearchBar";
 import FilterBar from "@/components/CompaniesPage/FilterBar";
@@ -8,6 +9,7 @@ import FeaturedSection from "@/components/CompaniesPage/FeaturedSection";
 import CompanyCard from "@/components/CompaniesPage/CompanyCard";
 import Pagination from "@/components/CompaniesPage/Pagination";
 import type {
+  CompanyListItem,
   CompanyListResponse,
   CompanyOverview,
 } from "@/lib/api/contracts";
@@ -25,9 +27,36 @@ export default function CompaniesPageClient({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const q = searchParams.get("q") || "";
   const hiring = searchParams.get("hiring") || "false";
   const totalPages = Math.ceil(list.meta.total / list.meta.limit);
+
+  const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
+  const [searchResults, setSearchResults] = useState<CompanyListItem[] | null>(null);
+  const [searching, setSearching] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const fetchSearch = useCallback(async (q: string) => {
+    if (!q.trim()) {
+      setSearchResults(null);
+      return;
+    }
+    setSearching(true);
+    try {
+      const res = await fetch(`/api/company/search?q=${encodeURIComponent(q)}`);
+      if (res.ok) {
+        const data: CompanyListItem[] = await res.json();
+        setSearchResults(data);
+      }
+    } finally {
+      setSearching(false);
+    }
+  }, []);
+
+  function handleSearchChange(value: string) {
+    setSearchQuery(value);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => fetchSearch(value), 300);
+  }
 
   function updateParams(next: Record<string, string | null>) {
     const sp = new URLSearchParams(searchParams.toString());
@@ -37,6 +66,9 @@ export default function CompaniesPageClient({
     });
     router.push(`${pathname}?${sp.toString()}`);
   }
+
+  const displayedCompanies = searchResults ?? list.companies;
+  const displayedTotal = searchResults ? searchResults.length : list.meta.total;
 
   return (
     <div className="min-h-screen bg-background">
@@ -60,8 +92,8 @@ export default function CompaniesPageClient({
               </p>
               <div className="mt-8 mb-4">
                 <SearchBar
-                  value={q}
-                  onChange={(value) => updateParams({ q: value, page: "1" })}
+                  value={searchQuery}
+                  onChange={handleSearchChange}
                 />
               </div>
             </div>
@@ -102,24 +134,28 @@ export default function CompaniesPageClient({
           <div className="mb-6 flex items-center gap-2">
             <Building2 className="h-5 w-5 text-muted-foreground" />
             <span className="text-muted-foreground">
-              Showing{" "}
-              <span className="font-mono text-foreground">{list.meta.total}</span>{" "}
-              companies
+              {searching ? "Searching..." : (
+                <>Showing{" "}
+                <span className="font-mono text-foreground">{displayedTotal}</span>{" "}
+                companies</>
+              )}
             </span>
           </div>
 
-          {list.companies.length > 0 ? (
+          {displayedCompanies.length > 0 ? (
             <>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {list.companies.map((company) => (
+                {displayedCompanies.map((company) => (
                   <CompanyCard key={company.id} company={company} />
                 ))}
               </div>
-              <Pagination
-                currentPage={list.meta.page}
-                totalPages={totalPages}
-                onPageChange={(p) => updateParams({ page: String(p) })}
-              />
+              {!searchResults && (
+                <Pagination
+                  currentPage={list.meta.page}
+                  totalPages={totalPages}
+                  onPageChange={(p) => updateParams({ page: String(p) })}
+                />
+              )}
             </>
           ) : (
             <div className="py-16 text-center">

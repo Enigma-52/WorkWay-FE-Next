@@ -31,7 +31,7 @@ export default function FeaturedSection({
         <h3 className="font-display font-semibold text-foreground">{title}</h3>
       </div>
       <div className="flex flex-wrap gap-2">
-        {companies.slice(0, 6).map((company) => (
+        {companies.map((company) => (
           <Link
             href={`/company/${company.slug}`}
             key={company.id}

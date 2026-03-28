@@ -279,7 +279,7 @@ export default function JobPageClient({ job }: Props) {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.4, delay: 0.35 }}
                 >
-                  <JobViewFeed title="Live views on WorkWay" />
+                  <JobViewFeed title="Live views on WorkWay" limit={5} />
                 </motion.div>
               </div>
             </div>
