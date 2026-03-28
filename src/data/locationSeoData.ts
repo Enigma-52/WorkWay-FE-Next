@@ -31,11 +31,15 @@ export const ALL_ROLES: SeoRole[] = [
   { name: "Operations Manager", slug: "operations-manager" },
   { name: "Legal Counsel", slug: "legal-counsel" },
   { name: "Sales Engineer", slug: "sales-engineer" },
+  { name: "AI Engineer", slug: "ai-engineer" },
+  { name: "Account Executive", slug: "account-executive" },
+  { name: "Data Engineer", slug: "data-engineer" },
 ];
 
 // Top-traffic locations first (first 10 = pre-built at build time)
 export const ALL_LOCATIONS: SeoLocation[] = [
   { name: "Bangalore", slug: "bangalore" },
+  { name: "Bengaluru", slug: "bengaluru" },
   { name: "Remote", slug: "remote" },
   { name: "San Francisco", slug: "san-francisco" },
   { name: "New York", slug: "new-york" },
@@ -60,6 +64,50 @@ export const ALL_LOCATIONS: SeoLocation[] = [
   { name: "Sydney", slug: "sydney" },
   { name: "Tokyo", slug: "tokyo" },
   { name: "Dublin", slug: "dublin" },
+  { name: "Washington DC", slug: "washington-dc" },
+{ name: "San Jose", slug: "san-jose" },
+{ name: "Denver", slug: "denver" },
+{ name: "Atlanta", slug: "atlanta" },
+{ name: "Dallas", slug: "dallas" },
+{ name: "Phoenix", slug: "phoenix" },
+{ name: "Vancouver", slug: "vancouver" },
+{ name: "Barcelona", slug: "barcelona" },
+{ name: "Madrid", slug: "madrid" },
+{ name: "Seoul", slug: "seoul" },
+{ name: "Hong Kong", slug: "hong-kong" },
+{ name: "Tel Aviv", slug: "tel-aviv" },
+{ name: "San Diego", slug: "san-diego" },
+{ name: "Houston", slug: "houston" },
+{ name: "Philadelphia", slug: "philadelphia" },
+{ name: "Raleigh", slug: "raleigh" },
+{ name: "Charlotte", slug: "charlotte" },
+{ name: "Pittsburgh", slug: "pittsburgh" },
+{ name: "Salt Lake City", slug: "salt-lake-city" },
+
+{ name: "Gurgaon", slug: "gurgaon" },
+{ name: "Noida", slug: "noida" },
+
+{ name: "Stockholm", slug: "stockholm" },
+{ name: "Warsaw", slug: "warsaw" },
+{ name: "Lisbon", slug: "lisbon" },
+{ name: "Copenhagen", slug: "copenhagen" },
+
+{ name: "Bangkok", slug: "bangkok" },
+{ name: "Taipei", slug: "taipei" },
+{ name: "Manila", slug: "manila" },
+
+{ name: "Cape Town", slug: "cape-town" },
+
+{ name: "United States", slug: "united-states" },
+{ name: "United Kingdom", slug: "united-kingdom" },
+{ name: "Canada", slug: "canada" },
+{ name: "Germany", slug: "germany" },
+{ name: "Brazil", slug: "brazil" },
+{ name: "Mexico", slug: "mexico" },
+
+{ name: "Remote US", slug: "remote-us" },
+{ name: "Remote India", slug: "remote-india" },
+{ name: "Remote Europe", slug: "remote-europe" },
 ];
 
 // Pre-compute all valid slug combinations — O(1) lookup at request time
