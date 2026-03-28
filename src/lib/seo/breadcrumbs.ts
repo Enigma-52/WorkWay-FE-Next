@@ -182,3 +182,24 @@ export function buildDisclaimerBreadcrumb(): BreadcrumbItem[] {
   ];
 }
 
+export function buildLocationJobsBreadcrumb(): BreadcrumbItem[] {
+  return [
+    ...buildHomeBreadcrumb(),
+    {
+      name: "Location Jobs",
+      href: "/location-jobs",
+    },
+  ];
+}
+
+export function buildLocationSeoDetailBreadcrumb(
+  roleName: string,
+  locationName: string,
+): BreadcrumbItem[] {
+  return [
+    ...buildLocationJobsBreadcrumb(),
+    {
+      name: `${roleName} Jobs in ${locationName}`,
+    },
+  ];
+}
