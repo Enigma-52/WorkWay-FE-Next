@@ -30,6 +30,7 @@ export type CompanyDetails = {
   website?: string | null;
   logo_url?: string | null;
   jobListings: JobListing[];
+  recentlyPostedJobs : JobListing[];
 };
 
 export type DomainJobsPayload = {
