@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skill Graph — Node.js Universe</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --green:#34d399;--blue:#60a5fa;--amber:#f59e0b;--purple:#a78bfa;
+  --bg:rgba(6,8,14,0.94);--border:rgba(255,255,255,0.07);
+  --text:rgba(255,255,255,0.85);--muted:rgba(255,255,255,0.35);
+}
+body{background:#050508;overflow:hidden;font-family:'Inter',sans-serif;color:var(--text)}
+#cv{position:fixed;inset:0;z-index:0}canvas{display:block}
+
+/* Labels */
+#labels{position:fixed;inset:0;pointer-events:none;z-index:5}
+.nlabel{position:absolute;white-space:nowrap;font-size:10.5px;font-weight:500;letter-spacing:.04em;
+  padding:3px 9px;border-radius:20px;border:1px solid rgba(255,255,255,0.1);
+  background:rgba(4,5,10,0.78);backdrop-filter:blur(6px);pointer-events:all;cursor:pointer;
+  transition:opacity .25s,border-color .2s;user-select:none}
+.nlabel:hover{border-color:rgba(255,255,255,0.3)!important;background:rgba(4,5,10,0.98)}
+
+/* Top bar */
+#top-bar{position:fixed;top:0;left:220px;right:0;height:52px;z-index:20;
+  display:flex;align-items:center;padding:0 20px;gap:14px;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(5,5,8,0.9) 0%,transparent 100%)}
+.sw{position:relative;flex:1;max-width:280px;pointer-events:all}
+#search{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;
+  padding:7px 14px 7px 34px;font-size:12px;color:#fff;outline:none;font-family:'Inter',sans-serif;transition:border .2s}
+#search::placeholder{color:var(--muted)}
+#search:focus{border-color:rgba(52,211,153,.3);background:rgba(52,211,153,.03)}
+.si{position:absolute;left:11px;top:50%;transform:translateY(-50%);opacity:.3}
+#filter-row{display:flex;gap:5px;pointer-events:all;margin-left:auto}
+.filt{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:6px;
+  padding:5px 11px;font-size:10px;font-weight:600;letter-spacing:.08em;cursor:pointer;
+  color:var(--muted);transition:all .18s;text-transform:uppercase;font-family:'Inter',sans-serif}
+.filt.active{color:#fff;border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.09)}
+.filt[data-t="skill"].active{color:var(--green);border-color:rgba(52,211,153,.35);background:rgba(52,211,153,.08)}
+.filt[data-t="job"].active{color:var(--blue);border-color:rgba(96,165,250,.35);background:rgba(96,165,250,.08)}
+.filt[data-t="company"].active{color:var(--amber);border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.08)}
+
+/* Left panel */
+#left{position:fixed;left:0;top:0;bottom:80px;width:220px;z-index:15;
+  background:var(--bg);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+#brand{padding:16px 18px 14px;border-bottom:1px solid var(--border)}
+.bm{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--green);letter-spacing:.22em;opacity:.7;text-transform:uppercase}
+.bn{font-size:16px;font-weight:600;letter-spacing:-.02em;background:linear-gradient(90deg,#fff,var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.2}
+#left-scroll{flex:1;overflow-y:auto;padding:0}
+#left-scroll::-webkit-scrollbar{width:0}
+.lsec{padding:14px 18px;border-bottom:1px solid var(--border)}
+.lh{font-size:8.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.stat-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.sv{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:500}
+.sl{font-size:10px;color:var(--muted)}.sv.g{color:var(--green)}.sv.b{color:var(--blue)}.sv.a{color:var(--amber)}
+.top-node{display:flex;align-items:center;gap:8px;padding:5px 4px;cursor:pointer;
+  border-radius:6px;transition:background .15s;margin:0 -4px}
+.top-node:hover{background:rgba(255,255,255,.05)}
+.tn-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.tn-name{font-size:11.5px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tn-ct{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted)}
+.bw{height:2px;background:rgba(255,255,255,.06);border-radius:1px;margin-top:3px}
+.bf{height:100%;border-radius:1px}
+.leg-item{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:11px;color:var(--muted)}
+.leg-dot{width:9px;height:9px;border-radius:50%}
+#hint{font-size:10px;color:var(--muted);line-height:1.65;margin-top:6px}
+
+/* Right panel */
+#right{position:fixed;right:0;top:0;bottom:80px;width:288px;z-index:15;
+  background:var(--bg);border-left:1px solid var(--border);
+  display:flex;flex-direction:column;transition:transform .32s cubic-bezier(.4,0,.2,1);
+  transform:translateX(100%)}
+#right.open{transform:translateX(0)}
+#right-scroll{flex:1;overflow-y:auto}
+#right-scroll::-webkit-scrollbar{width:0}
+#ph{padding:18px 18px 0}
+.phs{height:3px;border-radius:2px;margin-bottom:12px}
+.pt{font-size:8.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;margin-bottom:3px}
+.pn{font-size:21px;font-weight:600;line-height:1.1;margin-bottom:6px}
+.pd{font-size:11.5px;color:var(--muted);line-height:1.55}
+#cbtn{position:absolute;top:16px;right:14px;width:22px;height:22px;border-radius:50%;
+  background:rgba(255,255,255,.07);border:none;color:rgba(255,255,255,.38);
+  cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+#cbtn:hover{background:rgba(255,255,255,.14);color:#fff}
+.pm{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:12px 18px}
+.mb{background:rgba(255,255,255,.04);border-radius:8px;padding:9px 11px;border:1px solid var(--border)}
+.mv{font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:500;line-height:1.2}
+.ml{font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+.db{padding:0 18px 12px}
+.dbl{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:4px}
+.dbt{height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden}
+.dbf{height:100%;border-radius:2px;transition:width .55s .05s}
+.ps{padding:0 18px 12px}
+.psl{font-size:8.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.cw{display:flex;flex-wrap:wrap;gap:5px}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:4px 9px;border-radius:20px;
+  font-size:11px;font-weight:500;cursor:pointer;border:1px solid transparent;
+  transition:all .16s;font-family:'Inter',sans-serif;line-height:1}
+.chip:hover{transform:translateY(-1px);filter:brightness(1.15)}
+.chip.skill{color:var(--green);background:rgba(52,211,153,.09);border-color:rgba(52,211,153,.2)}
+.chip.job{color:var(--blue);background:rgba(96,165,250,.09);border-color:rgba(96,165,250,.2)}
+.chip.company{color:var(--amber);background:rgba(245,158,11,.09);border-color:rgba(245,158,11,.2)}
+.chip.plain{color:var(--muted);background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.1);cursor:default}
+.chip:not(.plain):hover::after{content:'→';margin-left:2px;opacity:.5;font-size:9px}
+.cd{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.5;flex-shrink:0}
+
+/* Bottom */
+#bot{position:fixed;bottom:0;left:220px;right:0;height:80px;z-index:15;
+  background:var(--bg);border-top:1px solid var(--border);
+  display:flex;align-items:stretch;transition:right .32s}
+#bot.has-panel{right:288px}
+#cp{flex:1;padding:10px 20px;display:flex;flex-direction:column;justify-content:center;gap:5px;overflow:hidden}
+.cpl{font-size:8.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+#cps{display:flex;align-items:center;gap:5px;overflow:hidden}
+.cst{display:inline-flex;align-items:center;padding:3px 10px;border-radius:6px;
+  font-size:11px;font-weight:500;cursor:pointer;white-space:nowrap;transition:opacity .2s;border:1px solid transparent}
+.cst:hover{opacity:.7}
+.ca{color:var(--muted);font-size:10px}
+
+#trend{width:190px;border-left:1px solid var(--border);padding:10px 14px}
+.trl{font-size:8.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.tri{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+.trn{font-size:10px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.trb{height:2px;background:rgba(255,255,255,.06);border-radius:1px;width:50px;flex-shrink:0}
+.trf{height:100%;border-radius:1px}
+.trp{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);width:26px;text-align:right;flex-shrink:0}
+
+/* Tooltip */
+#tt{position:fixed;pointer-events:none;background:rgba(6,8,14,.97);border:1px solid rgba(255,255,255,.12);
+  border-radius:8px;padding:8px 12px;font-size:11px;z-index:50;opacity:0;transition:opacity .12s;
+  transform:translate(-50%,-115%);max-width:200px}
+.ttn{font-weight:600;margin-bottom:2px}
+.tts{font-size:10px;color:var(--muted)}
+
+/* Loading */
+#load{position:fixed;inset:0;background:#050508;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;z-index:100;transition:opacity .55s}
+#load.done{opacity:0;pointer-events:none}
+.lr{width:44px;height:44px;border:1px solid rgba(52,211,153,.15);border-top-color:var(--green);
+  border-radius:50%;animation:spin 1s linear infinite;margin-bottom:14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.lt{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.22em;color:rgba(52,211,153,.55);text-transform:uppercase}
+</style>
+</head>
+<body>
+<div id="load"><div class="lr"></div><div class="lt">Initialising graph…</div></div>
+<div id="cv"></div>
+<div id="labels"></div>
+
+<!-- Top bar -->
+<div id="top-bar">
+  <div class="sw">
+    <svg class="si" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"><circle cx="6.5" cy="6.5" r="4.5"/><line x1="10.5" y1="10.5" x2="14" y2="14"/></svg>
+    <input id="search" placeholder="Search nodes…" oninput="onSearch(this.value)">
+  </div>
+  <div id="filter-row">
+    <button class="filt active" data-t="all" onclick="setFilter('all')">All</button>
+    <button class="filt" data-t="skill" onclick="setFilter('skill')">Skills</button>
+    <button class="filt" data-t="job" onclick="setFilter('job')">Jobs</button>
+    <button class="filt" data-t="company" onclick="setFilter('company')">Companies</button>
+  </div>
+</div>
+
+<!-- Left panel -->
+<div id="left">
+  <div id="brand"><div class="bm">// skill graph</div><div class="bn">Node.js<br>Universe</div></div>
+  <div id="left-scroll">
+    <div class="lsec">
+      <div class="lh">Graph Stats</div>
+      <div class="stat-row"><span class="sv g" id="sn">0</span><span class="sl">Nodes</span></div>
+      <div class="stat-row"><span class="sv b" id="se">0</span><span class="sl">Connections</span></div>
+      <div class="stat-row"><span class="sv a" id="sc">0</span><span class="sl">Companies</span></div>
+    </div>
+    <div class="lsec">
+      <div class="lh">Most Connected</div>
+      <div id="top-list"></div>
+    </div>
+    <div class="lsec">
+      <div class="lh">Legend</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div>Skill / Technology</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--blue)"></div>Job Role</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--amber)"></div>Company</div>
+      <div id="hint">Drag to orbit · Scroll to zoom<br>Click any node to explore<br>Click chips in panel to navigate</div>
+    </div>
+  </div>
+</div>
+
+<!-- Right panel -->
+<div id="right">
+  <div id="right-scroll">
+    <div id="ph" style="position:relative">
+      <button id="cbtn" onclick="closePanel()">✕</button>
+      <div class="phs" id="phs"></div>
+      <div class="pt" id="pt">SKILL</div>
+      <div class="pn" id="pn">Node.js</div>
+      <div class="pd" id="pd"></div>
+    </div>
+    <div class="pm" id="pm"></div>
+    <div class="db">
+      <div class="dbl"><span>Market Demand</span><span id="dp">--</span></div>
+      <div class="dbt"><div class="dbf" id="df"></div></div>
+    </div>
+    <div class="ps" id="psk" style="display:none"><div class="psl">Related Skills</div><div class="cw" id="pck"></div></div>
+    <div class="ps" id="psj" style="display:none"><div class="psl">Linked Jobs</div><div class="cw" id="pcj"></div></div>
+    <div class="ps" id="psc" style="display:none"><div class="psl">Top Companies</div><div class="cw" id="pcc"></div></div>
+    <div class="ps" id="pss" style="display:none"><div class="psl">Tech Stack</div><div class="cw" id="pcs"></div></div>
+  </div>
+</div>
+
+<!-- Bottom -->
+<div id="bot">
+  <div id="cp"><div class="cpl">Career Path</div><div id="cps"><span style="font-size:11px;color:var(--muted)">Click a node to see paths</span></div></div>
+  <div id="trend"><div class="trl">Trending</div><div id="trl"></div></div>
+</div>
+
+<!-- Tooltip -->
+<div id="tt"><div class="ttn" id="ttn"></div><div class="tts" id="tts"></div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ── DATA ──────────────────────────────────────────────────────
+const CO_COL={netflix:'#E50914',linkedin:'#0A66C2',uber:'#555',airbnb:'#FF5A5F',
+  stripe:'#635BFF',vercel:'#333',shopify:'#95BF47',cloudflare:'#F6821F'};
+const CO_INIT={netflix:'N',linkedin:'in',uber:'Ub',airbnb:'Bn',stripe:'S',
+  vercel:'▲',shopify:'Sh',cloudflare:'☁'};
+
+const NODES=[
+  {id:'nodejs',label:'Node.js',type:'skill',sz:3.1,color:'#34d399',demand:96,growth:'+12%',salary:'$120–185k',openings:'98k',
+   desc:'Async JS runtime on Chrome V8. Powers APIs, microservices & real-time apps at Netflix, LinkedIn scale.',
+   skills:['express','kafka','mongodb','redis','graphql','docker','typescript'],jobs:['backend','fullstack','devops'],companies:['netflix','linkedin','uber','stripe','vercel']},
+  {id:'express',label:'Express.js',type:'skill',sz:1.9,color:'#34d399',demand:82,growth:'+4%',salary:'$110–165k',openings:'62k',
+   desc:'Minimal, unopinionated web framework. The de facto standard for Node.js APIs.',
+   skills:['nodejs','graphql','mongodb'],jobs:['backend','fullstack'],companies:['shopify','stripe']},
+  {id:'kafka',label:'Apache Kafka',type:'skill',sz:2.0,color:'#34d399',demand:88,growth:'+19%',salary:'$130–195k',openings:'41k',
+   desc:'Distributed event streaming platform for high-throughput real-time pipelines.',
+   skills:['nodejs','redis'],jobs:['dataeng','backend'],companies:['linkedin','netflix','uber']},
+  {id:'mongodb',label:'MongoDB',type:'skill',sz:1.9,color:'#34d399',demand:79,growth:'+6%',salary:'$105–160k',openings:'55k',
+   desc:'Document-oriented NoSQL database. Flexible schema, horizontal scaling.',
+   skills:['nodejs','redis'],jobs:['backend','fullstack'],companies:['shopify']},
+  {id:'redis',label:'Redis',type:'skill',sz:1.8,color:'#34d399',demand:84,growth:'+11%',salary:'$115–175k',openings:'38k',
+   desc:'In-memory data store. Caching, pub/sub, sessions, rate limiting.',
+   skills:['nodejs','kafka','mongodb'],jobs:['backend','sre'],companies:['cloudflare','uber']},
+  {id:'graphql',label:'GraphQL',type:'skill',sz:1.8,color:'#34d399',demand:81,growth:'+22%',salary:'$120–180k',openings:'33k',
+   desc:'Type-safe API query language. Self-documenting, reduces over-fetching.',
+   skills:['nodejs','typescript'],jobs:['fullstack','backend'],companies:['shopify','airbnb']},
+  {id:'docker',label:'Docker',type:'skill',sz:1.8,color:'#34d399',demand:91,growth:'+9%',salary:'$125–185k',openings:'78k',
+   desc:'Container platform. Package once, run anywhere. Foundation of modern DevOps.',
+   skills:['nodejs','kubernetes'],jobs:['devops','sre'],companies:['cloudflare','stripe']},
+  {id:'typescript',label:'TypeScript',type:'skill',sz:1.9,color:'#34d399',demand:93,growth:'+28%',salary:'$115–178k',openings:'85k',
+   desc:'Typed JS superset. Catches bugs at compile time, improves DX enormously.',
+   skills:['nodejs','react'],jobs:['fullstack','frontend'],companies:['vercel','airbnb']},
+  {id:'react',label:'React',type:'skill',sz:2.0,color:'#34d399',demand:90,growth:'+8%',salary:'$110–175k',openings:'102k',
+   desc:'Declarative UI library. Virtual DOM, hooks, massive ecosystem.',
+   skills:['typescript','graphql'],jobs:['frontend','fullstack'],companies:['airbnb','vercel']},
+  {id:'backend',label:'Backend Engineer',type:'job',sz:2.1,color:'#60a5fa',demand:94,growth:'+10%',salary:'$130–200k',openings:'156k',
+   desc:'Designs APIs, services and databases. Owns reliability and performance.',
+   skills:['nodejs','express','mongodb','redis','docker'],jobs:[],companies:['stripe','cloudflare']},
+  {id:'fullstack',label:'Full-Stack Dev',type:'job',sz:2.0,color:'#60a5fa',demand:87,growth:'+13%',salary:'$120–185k',openings:'134k',
+   desc:'Frontend + backend. Ships product features end-to-end independently.',
+   skills:['nodejs','react','graphql','typescript'],jobs:[],companies:['airbnb','vercel','shopify']},
+  {id:'devops',label:'DevOps Engineer',type:'job',sz:1.8,color:'#60a5fa',demand:92,growth:'+16%',salary:'$135–205k',openings:'89k',
+   desc:'CI/CD, infra-as-code, deployment automation, incident response.',
+   skills:['docker','nodejs'],jobs:[],companies:['cloudflare','stripe']},
+  {id:'dataeng',label:'Data Engineer',type:'job',sz:1.7,color:'#60a5fa',demand:86,growth:'+24%',salary:'$125–195k',openings:'71k',
+   desc:'Builds data pipelines, manages warehouses, enables analytics at scale.',
+   skills:['kafka','nodejs'],jobs:[],companies:['linkedin','netflix']},
+  {id:'sre',label:'SRE',type:'job',sz:1.6,color:'#60a5fa',demand:88,growth:'+14%',salary:'$140–210k',openings:'52k',
+   desc:'Site Reliability Engineering. Uptime SLOs, latency, chaos engineering.',
+   skills:['redis','docker','nodejs'],jobs:[],companies:['cloudflare','stripe']},
+  {id:'frontend',label:'Frontend Engineer',type:'job',sz:1.7,color:'#60a5fa',demand:85,growth:'+7%',salary:'$110–170k',openings:'118k',
+   desc:'Crafts performant, accessible, beautiful user interfaces.',
+   skills:['react','typescript'],jobs:[],companies:['vercel','airbnb']},
+  {id:'netflix',label:'Netflix',type:'company',sz:2.1,color:'#f59e0b',demand:95,growth:'+5%',salary:'$180–800k',openings:'320',
+   desc:'Streaming giant. 220M+ subscribers. Chaos engineering & Node.js at planetary scale.',
+   stack:['nodejs','kafka','react'],jobs:['backend','dataeng','sre'],companies:[]},
+  {id:'linkedin',label:'LinkedIn',type:'company',sz:1.9,color:'#f59e0b',demand:88,growth:'+4%',salary:'$165–450k',openings:'180',
+   desc:'Professional network. Invented Apache Kafka. 900M+ members.',
+   stack:['nodejs','kafka'],jobs:['backend','fullstack'],companies:[]},
+  {id:'uber',label:'Uber',type:'company',sz:1.9,color:'#f59e0b',demand:87,growth:'+6%',salary:'$170–550k',openings:'240',
+   desc:'Ride-hailing & logistics. Real-time dispatch for 5M daily trips.',
+   stack:['nodejs','redis','kafka'],jobs:['backend','sre'],companies:[]},
+  {id:'airbnb',label:'Airbnb',type:'company',sz:1.8,color:'#f59e0b',demand:83,growth:'+3%',salary:'$160–480k',openings:'140',
+   desc:'Travel marketplace. TypeScript pioneers. Strong design culture.',
+   stack:['nodejs','react','typescript'],jobs:['fullstack','frontend'],companies:[]},
+  {id:'stripe',label:'Stripe',type:'company',sz:1.9,color:'#f59e0b',demand:91,growth:'+9%',salary:'$175–600k',openings:'200',
+   desc:'Payments infrastructure. Famously high engineering bar. $1T+ processed.',
+   stack:['nodejs','express','typescript'],jobs:['backend','devops','sre'],companies:[]},
+  {id:'vercel',label:'Vercel',type:'company',sz:1.7,color:'#f59e0b',demand:86,growth:'+18%',salary:'$150–380k',openings:'90',
+   desc:'Frontend cloud platform. Built on Node.js. Remote-first. $2.5B valuation.',
+   stack:['nodejs','react','typescript'],jobs:['fullstack','frontend'],companies:[]},
+  {id:'shopify',label:'Shopify',type:'company',sz:1.8,color:'#f59e0b',demand:82,growth:'+7%',salary:'$155–400k',openings:'160',
+   desc:'E-commerce platform. $7B ARR. Huge merchant & developer ecosystem.',
+   stack:['nodejs','graphql','express'],jobs:['backend','fullstack'],companies:[]},
+  {id:'cloudflare',label:'Cloudflare',type:'company',sz:1.8,color:'#f59e0b',demand:89,growth:'+15%',salary:'$160–450k',openings:'130',
+   desc:'Internet infrastructure. Edge computing, DNS, Zero Trust security.',
+   stack:['nodejs','docker','redis'],jobs:['devops','sre','backend'],companies:[]},
+];
+
+const EDGES=[
+  ['nodejs','express'],['nodejs','kafka'],['nodejs','mongodb'],['nodejs','redis'],
+  ['nodejs','graphql'],['nodejs','docker'],['nodejs','typescript'],['nodejs','react'],
+  ['nodejs','backend'],['nodejs','fullstack'],['nodejs','devops'],
+  ['nodejs','netflix'],['nodejs','linkedin'],['nodejs','uber'],['nodejs','stripe'],['nodejs','vercel'],
+  ['express','backend'],['express','shopify'],['express','stripe'],
+  ['kafka','dataeng'],['kafka','netflix'],['kafka','linkedin'],['kafka','uber'],
+  ['mongodb','backend'],['mongodb','shopify'],
+  ['redis','backend'],['redis','sre'],['redis','uber'],['redis','cloudflare'],
+  ['graphql','fullstack'],['graphql','airbnb'],['graphql','shopify'],
+  ['docker','devops'],['docker','sre'],['docker','cloudflare'],['docker','stripe'],
+  ['typescript','fullstack'],['typescript','react'],['typescript','airbnb'],['typescript','vercel'],
+  ['react','fullstack'],['react','frontend'],['react','airbnb'],['react','vercel'],['react','netflix'],
+  ['backend','netflix'],['backend','stripe'],['backend','cloudflare'],
+  ['fullstack','airbnb'],['fullstack','vercel'],['fullstack','shopify'],
+  ['devops','cloudflare'],['devops','stripe'],
+  ['dataeng','linkedin'],['dataeng','netflix'],
+  ['sre','uber'],['sre','cloudflare'],['sre','stripe'],
+  ['frontend','airbnb'],['frontend','vercel'],
+];
+
+const TRENDING=[
+  {n:'TypeScript',p:93,c:'#34d399'},{n:'Kafka',p:88,c:'#34d399'},
+  {n:'Docker',p:91,c:'#34d399'},{n:'GraphQL',p:81,c:'#34d399'},
+];
+
+// ── SCENE ─────────────────────────────────────────────────────
+const cvEl=document.getElementById('cv');
+let W=window.innerWidth,H=window.innerHeight;
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(W,H);renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setClearColor(0x050508,1);
+cvEl.appendChild(renderer.domElement);
+const scene=new THREE.Scene();
+scene.fog=new THREE.FogExp2(0x050508,.0065);
+const camera=new THREE.PerspectiveCamera(50,W/H,.1,1000);
+camera.position.set(0,0,72);
+
+// Stars
+const sg=new THREE.BufferGeometry(),sp2=new Float32Array(2400*3);
+for(let i=0;i<2400*3;i++)sp2[i]=(Math.random()-.5)*600;
+sg.setAttribute('position',new THREE.BufferAttribute(sp2,3));
+scene.add(new THREE.Points(sg,new THREE.PointsMaterial({color:0xffffff,size:.11,transparent:true,opacity:.45})));
+
+// ── HELPERS ───────────────────────────────────────────────────
+function hx(h) {
+  if (!h || typeof h !== 'string') {
+    return { r: 255, g: 255, b: 255 };
+  }
+
+  // Normalize hex
+  if (h.startsWith('#')) {
+    if (h.length === 4) {
+      // #abc → #aabbcc
+      h = '#' + h[1]+h[1] + h[2]+h[2] + h[3]+h[3];
+    }
+
+    if (h.length === 7) {
+      return {
+        r: parseInt(h.slice(1,3),16),
+        g: parseInt(h.slice(3,5),16),
+        b: parseInt(h.slice(5,7),16)
+      };
+    }
+  }
+
+  // Fallback (prevents crash)
+  console.warn('Invalid color input:', h);
+  return { r: 255, g: 255, b: 255 };
+}
+
+function mkGlow(col,sz=128){
+  const c=document.createElement('canvas');c.width=c.height=sz;
+  const ctx=c.getContext('2d'),{r,g,b}=hx(col);
+  const g2=ctx.createRadialGradient(sz/2,sz/2,0,sz/2,sz/2,sz/2);
+  g2.addColorStop(0,`rgba(${r},${g},${b},1)`);
+  g2.addColorStop(.38,`rgba(${r},${g},${b},.65)`);
+  g2.addColorStop(.72,`rgba(${r},${g},${b},.12)`);
+  g2.addColorStop(1,`rgba(${r},${g},${b},0)`);
+  ctx.fillStyle=g2;ctx.fillRect(0,0,sz,sz);
+  return new THREE.CanvasTexture(c);
+}
+
+function mkCoTex(id,baseCol){
+  const c=document.createElement('canvas');c.width=c.height=128;
+  const ctx=c.getContext('2d'),col=baseCol==='#000000'||baseCol==='#333333'?'#1c1c2e':baseCol;
+  const{r,g,b}=hx(col);
+  const bg=ctx.createRadialGradient(52,44,0,64,64,64);
+  bg.addColorStop(0,`rgba(${r},${g},${b},.92)`);
+  bg.addColorStop(1,`rgba(${Math.round(r*.35)},${Math.round(g*.35)},${Math.round(b*.35)},1)`);
+  ctx.fillStyle=bg;ctx.beginPath();ctx.arc(64,64,64,0,Math.PI*2);ctx.fill();
+  const hi=ctx.createRadialGradient(42,38,0,42,38,36);
+  hi.addColorStop(0,'rgba(255,255,255,.22)');hi.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=hi;ctx.beginPath();ctx.arc(64,64,64,0,Math.PI*2);ctx.fill();
+  const ltr=CO_INIT[id]||id.slice(0,2).toUpperCase();
+  ctx.fillStyle='rgba(255,255,255,.93)';
+  ctx.font=`600 ${ltr.length>2?26:34}px Inter,sans-serif`;
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText(ltr,64,68);
+  return new THREE.CanvasTexture(c);
+}
+
+function mkSkillTex(col){
+  const c=document.createElement('canvas');c.width=c.height=128;
+  const ctx=c.getContext('2d'),{r,g,b}=hx(col);
+  const bg=ctx.createRadialGradient(52,44,0,64,64,64);
+  bg.addColorStop(0,`rgba(${Math.round(r*.28)},${Math.round(g*.28)},${Math.round(b*.28)},.9)`);
+  bg.addColorStop(1,`rgba(${Math.round(r*.08)},${Math.round(g*.08)},${Math.round(b*.08)},1)`);
+  ctx.fillStyle=bg;ctx.beginPath();ctx.arc(64,64,64,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle=`rgba(${r},${g},${b},.5)`;ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.arc(64,64,56,0,Math.PI*2);ctx.stroke();
+  ctx.fillStyle=`rgba(${r},${g},${b},.85)`;
+  ctx.beginPath();ctx.arc(64,64,20,0,Math.PI*2);ctx.fill();
+  const hi=ctx.createRadialGradient(42,38,0,42,38,34);
+  hi.addColorStop(0,'rgba(255,255,255,.18)');hi.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=hi;ctx.beginPath();ctx.arc(64,64,64,0,Math.PI*2);ctx.fill();
+  return new THREE.CanvasTexture(c);
+}
+
+function mkJobTex(col){
+  const c=document.createElement('canvas');c.width=c.height=128;
+  const ctx=c.getContext('2d'),{r,g,b}=hx(col);
+  const bg=ctx.createRadialGradient(52,44,0,64,64,64);
+  bg.addColorStop(0,`rgba(${Math.round(r*.22)},${Math.round(g*.22)},${Math.round(b*.22)},.9)`);
+  bg.addColorStop(1,`rgba(${Math.round(r*.06)},${Math.round(g*.06)},${Math.round(b*.06)},1)`);
+  ctx.fillStyle=bg;ctx.beginPath();ctx.arc(64,64,64,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle=`rgba(${r},${g},${b},.65)`;ctx.lineWidth=1.5;ctx.beginPath();
+  for(let i=0;i<8;i++){const a=i/8*Math.PI*2-Math.PI/8;ctx[i?'lineTo':'moveTo'](64+52*Math.cos(a),64+52*Math.sin(a))}
+  ctx.closePath();ctx.stroke();
+  ctx.fillStyle=`rgba(${r},${g},${b},.2)`;ctx.fill();
+  const hi=ctx.createRadialGradient(42,38,0,42,38,32);
+  hi.addColorStop(0,'rgba(255,255,255,.14)');hi.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=hi;ctx.beginPath();ctx.arc(64,64,64,0,Math.PI*2);ctx.fill();
+  return new THREE.CanvasTexture(c);
+}
+
+// ── FORCE LAYOUT ──────────────────────────────────────────────
+function fibSph(i,n,r){const g=Math.PI*(3-Math.sqrt(5)),y=1-(i/(n-1))*2,p=Math.sqrt(1-y*y),t=g*i;return{x:Math.cos(t)*p*r,y:y*r,z:Math.sin(t)*p*r}}
+function sf(v){return isFinite(v)?v:0}
+
+const nodes=NODES.map((n,i)=>{
+  const p=n.id==='nodejs'?{x:0,y:0,z:0}:fibSph(i,NODES.length,26);
+  return{...n,...p,vx:0,vy:0,vz:0,obj:null,glow:null,labelEl:null,conns:0};
+});
+const nIdx={};nodes.forEach(n=>nIdx[n.id]=n);
+const edges=EDGES.map(([a,b])=>({a:nIdx[a],b:nIdx[b]})).filter(e=>e.a&&e.b);
+edges.forEach(({a,b})=>{a.conns++;b.conns++});
+
+(function runForces(it=260){
+  const ID=13,RP=24,MV=3.2;
+  for(let k=0;k<it;k++){
+    const d=1-k/it*.55;
+    for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){
+      const a=nodes[i],b=nodes[j];
+      let dx=b.x-a.x,dy=b.y-a.y,dz=b.z-a.z;
+      const d2=dx*dx+dy*dy+dz*dz;
+      if(d2<.001){dx=.5-Math.random();dy=.5-Math.random();dz=.5-Math.random()}
+      const dist=Math.sqrt(d2||.001)+.5,f=Math.min(RP/(dist*dist),3);
+      a.vx=sf(a.vx-dx*f);a.vy=sf(a.vy-dy*f);a.vz=sf(a.vz-dz*f);
+      b.vx=sf(b.vx+dx*f);b.vy=sf(b.vy+dy*f);b.vz=sf(b.vz+dz*f);
+    }
+    edges.forEach(({a,b})=>{
+      const dx=b.x-a.x,dy=b.y-a.y,dz=b.z-a.z,dist=Math.sqrt(dx*dx+dy*dy+dz*dz)+.5;
+      const f=Math.min((dist-ID)*.013,2);
+      a.vx=sf(a.vx+dx*f);a.vy=sf(a.vy+dy*f);a.vz=sf(a.vz+dz*f);
+      b.vx=sf(b.vx-dx*f);b.vy=sf(b.vy-dy*f);b.vz=sf(b.vz-dz*f);
+    });
+    nodes.forEach(n=>{
+      if(n.id==='nodejs'){n.vx=n.vy=n.vz=0;return}
+      n.vx=sf(n.vx-n.x*.005);n.vy=sf(n.vy-n.y*.005);n.vz=sf(n.vz-n.z*.003);
+      n.vx=Math.max(-MV,Math.min(MV,n.vx))*.84*d;
+      n.vy=Math.max(-MV,Math.min(MV,n.vy))*.84*d;
+      n.vz=Math.max(-MV,Math.min(MV,n.vz))*.84*d;
+      n.x=sf(n.x+n.vx);n.y=sf(n.y+n.vy);n.z=sf(n.z+n.vz);
+    });
+  }
+  nodes.forEach((n,i)=>{if(!isFinite(n.x)||!isFinite(n.y)||!isFinite(n.z)){const p=fibSph(i,nodes.length,26);n.x=p.x;n.y=p.y;n.z=p.z}});
+})();
+
+// ── BUILD 3D OBJECTS ──────────────────────────────────────────
+const meshes=[];
+nodes.forEach(n=>{
+  const s=n.sz||1.4,col=n.color;
+  const r=n.type==='company'?s*.44:n.id==='nodejs'?s*.48:s*.4;
+  const geo=new THREE.SphereGeometry(r,28,28);
+  let tex;
+  if(n.type==='company')tex=mkCoTex(n.id,CO_COL[n.id]||col);
+  else if(n.type==='job')tex=mkJobTex(col);
+  else tex=mkSkillTex(col);
+  const mat=new THREE.MeshStandardMaterial({map:tex,color:0xffffff,emissiveMap:tex,emissive:0xffffff,emissiveIntensity:.32,roughness:.28,metalness:.55});
+  const mesh=new THREE.Mesh(geo,mat);
+  mesh.position.set(n.x,n.y,n.z);mesh.userData={id:n.id};
+  scene.add(mesh);meshes.push(mesh);n.obj=mesh;
+
+  // Glow
+  const gsp=new THREE.SpriteMaterial({map:mkGlow(col),transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,opacity:.65});
+  const glow=new THREE.Sprite(gsp);
+  glow.scale.setScalar(s*(n.id==='nodejs'?9:5.2));
+  glow.position.copy(mesh.position);scene.add(glow);n.glow=glow;
+
+  // Rings for center
+  if(n.id==='nodejs'){
+    n.rings=[];
+    [[s*1.05,.032,.55,0,'z'],[s*1.65,.022,.35,Math.PI/3,'y'],[s*2.3,.015,.22,Math.PI/5,'x']].forEach(([rad,t,op,rx,ax])=>{
+      const rg=new THREE.TorusGeometry(rad,t,8,72);
+      const rm=new THREE.MeshBasicMaterial({color:new THREE.Color(col),transparent:true,opacity:op});
+      const rmesh=new THREE.Mesh(rg,rm);rmesh.position.copy(mesh.position);rmesh.rotation.x=rx;
+      scene.add(rmesh);n.rings.push({mesh:rmesh,ax,sp:.35+Math.random()*.3});
+    });
+  }
+});
+
+// ── EDGES ─────────────────────────────────────────────────────
+const edgeObjs=[];
+edges.forEach(({a,b})=>{
+  const isMain=a.id==='nodejs'||b.id==='nodejs';
+  const col=isMain?(a.id==='nodejs'?b.color:a.color):'#8888aa';
+  const mid=new THREE.Vector3((a.x+b.x)/2+(Math.random()-.5)*6,(a.y+b.y)/2+(Math.random()-.5)*6,(a.z+b.z)/2+(Math.random()-.5)*4);
+  const curve=new THREE.QuadraticBezierCurve3(new THREE.Vector3(a.x,a.y,a.z),mid,new THREE.Vector3(b.x,b.y,b.z));
+  const pts=curve.getPoints(38);
+  const geo=new THREE.BufferGeometry().setFromPoints(pts);
+  const mat=new THREE.LineBasicMaterial({color:new THREE.Color(col),transparent:true,
+    opacity:isMain?.22:.07,blending:THREE.AdditiveBlending});
+  const line=new THREE.Line(geo,mat);line.userData={eid:`${a.id}--${b.id}`,oa:a.id,ob:b.id};scene.add(line);
+
+  if(isMain||a.conns>4||b.conns>4){
+    const p0=curve.getPoint(0);
+    const pGeo=new THREE.BufferGeometry();
+    const pAttr=new THREE.BufferAttribute(new Float32Array([p0.x,p0.y,p0.z]),3);
+    pAttr.setUsage(THREE.DynamicDrawUsage);pGeo.setAttribute('position',pAttr);
+    pGeo.boundingSphere=new THREE.Sphere(p0.clone(),1);
+    const pMat=new THREE.PointsMaterial({color:new THREE.Color(col),size:isMain?.5:.24,
+      transparent:true,opacity:isMain?.8:.38,blending:THREE.AdditiveBlending,depthWrite:false});
+    const part=new THREE.Points(pGeo,pMat);scene.add(part);
+    edgeObjs.push({curve,part,line,t:Math.random(),sp:.0018+Math.random()*.003,na:a.id,nb:b.id,isMain,origOp:isMain?.22:.07});
+  } else {
+    edgeObjs.push({curve,part:null,line,t:0,sp:0,na:a.id,nb:b.id,isMain,origOp:isMain?.22:.07});
+  }
+});
+
+// ── LIGHTS ────────────────────────────────────────────────────
+scene.add(new THREE.AmbientLight(0x151525,3.5));
+const pl1=new THREE.PointLight(0x34d399,4.5,90);pl1.position.set(0,8,12);scene.add(pl1);
+const pl2=new THREE.PointLight(0x60a5fa,2.2,110);pl2.position.set(-28,22,18);scene.add(pl2);
+const pl3=new THREE.PointLight(0xf59e0b,1.8,110);pl3.position.set(28,-22,-18);scene.add(pl3);
+
+// ── HTML LABELS ───────────────────────────────────────────────
+const labsEl=document.getElementById('labels');
+nodes.forEach(n=>{
+  const d=document.createElement('div');d.className='nlabel';
+  d.textContent=n.label;d.style.color=n.color;
+  d.style.borderColor=n.color+'2a';
+  d.onclick=()=>navigateTo(n.id);
+  labsEl.appendChild(d);n.labelEl=d;
+});
+
+// ── CAMERA ────────────────────────────────────────────────────
+let isDrag=false,prevM={x:0,y:0};
+let sph={t:.3,p:1.28,r:70};let tSph={...sph};
+let autoRot=true;let idleTmr;
+const cv2=renderer.domElement;
+
+function resetIdle(ms=5000){clearTimeout(idleTmr);idleTmr=setTimeout(()=>autoRot=true,ms)}
+cv2.addEventListener('mousedown',e=>{isDrag=true;prevM={x:e.clientX,y:e.clientY};autoRot=false;resetIdle(9000)});
+cv2.addEventListener('mouseup',()=>{isDrag=false;resetIdle()});
+cv2.addEventListener('mousemove',e=>{
+  if(!isDrag)return;
+  tSph.t-=(e.clientX-prevM.x)*.0048;
+  tSph.p=Math.max(.22,Math.min(Math.PI-.22,tSph.p-(e.clientY-prevM.y)*.0048));
+  prevM={x:e.clientX,y:e.clientY};
+});
+cv2.addEventListener('wheel',e=>{tSph.r=Math.max(22,Math.min(130,tSph.r+e.deltaY*.05));autoRot=false;resetIdle()},{passive:true});
+cv2.addEventListener('touchstart',e=>{isDrag=true;prevM={x:e.touches[0].clientX,y:e.touches[0].clientY};autoRot=false},{passive:true});
+cv2.addEventListener('touchend',()=>{isDrag=false;resetIdle()});
+cv2.addEventListener('touchmove',e=>{if(!isDrag)return;tSph.t-=(e.touches[0].clientX-prevM.x)*.0048;tSph.p=Math.max(.22,Math.min(Math.PI-.22,tSph.p-(e.touches[0].clientY-prevM.y)*.0048));prevM={x:e.touches[0].clientX,y:e.touches[0].clientY}},{passive:true});
+
+// ── HOVER ─────────────────────────────────────────────────────
+const ray=new THREE.Raycaster(),mv=new THREE.Vector2();
+const ttEl=document.getElementById('tt'),ttn=document.getElementById('ttn'),tts=document.getElementById('tts');
+let hovId=null,selId=null;
+
+cv2.addEventListener('mousemove',e=>{
+  if(isDrag){ttEl.style.opacity='0';return}
+  mv.x=(e.clientX/W)*2-1;mv.y=-(e.clientY/H)*2+1;
+  ray.setFromCamera(mv,camera);
+  const hits=ray.intersectObjects(meshes.filter(m=>m.visible));
+  if(hits.length){
+    const id=hits[0].object.userData.id,n=nIdx[id];
+    if(id!==hovId){hovId=id;ttn.textContent=n.label;tts.textContent=n.type.toUpperCase()+' · '+n.growth+' · '+n.conns+' connections';cv2.style.cursor='pointer'}
+    ttEl.style.left=e.clientX+'px';ttEl.style.top=e.clientY+'px';ttEl.style.opacity='1';
+    ttEl.style.borderColor=n.color+'44';
+  }else{hovId=null;ttEl.style.opacity='0';cv2.style.cursor='default'}
+});
+cv2.addEventListener('mouseleave',()=>{ttEl.style.opacity='0';hovId=null});
+
+// ── CLICK ─────────────────────────────────────────────────────
+cv2.addEventListener('click',e=>{
+  if(isDrag)return;
+  mv.x=(e.clientX/W)*2-1;mv.y=-(e.clientY/H)*2+1;
+  ray.setFromCamera(mv,camera);
+  const hits=ray.intersectObjects(meshes.filter(m=>m.visible));
+  if(hits.length)navigateTo(hits[0].object.userData.id);
+});
+
+// ── NAVIGATION ────────────────────────────────────────────────
+function navigateTo(id){
+  const n=nIdx[id];if(!n||!n.obj.visible)return;
+  selId=id;
+  tSph.t=Math.atan2(n.x,n.z)+.25;
+  tSph.p=Math.PI/2+(-n.y*.008);
+  tSph.r=Math.max(28,Math.min(52,n.conns*2.8+22));
+  autoRot=false;resetIdle(12000);
+  openPanel(n);updateCareerPath(n);highlight(id);
+}
+window.navigateTo=navigateTo;
+
+function highlight(id){
+  const conn=new Set([id]);
+  edges.forEach(({a,b})=>{if(a.id===id)conn.add(b.id);if(b.id===id)conn.add(a.id)});
+  nodes.forEach(n=>{
+    const yes=conn.has(n.id);
+    n.obj.material.opacity=yes?1:.18;n.obj.material.transparent=!yes;
+    n.glow.material.opacity=yes?.65:.06;
+    if(n.labelEl)n.labelEl.style.opacity=yes?'1':'.15';
+  });
+  edgeObjs.forEach(e=>{
+    const yes=conn.has(e.na)&&conn.has(e.nb);
+    e.line.material.opacity=yes?e.origOp*2.2:.025;
+    if(e.part)e.part.material.opacity=yes?.9:.04;
+  });
+}
+
+function clearHighlight(){
+  nodes.forEach(n=>{n.obj.material.opacity=1;n.obj.material.transparent=false;n.glow.material.opacity=.65;if(n.labelEl)n.labelEl.style.opacity='1'});
+  edgeObjs.forEach(e=>{e.line.material.opacity=e.origOp;if(e.part)e.part.material.opacity=e.isMain?.8:.38});
+}
+
+// ── PANEL ─────────────────────────────────────────────────────
+function chips(ids,fallbackType){
+  return(ids||[]).map(raw=>{
+    const nd=nIdx[raw]||(nodes.find(n=>n.label===raw));
+    const type=nd?nd.type:fallbackType;
+    const lbl=nd?nd.label:raw;
+    if(nd)return`<span class="chip ${type}" onclick="navigateTo('${nd.id}')" title="Explore ${lbl}">`+
+      `<span class="cd"></span>${lbl}</span>`;
+    return`<span class="chip plain"><span class="cd"></span>${lbl}</span>`;
+  }).join('');
+}
+
+function openPanel(n){
+  const brandCol=n.type==='company'?(CO_COL[n.id]||n.color):n.color;
+  document.getElementById('phs').style.background=brandCol;
+  document.getElementById('pt').textContent=n.type.toUpperCase();
+  document.getElementById('pt').style.color=brandCol;
+  document.getElementById('pn').textContent=n.label;
+  document.getElementById('pn').style.color=brandCol;
+  document.getElementById('pd').textContent=n.desc;
+
+  const mets=[];
+  if(n.salary)mets.push({v:n.salary,l:'Salary'});
+  if(n.openings)mets.push({v:(n.type==='company'?n.openings+' roles':n.openings+' jobs'),l:'Openings'});
+  if(n.growth)mets.push({v:n.growth,l:'YoY Growth'});
+  mets.push({v:n.conns,l:'Connections'});
+  document.getElementById('pm').innerHTML=mets.map(m=>`<div class="mb"><div class="mv" style="color:${brandCol}">${m.v}</div><div class="ml">${m.l}</div></div>`).join('');
+
+  document.getElementById('dp').textContent=n.demand+'%';
+  document.getElementById('df').style.width=n.demand+'%';
+  document.getElementById('df').style.background=`linear-gradient(90deg,${brandCol}66,${brandCol})`;
+
+  const sk=n.skills&&n.skills.length,jo=n.jobs&&n.jobs.length,co=n.companies&&n.companies.length,st=n.stack&&n.stack.length;
+  document.getElementById('psk').style.display=sk?'':'none';
+  document.getElementById('pck').innerHTML=sk?chips(n.skills,'skill'):'';
+  document.getElementById('psj').style.display=jo?'':'none';
+  document.getElementById('pcj').innerHTML=jo?chips(n.jobs,'job'):'';
+  document.getElementById('psc').style.display=co?'':'none';
+  document.getElementById('pcc').innerHTML=co?chips(n.companies,'company'):'';
+  document.getElementById('pss').style.display=st?'':'none';
+  document.getElementById('pcs').innerHTML=st?chips(n.stack,'skill'):'';
+
+  document.getElementById('right').classList.add('open');
+  document.getElementById('bot').classList.add('has-panel');
+}
+
+function closePanel(){
+  document.getElementById('right').classList.remove('open');
+  document.getElementById('bot').classList.remove('has-panel');
+  selId=null;clearHighlight();autoRot=true;
+}
+window.closePanel=closePanel;
+
+// ── CAREER PATH ───────────────────────────────────────────────
+function updateCareerPath(n){
+  let steps=[];
+  if(n.type==='skill'){
+    steps.push({id:n.id,col:n.color,lbl:n.label});
+    nodes.filter(j=>j.type==='job'&&(j.skills||[]).includes(n.id)).slice(0,2).forEach(j=>steps.push({id:j.id,col:j.color,lbl:j.label}));
+    nodes.filter(c=>c.type==='company'&&(c.stack||[]).includes(n.id)).slice(0,2).forEach(c=>steps.push({id:c.id,col:c.color,lbl:c.label}));
+  }else if(n.type==='job'){
+    nodes.filter(s=>s.type==='skill'&&(n.skills||[]).includes(s.id)).slice(0,2).forEach(s=>steps.push({id:s.id,col:s.color,lbl:s.label}));
+    steps.push({id:n.id,col:n.color,lbl:n.label});
+    (n.companies||[]).map(id=>nIdx[id]).filter(Boolean).slice(0,2).forEach(c=>steps.push({id:c.id,col:c.color,lbl:c.label}));
+  }else{
+    (n.stack||[]).map(id=>nIdx[id]).filter(Boolean).slice(0,2).forEach(s=>steps.push({id:s.id,col:s.color,lbl:s.label}));
+    (n.jobs||[]).map(id=>nIdx[id]).filter(Boolean).slice(0,1).forEach(j=>steps.push({id:j.id,col:j.color,lbl:j.label}));
+    steps.push({id:n.id,col:n.color,lbl:n.label});
+  }
+  document.getElementById('cps').innerHTML=steps.map((s,i)=>
+    `<span class="cst" style="color:${s.col};background:${s.col}14;border-color:${s.col}2a" onclick="navigateTo('${s.id}')">${s.lbl}</span>`+
+    (i<steps.length-1?`<span class="ca">›</span>`:'')
+  ).join('');
+}
+
+// ── TRENDING ──────────────────────────────────────────────────
+document.getElementById('trl').innerHTML=TRENDING.map(t=>
+  `<div class="tri"><span class="trn">${t.n}</span><div class="trb"><div class="trf" style="width:${t.p}%;background:${t.c}"></div></div><span class="trp">${t.p}%</span></div>`
+).join('');
+
+// ── LEFT PANEL TOP LIST ───────────────────────────────────────
+const maxC=Math.max(...nodes.map(n=>n.conns));
+document.getElementById('top-list').innerHTML=[...nodes].sort((a,b)=>b.conns-a.conns).slice(0,6).map(n=>
+  `<div class="top-node" onclick="navigateTo('${n.id}')"><div class="tn-dot" style="background:${n.color}"></div>
+  <div style="flex:1;min-width:0"><div class="tn-name">${n.label}</div>
+  <div class="bw"><div class="bf" style="width:${Math.round(n.conns/maxC*100)}%;background:${n.color}55"></div></div></div>
+  <div class="tn-ct">${n.conns}</div></div>`
+).join('');
+
+// ── FILTER ────────────────────────────────────────────────────
+let activeFilt='all';
+function setFilter(type){
+  activeFilt=type;
+  document.querySelectorAll('.filt').forEach(b=>b.classList.toggle('active',b.dataset.t===type));
+  nodes.forEach(n=>{const show=type==='all'||n.type===type;
+    n.obj.visible=show;n.glow.visible=show;if(n.labelEl)n.labelEl.style.display=show?'':'none';
+    if(n.rings)n.rings.forEach(r=>r.mesh.visible=show)});
+  edgeObjs.forEach(e=>{const a=nIdx[e.na],b=nIdx[e.nb];
+    const show=type==='all'||a.type===type||b.type===type;
+    e.line.visible=show;if(e.part)e.part.visible=show});
+}
+window.setFilter=setFilter;
+
+// ── SEARCH ────────────────────────────────────────────────────
+function onSearch(q){
+  const s=q.trim().toLowerCase();
+  if(!s){if(selId)highlight(selId);else clearHighlight();return}
+  const match=nodes.find(n=>n.label.toLowerCase().includes(s)||n.id.includes(s));
+  if(match){highlight(match.id)}else clearHighlight();
+}
+window.onSearch=onSearch;
+
+// ── COUNTER ───────────────────────────────────────────────────
+function animCount(el,val,ms=1100){const t0=performance.now();(function s(t){el.textContent=Math.round(Math.min((t-t0)/ms,1)*val);if(t-t0<ms)requestAnimationFrame(s)})(t0)}
+
+// ── ANIMATE ───────────────────────────────────────────────────
+let time=0;const clk=new THREE.Clock();const pv=new THREE.Vector3();
+
+function animate(){
+  requestAnimationFrame(animate);
+  const dt=clk.getDelta();time+=dt;
+  if(autoRot)tSph.t+=.0022;
+  sph.t+=(tSph.t-sph.t)*.048;sph.p+=(tSph.p-sph.p)*.048;sph.r+=(tSph.r-sph.r)*.048;
+  camera.position.set(sph.r*Math.sin(sph.p)*Math.sin(sph.t),sph.r*Math.cos(sph.p),sph.r*Math.sin(sph.p)*Math.cos(sph.t));
+  camera.lookAt(0,0,0);
+
+  nodes.forEach((n,i)=>{
+    const ph=time*1.1+i*.52,pulse=1+Math.sin(ph)*.055;
+    n.obj.scale.setScalar(pulse);
+    if(n.id!=='nodejs')n.obj.rotation.y=time*.25+i*.4;
+    if(n.rings)n.rings.forEach((r,ri)=>{r.mesh.rotation[r.ax]=time*r.sp*(ri%2?1:-1)});
+
+    // Label projection
+    if(n.labelEl&&n.obj.visible){
+      pv.copy(n.obj.position);pv.project(camera);
+      if(pv.z<1){
+        const lx = (pv.x * 0.5 + 0.5) * W; 
+        const ly = (-pv.y * 0.5 + 0.5) * H;
+        const yoff=(n.sz||1.4)*.46*(1/(sph.r*.014))*13;
+        n.labelEl.style.transform=`translate(-50%,-50%) translate(${lx}px,${ly-yoff}px)`;
+        n.labelEl.style.display='';
+      }else n.labelEl.style.display='none';
+    }
+  });
+
+  edgeObjs.forEach(e=>{
+    if(!e.part||!e.part.visible)return;
+    e.t=(e.t+e.sp)%1;
+    const pt=e.curve.getPoint(e.t);
+    if(!isFinite(pt.x)||!isFinite(pt.y)||!isFinite(pt.z))return;
+    const pos=e.part.geometry.attributes.position;
+    pos.setXYZ(0,pt.x,pt.y,pt.z);pos.needsUpdate=true;
+    e.part.geometry.boundingSphere.center.set(pt.x,pt.y,pt.z);
+  });
+
+  pl1.intensity=4+Math.sin(time*.75)*.6;
+  pl2.position.x=-28+Math.sin(time*.32)*10;
+  pl3.position.y=-22+Math.cos(time*.26)*10;
+  renderer.render(scene,camera);
+}
+
+window.addEventListener('resize',()=>{W=window.innerWidth;H=window.innerHeight;camera.aspect=W/H;camera.updateProjectionMatrix();renderer.setSize(W,H)});
+
+setTimeout(()=>{
+  document.getElementById('load').classList.add('done');
+  animCount(document.getElementById('sn'),nodes.length);
+  animCount(document.getElementById('se'),EDGES.length);
+  animCount(document.getElementById('sc'),nodes.filter(n=>n.type==='company').length);
+},650);
+animate();
+</script>
+</body>
+</html>
