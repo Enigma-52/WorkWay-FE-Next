@@ -100,6 +100,34 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   const title = `${role.name} Jobs in ${location.name} (${total.toLocaleString()} Open Roles) | WorkWay`;
   const description = `Browse ${total.toLocaleString()} open ${role.name.toLowerCase()} jobs in ${location.name}. Filter by experience, domain, and employment type. Apply directly on WorkWay.`;
 
+  const keywords = [
+  `${role.name} jobs in ${location.name}`,
+  `${role.name} jobs ${location.name}`,
+  `${role.name} openings in ${location.name}`,
+  `${role.name} hiring ${location.name}`,
+  `${role.name} careers ${location.name}`,
+  `${role.name} job openings ${location.name}`,
+  `${role.name} recruitment ${location.name}`,
+  `${role.name} vacancies ${location.name}`,
+
+  // intent variations
+  `${role.name} roles ${location.name}`,
+  `${role.name} opportunities ${location.name}`,
+  `apply ${role.name} jobs ${location.name}`,
+  `${role.name.toLowerCase()} jobs near ${location.name.toLowerCase()}`,
+
+  // filter-related (long-tail)
+  `${role.name} remote jobs ${location.name}`,
+  `${role.name} full time jobs ${location.name}`,
+  `${role.name} internships ${location.name}`,
+  `${role.name} fresher jobs ${location.name}`,
+  `${role.name} experienced jobs ${location.name}`,
+
+  // platform branding
+  `${role.name} jobs WorkWay`,
+  `${location.name} jobs WorkWay`,
+];
+  
   return buildPageMetadata({
     title,
     description,
@@ -107,6 +135,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
     robots: shouldNoIndex
       ? { index: false, follow: true }
       : { index: true, follow: true },
+    keywords,
   });
 }
 
