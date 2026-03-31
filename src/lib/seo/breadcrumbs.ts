@@ -192,6 +192,25 @@ export function buildLocationJobsBreadcrumb(): BreadcrumbItem[] {
   ];
 }
 
+export function buildGuidesBreadcrumb(): BreadcrumbItem[] {
+  return [
+    ...buildHomeBreadcrumb(),
+    {
+      name: "Guides",
+      href: "/guides",
+    },
+  ];
+}
+
+export function buildGuideDetailBreadcrumb(title: string): BreadcrumbItem[] {
+  return [
+    ...buildGuidesBreadcrumb(),
+    {
+      name: title,
+    },
+  ];
+}
+
 export function buildLocationSeoDetailBreadcrumb(
   roleName: string,
   locationName: string,
