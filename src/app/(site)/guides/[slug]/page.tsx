@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { CheckCircle2, XCircle, ArrowRight, Zap } from "lucide-react";
+import { CheckCircle2, XCircle, ArrowRight, Zap, Users, HelpCircle } from "lucide-react";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import { buildGuideDetailBreadcrumb } from "@/lib/seo/breadcrumbs";
-import { buildBreadcrumbJsonLd } from "@/lib/seo/jsonld";
+import { buildBreadcrumbJsonLd, buildFaqJsonLd } from "@/lib/seo/jsonld";
 import { GUIDES, getGuideBySlug, ALL_GUIDE_SLUGS } from "@/data/guidesData";
 
 type Props = {
@@ -36,11 +36,14 @@ export default async function GuidePage({ params }: Props) {
   if (!guide) notFound();
 
   const breadcrumbs = buildGuideDetailBreadcrumb(guide.h1);
-  const relatedGuides = GUIDES.filter((g) => g.slug !== guide.slug).slice(0, 3);
+  const relatedGuides = GUIDES.filter((g) => g.slug !== guide.slug).slice(0, 6);
 
   return (
     <main className="min-h-screen bg-background text-foreground">
       <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
+      {guide.faq && guide.faq.length > 0 && (
+        <JsonLd data={buildFaqJsonLd(guide.faq)} />
+      )}
 
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-border">
@@ -65,6 +68,17 @@ export default async function GuidePage({ params }: Props) {
       </section>
 
       <div className="max-w-4xl mx-auto px-6 py-16 space-y-20">
+
+        {/* Who this is for */}
+        {guide.whoIsFor && (
+          <section>
+            <div className="flex items-center gap-3 mb-4">
+              <Users className="w-4 h-4 text-primary" />
+              <p className="section-heading">Who this is for</p>
+            </div>
+            <p className="text-muted-foreground leading-relaxed text-base">{guide.whoIsFor}</p>
+          </section>
+        )}
 
         {/* The Problem */}
         <section>
@@ -125,6 +139,24 @@ export default async function GuidePage({ params }: Props) {
             ))}
           </div>
         </section>
+
+        {/* FAQ */}
+        {guide.faq && guide.faq.length > 0 && (
+          <section>
+            <div className="flex items-center gap-3 mb-6">
+              <HelpCircle className="w-4 h-4 text-primary" />
+              <p className="section-heading">Frequently asked questions</p>
+            </div>
+            <div className="space-y-4">
+              {guide.faq.map((item, i) => (
+                <div key={i} className="rounded-xl border border-border bg-card p-6">
+                  <p className="font-semibold mb-3">{item.question}</p>
+                  <p className="text-muted-foreground leading-relaxed text-sm">{item.answer}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Verdict */}
         <section>
@@ -189,7 +221,7 @@ export default async function GuidePage({ params }: Props) {
         {/* Related guides */}
         <section>
           <p className="section-heading mb-6">More comparisons</p>
-          <div className="grid sm:grid-cols-3 gap-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {relatedGuides.map((related) => (
               <Link
                 key={related.slug}

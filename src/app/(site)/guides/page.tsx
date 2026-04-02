@@ -47,6 +47,28 @@ const ATS_GROUPS = [
       "workway-vs-bookmarking-job-links",
     ],
   },
+  {
+    label: "Tracker Tools",
+    slugs: [
+      "workway-vs-notion-job-tracker",
+      "workway-vs-airtable-job-tracking",
+    ],
+  },
+  {
+    label: "Alerts & Discovery",
+    slugs: [
+      "workway-vs-job-alert-emails",
+      "workway-vs-google-alerts-job-search",
+    ],
+  },
+  {
+    label: "Job Platforms",
+    slugs: [
+      "workway-vs-linkedin-jobs",
+      "workway-vs-wellfound-startup-jobs",
+      "workway-vs-hacker-news-hiring-threads",
+    ],
+  },
 ];
 
 export default function GuidesPage() {
