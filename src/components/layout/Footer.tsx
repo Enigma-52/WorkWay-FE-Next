@@ -92,6 +92,12 @@ const Footer = () => {
               >
                 Disclaimer
               </a>
+              <a
+                href="/guides"
+                className="transition-colors hover:text-foreground"
+              >
+                Guides
+              </a>
             </div>
           </div>
 
