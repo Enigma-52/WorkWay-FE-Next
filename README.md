@@ -2,13 +2,11 @@
 
 Next.js App Router SSR frontend for WorkWay, migrated from the legacy React Router app with SEO-first metadata, server rendering, and Vercel deployment support.
 
-
 ## Stack
 - Next.js 16 + React 19 + TypeScript
 - Tailwind CSS
 - SSR data fetching against WorkWay backend APIs
 - GA4 + Mixpanel analytics
-
 
 ## Local Setup
 ```bash
