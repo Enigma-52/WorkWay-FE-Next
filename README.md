@@ -30,4 +30,3 @@ npm run dev
 
 ## Production
 - Primary domain: `https://www.workway.dev`
-- Deployed on Vercel
