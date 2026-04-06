@@ -563,6 +563,8 @@ export const GUIDES: GuideComparison[] = [
     ],
     ats: "general",
     manualLabel: "Spreadsheet job tracker",
+    whoIsFor:
+      "This guide is for anyone who has ever opened a blank Google Sheet, typed 'Company', 'Role', 'Link', 'Status', 'Date Applied' across the top row, and tried to run their entire job search from it. The spreadsheet job tracker is the default solution for candidates who want to feel organized — and it works, for about a week. If you've found yourself with a spreadsheet full of stale links, outdated statuses, and roles you're no longer sure are even open, this guide explains why the problem isn't your spreadsheet design — it's that a spreadsheet is fundamentally the wrong tool for a live, dynamic job market. WorkWay was built to be the right tool: automatic discovery from Greenhouse, Lever, and Ashby, real-time freshness, and a built-in tracker that requires no maintenance.",
     painPoints: [
       "Every job in your spreadsheet had to be manually discovered, clicked through, and copy-pasted — the data entry alone is a 5-to-10-minute task per role that adds nothing to the quality of your application and takes time away from the things that do",
       "Your spreadsheet has no connection to the live ATS data — it doesn't know when a job you pasted last week got filled, when the title changed, when the role was paused, or when the company added a new position you'd be perfect for",
@@ -606,6 +608,28 @@ export const GUIDES: GuideComparison[] = [
     ],
     verdict:
       "Spreadsheets feel like control, but they're an illusion of it — the data inside is always a snapshot from whenever you last updated it, and the job market has moved on since then. WorkWay replaces that illusion with an actual live system: jobs discovered automatically, statuses updated in real time, closed roles purged on every sync. It's not a better spreadsheet — it's what candidates have been trying to build with spreadsheets for years, finally built properly with a direct connection to the ATS data that makes it accurate.",
+    faq: [
+      {
+        question: "What's wrong with using a spreadsheet to track job applications?",
+        answer:
+          "The core problem is that a spreadsheet has no connection to the live data it's supposed to represent. Every piece of information in it — the job title, the link, the status — was accurate at the moment you typed it and starts going stale immediately after. Greenhouse, Lever, and Ashby update in real time: roles get filled, new ones appear, descriptions change. Your spreadsheet knows none of it. The result is that the more time passes, the less reliable your tracker becomes — and it becomes least reliable during active interview phases when you need it most.",
+      },
+      {
+        question: "Can't I just keep my spreadsheet updated manually?",
+        answer:
+          "You can, but the effort required scales with the ambition of your search. If you're tracking 10 companies, maybe. If you're tracking 50, the maintenance overhead — checking each link, updating statuses, adding new roles, deleting filled ones — can consume an hour or more per day that should be going toward applications and interview preparation. The discipline required to keep a spreadsheet current also tends to break down exactly when you're most stressed: during active interview weeks, when falling behind on the tracker has the highest real cost.",
+      },
+      {
+        question: "Does WorkWay replace my spreadsheet entirely?",
+        answer:
+          "For job tracking purposes, yes. WorkWay's built-in application pipeline covers everything a job tracker spreadsheet handles — saving roles, marking applied, tracking interview stages, logging outcomes — with the addition of live ATS data behind every entry. Your entire job search history, across Greenhouse, Lever, and Ashby, in one searchable dashboard that updates itself. If you want to use a spreadsheet alongside WorkWay for notes or custom data, that's fine — but the tracking function itself is fully covered.",
+      },
+      {
+        question: "How does WorkWay discover jobs without me manually adding them?",
+        answer:
+          "WorkWay connects directly to the public job board APIs that Greenhouse, Lever, and Ashby provide for exactly this purpose — making open roles discoverable to candidates. WorkWay syncs all covered companies every few hours, pulling new roles automatically and removing closed ones. You never add a role to WorkWay manually; the feed is populated and maintained by the system. Discovery is a function of the continuous sync, not of how often you remember to check.",
+      },
+    ],
   },
   {
     slug: "workway-vs-manual-job-search",
@@ -622,6 +646,8 @@ export const GUIDES: GuideComparison[] = [
     ],
     ats: "general",
     manualLabel: "Manual job search",
+    whoIsFor:
+      "This guide is for engineers, designers, product managers, and other technical professionals who are actively job searching and have started to feel like the search itself is consuming more time and energy than the actual interviewing and applying. If you've noticed that your mornings are disappearing into career page checks before you've done a single productive thing, or that your interview prep is suffering because you're spending evenings catching up on listings, this guide is for you. The manual job search isn't a discipline problem — it's a system problem. WorkWay fixes the system so the discipline you have goes toward outcomes instead of overhead.",
     painPoints: [
       "Manually checking career pages across Greenhouse, Lever, and Ashby consumes 5 to 10 hours per week for active job seekers — time that is structurally removed from the activities that actually produce offers: interview prep, tailored applications, and relationship building",
       "There is no way to search across multiple company career pages simultaneously when doing it manually — every search is scoped to one company at a time, which means the breadth of your search is directly proportional to the hours you can afford to spend on it",
@@ -665,6 +691,28 @@ export const GUIDES: GuideComparison[] = [
     ],
     verdict:
       "Job search success is a function of what you do with the opportunities you find — how well you prepare, how clearly you communicate your value, how deeply you understand the companies you're targeting. Manual search overhead competes directly with all of that. WorkWay removes the overhead so the competition disappears. Discovery is automated. The feed is always current. The search never stops, even when you do. What remains — the work that actually matters — gets your full attention.",
+    faq: [
+      {
+        question: "How many hours per week does manual ATS job searching actually take?",
+        answer:
+          "For candidates targeting 20 to 50 companies across Greenhouse, Lever, and Ashby, the time cost of manual searching typically runs 5 to 10 hours per week — spread across morning check routines, mid-day refreshes, and evening catch-up sessions. That estimate includes the actual page visits, the time spent evaluating whether a role is new or one you've already seen, and the overhead of managing whatever tracking system you're using alongside the search. WorkWay reduces that to under 10 minutes per week — the time it takes to open your feed, scan what's new, and start reading job descriptions.",
+      },
+      {
+        question: "What's the risk of missing jobs with manual searching?",
+        answer:
+          "The risk is structural and significant. Manual searching only catches jobs that happen to be live and visible during the narrow windows you choose to check. Highly competitive roles at desirable companies can receive dozens of applications within hours of posting — which means checking once a day may already be too slow. More fundamentally, manual search only covers the companies you've explicitly added to your list. WorkWay covers the full database of ATS-connected companies, including ones you've never heard of that might be a perfect fit, surfacing hiring activity that's completely invisible to a manual search.",
+      },
+      {
+        question: "Does WorkWay work for all types of tech roles?",
+        answer:
+          "WorkWay aggregates jobs across all role types posted on Greenhouse, Lever, and Ashby — engineering, product, design, data, operations, sales, and more. The search and filter system lets you narrow to your specific role category, seniority level, and location. Whether you're looking for a senior backend engineering role at a growth-stage startup or an entry-level product manager position at a larger tech company, if the company uses one of the three major ATS platforms, WorkWay surfaces it.",
+      },
+      {
+        question: "Can WorkWay help me apply faster to competitive roles?",
+        answer:
+          "Yes, and timing matters more than most candidates realize. For competitive roles at well-known companies, applicant volume builds quickly in the first 24 to 72 hours after posting. WorkWay surfaces new roles within hours of them appearing on the ATS — consistently earlier than LinkedIn, job board emails, or manual check cycles. Being in the first wave of applicants rather than the third doesn't guarantee an interview, but it removes a disadvantage that most candidates don't even know they have.",
+      },
+    ],
   },
   {
     slug: "workway-vs-bookmarking-job-links",
@@ -681,6 +729,8 @@ export const GUIDES: GuideComparison[] = [
     ],
     ats: "general",
     manualLabel: "Bookmark folder",
+    whoIsFor:
+      "This guide is for job seekers who have accumulated a browser bookmark folder — usually named something like 'Jobs', 'Apply', or 'Roles to Check' — full of links to Greenhouse, Lever, and Ashby job postings. If you've opened that folder recently and started clicking through links only to find 404 errors, 'this role has been filled' pages, or jobs that look nothing like what you remember saving, this guide is for you. The bookmark folder is one of the most common job search anti-patterns in tech, and the reason it fails isn't user error — it's that bookmarks are static and job markets are not. WorkWay gives you the live, status-aware version of the same idea.",
     painPoints: [
       "A bookmark folder full of job links gives you no signal about which roles are still open — every link looks identical whether the job was posted yesterday or filled three weeks ago, and the only way to find out is to click through one by one",
       "ATS job posting URLs expire silently — when a company closes a role on Greenhouse, Lever, or Ashby, the link often redirects to a generic error page or the company's main careers listing, and your bookmark becomes a dead end with no warning",
@@ -724,6 +774,28 @@ export const GUIDES: GuideComparison[] = [
     ],
     verdict:
       "A bookmark is just a URL — it has no memory, no status, no connection to the live data it points to. The moment you save it, it starts aging. WorkWay gives your saved jobs a living representation: connected to the ATS, updated on every sync, and embedded in a tracker that follows your application through every stage. The bookmark folder served a purpose when there were no better options. WorkWay is the better option.",
+    faq: [
+      {
+        question: "Why do ATS job links expire or break?",
+        answer:
+          "When a company closes a job posting on Greenhouse, Lever, or Ashby, the URL for that posting either gets deactivated entirely or redirects to a generic careers page. The ATS platform doesn't preserve the old link — it removes the job from its active index, making the specific posting URL return a 404 or a redirect. Your bookmark had no way of knowing this happened, so it looks identical to every other bookmark in your folder until you click it and discover it's broken. WorkWay avoids this entirely by maintaining a live connection to the ATS — when a posting disappears, WorkWay removes it from your feed on the next sync.",
+      },
+      {
+        question: "Can't I just use a bookmark with a note next to it for tracking?",
+        answer:
+          "Browser bookmarks don't support metadata like application status, follow-up dates, or interview stage notes — at least not natively. Some people work around this with bookmark naming conventions (e.g. 'Stripe - Applied - SWE L5') but this doesn't scale, breaks the URL on some browsers, and still doesn't solve the freshness problem. WorkWay's tracker gives you structured, persistent status data on every saved job — no naming conventions, no workarounds, and the underlying job data stays connected to the ATS so you know if it's still live.",
+      },
+      {
+        question: "How is saving a job in WorkWay different from bookmarking it?",
+        answer:
+          "When you save a job in WorkWay, you're not just storing a URL — you're adding a live, ATS-connected job record to your tracked list. The record shows the current status of the posting (open, closed, or updated), lets you move it through application stages, and persists in your dashboard across devices. If the job closes, WorkWay flags it. If you apply, you move it to Applied and it stays in your pipeline history forever. A browser bookmark is a pointer to a page that may or may not exist tomorrow. A WorkWay saved job is a managed record in a live system.",
+      },
+      {
+        question: "Is WorkWay accessible across all my devices?",
+        answer:
+          "Yes. WorkWay is account-based and web-accessible, so your saved jobs, application pipeline, and search history are available on any device with a browser. You can start reviewing a role on your laptop in the morning, apply from your work computer at lunch, and check your pipeline status from your phone in the evening — all with the same account, the same data, and no syncing required.",
+      },
+    ],
   },
   // --- Workflow Tools ---
   {
@@ -741,6 +813,8 @@ export const GUIDES: GuideComparison[] = [
     ],
     ats: "general",
     manualLabel: "Notion database",
+    whoIsFor:
+      "This guide is for job seekers who reached for Notion because a spreadsheet felt too limiting — you wanted a database, not a flat table, and Notion's gallery views, linked databases, and customizable properties seemed like the right level of structure for a serious job search. If you've invested hours building a Notion job tracker template and found yourself spending more time maintaining it than using it, this guide is for you. Notion is genuinely excellent for many things. Tracking live job market data from Greenhouse, Lever, and Ashby is not one of them — not because of the tool's limitations, but because the problem requires a live ATS connection that no general-purpose workspace tool can replicate. WorkWay provides that connection natively.",
     painPoints: [
       "Every single job in your Notion database required you to first discover it manually by visiting career pages, then copy-paste the title, company, link, and description into a Notion row — a workflow that adds 5 to 10 minutes of overhead per role before you've done anything productive",
       "Notion has no integration with Greenhouse, Lever, or Ashby and no mechanism to detect when a job you've tracked gets filled, removed, or modified — your Notion database is a permanently frozen snapshot of the job market as it existed when you last manually updated it",
@@ -784,6 +858,28 @@ export const GUIDES: GuideComparison[] = [
     ],
     verdict:
       "Notion job trackers are built with care and creativity — and they still fail at the most important part. They can't pull new jobs. They can't detect closed ones. They can't tell you that a company you've been watching just posted three new roles this morning. That's not a Notion problem; it's a structural limitation of any tool that relies on manual data entry. WorkWay eliminates the manual layer entirely with a direct connection to the ATS data that makes everything accurate. Use Notion for what it's great at. Use WorkWay for your job search.",
+    faq: [
+      {
+        question: "Can't I connect Notion to Greenhouse or Lever via Zapier or Make?",
+        answer:
+          "In theory, you can build workflows that push new job postings into Notion via automation tools — but in practice, this requires a paid Zapier or Make plan, significant setup and maintenance, and a reliable data source to trigger from. Most ATS platforms don't offer native Zapier triggers for new job postings, so you'd need to build a polling mechanism or use a third-party intermediary. Even if you succeed, you're building and maintaining a fragile pipeline to replicate functionality that WorkWay provides natively, out of the box, for free.",
+      },
+      {
+        question: "What can Notion still do well in a job search?",
+        answer:
+          "Notion is excellent for the qualitative parts of job searching: company research notes, interview prep pages, outreach draft templates, and post-interview reflections. These are tasks that benefit from Notion's rich text editing, linking, and flexible structure. WorkWay handles the quantitative, live-data parts — discovery, tracking, and pipeline status. Used together, WorkWay for the feed and tracker, Notion for your research notes, the combination covers both sides of a serious job search without forcing either tool to do something it wasn't built for.",
+      },
+      {
+        question: "How long does it take to set up WorkWay compared to a Notion tracker?",
+        answer:
+          "WorkWay requires zero setup. You sign in, and the feed is already populated with live jobs from Greenhouse, Lever, and Ashby. There are no properties to configure, no views to design, no templates to choose between. A well-built Notion job tracker can take 2 to 4 hours to set up properly — building the database, configuring the right views, creating the status pipeline — and that's before you've added a single job. With WorkWay, you can be reviewing your first batch of relevant jobs within minutes of signing up.",
+      },
+      {
+        question: "What happens to my job data if I stop using WorkWay?",
+        answer:
+          "Your application history — every role you've tracked, every stage you've moved a job through, every note you've added — stays in your account for as long as your account exists. WorkWay doesn't delete historical data when jobs close or are removed from the live feed. If you need a record of your job search activity for reference or performance tracking, your WorkWay dashboard serves as a persistent, searchable archive of everything you've done.",
+      },
+    ],
   },
   {
     slug: "workway-vs-airtable-job-tracking",
@@ -800,6 +896,8 @@ export const GUIDES: GuideComparison[] = [
     ],
     ats: "general",
     manualLabel: "Airtable base",
+    whoIsFor:
+      "This guide is for job seekers who outgrew a simple spreadsheet and turned to Airtable for its relational features, kanban views, and formula power. If you've spent an afternoon (or a weekend) building an Airtable job tracking base — linked tables for companies, roles, contacts, and applications — and found that maintaining it takes more effort than it's worth, this guide will explain why. Airtable is a genuinely powerful database tool, but it can't solve the fundamental problem: it has no connection to live ATS data. WorkWay is purpose-built for exactly the job that Airtable bases try to do, with the live data layer already built in.",
     painPoints: [
       "Setting up an Airtable base that actually works for job tracking — the right fields, the right views, the right automations — takes several hours of configuration before you can start using it, which is overhead that delays your search and adds friction before you've tracked a single role",
       "Airtable has no native connection to any ATS platform — it cannot pull jobs from Greenhouse, Lever, or Ashby, which means every role in your base is there because you manually found it, manually copied the details, and manually entered it row by row",
@@ -843,6 +941,28 @@ export const GUIDES: GuideComparison[] = [
     ],
     verdict:
       "Airtable is genuinely powerful for the things it was built to do — relational databases, team collaboration, complex data workflows. Job tracking isn't one of those things, not because Airtable lacks features, but because the problem requires a live ATS data connection that no general-purpose database tool can provide. WorkWay was built from the ground up as a job search tool: the data connection, the freshness guarantees, the application tracker, and the discovery feed are all first-class features, not workarounds. If you've spent hours configuring an Airtable job tracker, WorkWay replaces all of it with better data and no setup.",
+    faq: [
+      {
+        question: "What makes Airtable inadequate for job tracking specifically?",
+        answer:
+          "The core issue is data sourcing. Airtable is a database — it stores and organizes data you put into it, but it has no mechanism to pull data from external systems like Greenhouse, Lever, or Ashby on its own. You can build beautiful views and powerful formulas, but every row in your Airtable job tracker was put there by you, manually, and stays exactly as you left it until you manually update it again. A job tracker needs to know when jobs open and close in real time. Airtable fundamentally cannot provide that without complex third-party integration work.",
+      },
+      {
+        question: "Can Airtable automations solve the live data problem?",
+        answer:
+          "Airtable automations can trigger based on internal database changes or via webhooks from external services, but none of the major ATS platforms — Greenhouse, Lever, Ashby — provide native Airtable integrations or real-time webhooks for new job postings. Building a reliable pipeline that keeps an Airtable base current with ATS data requires a paid Airtable plan, a paid automation tool like Zapier or Make, and significant configuration and maintenance work. Even then, it can't fully replicate a purpose-built ATS aggregator. WorkWay provides this capability natively, at no cost.",
+      },
+      {
+        question: "Is WorkWay free to use?",
+        answer:
+          "WorkWay's core job discovery and tracking functionality — browsing the aggregated feed of Greenhouse, Lever, and Ashby jobs, saving roles, and tracking applications through pipeline stages — is free. You don't need a paid plan to access live ATS data, use the search and filter system, or manage your application history. This is in contrast to Airtable, where the features needed to approach WorkWay's functionality (automations, expanded API access, advanced views) require paid plans that add recurring cost to your job search.",
+      },
+      {
+        question: "Should I keep using Airtable alongside WorkWay?",
+        answer:
+          "If you have an Airtable base with company research, recruiter contacts, or notes that go beyond what a job tracker needs, keeping it for that purpose makes sense. But the job discovery and application tracking function — the part that requires live, current data — is better handled by WorkWay. Most candidates find that once they have WorkWay handling discovery and tracking, the Airtable base becomes redundant for job search purposes specifically.",
+      },
+    ],
   },
   // --- Job Alert & Discovery ---
   {
@@ -860,6 +980,8 @@ export const GUIDES: GuideComparison[] = [
     ],
     ats: "multiple",
     manualLabel: "ATS job alert emails",
+    whoIsFor:
+      "This guide is for job seekers who tried to solve the 'missing new roles' problem by subscribing to job alert emails from every company on their target list. If your inbox now receives a steady stream of alert digests from different companies, different ATS platforms, and different senders — all arriving at different times with inconsistent formatting and quality — this guide is for you. Job alert emails are the most common attempt at automating job discovery before candidates find a dedicated aggregator. WorkWay is that aggregator: one unified feed, updated every few hours, covering every Greenhouse, Lever, and Ashby company simultaneously without any per-company setup.",
     painPoints: [
       "Setting up job alerts requires visiting each company's ATS individually and finding their notification or follow option — there's no cross-company alert signup, so covering 30 companies means 30 separate manual setup steps across three different ATS interfaces",
       "ATS alert emails are notoriously delayed — most companies send digest emails 24 to 48 hours after a posting goes live, which means by the time you see the alert, the most competitive candidates who found the role through direct ATS monitoring have already applied",
@@ -903,6 +1025,28 @@ export const GUIDES: GuideComparison[] = [
     ],
     verdict:
       "Job alert emails solved one problem — getting notified when a company posts — while introducing several others: inbox noise, delayed delivery, fragmented senders, and no cross-company view. WorkWay solves the original problem better without introducing any of the new ones. Continuous automated syncing means you're always current. A unified feed means no inbox to manage. Filters mean you only see what's relevant. The alert email subscriptions you've accumulated represent a workaround. WorkWay is the solution.",
+    faq: [
+      {
+        question: "How do I set up job alerts on Greenhouse, Lever, or Ashby?",
+        answer:
+          "Each ATS handles alerts differently. Greenhouse allows candidates to follow specific companies and receive email notifications for new postings. Lever's alert system is minimal and varies by company configuration. Ashby similarly offers follow functionality on a per-company basis. In every case, setup requires visiting each company's ATS individually — there's no cross-platform subscription. WorkWay replaces all of this with zero setup: every covered company across all three platforms is monitored automatically from the moment you sign in.",
+      },
+      {
+        question: "Why are ATS alert emails delayed compared to the actual posting?",
+        answer:
+          "ATS platforms generally batch alert emails rather than sending them in real time — most run on 24-hour or 48-hour digest schedules. This is a deliberate product decision: immediate per-job alerts for every subscriber would generate enormous email volume. The consequence for candidates is that by the time an alert email arrives, the posting has been live for a day or more and competitive applicants have already been through. WorkWay syncs directly from ATS APIs on a recurring schedule, pulling new jobs within hours of posting without any batching delay.",
+      },
+      {
+        question: "How many alert subscriptions does WorkWay replace?",
+        answer:
+          "WorkWay replaces one alert subscription per company you're targeting — which for most active job seekers means dozens to hundreds of individual subscriptions across Greenhouse, Lever, and Ashby. Beyond just replacing the subscriptions, WorkWay covers companies you've never heard of that might be hiring for your ideal role. Most candidates using WorkWay discover roles from companies they never would have set up individual alerts for, because WorkWay's database surfaces the full hiring landscape rather than limiting discovery to companies you already know.",
+      },
+      {
+        question: "Does WorkWay send notifications like alert emails do?",
+        answer:
+          "WorkWay is designed as a pull-based feed rather than a push-based alert system — you open WorkWay and see everything new since your last visit, rather than receiving email notifications for each posting. This is intentional: the alternative is inbox noise, which is the main problem with ATS alert emails. Instead of emails interrupting your day, WorkWay gives you a clean, organized feed to check on your own schedule. The feed always reflects the current state of the job market, so a once-daily check is sufficient to stay current.",
+      },
+    ],
   },
   {
     slug: "workway-vs-google-alerts-job-search",
@@ -919,6 +1063,8 @@ export const GUIDES: GuideComparison[] = [
     ],
     ats: "general",
     manualLabel: "Google Alerts",
+    whoIsFor:
+      "This guide is for job seekers who've tried to use Google Alerts — setting up keyword queries like 'software engineer Greenhouse hiring' or '{company name} job openings' — to stay on top of new postings without manually checking career pages. If you've noticed that the alerts are noisy, delayed, and inconsistent — surfacing blog posts about a company's culture alongside actual job listings, missing roles entirely, or alerting you to something that was posted days ago — this guide explains the structural reason why Google Alerts can't reliably solve this problem, and what WorkWay does differently.",
     painPoints: [
       "Google Alerts for job postings surface job listings alongside blog posts about the company, news articles, LinkedIn profiles, and general tech industry content — the signal-to-noise ratio is low, and every alert email requires manual triage to find the actual relevant posting buried inside",
       "Google indexes web pages on its own crawler schedule, which means a job posted to Greenhouse, Lever, or Ashby on Monday morning might not appear in a Google Alert until Wednesday — by which point competitive candidates have already applied and the role could be closing",
@@ -962,6 +1108,28 @@ export const GUIDES: GuideComparison[] = [
     ],
     verdict:
       "Google Alerts were never designed for job searching — they're a general-purpose web monitoring tool being applied to a problem that requires structured, real-time ATS data. The mismatch shows in every alert email: noise, delay, inconsistency, and no path to tracking. WorkWay was designed specifically for this problem. Direct API connections. Structured job data. Consistent freshness. No noise. If you've been using Google Alerts to monitor job postings, WorkWay does what you were hoping the alerts would do — accurately, reliably, and with a tracker built in.",
+    faq: [
+      {
+        question: "How does Google index ATS job postings at all?",
+        answer:
+          "Greenhouse, Lever, and Ashby all generate publicly accessible web pages for each open job posting, which Google's crawler can index like any other page. However, Google's crawl schedule is determined by its own algorithms — not by when content is published. A job posted Monday morning might be crawled and indexed the same day, or it might not be indexed until Thursday. There's no guarantee of timing, and Google doesn't prioritize ATS job pages over other content types. WorkWay bypasses the crawler entirely by using the ATS APIs directly, which means job data arrives within hours of posting regardless of Google's crawl schedule.",
+      },
+      {
+        question: "What keywords should I use in Google Alerts for job searching?",
+        answer:
+          "This is a difficult problem even when Google Alerts works well. Broad keywords like 'software engineer jobs' return enormous noise. Company-specific keywords like 'Stripe hiring engineer' are more targeted but may miss postings or surface news coverage about Stripe's hiring plans rather than actual job postings. ATS-specific queries like 'boards.greenhouse.io/stripe engineer' can work but are brittle and miss most companies. The core limitation is that keyword matching against the full web is the wrong approach for a structured, categorical problem. WorkWay doesn't use keyword matching — it pulls structured job data directly from ATS APIs, which is categorically more reliable.",
+      },
+      {
+        question: "Can WorkWay tell me when a specific company posts a new role?",
+        answer:
+          "Yes. WorkWay's feed surfaces all new roles from every covered company as they appear. If you filter or search by a specific company name, you can see every role they currently have open and check back for new postings at any time. Because WorkWay syncs every few hours, a new role at a company you're watching will appear in your feed within hours of being posted — no Google Alert needed, and with zero noise from unrelated content.",
+      },
+      {
+        question: "Does WorkWay cover all companies, or only major ones?",
+        answer:
+          "WorkWay's database covers thousands of companies across Greenhouse, Lever, and Ashby, with a focus on tech companies — startups, scaleups, and growth-stage companies across all major tech verticals. The database is continuously expanded based on candidate demand. Coverage is most comprehensive for actively hiring companies that have been using ATS platforms for more than a few months. For very new companies or those with unusual ATS configurations, coverage may be added over time as they're requested.",
+      },
+    ],
   },
   // --- Platform Comparisons ---
   {
@@ -979,6 +1147,8 @@ export const GUIDES: GuideComparison[] = [
     ],
     ats: "multiple",
     manualLabel: "LinkedIn Jobs",
+    whoIsFor:
+      "This guide is for engineers, designers, and technical professionals who use LinkedIn Jobs as their primary job discovery tool — and have started to notice that the roles they find on LinkedIn are also on Greenhouse, Lever, or Ashby, often with a timestamp that shows they were posted days earlier. If you've ever applied to a role through LinkedIn only to be redirected to an ATS anyway, or wondered why applying early seems to matter so much in competitive searches, this guide explains the structural timing gap between LinkedIn and the ATS source — and how WorkWay closes it.",
     painPoints: [
       "LinkedIn re-posts jobs from Greenhouse, Lever, and Ashby with a delay — a role posted Monday morning on the ATS might not appear on LinkedIn until Tuesday or Wednesday, by which point it already has dozens of applications from candidates who found it at source",
       "LinkedIn's Easy Apply feature sounds like a shortcut, but for most tech companies using ATS platforms, clicking Easy Apply redirects you to the company's Greenhouse, Lever, or Ashby page anyway — adding a click layer without removing any of the actual application work",
@@ -1022,6 +1192,28 @@ export const GUIDES: GuideComparison[] = [
     ],
     verdict:
       "LinkedIn is indispensable for networking, company research, and professional visibility — but as a job discovery tool for ATS-sourced roles, it has a structural timing disadvantage. It's a re-post layer, and re-post layers have delays. WorkWay eliminates that delay by going directly to the source. For candidates targeting companies that use Greenhouse, Lever, or Ashby, WorkWay is the faster, cleaner, and more comprehensive path to the same roles — without the algorithmic filtering, sponsored noise, or Easy Apply redirect theater that LinkedIn adds.",
+    faq: [
+      {
+        question: "How much earlier does WorkWay show jobs compared to LinkedIn?",
+        answer:
+          "For roles at companies that post directly to Greenhouse, Lever, or Ashby and then syndicate to LinkedIn, WorkWay typically shows the role 24 to 72 hours earlier than it appears on LinkedIn. The gap exists because LinkedIn's job indexing from ATS platforms is not real-time — it runs on a batch or periodic schedule, and there's additional time between LinkedIn receiving the data and the role appearing in search results. WorkWay pulls directly from ATS APIs on a recurring sync every few hours, so new roles appear in your feed much closer to when they were actually posted.",
+      },
+      {
+        question: "Should I still use LinkedIn for job searching?",
+        answer:
+          "Yes — but for different things. LinkedIn is excellent for researching companies, understanding team structures, connecting with recruiters, and getting warm introductions to hiring managers. These are things WorkWay doesn't do. Where LinkedIn falls short is as an ATS-sourced job discovery tool: it's delayed, algorithmically filtered, and commercially influenced. Use LinkedIn for the relationship and research layer, and WorkWay for the discovery layer. Together they cover the full surface area of an effective tech job search.",
+      },
+      {
+        question: "Does WorkWay include jobs that are exclusive to LinkedIn and not on ATS?",
+        answer:
+          "No — WorkWay focuses specifically on jobs posted through Greenhouse, Lever, and Ashby. Some companies post roles directly on LinkedIn without using an ATS, and those won't appear in WorkWay. However, for tech companies at the startup, scaleup, and growth-stage level, the vast majority of hiring runs through one of the three major ATS platforms. LinkedIn-exclusive postings are more common for executive roles, contract work, and companies without a dedicated recruiting infrastructure.",
+      },
+      {
+        question: "How does WorkWay handle jobs that appear on both LinkedIn and the ATS?",
+        answer:
+          "WorkWay pulls from the ATS source directly, so the job data in WorkWay reflects what's on the company's Greenhouse, Lever, or Ashby page — not the LinkedIn re-post. This means WorkWay's version is typically the original, unmodified posting, while LinkedIn's version may have been formatted differently or had its details adjusted during syndication. The apply link in WorkWay always goes to the ATS directly, bypassing any LinkedIn intermediate layer.",
+      },
+    ],
   },
   {
     slug: "workway-vs-wellfound-startup-jobs",
@@ -1038,6 +1230,8 @@ export const GUIDES: GuideComparison[] = [
     ],
     ats: "multiple",
     manualLabel: "Wellfound (AngelList)",
+    whoIsFor:
+      "This guide is for startup-focused job seekers — engineers, designers, and product people who specifically want to work at early-to-mid stage companies and have been using Wellfound as their primary discovery tool. If you've noticed that some of the most interesting startups you've heard about don't have a Wellfound presence, or that the roles listed on Wellfound don't always match what's live on the company's actual ATS, this guide will explain why. Wellfound is a great platform for startup culture and founder context — but as a comprehensive source of startup job openings, it misses a significant portion of the market. WorkWay fills that gap by aggregating directly from the ATS layer, where all startups post their actual open roles.",
     painPoints: [
       "Wellfound's job listings are gated by company participation — only startups that have created and maintained a Wellfound company profile appear in search results, which means the platform's coverage is a function of which companies chose to invest time in their Wellfound presence",
       "A large portion of startups using Greenhouse, Lever, or Ashby never list on Wellfound — they rely entirely on their ATS career pages for hiring, which means searching Wellfound exclusively leaves a substantial portion of the startup job market invisible to you",
@@ -1081,6 +1275,28 @@ export const GUIDES: GuideComparison[] = [
     ],
     verdict:
       "Wellfound is an excellent platform for startup culture research, founder context, and community discovery — but as a job search tool, its coverage is inherently limited to companies that opted into the platform. The most interesting startups are often the ones quietly building and hiring without a polished Wellfound profile. WorkWay finds them by going directly to the ATS layer, where all companies with active hiring — Wellfound presence or not — post their open roles. Use Wellfound for context. Use WorkWay for coverage.",
+    faq: [
+      {
+        question: "What types of startups are on WorkWay but not Wellfound?",
+        answer:
+          "The startups most likely to be on WorkWay but absent from Wellfound are those that have deprioritized their external brand presence in favor of building — companies that are deep in product development, recently closed a round and are ramping hiring quietly, or have simply never gotten around to setting up a Wellfound profile. These are often exactly the companies that the most discerning startup candidates want to find: low-profile but well-funded, moving fast, and hiring selectively. If they use Greenhouse, Lever, or Ashby, WorkWay has them.",
+      },
+      {
+        question: "Does Wellfound show jobs from Greenhouse, Lever, and Ashby?",
+        answer:
+          "Wellfound can pull job data from companies that have both a Wellfound profile and an ATS integration configured — but this requires setup on the company's side and doesn't automatically include all ATS-powered companies. Companies that use Greenhouse, Lever, or Ashby but haven't connected those systems to Wellfound won't have their ATS jobs appear on the platform. WorkWay pulls from the ATS APIs directly and covers all companies in the database regardless of their Wellfound relationship.",
+      },
+      {
+        question: "Can I use WorkWay and Wellfound at the same time?",
+        answer:
+          "Absolutely — and for startup-focused candidates, using both is often the strongest approach. WorkWay gives you comprehensive job discovery coverage: every open role at every Greenhouse, Lever, and Ashby company, regardless of their presence on other platforms. Wellfound gives you startup context: founder backgrounds, funding history, team culture signals, and community discussion. These are complementary layers of a startup job search — WorkWay for what's open, Wellfound for whether you want to work there.",
+      },
+      {
+        question: "How does WorkWay compare to Wellfound for remote startup jobs specifically?",
+        answer:
+          "WorkWay allows you to filter by location including remote, which surfaces all remote-friendly roles across Greenhouse, Lever, and Ashby companies in the database — including startups that only list on their ATS and have no Wellfound presence. Wellfound also has strong remote job filtering, but limited to its registered company base. For remote startup roles specifically, WorkWay's broader ATS coverage means you're seeing a larger slice of the actual remote opportunity landscape.",
+      },
+    ],
   },
   {
     slug: "workway-vs-hacker-news-hiring-threads",
@@ -1097,6 +1313,8 @@ export const GUIDES: GuideComparison[] = [
     ],
     ats: "multiple",
     manualLabel: "HN Who's Hiring",
+    whoIsFor:
+      "This guide is for technically-minded job seekers — engineers, researchers, and builders — who look to the Hacker News community for job discovery because they trust the signal quality of companies that post there. HN Who's Hiring is genuinely curated: the companies that show up are often technical, mission-driven, and interesting in ways that generic job boards don't surface. If you find yourself checking the HN thread on the first of every month, Ctrl+F-ing your way through hundreds of comments, and wishing the information were structured and searchable, this guide is for you. WorkWay gives you the same quality of companies — plus many more — in a live, structured, searchable feed that doesn't make you wait until the first of the month.",
     painPoints: [
       "HN Who's Hiring publishes once at the start of each month — any job posted after the first is simply invisible until the next monthly thread appears, meaning the most recently opened positions at the most interesting companies are structurally hidden from view for up to 30 days",
       "HN job listings are free-form comments written by whoever at the company chose to post — some include detailed role descriptions, compensation ranges, and team context, while others are two sentences with a link — the inconsistency makes it impossible to compare roles or evaluate opportunities at a glance",
@@ -1140,6 +1358,28 @@ export const GUIDES: GuideComparison[] = [
     ],
     verdict:
       "HN Who's Hiring occupies a unique position in the tech job market — it carries signal quality that generic job boards don't, with companies that tend to be interesting, technical, and mission-driven. But as a job search tool, it's fundamentally limited: once a month, no structure, no search, no tracking. WorkWay doesn't replace the cultural value of the HN community — but it does replace the HN thread as a job discovery mechanism. The same companies that post in HN Who's Hiring use Greenhouse, Lever, or Ashby for their actual hiring, and WorkWay pulls from those sources continuously, with every role, not just the ones a hiring manager happened to include in a comment on the first of the month.",
+    faq: [
+      {
+        question: "Do the companies in HN Who's Hiring also post on Greenhouse or Lever?",
+        answer:
+          "Yes — the vast majority of companies that post in HN Who's Hiring use one of the three major ATS platforms for their actual recruiting process. The HN comment typically links to their Greenhouse, Lever, or Ashby career page, or to a specific job posting on one of those platforms. WorkWay aggregates from those platforms directly, which means most of the companies that appear in HN Who's Hiring are already in WorkWay's database — with all their open roles, not just the ones they chose to highlight in that month's comment.",
+      },
+      {
+        question: "Why do companies post in HN Who's Hiring if they have an ATS?",
+        answer:
+          "HN Who's Hiring is a community signal, not a recruiting mechanism. Companies post there to reach the Hacker News audience specifically — technical candidates who read HN regularly and identify with the community values. It's a brand and culture play as much as a recruiting one. The actual application process always happens through the ATS. WorkWay captures the ATS layer continuously, so you get discovery coverage of those companies regardless of whether they happened to post in the HN thread that month.",
+      },
+      {
+        question: "How do I find HN-style companies (technical, mission-driven) in WorkWay?",
+        answer:
+          "WorkWay's filter and search system lets you narrow by company, role type, ATS platform, and location — but the best way to surface the type of companies typically found in HN threads is to search for specific companies you're interested in, or to browse the Ashby-filtered feed (Ashby is particularly common among the high-bar, technically rigorous startups that tend to post in HN). Many candidates also discover HN-adjacent companies through WorkWay that never appeared in an HN thread — companies building interesting things that simply prioritized product over community presence.",
+      },
+      {
+        question: "Is WorkWay updated more frequently than the HN thread?",
+        answer:
+          "Yes — significantly. HN Who's Hiring posts once per calendar month, on the first. Any job that opens on the second of the month is invisible until the next thread, 29 days later. WorkWay syncs from Greenhouse, Lever, and Ashby every few hours, continuously. A job posted at any time, on any day, will appear in WorkWay within hours. For candidates doing an active search, the difference between a monthly snapshot and a continuously updated live feed is the difference between missing and catching the roles that close fastest.",
+      },
+    ],
   },
 ];
 
