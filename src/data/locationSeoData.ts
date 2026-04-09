@@ -141,3 +141,26 @@ export function parseLocationSeoSlug(
   if (!role || !location) return null;
   return { role, location };
 }
+
+// ─── Location-only SEO slugs ─────────────────────────────────────────────────
+
+export const LOCATION_ONLY_PREFIX = "jobs-in-";
+
+export function composeLocationOnlySlug(locationSlug: string): string {
+  return `${LOCATION_ONLY_PREFIX}${locationSlug}`;
+}
+
+/**
+ * Parses a slug like "jobs-in-bangalore" into the matching SeoLocation.
+ * Returns null if the location is not in ALL_LOCATIONS.
+ */
+export function parseLocationOnlySlug(slug: string): SeoLocation | null {
+  if (!slug.startsWith(LOCATION_ONLY_PREFIX)) return null;
+  const locationSlug = slug.slice(LOCATION_ONLY_PREFIX.length);
+  return ALL_LOCATIONS.find((l) => l.slug === locationSlug) ?? null;
+}
+
+// Pre-computed set for O(1) lookup
+export const VALID_LOCATION_ONLY_SLUGS: Set<string> = new Set(
+  ALL_LOCATIONS.map((l) => composeLocationOnlySlug(l.slug))
+);
