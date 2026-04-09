@@ -222,3 +222,24 @@ export function buildLocationSeoDetailBreadcrumb(
     },
   ];
 }
+
+export function buildJobsByLocationBreadcrumb(): BreadcrumbItem[] {
+  return [
+    ...buildHomeBreadcrumb(),
+    {
+      name: "Jobs by Location",
+      href: "/jobs-by-location",
+    },
+  ];
+}
+
+export function buildLocationOnlyDetailBreadcrumb(
+  locationName: string,
+): BreadcrumbItem[] {
+  return [
+    ...buildJobsByLocationBreadcrumb(),
+    {
+      name: `Jobs in ${locationName}`,
+    },
+  ];
+}
