@@ -73,11 +73,7 @@ export default function LocationOnlyPageClient({ data, location }: Props) {
 
   // Selecting a role navigates to the role+location combined page
   const handleRoleChange = (newRoleSlug: string) => {
-    if (newRoleSlug === "all") {
-      router.push(`/${composeLocationOnlySlug(location.slug)}`);
-    } else {
-      router.push(`/${composeLocationSeoSlug(newRoleSlug, location.slug)}`);
-    }
+    router.push(`/${composeLocationSeoSlug(newRoleSlug, location.slug)}`);
   };
 
   const handleLocationChange = (newLocationSlug: string) => {

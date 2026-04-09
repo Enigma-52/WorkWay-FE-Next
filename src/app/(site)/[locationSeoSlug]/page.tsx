@@ -198,7 +198,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
     });
   }
 
-  return buildPageMetadata({ title: "Jobs | WorkWay", description: "Find jobs on WorkWay.", path: "/" });
+  notFound();
 }
 
 export default async function LocationSeoPage({ params, searchParams }: Props) {

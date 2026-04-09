@@ -21,13 +21,13 @@ type ValidLocationsResponse = {
   locations: { location_slug: string }[];
 };
 
-async function getValidLocations(): Promise<Set<string>> {
+async function getValidLocations(): Promise<Set<string> | null> {
   const data = await backendGet<ValidLocationsResponse>(
     "/api/seo/valid-locations",
     { revalidate: 3600 }
   ).catch(() => null);
 
-  if (!data || data.locations.length === 0) return new Set();
+  if (!data) return null; // null = API failure, caller shows all
 
   return new Set(data.locations.map((l) => l.location_slug));
 }
@@ -35,10 +35,10 @@ async function getValidLocations(): Promise<Set<string>> {
 export default async function JobsByLocationHubPage() {
   const breadcrumbs = buildJobsByLocationBreadcrumb();
   const validLocations = await getValidLocations();
-  const showAll = validLocations.size === 0; // fallback: API down or returned nothing
+  const showAll = validLocations === null; // only show all on API failure
 
   const visibleLocations = ALL_LOCATIONS.filter(
-    (loc) => showAll || validLocations.has(loc.slug)
+    (loc) => showAll || validLocations!.has(loc.slug)
   );
 
   return (
