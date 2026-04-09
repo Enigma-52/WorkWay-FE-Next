@@ -22,7 +22,6 @@ npm run dev
 - `NEXT_PUBLIC_MIXPANEL_TOKEN`
 - `GOOGLE_SITE_VERIFICATION` (optional)
 
-
 ## Scripts
 - `npm run dev` - start dev server
 - `npm run build` - production build
