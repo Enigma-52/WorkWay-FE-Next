@@ -73,7 +73,6 @@ export function JobCard({ job }: JobCardProps) {
   const skillsList = normalizedSkills(job.skills);
   const platform = job.platform;
 
-
   return (
     <article className="group relative rounded-lg border border-border bg-card p-6 transition-all duration-300 hover:border-primary/40 hover:glow-subtle animate-fade-in">
       <div className="pointer-events-none absolute inset-0 rounded-lg bg-primary/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
@@ -89,7 +88,9 @@ export function JobCard({ job }: JobCardProps) {
                 className="h-full w-full object-cover"
                 onError={(e) => {
                   e.currentTarget.style.display = "none";
-                  e.currentTarget.nextElementSibling?.classList.remove("hidden");
+                  e.currentTarget.nextElementSibling?.classList.remove(
+                    "hidden",
+                  );
                 }}
               />
             ) : null}
@@ -123,12 +124,17 @@ export function JobCard({ job }: JobCardProps) {
                 <Briefcase className="mr-1 h-3 w-3" />
                 {job.employment_type}
               </Badge>
-              <Badge
-                variant="secondary"
-                className="font-mono text-xs"
-              >
+              <Badge variant="secondary" className="font-mono text-xs">
                 {job.experience_level}
               </Badge>
+              {job?.metadata?.compensation && (
+                <Badge
+                  variant="outline"
+                  className="font-mono text-xs border-primary/30 text-primary"
+                >
+                  {job?.metadata?.compensation}
+                </Badge>
+              )}
               <Badge
                 variant="outline"
                 className="font-mono text-xs border-primary/30 text-primary"
@@ -136,33 +142,33 @@ export function JobCard({ job }: JobCardProps) {
                 {job.platform?.charAt(0).toUpperCase() + job.platform?.slice(1)}
               </Badge>
             </div>
-                  {/* Skill tags (separate links so no nested anchors) */}
-              {skillsList.length > 0 ? (
-                <div className="mt-3 flex flex-wrap gap-1.5">
-                  {skillsList.slice(0, 10).map((s) => (
-                    <Link
-                      key={s.slug}
-                      href={`/skill/${s.slug}`}
-                      className="inline-flex items-center rounded-md border border-border bg-muted/60 px-2 py-0.5 text-xs text-muted-foreground hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-colors"
-                    >
-                      {s.name}
-                    </Link>
-                  ))}
-                  {skillsList.length > 10 ? (
-                    <span className="text-xs text-muted-foreground py-0.5">
-                      +{skillsList.length - 10}
-                    </span>
-                    ) : null}
-                    </div>
-                  ) : null}
+            {/* Skill tags (separate links so no nested anchors) */}
+            {skillsList.length > 0 ? (
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {skillsList.slice(0, 10).map((s) => (
+                  <Link
+                    key={s.slug}
+                    href={`/skill/${s.slug}`}
+                    className="inline-flex items-center rounded-md border border-border bg-muted/60 px-2 py-0.5 text-xs text-muted-foreground hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-colors"
+                  >
+                    {s.name}
+                  </Link>
+                ))}
+                {skillsList.length > 10 ? (
+                  <span className="text-xs text-muted-foreground py-0.5">
+                    +{skillsList.length - 10}
+                  </span>
+                ) : null}
+              </div>
+            ) : null}
 
-          {displayDesc ? (
-            <Link href={`/job/${job.slug}`} className="mt-4 block">
-              <p className="text-sm text-muted-foreground line-clamp-2">
-                {displayDesc}
-              </p>
-            </Link>
-          ) : null}
+            {displayDesc ? (
+              <Link href={`/job/${job.slug}`} className="mt-4 block">
+                <p className="text-sm text-muted-foreground line-clamp-2">
+                  {displayDesc}
+                </p>
+              </Link>
+            ) : null}
           </div>
         </Link>
 
@@ -175,7 +181,6 @@ export function JobCard({ job }: JobCardProps) {
           </Button>
         </div>
       </div>
-
     </article>
   );
 }

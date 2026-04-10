@@ -6,9 +6,24 @@ import Link from "next/link";
 
 function normalizedSkills(skills: unknown): { name: string; slug: string }[] {
   if (!skills) return [];
-  const raw = typeof skills === "string" ? (() => { try { return JSON.parse(skills); } catch { return []; } })() : skills;
+  const raw =
+    typeof skills === "string"
+      ? (() => {
+          try {
+            return JSON.parse(skills);
+          } catch {
+            return [];
+          }
+        })()
+      : skills;
   if (!Array.isArray(raw)) return [];
-  return raw.filter((s): s is { name: string; slug: string } => s && typeof s === "object" && typeof (s as { name?: string }).name === "string" && typeof (s as { slug?: string }).slug === "string");
+  return raw.filter(
+    (s): s is { name: string; slug: string } =>
+      s &&
+      typeof s === "object" &&
+      typeof (s as { name?: string }).name === "string" &&
+      typeof (s as { slug?: string }).slug === "string",
+  );
 }
 
 interface JobCardProps {
@@ -34,7 +49,10 @@ export function JobCard({ job }: JobCardProps) {
 
   return (
     <div className="group flex flex-col px-5 py-4 hover:bg-secondary/50 transition-all duration-200 border-b border-border last:border-b-0">
-      <Link href={`/job/${job.slug}`} className="flex items-center justify-between flex-1 min-w-0">
+      <Link
+        href={`/job/${job.slug}`}
+        className="flex items-center justify-between flex-1 min-w-0"
+      >
         <div className="flex-1 min-w-0">
           <h4 className="font-medium text-foreground group-hover:text-primary transition-colors truncate">
             {job.title}
@@ -51,6 +69,11 @@ export function JobCard({ job }: JobCardProps) {
             <span className="text-xs font-mono px-2 py-0.5 rounded bg-secondary">
               {job.employment_type}
             </span>
+            {job?.metadata?.compensation && (
+              <span className="text-xs font-mono px-2 py-0.5 rounded text-primary bg-secondary">
+                {job?.metadata?.compensation}
+              </span>
+            )}
           </div>
         </div>
 

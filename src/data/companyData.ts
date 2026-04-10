@@ -13,6 +13,9 @@ export interface JobListing {
   updated_at: string;
   /** Skills matched from job description: { name, slug }[] */
   skills?: { name: string; slug: string }[];
+  metadata?: {
+    compensation?: string;
+  };
 }
 
 export interface Company {

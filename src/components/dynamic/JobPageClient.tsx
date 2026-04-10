@@ -10,6 +10,7 @@ import {
   ExternalLink,
   ArrowLeft,
   ArrowRight,
+  Banknote,
 } from "lucide-react";
 import { useEffect } from "react";
 import JobBadge from "@/components/JobPage/JobBadge";
@@ -89,7 +90,10 @@ export default function JobPageClient({ job }: Props) {
           </div>
 
           <div className="container relative py-16 md:py-24">
-            <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}>
+            <motion.div
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+            >
               <Link
                 href="/jobs"
                 className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
@@ -133,7 +137,9 @@ export default function JobPageClient({ job }: Props) {
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-primary"
                         >
-                          {job.company_url.replace(/^https?:\/\//, "").replace(/\/$/, "")}
+                          {job.company_url
+                            .replace(/^https?:\/\//, "")
+                            .replace(/\/$/, "")}
                           <ExternalLink className="h-3 w-3" />
                         </a>
                       )}
@@ -169,6 +175,12 @@ export default function JobPageClient({ job }: Props) {
                     {job.experience_level}
                   </JobBadge>
                   <JobBadge variant="muted">{job.domain}</JobBadge>
+                  {job?.metadata?.compensation && (
+                    <JobBadge variant="primary">
+                      <Banknote className="mr-2 h-4 w-4" />
+                      {job.metadata.compensation}
+                    </JobBadge>
+                  )}
                 </motion.div>
 
                 {job.skills?.length > 0 && (
@@ -222,14 +234,16 @@ export default function JobPageClient({ job }: Props) {
           <div className="container">
             <div className="grid gap-6 lg:grid-cols-[1fr_380px]">
               <div className="space-y-6">
-                {(Array.isArray(job.description) ? job.description : []).map((section: any, index: number) => (
-                  <JobSection
-                    key={index}
-                    heading={section.heading}
-                    content={section.content}
-                    index={index}
-                  />
-                ))}
+                {(Array.isArray(job.description) ? job.description : []).map(
+                  (section: any, index: number) => (
+                    <JobSection
+                      key={index}
+                      heading={section.heading}
+                      content={section.content}
+                      index={index}
+                    />
+                  ),
+                )}
               </div>
 
               <div className="lg:sticky lg:top-24 lg:h-fit space-y-4">
@@ -239,28 +253,50 @@ export default function JobPageClient({ job }: Props) {
                   transition={{ duration: 0.4, delay: 0.3 }}
                   className="job-card"
                 >
-                  <h3 className="mb-6 text-lg font-semibold text-foreground">Job Summary</h3>
+                  <h3 className="mb-6 text-lg font-semibold text-foreground">
+                    Job Summary
+                  </h3>
 
                   <div className="space-y-4">
                     <div className="flex items-center justify-between border-b border-border pb-4">
-                      <span className="text-sm text-muted-foreground">Company</span>
-                      <span className="text-sm font-medium text-foreground">{job.company}</span>
+                      <span className="text-sm text-muted-foreground">
+                        Company
+                      </span>
+                      <span className="text-sm font-medium text-foreground">
+                        {job.company}
+                      </span>
                     </div>
                     <div className="flex items-center justify-between border-b border-border pb-4">
-                      <span className="text-sm text-muted-foreground">Location</span>
-                      <span className="text-sm font-medium text-foreground">{job.location}</span>
+                      <span className="text-sm text-muted-foreground">
+                        Location
+                      </span>
+                      <span className="text-sm font-medium text-foreground">
+                        {job.location}
+                      </span>
                     </div>
                     <div className="flex items-center justify-between border-b border-border pb-4">
-                      <span className="text-sm text-muted-foreground">Type</span>
-                      <span className="text-sm font-medium text-foreground">{job.employment_type}</span>
+                      <span className="text-sm text-muted-foreground">
+                        Type
+                      </span>
+                      <span className="text-sm font-medium text-foreground">
+                        {job.employment_type}
+                      </span>
                     </div>
                     <div className="flex items-center justify-between border-b border-border pb-4">
-                      <span className="text-sm text-muted-foreground">Level</span>
-                      <span className="text-sm font-medium text-foreground">{job.experience_level}</span>
+                      <span className="text-sm text-muted-foreground">
+                        Level
+                      </span>
+                      <span className="text-sm font-medium text-foreground">
+                        {job.experience_level}
+                      </span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">Domain</span>
-                      <span className="text-sm font-medium text-foreground">{job.domain}</span>
+                      <span className="text-sm text-muted-foreground">
+                        Domain
+                      </span>
+                      <span className="text-sm font-medium text-foreground">
+                        {job.domain}
+                      </span>
                     </div>
                   </div>
 
@@ -295,7 +331,9 @@ export default function JobPageClient({ job }: Props) {
               transition={{ duration: 0.4 }}
               className="mb-8 flex items-center justify-between"
             >
-              <h2 className="text-2xl font-bold text-foreground">Similar roles you might like</h2>
+              <h2 className="text-2xl font-bold text-foreground">
+                Similar roles you might like
+              </h2>
               <Link
                 href={`/domain/${getDomainSlug(domainJobs[0]?.domain || "")}`}
                 className="hidden items-center gap-1 text-sm font-medium text-primary hover:underline md:flex"
@@ -330,7 +368,9 @@ export default function JobPageClient({ job }: Props) {
               transition={{ duration: 0.4 }}
               className="mb-8 flex items-center justify-between"
             >
-              <h2 className="text-2xl font-bold text-foreground">More roles at {job.company}</h2>
+              <h2 className="text-2xl font-bold text-foreground">
+                More roles at {job.company}
+              </h2>
               <Link
                 href={`/company/${companyJobs[0]?.company_slug || ""}`}
                 className="hidden items-center gap-1 text-sm font-medium text-primary hover:underline md:flex"
@@ -359,4 +399,3 @@ export default function JobPageClient({ job }: Props) {
     </div>
   );
 }
-
