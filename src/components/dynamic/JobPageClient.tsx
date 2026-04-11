@@ -25,7 +25,22 @@ type Props = {
   job: JobDetails;
 };
 
+function getTimeAgo(updatedAt: string): string {
+  const diffMs = Date.now() - new Date(updatedAt).getTime();
+  const diffSec = Math.floor(diffMs / 1000);
+  if (diffSec < 60) return "Just Now";
+  const diffMin = Math.floor(diffSec / 60);
+  if (diffMin < 60) return `${diffMin} minutes ago`;
+  const diffH = Math.floor(diffMin / 60);
+  if (diffH < 24) return `${diffH} hours ago`;
+  const diffD = Math.floor(diffH / 24);
+  if (diffD === 1) return "Yesterday";
+  return `${diffD} days ago`;
+}
+
 export default function JobPageClient({ job }: Props) {
+  const timeAgo = job.updated_at ? getTimeAgo(job.updated_at) : null;
+
   useEffect(() => {
     if (!job?.slug) return;
 
@@ -181,6 +196,12 @@ export default function JobPageClient({ job }: Props) {
                       {job.metadata.compensation}
                     </JobBadge>
                   )}
+                  {timeAgo && (
+                    <JobBadge variant="muted">
+                      <Clock className="mr-1.5 h-3 w-3" />
+                      {timeAgo}
+                    </JobBadge>
+                  )}
                 </motion.div>
 
                 {job.skills?.length > 0 && (
@@ -290,7 +311,7 @@ export default function JobPageClient({ job }: Props) {
                         {job.experience_level}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between border-b border-border pb-4">
                       <span className="text-sm text-muted-foreground">
                         Domain
                       </span>
@@ -298,6 +319,16 @@ export default function JobPageClient({ job }: Props) {
                         {job.domain}
                       </span>
                     </div>
+                    {timeAgo && (
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-muted-foreground">
+                          Posted
+                        </span>
+                        <span className="text-sm font-medium text-foreground">
+                          {timeAgo}
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   <div className="mt-8">

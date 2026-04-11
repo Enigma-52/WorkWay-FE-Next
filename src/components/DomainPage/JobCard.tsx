@@ -64,11 +64,18 @@ export function JobCard({ job }: JobCardProps) {
     ? truncateDescription(descPreview, DESCRIPTION_PREVIEW_MAX_CHARS)
     : null;
 
-  const daysAgo = Math.floor(
-    (Date.now() - new Date(job.updated_at).getTime()) / (1000 * 60 * 60 * 24),
-  );
-  const timeAgo =
-    daysAgo === 0 ? "Today" : daysAgo === 1 ? "Yesterday" : `${daysAgo}d ago`;
+  const timeAgo = (() => {
+    const diffMs = Date.now() - new Date(job.updated_at).getTime();
+    const diffSec = Math.floor(diffMs / 1000);
+    if (diffSec < 60) return "Just Now";
+    const diffMin = Math.floor(diffSec / 60);
+    if (diffMin < 60) return `${diffMin} minutes ago`;
+    const diffH = Math.floor(diffMin / 60);
+    if (diffH < 24) return `${diffH} hours ago`;
+    const diffD = Math.floor(diffH / 24);
+    if (diffD === 1) return "Yesterday";
+    return `${diffD} days ago`;
+  })();
 
   const skillsList = normalizedSkills(job.skills);
   const platform = job.platform;
