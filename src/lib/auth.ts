@@ -11,7 +11,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
   session: { strategy: "jwt" },
   callbacks: {
-    async jwt({ token, user, account, profile }) {
+    async jwt({ token, user, account, profile, trigger, session }) {
+      // On session update (e.g. after onboarding saves role)
+      if (trigger === "update" && session) {
+        if (session.roles) token.roles = session.roles;
+        if (session.displayName) token.displayName = session.displayName;
+        return token;
+      }
+
       // On initial sign-in, sync user to backend and store role in token
       if (account?.provider === "google" && user) {
         try {
