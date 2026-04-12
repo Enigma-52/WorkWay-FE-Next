@@ -154,6 +154,7 @@ export const GUIDES: GuideComparison[] = [
       "Roles fill and are removed without any notification — the only way to find out a position is gone is to click the apply button and hit a dead end, wasting your time on a role that's no longer real",
       "Comparing compensation, scope, or seniority across companies requires having multiple tabs open simultaneously, with no structured way to evaluate them side by side or remember what you saw",
       "Every company you apply to through a Lever page becomes a separate mental tracking item — there's no unified history of where you've applied, what stage you're at, or which companies you're still waiting to hear back from",
+      "The mobile experience on individual Lever career pages is inconsistent at best — many company-hosted pages aren't optimized for phone browsing, making it nearly impossible to review and evaluate roles efficiently outside of a desktop session",
     ],
     workwayPoints: [
       "WorkWay automatically ingests job listings from every Lever-powered company in its database — no manual visits, no bookmark folders, no URL memorization required to see what's hiring",
@@ -161,6 +162,8 @@ export const GUIDES: GuideComparison[] = [
       "Every time WorkWay syncs — which happens every few hours — closed, filled, and removed jobs are automatically purged from your feed, so every result you see is a real, active opening accepting applications right now",
       "View multiple roles from different Lever-powered companies in one consistent layout, making it easy to compare titles, locations, and descriptions side by side without juggling browser tabs",
       "Track every application across all Lever companies with built-in stages — Saved, Applied, Interviewing, Offer, Rejected — from a single dashboard that updates as your process evolves",
+      "WorkWay surfaces compensation and salary data when Lever companies choose to publish it — displayed consistently across all listings so you can factor pay into your prioritization without hunting through individual job descriptions",
+      "WorkWay's unified interface is fully optimized for any device — review your Lever job feed, save roles, and update your application pipeline seamlessly from a phone, tablet, or laptop without losing context between sessions",
     ],
     comparisonRows: [
       {
@@ -188,6 +191,21 @@ export const GUIDES: GuideComparison[] = [
         workway: "2 minutes",
         manual: "45+ minutes",
       },
+      {
+        feature: "Compensation visibility",
+        workway: "Surfaced when published",
+        manual: "Must open each job individually",
+      },
+      {
+        feature: "Mobile experience",
+        workway: "Fully optimized",
+        manual: "Inconsistent per company",
+      },
+      {
+        feature: "Company discovery",
+        workway: "Entire Lever ecosystem visible",
+        manual: "Only bookmarked companies",
+      },
     ],
     verdict:
       "The ritual of visiting dozens of Lever career pages every morning is a symptom of a structural gap — Lever was built for recruiters, not for candidates doing cross-company discovery. WorkWay fills that gap. It does the checking automatically, surfaces only live roles, and gives you the cross-company search layer that Lever's architecture never included. If Lever companies are on your target list, WorkWay is the most direct path to seeing every role they post — with none of the tab overhead.",
@@ -211,6 +229,11 @@ export const GUIDES: GuideComparison[] = [
         question: "Does WorkWay support application tracking for Lever jobs?",
         answer:
           "Yes, and it works the same way regardless of which ATS a company uses. WorkWay includes a built-in application tracker with stages: Saved, Applied, Interviewing, Offer, and Rejected. When you find a role in your WorkWay feed, you can save it and move it through stages as your process evolves. Your full application history — across Lever, Greenhouse, and Ashby — lives in one searchable dashboard. No spreadsheet, no copy-pasting links into a Notion doc, no losing track of which round you're on with which company.",
+      },
+      {
+        question: "Is WorkWay free to use for finding Lever jobs?",
+        answer:
+          "Yes. WorkWay's core job discovery and application tracking functionality is free. You can search and filter across every Lever-powered company in the database, save roles to your tracker, and manage your full application pipeline without a paid subscription. WorkWay was built to level the playing field for job seekers — the time advantage of seeing Lever jobs hours earlier than LinkedIn, and the organizational advantage of a built-in tracker, are available to every user from day one. There's no paywall between you and the jobs.",
       },
     ],
   },
@@ -237,6 +260,8 @@ export const GUIDES: GuideComparison[] = [
       "Spreadsheets are disconnected from live data the moment you close them — jobs get filled, roles get updated, and listings get removed while your spreadsheet sits frozen at the state it was in when you last manually updated it",
       "There's no way to filter across Ashby companies by role, seniority, or location from a spreadsheet — the best you can do is sort columns in a static table, which means you're still manually scanning rather than searching",
       "Spreadsheets require discipline to maintain, and job searches are stressful — when you're busy or anxious, updates slip, statuses go un-logged, and the tracker you built to help you gradually becomes a liability you don't trust",
+      "Comparing compensation across Ashby companies requires opening each role individually and manually noting the salary range — there's no way to see pay side-by-side across companies without a tedious tab-switching exercise",
+      "There's no signal when a company you're tracking on Ashby becomes more or less active in hiring — your spreadsheet shows a static list, but the actual hiring velocity at each company changes constantly and invisibly to you",
     ],
     workwayPoints: [
       "WorkWay pulls jobs from every Ashby-powered company in its database automatically on a recurring sync schedule — no visits, no copy-pasting, no bookmark folders needed",
@@ -244,6 +269,8 @@ export const GUIDES: GuideComparison[] = [
       "Every time WorkWay syncs, it checks each Ashby company for closed or removed roles and purges them from your feed automatically — so every job you see is current, live, and actively accepting applications",
       "Filter across all Ashby companies simultaneously by role title, location, seniority, or company name — the kind of search that would take 20 minutes manually takes under 10 seconds in WorkWay",
       "Your complete application history across all Ashby companies — and all other ATS platforms — lives in one searchable dashboard, updated in real time as you move roles through stages",
+      "Compensation data published by Ashby companies is surfaced directly in WorkWay listings — no opening each role individually to check pay, just filter and compare from the unified feed",
+      "A single WorkWay session covers every Ashby-powered company in the database simultaneously — what would require visiting 50+ individual career pages takes under 2 minutes, with no tab management and no chance of missing a page",
     ],
     comparisonRows: [
       {
@@ -270,6 +297,21 @@ export const GUIDES: GuideComparison[] = [
         feature: "Setup time",
         workway: "Zero — start browsing immediately",
         manual: "Build and maintain spreadsheet",
+      },
+      {
+        feature: "Compensation visibility",
+        workway: "Surfaced inline when published",
+        manual: "Open each role individually",
+      },
+      {
+        feature: "Companies discoverable",
+        workway: "Entire Ashby ecosystem",
+        manual: "Only companies you know about",
+      },
+      {
+        feature: "Time to check 50 companies",
+        workway: "Under 2 minutes",
+        manual: "45–60 minutes",
       },
     ],
     verdict:
@@ -321,6 +363,7 @@ export const GUIDES: GuideComparison[] = [
       "The vast majority of your tab-checking sessions yield nothing new — you're opening and closing 40 pages to find 2 new roles, spending 90% of your effort on companies that haven't posted anything since yesterday",
       "There's no signal that tells you a company has posted something new without visiting the page — so the only way to know is to check, which means checking everything, every day, whether or not anything has changed",
       "Application tracking across all those tabs is an afterthought — you end up with some roles in a spreadsheet, some in a Notion doc, some just as open browser tabs you're afraid to close, creating a fragmented mess instead of a clean pipeline",
+      "Keeping three separate sets of URLs memorized — boards.greenhouse.io, jobs.lever.co, jobs.ashbyhq.com — is a cognitive tax that accumulates throughout the day, consuming mental bandwidth that should be reserved for evaluating roles, preparing for interviews, and writing targeted applications",
     ],
     workwayPoints: [
       "One WorkWay tab replaces 30 to 80 browser tabs — every Greenhouse, Lever, and Ashby company you care about is aggregated into a single feed that you can scan from top to bottom in under 2 minutes",
@@ -328,6 +371,8 @@ export const GUIDES: GuideComparison[] = [
       "WorkWay syncs every few hours across every company in its database simultaneously, so your feed shows only new and currently active listings — no wasted clicks on roles that filled yesterday or positions that were quietly removed",
       "Powerful filters for role type, location, seniority level, and ATS platform let you narrow thousands of listings to the 20 most relevant ones in seconds — no manual scanning required",
       "Your daily job check with WorkWay is a focused, purposeful 2 minutes instead of a scattered, anxiety-inducing hour — and at the end of it, you can be confident you haven't missed anything",
+      "Your saved search filters persist across sessions in WorkWay — open it in the morning and your preferred role type, location, and seniority filters are already set, so you go straight to reviewing new roles instead of reconfiguring your search from scratch",
+      "WorkWay surfaces companies you never would have added to a bookmark folder — the full database is visible and searchable, so hiring activity at companies you hadn't thought to check appears in your feed automatically alongside the companies you already know",
     ],
     comparisonRows: [
       {
@@ -354,6 +399,21 @@ export const GUIDES: GuideComparison[] = [
         feature: "Time per day",
         workway: "~2 minutes",
         manual: "45–90 minutes",
+      },
+      {
+        feature: "Company discovery",
+        workway: "Full database — no bookmarks needed",
+        manual: "Only companies you bookmarked",
+      },
+      {
+        feature: "Saved search filters",
+        workway: "Persist across sessions",
+        manual: "Not applicable — no search layer",
+      },
+      {
+        feature: "Missing job risk",
+        workway: "Near zero — continuous sync",
+        manual: "High — one skipped tab = missed role",
       },
     ],
     verdict:
@@ -405,6 +465,7 @@ export const GUIDES: GuideComparison[] = [
       "Some companies maintain job listings on multiple ATS platforms simultaneously — either during a migration or because different teams use different tools — meaning you might visit the same company twice and not realize you've already seen those roles",
       "The cognitive cost of switching between three different platforms mid-morning is underestimated — each switch requires reorienting to a new layout, new search logic, and new filter syntax, fragmenting your focus at exactly the time you need it most",
       "When you spot a role on Greenhouse but want to compare it to something you saw on Lever yesterday, there's no way to pull both up side by side in a common format — you're stuck with either memory or yet another set of tabs",
+      "Maintaining three mental models of the job market — one per ATS — creates a subtle but constant drain on the energy you have for everything else in your search: the more cognitive overhead consumed by process management, the less remains for the quality of thought that actually converts into offers",
     ],
     workwayPoints: [
       "WorkWay syncs from Greenhouse, Lever, and Ashby simultaneously in one automated operation — every company across all three platforms is checked in a single pass, so your feed reflects the full state of the tech hiring market at once",
@@ -412,6 +473,8 @@ export const GUIDES: GuideComparison[] = [
       "A single search across WorkWay covers every Greenhouse, Lever, and Ashby company in the database simultaneously — search for 'senior product manager remote' and see results from all three platforms in one ranked, filterable list",
       "WorkWay handles deduplication automatically — if a company posts the same role across two ATS platforms during a transition, you see it once, not twice, with no manual cross-referencing required",
       "One consistent workflow handles your entire job search — no mental switching between platform conventions, no separate tracking systems, no confusion about where you found a particular role",
+      "Because WorkWay abstracts away which ATS each company uses, you can research and evaluate companies on their own merits — their team, culture, stage, and role — without the distraction of which URL format to navigate",
+      "The full tech hiring landscape across all three major ATS platforms is visible in a single WorkWay session — you see the complete picture of what's open in the market, not the sliver that happens to be on whatever platform you checked last",
     ],
     comparisonRows: [
       {
@@ -438,6 +501,21 @@ export const GUIDES: GuideComparison[] = [
         feature: "Mental overhead",
         workway: "Zero — one interface",
         manual: "Three separate workflows",
+      },
+      {
+        feature: "New job latency",
+        workway: "~2–4 hours after posting",
+        manual: "Only when you check that platform",
+      },
+      {
+        feature: "Company discovery",
+        workway: "Full cross-platform ecosystem",
+        manual: "Limited to platforms you visit",
+      },
+      {
+        feature: "Application tracking",
+        workway: "Unified dashboard across all ATS",
+        manual: "Fragmented — per platform or spreadsheet",
       },
     ],
     verdict:
@@ -488,6 +566,8 @@ export const GUIDES: GuideComparison[] = [
       "Application tracking across three separate platforms fragments your pipeline in ways that are hard to recover from — some applied jobs end up in a spreadsheet, some in memory, some in browser tabs, and the moment you lose track of one, you risk following up late or missing a deadline",
       "When a company switches ATS providers — which happens regularly during growth phases — the URL you've been checking goes dead silently, and new jobs start appearing on a platform you weren't watching, creating an invisible gap in your coverage",
       "The overhead of managing the process compounds over time: the longer your job search runs, the larger your list of companies to monitor, the more platforms to check, and the more time you spend on logistics that could be spent on applications, prep, and interviews",
+      "Context-switching between three different platform UIs mid-morning is more costly than it appears — each switch requires your brain to reorient to a different search interface, different role card layout, and different filter convention, fragmenting your focus at exactly the moment you need it most concentrated",
+      "Without a unified view, there's no way to know whether a company you're interested in is actively ramping hiring or has gone quiet — you'd need to manually visit all three platforms for every company on your list just to get a sense of their current hiring activity",
     ],
     workwayPoints: [
       "WorkWay runs continuous automated monitoring of Greenhouse, Lever, and Ashby simultaneously — every company across all three platforms is synced every few hours without any manual action required from you",
@@ -495,6 +575,8 @@ export const GUIDES: GuideComparison[] = [
       "Application tracking in WorkWay works identically regardless of which ATS a role originated from — every job, from every platform, uses the same Saved / Applied / Interviewing / Offer / Rejected pipeline in one unified dashboard",
       "When a company changes ATS providers, WorkWay's backend adapts automatically — their jobs keep appearing in your feed from the new platform without any action on your part, so ATS migrations are invisible to you as a candidate",
       "Redirecting the 3 to 5 hours per week you currently spend on platform management toward interview preparation, company research, and application quality is one of the most direct improvements WorkWay makes to the outcome of your job search",
+      "Your saved search filters persist across WorkWay sessions — open the platform and your role type, location, and seniority preferences are already applied, so every daily check starts exactly where the last one left off rather than requiring you to reconfigure from scratch",
+      "Over a typical 4-to-8-week active job search, reclaiming 3 to 5 hours per week from multi-platform management amounts to 12 to 40 hours returned to activities that actually produce offers — not a marginal improvement, but a fundamental reallocation of the most limited resource in any job search",
     ],
     comparisonRows: [
       {
@@ -521,6 +603,21 @@ export const GUIDES: GuideComparison[] = [
         feature: "Weekly overhead",
         workway: "~10 minutes",
         manual: "3–5 hours",
+      },
+      {
+        feature: "Saved search state",
+        workway: "Persists across sessions",
+        manual: "Not applicable",
+      },
+      {
+        feature: "Time savings over 6-week search",
+        workway: "18–30 hours reclaimed",
+        manual: "Zero — overhead compounds",
+      },
+      {
+        feature: "Job discovery breadth",
+        workway: "Entire tri-platform ecosystem",
+        manual: "Only companies you remember to check",
       },
     ],
     verdict:
@@ -571,6 +668,8 @@ export const GUIDES: GuideComparison[] = [
       "The spreadsheet is only as populated as you make it — it can't discover companies you haven't heard of, surface roles you didn't know to look for, or surface opportunities from ATS platforms you forgot to check",
       "Spreadsheet formatting is a personal convention — every candidate builds their own column structure, their own status labels, their own follow-up logic — which makes it impossible to standardize and easy to break as your search evolves",
       "Maintaining accurate application statuses in a spreadsheet requires consistent manual discipline during the most stressful phase of a job search — when you're busy interviewing, it's the first thing that slips, leaving you with an unreliable record at exactly the moment you need it most",
+      "Reviewing your spreadsheet on mobile is a genuinely poor experience — column widths don't adapt, formulas behave unexpectedly, and there's no native mobile interface, which means any job search activity away from a desktop is effectively blocked",
+      "A spreadsheet has no memory of your search history in a useful way — you can see what you entered, but you can't search within your tracked jobs by role attributes, filter to 'all applied senior engineer roles in the last two weeks,' or get any summary view of where your pipeline stands at a glance",
     ],
     workwayPoints: [
       "WorkWay discovers and pulls jobs from Greenhouse, Lever, and Ashby automatically — no manual browsing, no copy-pasting, no data entry required to build a comprehensive view of what's currently open",
@@ -578,6 +677,8 @@ export const GUIDES: GuideComparison[] = [
       "Application stages are built into every job card — Saved, Applied, Interviewing, Offer, Rejected — with one-click transitions that update your dashboard in real time without opening a separate tool",
       "Every job in WorkWay uses the same normalized format regardless of which company or ATS it came from, so your tracker is consistent by default and never needs reformatting as your search evolves",
       "The WorkWay dashboard gives you an accurate, always-current view of your full application pipeline without any maintenance effort — the system updates itself, so you always know where you stand",
+      "WorkWay is account-based and fully accessible from any device — review your pipeline from your phone on a commute, save a role from a tablet, and follow up on an application from a laptop, all with the same data and zero sync required",
+      "Your complete application history in WorkWay is searchable and filterable — find every senior engineering role you applied to in the past month, filter to companies at Series B stage, or see at a glance how many roles are in active interview stages, without manipulating a single spreadsheet formula",
     ],
     comparisonRows: [
       {
@@ -604,6 +705,21 @@ export const GUIDES: GuideComparison[] = [
         feature: "Setup time",
         workway: "None",
         manual: "Hours to build, ongoing to maintain",
+      },
+      {
+        feature: "Mobile access",
+        workway: "Fully optimized",
+        manual: "Poor — spreadsheets aren't mobile-first",
+      },
+      {
+        feature: "Pipeline search & filter",
+        workway: "Full search within saved jobs",
+        manual: "Manual column sorting only",
+      },
+      {
+        feature: "Company discovery",
+        workway: "Auto-surfaced from ATS ecosystem",
+        manual: "Only what you manually found",
       },
     ],
     verdict:
@@ -654,6 +770,8 @@ export const GUIDES: GuideComparison[] = [
       "Job searching is not a continuous activity — you have to sleep, work, and live — but job postings appear continuously, including while you're busy with something else, and manually checking only catches the roles that happen to be live during the narrow windows you choose to look",
       "The tech job market runs on three major ATS platforms that each require different navigation, different search logic, and different URL patterns — maintaining three separate manual workflows for what is functionally the same task multiplies your overhead without multiplying your results",
       "The hours you invest in the discovery phase of your search are in direct competition with the hours you have for preparation — every minute spent checking career pages is a minute not spent on the technical depth, company knowledge, and application quality that actually determine outcomes",
+      "Manual searching creates a false sense of completeness — after spending 90 minutes cycling through career pages, you feel like you've done a thorough check, but structural gaps remain: companies you forgot to visit, pages that loaded incorrectly, ATS platforms you didn't get to — and you have no way of knowing what you missed",
+      "Search fatigue is a real phenomenon in extended job searches — when the same daily discovery ritual repeats for weeks, quality of attention decreases, promising roles get less careful evaluation, and the applications you write for the roles you do find suffer from diminished energy and focus",
     ],
     workwayPoints: [
       "WorkWay runs automated syncing across Greenhouse, Lever, and Ashby 24 hours a day — new roles surface in your feed within hours of being posted, whether you're online or not, so you never miss a window",
@@ -661,6 +779,8 @@ export const GUIDES: GuideComparison[] = [
       "WorkWay's continuous sync means you don't need to be actively searching to stay current — the feed updates itself, and when you open WorkWay, you're seeing everything that's changed since your last visit without any manual effort",
       "One consistent WorkWay interface handles Greenhouse, Lever, and Ashby jobs identically — there's no separate workflow to learn for each platform, no different URL structures to memorize, no re-orienting to a new layout mid-session",
       "Reclaiming 5 to 10 hours per week from manual search overhead and redirecting it toward tailored applications, technical interview prep, and company research is one of the most direct improvements WorkWay makes to the quality and speed of a job search outcome",
+      "WorkWay gives you systematic, complete coverage — every company in the database is checked on every sync cycle, so the confidence you get from a WorkWay review is backed by actual comprehensive coverage rather than the partial, gap-ridden result of a manual session",
+      "With discovery automated, every unit of energy you bring to your job search goes toward the work that produces outcomes — writing a better cover letter, preparing more deeply for a technical screen, doing more thorough company research before a final round",
     ],
     comparisonRows: [
       {
@@ -687,6 +807,21 @@ export const GUIDES: GuideComparison[] = [
         feature: "Time per week",
         workway: "~10 minutes",
         manual: "5–10+ hours",
+      },
+      {
+        feature: "Coverage confidence",
+        workway: "Complete — every company checked",
+        manual: "Partial — structural gaps always exist",
+      },
+      {
+        feature: "Application quality impact",
+        workway: "High — energy freed for prep",
+        manual: "Lower — overhead competes with prep",
+      },
+      {
+        feature: "Search fatigue risk",
+        workway: "None — discovery is automated",
+        manual: "High — daily ritual erodes focus",
       },
     ],
     verdict:
@@ -737,6 +872,8 @@ export const GUIDES: GuideComparison[] = [
       "Browser bookmarks have no concept of application status — you can't mark something as applied, interviewing, or rejected from a bookmark, which means your actual tracking has to happen somewhere else (usually a spreadsheet that immediately starts going stale)",
       "Bookmarks are browser-local by default — if you do your job search on a work laptop in the morning and a personal computer at night, your bookmark folders are probably out of sync, meaning your job search is fragmented across devices",
       "Bookmark folders become unusable fast — without automatic organization by status, date, or company, a folder of 60 job links is essentially unsearchable, and the mental overhead of keeping it organized is overhead that could go toward actual applications",
+      "Browser bookmarks are completely unsearchable by job attributes — you can't ask your bookmark folder to 'show me all senior engineer roles at Series B companies I saved in the last two weeks' — every review requires manually scanning every entry in sequence",
+      "When a bookmarked job's details change — salary range updated, location changed from onsite to hybrid, title revised — your bookmark still points to the old URL with no indication that anything has changed, meaning you may pursue or deprioritize a role based on outdated information",
     ],
     workwayPoints: [
       "When you save a job in WorkWay, it's connected to the live ATS data — the save persists, and the listing updates automatically, so you always know whether the role is still open without clicking through to check",
@@ -744,6 +881,8 @@ export const GUIDES: GuideComparison[] = [
       "Every saved job in WorkWay has built-in status tracking — move it from Saved to Applied to Interviewing to Offer or Rejected with one click, keeping your full pipeline current without opening a separate tool",
       "WorkWay is account-based and accessible from any device — your entire saved job list, application history, and pipeline status travels with you whether you're on a laptop, phone, or any browser",
       "Jobs in WorkWay are organized automatically by status, date, and company, and are fully searchable and filterable — finding a specific role or reviewing where you stand with a particular company takes seconds, not scrolling through a disorganized folder",
+      "Search across all your saved WorkWay jobs by title, company, location, or stage — ask 'show me everything I applied to in the last 30 days' or 'all saved roles at Ashby companies' and get instant, structured results that no bookmark folder can match",
+      "Even after a role closes and disappears from the live feed, your WorkWay record of it remains intact in your application history — you always have a complete picture of your job search, including the roles that didn't work out, without any bookmark-rot degrading the record",
     ],
     comparisonRows: [
       {
@@ -770,6 +909,21 @@ export const GUIDES: GuideComparison[] = [
         feature: "Organization",
         workway: "Filters by company, status, role",
         manual: "Manual folders",
+      },
+      {
+        feature: "Search within saved jobs",
+        workway: "Full search by any attribute",
+        manual: "Not possible",
+      },
+      {
+        feature: "Job change detection",
+        workway: "Updates on each sync",
+        manual: "No detection — static URL only",
+      },
+      {
+        feature: "Historical record",
+        workway: "Persistent even after job closes",
+        manual: "Dead links with no context",
       },
     ],
     verdict:
@@ -821,6 +975,8 @@ export const GUIDES: GuideComparison[] = [
       "Building a Notion job tracker that works well requires significant upfront design work: choosing the right properties, setting up views, creating status pipelines, deciding what information to track — and all of that has to be done before you can start using it, with no guarantee the design will hold up as your search evolves",
       "Notion's strength is flexible structure, but a job tracker needs live, connected data that Notion simply cannot provide — no template, formula, or Notion automation can pull jobs automatically from ATS APIs or detect when a tracked role closes",
       "Keeping your Notion tracker current requires consistent discipline throughout your search — updating statuses, adding new roles, removing dead ones — and that maintenance overhead peaks during the most stressful phases of the job search when you have the least bandwidth for it",
+      "The Notion community has hundreds of job tracker templates, and choosing between them creates its own decision overhead before you've tracked a single role — each template has a different structure, different properties, and different workflow assumptions, none of which can be validated until you've used it long enough to find the gaps",
+      "Notion has no way to surface compensation or salary data from ATS listings automatically — if a Greenhouse or Ashby role publishes a salary range in the job description, you have to manually copy it into your tracker, and any update to that range on the ATS is completely invisible to your Notion database",
     ],
     workwayPoints: [
       "WorkWay pulls jobs automatically from Greenhouse, Lever, and Ashby on a recurring sync schedule — your feed is populated without any manual browsing, copy-pasting, or data entry on your part",
@@ -828,6 +984,8 @@ export const GUIDES: GuideComparison[] = [
       "Application stages — Saved, Applied, Interviewing, Offer, Rejected — are built into every job card from day one, with no template to design, no properties to configure, and no setup time before you can start using them",
       "WorkWay's connection to Greenhouse, Lever, and Ashby is live and continuous — syncing every few hours so the jobs you see reflect the actual current state of each company's hiring, not a manual entry from three days ago",
       "The maintenance overhead of a Notion job tracker — keeping it populated, accurate, and current — drops to zero when you switch to WorkWay, freeing the time and attention that maintenance consumed for actual job search work",
+      "Compensation and salary data published by ATS companies surfaces directly in WorkWay job listings — no manual extraction, no copy-paste into a property field, just the live pay data visible inline with every role that publishes it",
+      "WorkWay is immediately usable from the moment you sign in — no template selection, no property configuration, no views to set up — and it works exactly the same whether you're on a desktop, laptop, or phone, with no sync issues or mobile formatting problems",
     ],
     comparisonRows: [
       {
@@ -854,6 +1012,21 @@ export const GUIDES: GuideComparison[] = [
         feature: "ATS integration",
         workway: "Native Greenhouse, Lever, Ashby",
         manual: "None — you copy manually",
+      },
+      {
+        feature: "Compensation data",
+        workway: "Surfaced from ATS automatically",
+        manual: "Manual copy from job description",
+      },
+      {
+        feature: "Cross-device access",
+        workway: "Seamless — account-based",
+        manual: "Variable — Notion mobile is limited",
+      },
+      {
+        feature: "Time to first job view",
+        workway: "Immediate — sign in and browse",
+        manual: "Hours of setup before first use",
       },
     ],
     verdict:
@@ -904,6 +1077,8 @@ export const GUIDES: GuideComparison[] = [
       "Once a job is in your Airtable base, you have no way of knowing whether it's still open — filled roles persist indefinitely in your tracker until you manually find out and delete them, which often happens only after you've wasted time trying to apply to something that closed weeks ago",
       "Airtable automations that approach the functionality of live ATS data require premium plans, third-party integrations, and significant configuration work — and even then, they cannot replicate a direct ATS API connection for job freshness or closed-role detection",
       "Airtable bases grow complex quickly in an active job search — multiple views, custom formulas, linked records across bases — and maintaining that complexity while also managing active interviews and applications divides your attention at exactly the wrong time",
+      "Airtable's free tier caps the number of records per base, which can become a limitation in an extended job search where you're tracking dozens of roles across multiple companies — getting more functionality requires a paid subscription that adds recurring cost to your job search",
+      "The mobile Airtable experience for reviewing and managing a job tracker is significantly worse than desktop — forms render awkwardly, views don't adapt well to small screens, and quick status updates from a phone require navigating multiple layers of the interface that work fine on desktop",
     ],
     workwayPoints: [
       "WorkWay requires zero setup to start tracking jobs — sign in, and your feed is already populated with live listings from Greenhouse, Lever, and Ashby without configuring a single field, view, or automation",
@@ -911,6 +1086,8 @@ export const GUIDES: GuideComparison[] = [
       "When roles are filled or removed from an ATS, WorkWay purges them from your feed on the next sync — your board stays clean and accurate without any manual deletion or status-checking",
       "Application pipeline stages are built into every job card with one-click transitions — no kanban board to build, no pipeline to configure, no formula to write before you can start moving roles through your process",
       "WorkWay's core job tracking functionality is free — no premium plan required to get live ATS data, automatic discovery, closed-role detection, or application status tracking",
+      "WorkWay's mobile interface is purpose-built for job searching on any device — review your feed, save roles, and update your pipeline status from a phone with the same speed and clarity as desktop, with no functionality lost in translation",
+      "Compensation data is surfaced inline in WorkWay listings when companies publish it — no creating a custom 'salary' field in Airtable, no manual extraction from individual job descriptions, just the pay data visible directly in the feed",
     ],
     comparisonRows: [
       {
@@ -937,6 +1114,21 @@ export const GUIDES: GuideComparison[] = [
         feature: "Cost",
         workway: "Free",
         manual: "Free tier limited; features need paid plan",
+      },
+      {
+        feature: "Mobile experience",
+        workway: "Fully optimized",
+        manual: "Poor — Airtable mobile is limited",
+      },
+      {
+        feature: "Compensation visibility",
+        workway: "Shown inline from ATS",
+        manual: "Manual field — you enter it",
+      },
+      {
+        feature: "Time to first job view",
+        workway: "Immediate on sign-in",
+        manual: "Hours of base config first",
       },
     ],
     verdict:
@@ -988,6 +1180,8 @@ export const GUIDES: GuideComparison[] = [
       "An inbox subscribed to job alerts from 30 companies quickly becomes unusable — roles you don't care about, follow-ups from companies you've already ruled out, and digest emails with 10 roles but only one relevant one all accumulate until the signal is buried in noise",
       "Job alert emails arrive from dozens of different company senders with different subject line formats, different email designs, and different information density — there's no unified view, no filter that spans all of them, and no way to compare roles across companies without opening individual emails and clicking through to separate pages",
       "Every job alert email that requires action sends you back to the company's ATS career page — which means clicking through an email just returns you to the fragmented, multi-page, multi-layout experience that job alerts were supposed to make easier",
+      "Unsubscribing from individual company alerts when you're no longer interested is a tedious process — each subscription requires finding the right email, locating the unsubscribe link, and often navigating to the company's ATS settings to disable notifications, compounding the administrative overhead of a system that was supposed to reduce it",
+      "ATS alert emails have no role-type filter at the company level — if a company posts roles across engineering, sales, design, and operations, you receive alerts for all of them and must manually triage the noise to find the one category relevant to your search",
     ],
     workwayPoints: [
       "WorkWay covers every Greenhouse, Lever, and Ashby company in its database with zero per-company setup — no individual alert subscriptions, no separate notification configurations, no managing which companies you've signed up for",
@@ -995,6 +1189,8 @@ export const GUIDES: GuideComparison[] = [
       "Unified filters across WorkWay's entire database — by role type, location, seniority, and ATS platform — let you narrow thousands of listings to the exact subset relevant to your search, with no inbox noise to sort through",
       "WorkWay is pull-based, not push-based — you check it when you want to, on your own schedule, without your inbox accumulating unread alerts that create anxiety and interrupt your day when they arrive",
       "Every job in WorkWay is viewable in a consistent card format with the full apply link — no email thread to follow, no redirect chain to navigate, no UI-switching to get to the actual posting",
+      "Filter by role type and seniority level across WorkWay's entire database so you only see the roles relevant to your search — no unsubscribe management, no inbox noise from irrelevant departments, just a clean feed of positions that actually match your criteria",
+      "WorkWay's database covers companies you've never heard of that are actively hiring — because discovery is based on ATS coverage rather than which companies you've manually signed up for, WorkWay surfaces roles at companies completely outside your existing alert subscription list",
     ],
     comparisonRows: [
       {
@@ -1021,6 +1217,21 @@ export const GUIDES: GuideComparison[] = [
         feature: "Coverage",
         workway: "All Greenhouse, Lever, Ashby companies",
         manual: "Only companies you've signed up with",
+      },
+      {
+        feature: "Unsubscribe management",
+        workway: "Not needed — one feed",
+        manual: "Per-company, tedious to manage",
+      },
+      {
+        feature: "Role-type filtering",
+        workway: "Built-in — by role and seniority",
+        manual: "Not available — all alerts arrive",
+      },
+      {
+        feature: "Discovery beyond known companies",
+        workway: "Full ATS ecosystem visible",
+        manual: "Only companies you subscribed to",
       },
     ],
     verdict:
@@ -1071,6 +1282,8 @@ export const GUIDES: GuideComparison[] = [
       "Google Alerts are keyword-based and fire based on Google's indexing patterns, which are inconsistent — the same search query might alert you to some postings and silently miss others depending on whether the crawler has visited the relevant ATS page recently",
       "There's no way to filter Google Alert results by ATS platform, company category, seniority level, or job type — every alert delivers a raw list of Google-matched results that you have to evaluate manually, with no structured filtering to narrow it down",
       "Clicking a Google Alert link for a job posting typically leads you to the company's ATS career page — which is the same individual, isolated page experience that requires manual tracking, with no connection to a unified view or any way to manage the application from the same context",
+      "Google Alerts frequently re-surface old articles about a company's hiring plans — think 'Stripe plans to hire 500 engineers this year' from a press release published six months ago — which are indistinguishable from current job postings in the alert email and require clicking through each result to determine whether it's relevant and current",
+      "Managing multiple Google Alert queries for different companies or role types creates its own administrative overhead: editing queries, adjusting frequency settings, unsubscribing from alerts that generate too much noise — mirroring the very fragmentation problem the alerts were supposed to solve",
     ],
     workwayPoints: [
       "WorkWay pulls job data directly from Greenhouse, Lever, and Ashby APIs, bypassing the Google crawler entirely — jobs appear in your feed within hours of being posted, not after an unpredictable indexing delay that could cost you days",
@@ -1078,6 +1291,8 @@ export const GUIDES: GuideComparison[] = [
       "Filters in WorkWay let you narrow your feed by role title, location, seniority level, ATS platform, and company in seconds — a level of precision that Google Alerts' keyword-only matching fundamentally cannot replicate",
       "Every job in WorkWay links directly to the application page on the company's ATS — no redirect chains, no Google search results page, no navigating to find the actual posting after clicking through",
       "The moment you find a relevant role in WorkWay, you can save it to your application tracker and begin managing the process — discovery and tracking are integrated in one place so you never lose a job you've found",
+      "Every WorkWay listing includes a posting date so you can see exactly how fresh each role is — no ambiguity about whether a result is from yesterday or six months ago, just a clean timestamp alongside every job that tells you exactly where it stands in the hiring cycle",
+      "WorkWay requires zero query management — the entire Greenhouse, Lever, and Ashby ecosystem is covered automatically from the moment you sign in, with no alerts to configure, no queries to tune, and no noise to manage",
     ],
     comparisonRows: [
       {
@@ -1104,6 +1319,21 @@ export const GUIDES: GuideComparison[] = [
         feature: "Application tracking",
         workway: "Built-in",
         manual: "Not available",
+      },
+      {
+        feature: "Posting date visibility",
+        workway: "Shown on every listing",
+        manual: "Not available — freshness unknown",
+      },
+      {
+        feature: "Query management",
+        workway: "None — full coverage by default",
+        manual: "Ongoing — per keyword/company",
+      },
+      {
+        feature: "False positives",
+        workway: "None — ATS source only",
+        manual: "High — old articles, news, blogs",
       },
     ],
     verdict:
@@ -1155,6 +1385,8 @@ export const GUIDES: GuideComparison[] = [
       "LinkedIn search results mix sponsored job listings, promoted postings, and recruiter-paid placements into organic results with no clear labeling — what appears to be a comprehensive view of what's hiring is actually a curated, commercially influenced selection",
       "LinkedIn's job search algorithm uses your profile, activity, and behavior to decide what to show you — which means your feed reflects LinkedIn's best guess at what's relevant, not a direct query against every open role at every company you care about",
       "There's no way on LinkedIn to filter specifically for companies that use Greenhouse, Lever, or Ashby — you can't say 'show me all roles at Ashby-powered companies' the way you can in WorkWay, which means platform coverage is opaque and incomplete",
+      "For competitive roles at desirable companies, applicant volume builds rapidly in the first 24 to 72 hours after posting — finding a role on LinkedIn 48 hours after it went live on the ATS means entering a pool that's already formed, against candidates who applied when it was fresh and their application stood out",
+      "LinkedIn's recruiter and paid promotion ecosystem creates a misleading picture of who's hiring — sponsored job posts, recruiter inmails about open roles, and algorithm-boosted content from companies with paid plans all inflate certain companies' visibility while organic, un-promoted roles from equally great companies stay invisible",
     ],
     workwayPoints: [
       "WorkWay connects directly to Greenhouse, Lever, and Ashby APIs — there's no re-posting layer, no syndication delay, and no algorithm between you and the source data, so jobs appear in your WorkWay feed within hours of going live on the ATS",
@@ -1162,6 +1394,8 @@ export const GUIDES: GuideComparison[] = [
       "WorkWay contains only organic job postings pulled directly from ATS APIs — no sponsored listings, no promoted placements, no commercially influenced ranking affecting which roles appear at the top of your feed",
       "WorkWay filters are direct and transparent: filter by Greenhouse, Lever, or Ashby specifically, by role title, by location, by seniority — the results reflect your actual query against the real data, not an algorithm's interpretation of your preferences",
       "WorkWay shows you roles you'd never find on LinkedIn — companies that post directly to their ATS without syndicating to job boards, companies whose LinkedIn presence is minimal, and companies whose roles appear late on LinkedIn after early competition has already formed",
+      "Applying to a role through WorkWay gives you a consistent 24-to-72-hour timing advantage over LinkedIn users — being among the first wave of applicants doesn't guarantee an offer, but it removes a structural disadvantage that most candidates don't realize they're carrying",
+      "WorkWay surfaces compensation data published on ATS listings directly in the job feed — something LinkedIn's algorithm often buries or omits, giving you cleaner pay information to inform your prioritization before you invest time in an application",
     ],
     comparisonRows: [
       {
@@ -1188,6 +1422,21 @@ export const GUIDES: GuideComparison[] = [
         feature: "Apply path",
         workway: "Direct to ATS application",
         manual: "Often redirects to ATS anyway",
+      },
+      {
+        feature: "Organic vs sponsored content",
+        workway: "100% organic ATS postings",
+        manual: "Algorithm + paid promotions mixed in",
+      },
+      {
+        feature: "Application timing advantage",
+        workway: "24–72h earlier than LinkedIn",
+        manual: "No advantage — late to source",
+      },
+      {
+        feature: "Compensation data",
+        workway: "Surfaced from ATS directly",
+        manual: "Variable — algorithm may hide it",
       },
     ],
     verdict:
@@ -1238,6 +1487,8 @@ export const GUIDES: GuideComparison[] = [
       "Wellfound profiles are only as current as the company's last update — startups in active hiring mode sometimes have outdated Wellfound profiles, incorrect role information, or listings that haven't been refreshed to match what's actually live on their ATS",
       "There's no way to search across ATS platforms for companies outside the Wellfound ecosystem — if a startup uses Greenhouse but hasn't listed on Wellfound, you have to know their direct ATS URL to find their jobs, making discovery dependent on prior knowledge",
       "Application flows on Wellfound are inconsistent — some roles use Wellfound's native apply, others redirect to the company's ATS, and some redirect to an email or Google Form, creating an uneven experience that makes it hard to know what process you're actually entering",
+      "Wellfound's equity and compensation data is self-reported and maintained at the company's discretion — many startup profiles carry salary ranges that haven't been updated since the company's last funding round and no longer reflect current compensation, making financial comparisons across companies unreliable",
+      "Companies going through stealth hiring — ramping a team quietly before a public funding announcement — often have minimal Wellfound presence by design, making them invisible on a platform that requires active participation, even when they're using Greenhouse, Lever, or Ashby to manage the actual recruiting",
     ],
     workwayPoints: [
       "WorkWay's coverage of startup jobs is based on ATS connections, not platform participation — if a company uses Greenhouse, Lever, or Ashby, their open roles appear in WorkWay regardless of whether they have a Wellfound profile, an AngelList presence, or any other third-party listing",
@@ -1245,6 +1496,8 @@ export const GUIDES: GuideComparison[] = [
       "Every application link in WorkWay goes directly to the company's ATS posting — consistent, direct, and always the same regardless of which company or ATS platform it originated from",
       "Search by role type, location, seniority, and ATS platform across WorkWay's entire startup database — a unified query that spans every Greenhouse, Lever, and Ashby company, not just the ones that showed up on Wellfound",
       "WorkWay's data freshness is based on ATS API sync schedules rather than company update activity — roles appear within hours of being posted, not whenever the company's recruiting team remembers to update their Wellfound listing",
+      "WorkWay applies consistently to the ATS for every single company — there's no ambiguity about whether you're applying through Wellfound's native system or being redirected elsewhere, just a direct link to the company's real application page every time",
+      "Compensation data from ATS listings is surfaced directly in WorkWay when companies choose to publish it — pulled from the actual job posting rather than from a self-reported company profile, which means it reflects what the company is actively offering rather than what they last updated months ago",
     ],
     comparisonRows: [
       {
@@ -1271,6 +1524,21 @@ export const GUIDES: GuideComparison[] = [
         feature: "Posting latency",
         workway: "~2–4 hours",
         manual: "Depends on company update frequency",
+      },
+      {
+        feature: "Data freshness model",
+        workway: "ATS API — always current",
+        manual: "Company-updated — often stale",
+      },
+      {
+        feature: "Compensation accuracy",
+        workway: "From live ATS posting",
+        manual: "Self-reported — may be outdated",
+      },
+      {
+        feature: "Stealth company coverage",
+        workway: "Included if using ATS",
+        manual: "Not discoverable without profile",
       },
     ],
     verdict:
@@ -1321,6 +1589,8 @@ export const GUIDES: GuideComparison[] = [
       "Most companies posting in HN Who's Hiring link to their Greenhouse, Lever, or Ashby career page in the comment — which means the HN thread is a middleman that adds friction (finding the comment, parsing the text, clicking through) without adding value beyond what WorkWay already surfaces directly",
       "The HN thread has no search, no filter, and no structured navigation — finding relevant roles means scrolling through hundreds of parent comments and Ctrl+F searching for keywords, which is manual signal extraction from an unstructured text document",
       "There's no application tracking built into or adjacent to the HN thread — every role you find there requires a separate system to track, and the thread itself is ephemeral, so saving links for later creates the same bookmark-rot problem as any other static job-saving approach",
+      "Companies that participated in previous months' HN threads but have since paused or stopped hiring leave their comments visible in old threads indefinitely — there's no way to know whether the role described in a comment from three months ago is still open without clicking through and checking the ATS manually",
+      "When you find an interesting role in an HN thread, there's no in-thread mechanism to save it, star it, or add it to a list — your only options are copying the URL into a separate tool or keeping the browser tab open, both of which recreate the bookmark-rot and tab-chaos problems you were trying to escape",
     ],
     workwayPoints: [
       "WorkWay syncs from Greenhouse, Lever, and Ashby every few hours, continuously — new roles appear in your feed within hours of being posted, not at the start of the next monthly HN thread, so you have access to the full current state of the market at any time",
@@ -1328,6 +1598,8 @@ export const GUIDES: GuideComparison[] = [
       "WorkWay goes directly to the ATS source APIs rather than relying on a company choosing to post in a HN thread — coverage is comprehensive and automatic, not dependent on which companies happened to participate in a particular month's discussion",
       "Full-text search and structured filters across WorkWay's entire database let you find exactly what you're looking for in seconds — no Ctrl+F, no manual scrolling, no parsing free-form comment text to extract the relevant details",
       "Built-in application tracking in WorkWay lets you save, apply, and manage every role you find without ever leaving the platform — jobs don't disappear into a long comment thread, and your pipeline history persists across sessions",
+      "Every job in WorkWay has a live ATS connection — if a company stops hiring or closes a role, it disappears from the feed automatically on the next sync, so you never read a detailed job description and get excited about a role that quietly closed weeks ago",
+      "Saving a role in WorkWay creates a permanent, searchable record in your tracked jobs — one click from any listing, accessible from any device, with no link rot, no lost tabs, and no relying on browser history to find something you saw earlier",
     ],
     comparisonRows: [
       {
@@ -1354,6 +1626,21 @@ export const GUIDES: GuideComparison[] = [
         feature: "Application tracking",
         workway: "Built-in",
         manual: "Not available",
+      },
+      {
+        feature: "Closed role detection",
+        workway: "Automatic — removed on next sync",
+        manual: "None — stale comments stay forever",
+      },
+      {
+        feature: "Save and track jobs",
+        workway: "One click — persistent record",
+        manual: "Copy URL to external tool",
+      },
+      {
+        feature: "Companies not in thread",
+        workway: "Full ATS ecosystem covered",
+        manual: "Invisible — no participation, no listing",
       },
     ],
     verdict:
