@@ -12,7 +12,7 @@ import {
   ArrowRight,
   Banknote,
 } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import JobBadge from "@/components/JobPage/JobBadge";
 import JobSection from "@/components/JobPage/JobSection";
 import JobCard from "@/components/JobPage/JobCard";
@@ -40,6 +40,8 @@ function getTimeAgo(updatedAt: string): string {
 
 export default function JobPageClient({ job }: Props) {
   const timeAgo = job.updated_at ? getTimeAgo(job.updated_at) : null;
+  const [applyClicked, setApplyClicked] = useState(false);
+  const [appliedStatus, setAppliedStatus] = useState<"yes" | "no" | null>(null);
 
   useEffect(() => {
     if (!job?.slug) return;
@@ -237,15 +239,48 @@ export default function JobPageClient({ job }: Props) {
                 transition={{ duration: 0.4, delay: 0.25 }}
                 className="flex flex-col gap-3"
               >
-                <a href={job.url} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={job.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => { setApplyClicked(true); setAppliedStatus(null); }}
+                >
                   <Button size="xl" className="w-full cursor-pointer lg:w-auto">
                     Apply Now
                     <ExternalLink className="ml-2 h-5 w-5" />
                   </Button>
                 </a>
-                <p className="text-center text-xs text-muted-foreground lg:text-left">
-                  You will be redirected to the company career page
-                </p>
+
+                {applyClicked && appliedStatus === null && (
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="text-xs text-muted-foreground">Did you apply?</span>
+                    <button
+                      onClick={() => setAppliedStatus("yes")}
+                      className="text-xs px-2.5 py-1 rounded-full border border-border bg-secondary hover:border-primary hover:text-primary transition-colors"
+                    >
+                      Yes ✓
+                    </button>
+                    <button
+                      onClick={() => setAppliedStatus("no")}
+                      className="text-xs px-2.5 py-1 rounded-full border border-border bg-secondary hover:border-muted-foreground/50 hover:text-foreground transition-colors"
+                    >
+                      Not yet
+                    </button>
+                  </div>
+                )}
+
+                {appliedStatus === "yes" && (
+                  <p className="text-xs text-primary mt-1">Nice! Good luck with your application 🤞</p>
+                )}
+                {appliedStatus === "no" && (
+                  <p className="text-xs text-muted-foreground mt-1">No worries — take your time.</p>
+                )}
+
+                {!applyClicked && (
+                  <p className="text-center text-xs text-muted-foreground lg:text-left">
+                    You will be redirected to the company career page
+                  </p>
+                )}
               </motion.div>
             </div>
           </div>
