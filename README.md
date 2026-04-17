@@ -1,6 +1,6 @@
 # WorkWay Next
 
-Next.js App Router SSR frontend for WorkWay, migrated from the legacy React Router app with SEO-first metadata, server rendering, and Vercel deployment support.
+Next.js App Router SSR frontend for WorkWay, migrated from the legacy React Router app with SEO-first metadata and server rendering
 
 ## Stack
 - Next.js 16 + React 19 + TypeScript
