@@ -9,14 +9,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
 
 interface JobFiltersProps {
+  // committed values
   searchQuery: string;
-  onSearchChange: (value: string) => void;
   selectedLocation: string;
-  onLocationChange: (value: string) => void;
   selectedExperience: string;
-  onExperienceChange: (value: string) => void;
+  onApply: (filters: { searchQuery: string; selectedLocation: string; selectedExperience: string }) => void;
   locations: string[];
   experienceLevels: string[];
   onReset: () => void;
@@ -24,17 +24,26 @@ interface JobFiltersProps {
 
 export function JobFilters({
   searchQuery,
-  onSearchChange,
   selectedLocation,
-  onLocationChange,
   selectedExperience,
-  onExperienceChange,
+  onApply,
   locations,
   experienceLevels,
   onReset,
 }: JobFiltersProps) {
-  const hasFilters =
-    searchQuery || selectedLocation !== "all" || selectedExperience !== "all";
+  const [draftSearch, setDraftSearch] = useState(searchQuery);
+  const [draftLocation, setDraftLocation] = useState(selectedLocation || "all");
+  const [draftExperience, setDraftExperience] = useState(selectedExperience || "all");
+
+  useEffect(() => { setDraftSearch(searchQuery); }, [searchQuery]);
+  useEffect(() => { setDraftLocation(selectedLocation || "all"); }, [selectedLocation]);
+  useEffect(() => { setDraftExperience(selectedExperience || "all"); }, [selectedExperience]);
+
+  const handleApply = () => {
+    onApply({ searchQuery: draftSearch, selectedLocation: draftLocation, selectedExperience: draftExperience });
+  };
+
+  const hasFilters = searchQuery || selectedLocation !== "all" || selectedExperience !== "all";
 
   return (
     <div className="flex flex-wrap gap-3 items-center">
@@ -43,14 +52,15 @@ export function JobFilters({
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <Input
           placeholder="Search roles..."
-          value={searchQuery}
-          onChange={(e) => onSearchChange(e.target.value)}
+          value={draftSearch}
+          onChange={(e) => setDraftSearch(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleApply()}
           className="pl-10 bg-secondary border-border focus:border-primary focus:ring-primary/20"
         />
       </div>
 
       {/* Location Filter */}
-      <Select value={selectedLocation} onValueChange={onLocationChange}>
+      <Select value={draftLocation} onValueChange={setDraftLocation}>
         <SelectTrigger className="w-[180px] bg-secondary border-border">
           <SelectValue placeholder="Location" />
         </SelectTrigger>
@@ -65,7 +75,7 @@ export function JobFilters({
       </Select>
 
       {/* Experience Filter */}
-      <Select value={selectedExperience} onValueChange={onExperienceChange}>
+      <Select value={draftExperience} onValueChange={setDraftExperience}>
         <SelectTrigger className="w-[160px] bg-secondary border-border">
           <SelectValue placeholder="Experience" />
         </SelectTrigger>
@@ -78,6 +88,11 @@ export function JobFilters({
           ))}
         </SelectContent>
       </Select>
+
+      <Button size="sm" onClick={handleApply} className="font-mono">
+        <Search className="mr-1.5 w-3.5 h-3.5" />
+        Search
+      </Button>
 
       {/* Reset */}
       {hasFilters && (

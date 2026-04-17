@@ -32,12 +32,13 @@ export default function SkillPageClient({ data }: Props) {
     router.push(`${pathname}?${sp.toString()}`);
   }
 
-  const handleFilterChange = (key: string) => (value: string) => {
-    updateParams({ [key]: value, page: "1" });
-  };
-
-  const handleSearchChange = (value: string) => {
-    updateParams({ location: value || "all", page: "1" });
+  const handleApply = (filters: { searchQuery: string; experienceLevel: string; employmentType: string; location: string }) => {
+    updateParams({
+      location: filters.searchQuery || filters.location || null,
+      employment_level: filters.experienceLevel,
+      employment_type: filters.employmentType,
+      page: "1",
+    });
   };
 
   const clearFilters = () => {
@@ -100,13 +101,10 @@ export default function SkillPageClient({ data }: Props) {
         <div className="grid gap-8">
           <JobFilters
             searchQuery={location === "all" ? "" : location}
-            onSearchChange={handleSearchChange}
             experienceLevel={experienceLevel}
-            onExperienceLevelChange={handleFilterChange("employment_level")}
             employmentType={employmentType}
-            onEmploymentTypeChange={handleFilterChange("employment_type")}
             location={location}
-            onLocationChange={handleFilterChange("location")}
+            onApply={handleApply}
             onClearFilters={clearFilters}
             activeFiltersCount={activeFiltersCount}
           />

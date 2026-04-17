@@ -70,11 +70,13 @@ export function JobsSection({ jobs }: JobsSectionProps) {
 
       <JobFilters
         searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
         selectedLocation={selectedLocation}
-        onLocationChange={setSelectedLocation}
         selectedExperience={selectedExperience}
-        onExperienceChange={setSelectedExperience}
+        onApply={({ searchQuery: q, selectedLocation: loc, selectedExperience: exp }) => {
+          setSearchQuery(q);
+          setSelectedLocation(loc);
+          setSelectedExperience(exp);
+        }}
         locations={locations}
         experienceLevels={experienceLevels}
         onReset={handleReset}

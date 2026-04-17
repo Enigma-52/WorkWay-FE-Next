@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useState, useEffect } from "react";
 
 const EXPERIENCE_LEVELS = [
   "Intern",
@@ -24,17 +25,22 @@ const EXPERIENCE_LEVELS = [
 ];
 const EMPLOYMENT_TYPES = ["Full-Time", "Part-Time", "Contract"];
 
-export type JobsListFiltersProps = {
+export type AppliedFilters = {
   q: string;
-  onQChange: (v: string) => void;
   domain: string;
-  onDomainChange: (v: string) => void;
   employmentType: string;
-  onEmploymentTypeChange: (v: string) => void;
   experienceLevel: string;
-  onExperienceLevelChange: (v: string) => void;
   location: string;
-  onLocationChange: (v: string) => void;
+};
+
+export type JobsListFiltersProps = {
+  // committed (URL) values — used for active badges
+  q: string;
+  domain: string;
+  employmentType: string;
+  experienceLevel: string;
+  location: string;
+  onApply: (filters: AppliedFilters) => void;
   onClear: () => void;
   activeCount: number;
   domainOptions: { slug: string; name: string; count: number }[];
@@ -42,33 +48,58 @@ export type JobsListFiltersProps = {
 
 export function JobsListFilters({
   q,
-  onQChange,
   domain,
-  onDomainChange,
   employmentType,
-  onEmploymentTypeChange,
   experienceLevel,
-  onExperienceLevelChange,
   location,
-  onLocationChange,
+  onApply,
   onClear,
   activeCount,
   domainOptions,
 }: JobsListFiltersProps) {
+  // Draft state — local until Search button is clicked
+  const [draftQ, setDraftQ] = useState(q);
+  const [draftDomain, setDraftDomain] = useState(domain || "all");
+  const [draftEmploymentType, setDraftEmploymentType] = useState(employmentType || "all");
+  const [draftExperienceLevel, setDraftExperienceLevel] = useState(experienceLevel || "all");
+  const [draftLocation, setDraftLocation] = useState(location);
+
+  // Sync draft when committed values change (e.g. after clear or external nav)
+  useEffect(() => { setDraftQ(q); }, [q]);
+  useEffect(() => { setDraftDomain(domain || "all"); }, [domain]);
+  useEffect(() => { setDraftEmploymentType(employmentType || "all"); }, [employmentType]);
+  useEffect(() => { setDraftExperienceLevel(experienceLevel || "all"); }, [experienceLevel]);
+  useEffect(() => { setDraftLocation(location); }, [location]);
+
+  const handleApply = () => {
+    onApply({
+      q: draftQ,
+      domain: draftDomain,
+      employmentType: draftEmploymentType,
+      experienceLevel: draftExperienceLevel,
+      location: draftLocation,
+    });
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") handleApply();
+  };
+
   return (
     <div className="space-y-4">
       <div className="relative">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
-          placeholder="Search by title, company, or location..."
-          value={q}
-          onChange={(e) => onQChange(e.target.value)}
+          placeholder="Search by title or company..."
+          value={draftQ}
+          onChange={(e) => setDraftQ(e.target.value)}
+          onKeyDown={handleKeyDown}
           className="pl-10 bg-secondary border-border focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-xl py-2.5"
         />
-        {q && (
+        {draftQ && (
           <button
             type="button"
-            onClick={() => onQChange("")}
+            onClick={() => setDraftQ("")}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
             aria-label="Clear search"
           >
@@ -83,7 +114,7 @@ export function JobsListFilters({
           <span className="font-mono tracking-wide">Filters</span>
         </div>
 
-        <Select value={domain || "all"} onValueChange={onDomainChange}>
+        <Select value={draftDomain} onValueChange={setDraftDomain}>
           <SelectTrigger className="w-[180px] bg-secondary border-border rounded-lg">
             <SelectValue placeholder="Domain" />
           </SelectTrigger>
@@ -97,10 +128,7 @@ export function JobsListFilters({
           </SelectContent>
         </Select>
 
-        <Select
-          value={experienceLevel || "all"}
-          onValueChange={onExperienceLevelChange}
-        >
+        <Select value={draftExperienceLevel} onValueChange={setDraftExperienceLevel}>
           <SelectTrigger className="w-[160px] bg-secondary border-border rounded-lg">
             <SelectValue placeholder="Experience" />
           </SelectTrigger>
@@ -114,10 +142,7 @@ export function JobsListFilters({
           </SelectContent>
         </Select>
 
-        <Select
-          value={employmentType || "all"}
-          onValueChange={onEmploymentTypeChange}
-        >
+        <Select value={draftEmploymentType} onValueChange={setDraftEmploymentType}>
           <SelectTrigger className="w-[140px] bg-secondary border-border rounded-lg">
             <SelectValue placeholder="Type" />
           </SelectTrigger>
@@ -135,11 +160,21 @@ export function JobsListFilters({
           <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
           <Input
             placeholder="Location (e.g. Remote)"
-            value={location}
-            onChange={(e) => onLocationChange(e.target.value)}
+            value={draftLocation}
+            onChange={(e) => setDraftLocation(e.target.value)}
+            onKeyDown={handleKeyDown}
             className="pl-10 bg-secondary border-border focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-lg py-2"
           />
         </div>
+
+        <Button
+          size="sm"
+          onClick={handleApply}
+          className="font-mono"
+        >
+          <Search className="mr-1.5 h-3.5 w-3.5" />
+          Search
+        </Button>
 
         {activeCount > 0 && (
           <Button
@@ -156,11 +191,21 @@ export function JobsListFilters({
 
       {activeCount > 0 && (
         <div className="flex flex-wrap gap-2">
+          {q && (
+            <Badge
+              variant="secondary"
+              className="gap-1 font-mono text-xs cursor-pointer hover:bg-secondary/80"
+              onClick={() => onApply({ q: "", domain, employmentType, experienceLevel, location })}
+            >
+              {q}
+              <X className="h-3 w-3" />
+            </Badge>
+          )}
           {domain && domain !== "all" && (
             <Badge
               variant="secondary"
               className="gap-1 font-mono text-xs cursor-pointer hover:bg-secondary/80"
-              onClick={() => onDomainChange("all")}
+              onClick={() => onApply({ q, domain: "all", employmentType, experienceLevel, location })}
             >
               Domain: {domain}
               <X className="h-3 w-3" />
@@ -170,7 +215,7 @@ export function JobsListFilters({
             <Badge
               variant="secondary"
               className="gap-1 font-mono text-xs cursor-pointer hover:bg-secondary/80"
-              onClick={() => onExperienceLevelChange("all")}
+              onClick={() => onApply({ q, domain, employmentType, experienceLevel: "all", location })}
             >
               {experienceLevel}
               <X className="h-3 w-3" />
@@ -180,7 +225,7 @@ export function JobsListFilters({
             <Badge
               variant="secondary"
               className="gap-1 font-mono text-xs cursor-pointer hover:bg-secondary/80"
-              onClick={() => onEmploymentTypeChange("all")}
+              onClick={() => onApply({ q, domain, employmentType: "all", experienceLevel, location })}
             >
               {employmentType}
               <X className="h-3 w-3" />
@@ -190,7 +235,7 @@ export function JobsListFilters({
             <Badge
               variant="secondary"
               className="gap-1 font-mono text-xs cursor-pointer hover:bg-secondary/80"
-              onClick={() => onLocationChange("")}
+              onClick={() => onApply({ q, domain, employmentType, experienceLevel, location: "" })}
             >
               {location}
               <X className="h-3 w-3" />
