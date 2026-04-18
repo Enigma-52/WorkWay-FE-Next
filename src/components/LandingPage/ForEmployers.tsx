@@ -1,87 +1,73 @@
 "use client";
-import { Clock, UserCheck, LayoutGrid, ListChecks, BarChart3, Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
+import { Clock, UserCheck, LayoutGrid, Sparkles } from "lucide-react";
 
-const ForEmployers = () => {
-  const features = [
-    { icon: Clock, text: "Post jobs in minutes", stat: "< 5 min" },
-    { icon: UserCheck, text: "Get candidates who actually fit", stat: "90% match" },
-    { icon: LayoutGrid, text: "Manage applicants in a clean pipeline", stat: "No chaos" },
-    { icon: ListChecks, text: "Shortlist without spreadsheets", stat: "1-click" },
-    { icon: BarChart3, text: "See what's working (and what isn't)", stat: "Real data" },
-  ];
+const items = [
+  { icon: Clock, text: "Post in under 5 minutes" },
+  { icon: UserCheck, text: "Get candidates who actually fit" },
+  { icon: LayoutGrid, text: "Clean pipeline, no spreadsheet chaos" },
+];
 
-  return (
-    <section className="py-24 md:py-32 relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/2 left-0 w-1/2 h-96 bg-gradient-to-r from-primary/5 to-transparent blur-3xl" />
-        <div className="absolute top-1/2 right-0 w-1/2 h-96 bg-gradient-to-l from-primary/5 to-transparent blur-3xl" />
-      </div>
+const ForEmployers = () => (
+  <section className="py-28 md:py-36 relative">
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-primary/[0.02] rounded-full blur-[130px] pointer-events-none" />
 
-      <div className="container px-4 relative z-10">
-        <div className="max-w-5xl mx-auto">
-          {/* Heading */}
-          <div className="text-center mb-16">
-            <p className="text-primary font-mono text-sm uppercase tracking-wider mb-4 flex items-center justify-center gap-2">
-              <Sparkles className="w-4 h-4" />
-              For Employers
+    <div className="relative z-10 max-w-4xl mx-auto text-center">
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true }}
+      >
+        <p className="text-[10px] font-mono uppercase tracking-[0.35em] text-primary/60 mb-5 inline-flex items-center gap-2">
+          <Sparkles className="w-3 h-3" />
+          For Employers
+        </p>
+        <h2 className="text-3xl sm:text-4xl md:text-[2.75rem] font-bold leading-tight">
+          Hiring without the circus.
+        </h2>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.15 }}
+        viewport={{ once: true }}
+        className="mt-14 grid sm:grid-cols-3 gap-3 max-w-3xl mx-auto"
+      >
+        {items.map((item, i) => (
+          <div
+            key={i}
+            className="group p-6 rounded-2xl border border-white/[0.04] bg-white/[0.015] hover:bg-white/[0.035] transition-all duration-500"
+          >
+            <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/15 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+              <item.icon className="w-5 h-5 text-primary/70" />
+            </div>
+            <p className="text-[13px] font-medium text-white/50 group-hover:text-white/70 transition-colors">
+              {item.text}
             </p>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold">
-              Hiring without
-            </h2>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mt-2">
-              <span className="relative inline-block">
-                <span className="relative z-10">the circus.</span>
-                <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 200 12" fill="none">
-                  <path d="M2 10C50 2 150 2 198 10" stroke="hsl(82 100% 55%)" strokeWidth="3" strokeLinecap="round" className="opacity-60"/>
-                </svg>
-              </span>
-            </h2>
           </div>
+        ))}
+      </motion.div>
 
-          {/* Features */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-            {features.map((feature, index) => (
-              <div
-                key={index}
-                className={`group relative p-6 rounded-2xl border border-border bg-card/50 backdrop-blur-sm hover:bg-card hover:border-primary/30 transition-all duration-300 hover:-translate-y-1 ${
-                  index === features.length - 1 ? "md:col-span-2 lg:col-span-1" : ""
-                }`}
-              >
-                {/* Corner accent */}
-                <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-primary/10 to-transparent rounded-tr-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                
-                <div className="flex items-start justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
-                    <feature.icon className="w-5 h-5 text-primary" />
-                  </div>
-                  <span className="text-xs font-mono text-primary bg-primary/10 px-3 py-1 rounded-full">
-                    {feature.stat}
-                  </span>
-                </div>
-                
-                <p className="text-lg font-medium text-foreground/90 group-hover:text-foreground transition-colors">
-                  {feature.text}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          {/* Punchline */}
-          <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12">
-            <div className="flex items-center gap-4 p-4 rounded-xl border border-destructive/30 bg-destructive/5">
-              <span className="text-2xl">🚫</span>
-              <span className="text-lg text-foreground/80">No ATS bloat.</span>
-            </div>
-            <div className="flex items-center gap-4 p-4 rounded-xl border border-destructive/30 bg-destructive/5">
-              <span className="text-2xl">💸</span>
-              <span className="text-lg text-foreground/80">No enterprise pricing jumpscare.</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.4, delay: 0.3 }}
+        viewport={{ once: true }}
+        className="mt-10 flex flex-wrap justify-center gap-3"
+      >
+        {["No ATS bloat", "No enterprise pricing jumpscare"].map((t, i) => (
+          <span
+            key={i}
+            className="px-4 py-2 rounded-full border border-red-400/[0.08] bg-red-400/[0.02] text-xs font-mono text-white/30"
+          >
+            {t}
+          </span>
+        ))}
+      </motion.div>
+    </div>
+  </section>
+);
 
 export default ForEmployers;

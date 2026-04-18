@@ -1,4 +1,5 @@
 "use client";
+import { motion } from "framer-motion";
 import { X } from "lucide-react";
 
 const WhatWeAreNot = () => {
@@ -11,37 +12,62 @@ const WhatWeAreNot = () => {
   ];
 
   return (
-    <section className="py-24 md:py-32 bg-card/30 border-y border-border">
+    <motion.section
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
+      viewport={{ once: true, margin: "-100px" }}
+      className="py-28 md:py-36 border-y border-white/[0.04]"
+    >
       <div className="container px-4">
         <div className="max-w-3xl mx-auto text-center">
-          {/* Heading */}
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-12">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-3xl sm:text-4xl md:text-5xl font-bold mb-14"
+          >
             Things we{" "}
-            <span className="text-destructive">refused</span> to build.
-          </h2>
+            <span className="text-red-400/80">refused</span> to build.
+          </motion.h2>
 
-          {/* Items */}
-          <div className="flex flex-wrap justify-center gap-4 mb-12">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="flex flex-wrap justify-center gap-3 mb-14"
+          >
             {notItems.map((item, index) => (
-              <div
+              <motion.div
                 key={index}
-                className="flex items-center gap-2 px-5 py-3 rounded-full border border-destructive/30 bg-destructive/5 text-foreground/80"
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3, delay: 0.3 + index * 0.06 }}
+                viewport={{ once: true }}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-full border border-red-500/10 bg-red-500/[0.03] text-white/50"
               >
-                <X className="w-4 h-4 text-destructive" />
-                <span className="font-mono text-sm">{item}</span>
-              </div>
+                <X className="w-3.5 h-3.5 text-red-400/50" />
+                <span className="font-mono text-xs">{item}</span>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
-          {/* Tagline */}
-          <p className="text-xl text-muted-foreground">
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            viewport={{ once: true }}
+            className="text-lg text-white/30"
+          >
             Just tools that help you get hired.
             <br />
-            <span className="text-foreground font-semibold">Or hire faster.</span>
-          </p>
+            <span className="text-white/70 font-semibold">Or hire faster.</span>
+          </motion.p>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

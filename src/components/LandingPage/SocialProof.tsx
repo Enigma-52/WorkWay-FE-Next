@@ -1,34 +1,43 @@
 "use client";
-import { Briefcase, Users, Zap } from "lucide-react";
+import { motion } from "framer-motion";
+
+const stats = [
+  { value: "10,000+", label: "Jobs aggregated" },
+  { value: "500+", label: "Companies" },
+  { value: "50+", label: "Domains covered" },
+];
 
 const SocialProof = () => {
-  const badges = [
-    { icon: Briefcase, text: "applying every day" },
-    { icon: Users, text: "hiring seriously" },
-    { icon: Zap, text: "extremely tired of other job platforms" },
-  ];
-
   return (
-    <section className="py-20 border-y border-border bg-card/30">
+    <motion.section
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7 }}
+      viewport={{ once: true, margin: "-100px" }}
+      className="py-20 border-y border-white/[0.06]"
+    >
       <div className="container px-4">
-        <p className="text-center text-muted-foreground mb-8 font-mono text-sm">
-          Used by people who are:
-        </p>
-        <div className="flex flex-wrap justify-center gap-4 md:gap-6">
-          {badges.map((badge, index) => (
-            <div
-              key={index}
-              className="flex items-center gap-3 px-5 py-3 rounded-full border border-border bg-background/50 backdrop-blur-sm hover:border-primary/50 transition-colors duration-300"
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-3xl mx-auto">
+          {stats.map((stat, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+              viewport={{ once: true }}
+              className="text-center"
             >
-              <badge.icon className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-foreground">
-                {badge.text}
-              </span>
-            </div>
+              <p className="text-3xl sm:text-4xl font-bold tracking-tight text-gradient mb-2">
+                {stat.value}
+              </p>
+              <p className="text-sm font-mono text-white/30 uppercase tracking-wider">
+                {stat.label}
+              </p>
+            </motion.div>
           ))}
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
