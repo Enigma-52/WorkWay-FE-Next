@@ -1,8 +1,11 @@
 "use client";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { MapPin, Briefcase, Building2 } from "lucide-react";
+import { MapPin, Briefcase, Building2, CheckCircle2 } from "lucide-react";
 import JobBadge from "./JobBadge";
+import SaveJobButton from "@/components/common/SaveJobButton";
+import { useJobStatus } from "@/contexts/JobStatusContext";
 
 function normalizedSkills(skills: unknown): { name: string; slug: string }[] {
   if (!skills) return [];
@@ -34,9 +37,11 @@ interface JobCardProps {
   company: string;
   location: string;
   company_logo_url?: string;
+  company_slug?: string;
   employment_type: string;
   domain: string;
   slug: string;
+  url?: string;
   skills?: { name: string; slug: string }[] | unknown;
 }
 
@@ -46,19 +51,31 @@ const JobCard = ({
   slug,
   company_logo_url,
   company,
+  company_slug,
   location,
   employment_type,
   domain,
+  url,
   skills,
 }: JobCardProps) => {
   const router = useRouter();
+  const { appliedSlugs } = useJobStatus();
   const skillsList = normalizedSkills(skills);
+  const isApplied = appliedSlugs.has(slug);
 
   return (
     <div
       onClick={() => router.push(`/job/${slug}`)}
-      className="job-card h-full group block cursor-pointer"
+      className="job-card h-full group block cursor-pointer relative"
     >
+      {/* Applied badge */}
+      {isApplied && (
+        <div className="absolute top-0 right-0 flex items-center gap-1 text-[10px] font-medium text-green-500 bg-green-500/10 border border-green-500/20 rounded-full px-2 py-0.5">
+          <CheckCircle2 className="w-3 h-3" />
+          Applied
+        </div>
+      )}
+
       <div className="mb-4 flex items-center gap-3">
         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary group-hover:bg-primary/10 transition-colors">
           {company_logo_url ? (
@@ -71,9 +88,19 @@ const JobCard = ({
             <Building2 className="h-6 w-6 text-primary" />
           )}
         </div>
-        <span className="text-sm font-medium text-muted-foreground">
+        <span className="text-sm font-medium text-muted-foreground flex-1">
           {company}
         </span>
+        <SaveJobButton
+          jobSlug={slug}
+          jobTitle={title}
+          company={company}
+          companyLogoUrl={company_logo_url ?? null}
+          location={location}
+          employmentType={employment_type}
+          jobUrl={url ?? null}
+          className="opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+        />
       </div>
 
       <h4 className="mb-3 text-base font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2">

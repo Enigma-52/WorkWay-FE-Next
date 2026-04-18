@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import AuthModal from "@/components/common/AuthModal";
 
 const Navbar = () => {
@@ -34,12 +34,22 @@ const Navbar = () => {
 
         {/* CTA */}
         {session ? (
-          <Button size="sm" className="gap-1" asChild>
-            <Link href="/dashboard">
-              Dashboard
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button size="sm" className="gap-1" asChild>
+              <Link href="/dashboard">
+                Dashboard
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              className="gap-1 text-muted-foreground hover:text-foreground"
+              onClick={() => signOut({ callbackUrl: "/" })}
+            >
+              <LogOut className="w-4 h-4" />
+            </Button>
+          </div>
         ) : (
           <>
             <Button size="sm" className="gap-1" onClick={() => setAuthOpen(true)}>

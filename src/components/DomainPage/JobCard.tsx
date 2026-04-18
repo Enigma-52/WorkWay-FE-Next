@@ -9,6 +9,9 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import SaveJobButton from "@/components/common/SaveJobButton";
+import { useJobStatus } from "@/contexts/JobStatusContext";
+import { CheckCircle2 } from "lucide-react";
 
 const DESCRIPTION_PREVIEW_MAX_CHARS = 160;
 
@@ -59,6 +62,8 @@ interface JobCardProps {
 }
 
 export function JobCard({ job }: JobCardProps) {
+  const { appliedSlugs } = useJobStatus();
+  const isApplied = appliedSlugs.has(job.slug);
   const descPreview = getDescriptionPreview(job.description);
   const displayDesc = descPreview
     ? truncateDescription(descPreview, DESCRIPTION_PREVIEW_MAX_CHARS)
@@ -82,6 +87,13 @@ export function JobCard({ job }: JobCardProps) {
 
   return (
     <article className="group relative rounded-lg border border-border bg-card p-6 transition-all duration-300 hover:border-primary/40 hover:glow-subtle animate-fade-in">
+      {/* Applied badge */}
+      {isApplied && (
+        <div className="absolute top-3 right-3 flex items-center gap-1 text-[10px] font-medium text-green-500 bg-green-500/10 border border-green-500/20 rounded-full px-2 py-0.5 z-10">
+          <CheckCircle2 className="w-3 h-3" />
+          Applied
+        </div>
+      )}
       <div className="pointer-events-none absolute inset-0 rounded-lg bg-primary/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
       <div className="relative flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -179,7 +191,16 @@ export function JobCard({ job }: JobCardProps) {
           </div>
         </Link>
 
-        <div className="flex items-start shrink-0">
+        <div className="flex items-start gap-2 shrink-0">
+          <SaveJobButton
+            jobSlug={job.slug}
+            jobTitle={job.title}
+            company={job.company}
+            companyLogoUrl={job.company_logo_url}
+            location={job.location}
+            employmentType={job.employment_type}
+            jobUrl={job.url}
+          />
           <Button asChild variant="outline" size="sm" className="group/btn ...">
             <a href={job.url} target="_blank" rel="noopener noreferrer">
               Apply

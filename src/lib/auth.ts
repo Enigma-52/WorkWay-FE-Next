@@ -1,12 +1,43 @@
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
-import type { DefaultSession } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+    Credentials({
+      id: "magic-link",
+      name: "Magic Link",
+      credentials: {
+        token: { type: "text" },
+      },
+      async authorize(credentials) {
+        const token = credentials?.token as string | undefined;
+        if (!token) return null;
+        try {
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/auth/magic-link/verify?token=${encodeURIComponent(token)}`
+          );
+          if (!res.ok) return null;
+          const data = await res.json();
+          if (!data.success || !data.user) return null;
+          const u = data.user;
+          return {
+            id: String(u.id),
+            email: u.email,
+            name: u.display_name ?? u.email.split("@")[0],
+            image: u.avatar_url ?? null,
+            dbId: String(u.id),
+            roles: u.roles ?? [],
+            displayName: u.display_name ?? "",
+          };
+        } catch {
+          return null;
+        }
+      },
     }),
   ],
   session: { strategy: "jwt" },
@@ -19,7 +50,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         return token;
       }
 
-      // On initial sign-in, sync user to backend and store role in token
+      // On Google sign-in — sync user to backend and store role in token
       if (account?.provider === "google" && user) {
         try {
           const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/sync`, {
@@ -47,6 +78,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (!token.roles) token.roles = [];
         if (!token.displayName) token.displayName = user.name ?? "";
       }
+
+      // On magic-link sign-in — Credentials authorize() already populated these fields
+      if (account?.provider === "magic-link" && user) {
+        token.dbId = (user as any).dbId ?? "";
+        token.roles = (user as any).roles ?? [];
+        token.displayName = (user as any).displayName ?? user.name ?? "";
+      }
+
       return token;
     },
     async session({ session, token }) {
