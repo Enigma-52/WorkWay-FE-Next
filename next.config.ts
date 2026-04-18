@@ -19,6 +19,22 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async headers() {
+    return [
+      {
+        source: "/",
+        headers: [
+          {
+            key: "Link",
+            value: [
+              "</sitemap.xml>; rel=\"sitemap\"",
+              "</robots.txt>; rel=\"robots\"",
+            ].join(", "),
+          },
+        ],
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "**" },
