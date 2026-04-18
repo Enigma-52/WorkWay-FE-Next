@@ -1,8 +1,11 @@
 "use client";
-import { MapPin, Clock, ArrowUpRight } from "lucide-react";
+
+import { MapPin, Clock, ArrowUpRight, CheckCircle2 } from "lucide-react";
 import { type JobListing } from "@/data/companyData";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import SaveJobButton from "@/components/common/SaveJobButton";
+import { useJobStatus } from "@/contexts/JobStatusContext";
 
 function normalizedSkills(skills: unknown): { name: string; slug: string }[] {
   if (!skills) return [];
@@ -31,7 +34,8 @@ interface JobCardProps {
 }
 
 export function JobCard({ job }: JobCardProps) {
-  const skillsList = normalizedSkills(job.skills);
+  const { appliedSlugs } = useJobStatus();
+  const isApplied = appliedSlugs.has(job.slug);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -50,15 +54,23 @@ export function JobCard({ job }: JobCardProps) {
   };
 
   return (
-    <div className="group flex flex-col px-5 py-4 hover:bg-secondary/50 transition-all duration-200 border-b border-border last:border-b-0">
+    <div className="group flex flex-col px-5 py-4 hover:bg-secondary/50 transition-all duration-200 border-b border-border last:border-b-0 relative">
       <Link
         href={`/job/${job.slug}`}
         className="flex items-center justify-between flex-1 min-w-0"
       >
-        <div className="flex-1 min-w-0">
-          <h4 className="font-medium text-foreground group-hover:text-primary transition-colors truncate">
-            {job.title}
-          </h4>
+        <div className="flex-1 min-w-0 pr-2">
+          <div className="flex items-center gap-2 flex-wrap">
+            <h4 className="font-medium text-foreground group-hover:text-primary transition-colors truncate">
+              {job.title}
+            </h4>
+            {isApplied && (
+              <span className="inline-flex items-center gap-1 text-[10px] font-medium text-green-500 bg-green-500/10 border border-green-500/20 rounded-full px-2 py-0.5 shrink-0">
+                <CheckCircle2 className="w-3 h-3" />
+                Applied
+              </span>
+            )}
+          </div>
           <div className="flex items-center gap-4 mt-1.5 text-sm text-muted-foreground flex-wrap">
             <span className="inline-flex items-center gap-1.5">
               <MapPin className="w-3.5 h-3.5" />
@@ -79,10 +91,20 @@ export function JobCard({ job }: JobCardProps) {
           </div>
         </div>
 
-        <div className="flex items-center gap-4 shrink-0">
+        <div className="flex items-center gap-2 shrink-0">
           <span className="text-xs text-muted-foreground font-mono">
             {formatDate(job.updated_at)}
           </span>
+          <SaveJobButton
+            jobSlug={job.slug}
+            jobTitle={job.title}
+            company={job.company}
+            companyLogoUrl={job.company_logo_url}
+            location={job.location}
+            employmentType={job.employment_type}
+            jobUrl={job.url}
+            className="opacity-0 group-hover:opacity-100 transition-opacity"
+          />
           <Button
             size="sm"
             variant="ghost"
@@ -96,25 +118,6 @@ export function JobCard({ job }: JobCardProps) {
           </Button>
         </div>
       </Link>
-
-      {skillsList.length > 0 ? (
-        <div className="mt-2 flex flex-wrap gap-1.5">
-          {skillsList.slice(0, 8).map((s) => (
-            <Link
-              key={s.slug}
-              href={`/skill/${s.slug}`}
-              className="inline-flex items-center rounded-md border border-border bg-muted/60 px-2 py-0.5 text-xs text-muted-foreground hover:bg-primary/10 hover:text-primary transition-colors"
-            >
-              {s.name}
-            </Link>
-          ))}
-          {skillsList.length > 8 ? (
-            <span className="text-xs text-muted-foreground py-0.5">
-              +{skillsList.length - 8}
-            </span>
-          ) : null}
-        </div>
-      ) : null}
     </div>
   );
 }

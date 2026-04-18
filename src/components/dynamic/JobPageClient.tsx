@@ -12,7 +12,7 @@ import {
   ArrowRight,
   Banknote,
 } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import JobBadge from "@/components/JobPage/JobBadge";
 import JobSection from "@/components/JobPage/JobSection";
 import JobCard from "@/components/JobPage/JobCard";
@@ -20,6 +20,11 @@ import { Button } from "@/components/ui/button";
 import { getDomainSlug } from "@/utils/helper";
 import type { JobDetails } from "@/types/jobs";
 import JobViewFeed from "@/components/JobViewFeed/JobViewFeed";
+import AuthModal from "@/components/common/AuthModal";
+import SaveJobButton from "@/components/common/SaveJobButton";
+import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
+import { useJobStatus } from "@/contexts/JobStatusContext";
 
 type Props = {
   job: JobDetails;
@@ -39,7 +44,35 @@ function getTimeAgo(updatedAt: string): string {
 }
 
 export default function JobPageClient({ job }: Props) {
+  const { data: session } = useSession();
+  const pathname = usePathname();
+  const { appliedSlugs, addApplied } = useJobStatus();
   const timeAgo = job.updated_at ? getTimeAgo(job.updated_at) : null;
+  const [applyClicked, setApplyClicked] = useState(false);
+  const [appliedStatus, setAppliedStatus] = useState<"saving" | "yes" | "no" | null>(null);
+  const [authOpen, setAuthOpen] = useState(false);
+
+  const alreadyApplied = appliedSlugs.has(job.slug);
+
+  async function handleAppliedYes() {
+    if (!session?.user?.dbId) {
+      setAuthOpen(true);
+      return;
+    }
+    setAppliedStatus("saving");
+    fetch("/api/applications", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        job_slug: job.slug,
+        job_title: job.title,
+        company: job.company,
+        company_logo_url: job.company_logo_url ?? null,
+        location: job.location ?? null,
+        employment_type: job.employment_type ?? null,
+      }),
+    }).then(() => { setAppliedStatus("yes"); addApplied(job.slug); }).catch(() => setAppliedStatus("yes"));
+  }
 
   useEffect(() => {
     if (!job?.slug) return;
@@ -237,15 +270,79 @@ export default function JobPageClient({ job }: Props) {
                 transition={{ duration: 0.4, delay: 0.25 }}
                 className="flex flex-col gap-3"
               >
-                <a href={job.url} target="_blank" rel="noopener noreferrer">
-                  <Button size="xl" className="w-full cursor-pointer lg:w-auto">
-                    Apply Now
-                    <ExternalLink className="ml-2 h-5 w-5" />
-                  </Button>
-                </a>
-                <p className="text-center text-xs text-muted-foreground lg:text-left">
-                  You will be redirected to the company career page
-                </p>
+                <div className="flex items-center gap-2">
+                  <a
+                    href={job.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => { if (!alreadyApplied) { setApplyClicked(true); setAppliedStatus(null); } }}
+                  >
+                    <Button size="xl" className="cursor-pointer">
+                      Apply Now
+                      <ExternalLink className="ml-2 h-5 w-5" />
+                    </Button>
+                  </a>
+                  <SaveJobButton
+                    jobSlug={job.slug}
+                    jobTitle={job.title}
+                    company={job.company}
+                    companyLogoUrl={job.company_logo_url}
+                    location={job.location}
+                    employmentType={job.employment_type}
+                    jobUrl={job.url}
+                    size="md"
+                  />
+                </div>
+
+                {/* Already applied persistent state */}
+                {alreadyApplied && appliedStatus !== "yes" && (
+                  <p className="text-xs text-green-500 mt-1 flex items-center gap-1.5">
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    You already applied · <a href="/dashboard/seeker/applications" className="underline hover:text-green-400">View in Applications</a>
+                  </p>
+                )}
+
+                {/* "Did you apply?" prompt — only shown if not already tracked */}
+                {!alreadyApplied && applyClicked && appliedStatus === null && (
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="text-xs text-muted-foreground">Did you apply?</span>
+                    <button
+                      onClick={handleAppliedYes}
+                      className="text-xs px-2.5 py-1 rounded-full border border-border bg-secondary hover:border-primary hover:text-primary transition-colors"
+                    >
+                      Yes ✓
+                    </button>
+                    <button
+                      onClick={() => setAppliedStatus("no")}
+                      className="text-xs px-2.5 py-1 rounded-full border border-border bg-secondary hover:border-muted-foreground/50 hover:text-foreground transition-colors"
+                    >
+                      Not yet
+                    </button>
+                  </div>
+                )}
+
+                {appliedStatus === "saving" && (
+                  <p className="text-xs text-muted-foreground mt-1">Saving to applications...</p>
+                )}
+                {appliedStatus === "yes" && (
+                  <p className="text-xs text-green-500 mt-1 flex items-center gap-1.5">
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    Saved to your <a href="/dashboard/seeker/applications" className="underline">Applications</a>
+                  </p>
+                )}
+                {appliedStatus === "no" && (
+                  <p className="text-xs text-muted-foreground mt-1">No worries — take your time.</p>
+                )}
+
+                {!alreadyApplied && !applyClicked && (
+                  <p className="text-center text-xs text-muted-foreground lg:text-left">
+                    You will be redirected to the company career page
+                  </p>
+                )}
               </motion.div>
             </div>
           </div>
@@ -427,6 +524,7 @@ export default function JobPageClient({ job }: Props) {
           </div>
         </section>
       </div>
+      <AuthModal open={authOpen} onOpenChange={setAuthOpen} callbackUrl={pathname} />
     </div>
   );
 }
