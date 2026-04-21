@@ -104,7 +104,7 @@ export default function JobPageClient({ job }: Props) {
             <div className="absolute left-1/2 top-0 h-[500px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/5 blur-[120px]" />
           </div>
 
-          <div className="container relative py-16 md:py-24">
+          <div className="relative mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 md:py-16 lg:px-8 lg:py-24">
             <motion.div
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -118,7 +118,7 @@ export default function JobPageClient({ job }: Props) {
               </Link>
             </motion.div>
 
-            <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between lg:gap-8">
               <div className="max-w-3xl">
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -235,7 +235,7 @@ export default function JobPageClient({ job }: Props) {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4, delay: 0.25 }}
-                className="flex flex-col gap-3"
+                className="flex flex-col gap-3 sm:max-w-sm"
               >
                 <a href={job.url} target="_blank" rel="noopener noreferrer">
                   <Button size="xl" className="w-full cursor-pointer lg:w-auto">
@@ -251,9 +251,9 @@ export default function JobPageClient({ job }: Props) {
           </div>
         </section>
 
-        <section className="py-16 md:py-24">
-          <div className="container">
-            <div className="grid gap-6 lg:grid-cols-[1fr_380px]">
+        <section className="py-12 md:py-16 lg:py-24">
+          <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="grid gap-5 lg:grid-cols-[1fr_380px] lg:gap-6">
               <div className="space-y-6">
                 {(Array.isArray(job.description) ? job.description : []).map(
                   (section: any, index: number) => (
@@ -353,14 +353,14 @@ export default function JobPageClient({ job }: Props) {
           </div>
         </section>
 
-        <section className="border-t border-border/50 py-16 md:py-24">
-          <div className="container">
+        <section className="border-t border-border/50 py-12 md:py-16 lg:py-24">
+          <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4 }}
-              className="mb-8 flex items-center justify-between"
+              className="mb-7 flex items-center justify-between md:mb-8"
             >
               <h2 className="text-2xl font-bold text-foreground">
                 Similar roles you might like
@@ -374,7 +374,7 @@ export default function JobPageClient({ job }: Props) {
               </Link>
             </motion.div>
 
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
               {domainJobs.map((dJob: any, index: number) => (
                 <motion.div
                   key={dJob.id}
@@ -390,14 +390,14 @@ export default function JobPageClient({ job }: Props) {
           </div>
         </section>
 
-        <section className="border-t py-16 md:py-24">
-          <div className="container">
+        <section className="border-t py-12 md:py-16 lg:py-24">
+          <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4 }}
-              className="mb-8 flex items-center justify-between"
+              className="mb-7 flex items-center justify-between md:mb-8"
             >
               <h2 className="text-2xl font-bold text-foreground">
                 More roles at {job.company}
@@ -411,7 +411,7 @@ export default function JobPageClient({ job }: Props) {
               </Link>
             </motion.div>
 
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
               {companyJobs.map((cJob: any, index: number) => (
                 <motion.div
                   key={cJob.id}
