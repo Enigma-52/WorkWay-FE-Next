@@ -199,13 +199,23 @@ export default function JobPageClient({ job }: Props) {
                       {job.metadata.compensation.split("•")[0]?.trim()}
                     </JobBadge>
                   )}
-                  {job?.metadata?.compensation?.toLowerCase().includes("equity") && (
-                    <JobBadge variant="default" className="border-green-500/30 text-green-600 dark:text-green-400">
+                  {job?.metadata?.compensation
+                    ?.toLowerCase()
+                    .includes("equity") && (
+                    <JobBadge
+                      variant="default"
+                      className="border-green-500/30 text-green-600 dark:text-green-400"
+                    >
                       Offers Equity
                     </JobBadge>
                   )}
-                  {job?.metadata?.compensation?.toLowerCase().includes("bonus") && (
-                    <JobBadge variant="default" className="border-amber-500/30 text-amber-600 dark:text-amber-400">
+                  {job?.metadata?.compensation
+                    ?.toLowerCase()
+                    .includes("bonus") && (
+                    <JobBadge
+                      variant="default"
+                      className="border-amber-500/30 text-amber-600 dark:text-amber-400"
+                    >
                       Offers Bonus
                     </JobBadge>
                   )}
@@ -305,7 +315,10 @@ export default function JobPageClient({ job }: Props) {
                       <span className="text-sm text-muted-foreground shrink-0">
                         Location
                       </span>
-                      <span className="text-sm font-medium text-foreground text-right max-w-[220px]" title={job.location}>
+                      <span
+                        className="text-sm font-medium text-foreground text-right max-w-[220px]"
+                        title={job.location}
+                      >
                         {truncateLocation(job.location, 2)}
                       </span>
                     </div>
@@ -479,7 +492,7 @@ export default function JobPageClient({ job }: Props) {
         )}
 
         {jobsBySkill.length > 0 && (
-          <section className="border-t border-dashed border-border/60 bg-muted/30 py-16 md:py-24">
+          <section className="border-t border-dashed border-border/60 py-16 md:py-24">
             <div className="container">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -508,7 +521,7 @@ export default function JobPageClient({ job }: Props) {
                     <div className="mb-4 flex items-center justify-between">
                       <Link
                         href={`/skill/${group.skill_slug}`}
-                        className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-semibold text-primary transition-colors hover:bg-primary/10"
+                        className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-semibold transition-colors hover:bg-primary/10"
                       >
                         {group.skill_name}
                         <ArrowRight className="h-3.5 w-3.5" />
