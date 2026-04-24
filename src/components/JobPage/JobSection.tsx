@@ -20,33 +20,44 @@ const LONG_TEXT_THRESHOLD = 200;
 function highlightSkills(text: string, skills: Skill[]): ReactNode {
   if (!skills || skills.length === 0) return text;
 
-  // Build regex matching all skill names, longest first to avoid partial matches
+  // Build regex matching whole words only, longest first to avoid partial matches
   const sorted = [...skills].sort((a, b) => b.name.length - a.name.length);
   const escaped = sorted.map((s) =>
     s.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
   );
-  const pattern = new RegExp(`(${escaped.join("|")})`, "gi");
+  const pattern = new RegExp(`\\b(${escaped.join("|")})\\b`, "gi");
 
-  const parts = text.split(pattern);
-  if (parts.length === 1) return text;
-
-  return parts.map((part, i) => {
-    const match = skills.find(
-      (s) => s.name.toLowerCase() === part.toLowerCase(),
-    );
-    if (match) {
-      return (
-        <Link
-          key={i}
-          href={`/skill/${match.slug}`}
-          className="rounded bg-primary/10 px-1 py-0.5 font-medium text-primary hover:bg-primary/20 transition-colors"
-        >
-          {part}
-        </Link>
-      );
+  const result: ReactNode[] = [];
+  let lastIndex = 0;
+  let m: RegExpExecArray | null;
+  while ((m = pattern.exec(text)) !== null) {
+    if (m.index > lastIndex) {
+      result.push(text.slice(lastIndex, m.index));
     }
-    return part;
-  });
+    const matched = m[0];
+    const skill = skills.find(
+      (s) => s.name.toLowerCase() === matched.toLowerCase(),
+    );
+    if (skill) {
+      result.push(
+        <Link
+          key={m.index}
+          href={`/skill/${skill.slug}`}
+          className="rounded py-0.5 font-medium text-primary"
+        >
+          {matched}
+        </Link>,
+      );
+    } else {
+      result.push(matched);
+    }
+    lastIndex = pattern.lastIndex;
+  }
+  if (lastIndex < text.length) {
+    result.push(text.slice(lastIndex));
+  }
+
+  return result.length > 1 ? result : text;
 }
 
 function LongTextItem({ text, skills }: { text: string; skills: Skill[] }) {
