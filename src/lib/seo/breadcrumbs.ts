@@ -223,6 +223,16 @@ export function buildLocationSeoDetailBreadcrumb(
   ];
 }
 
+export function buildSalaryInsightsBreadcrumb(): BreadcrumbItem[] {
+  return [
+    ...buildHomeBreadcrumb(),
+    {
+      name: "Salary Insights",
+      href: "/salary-insights",
+    },
+  ];
+}
+
 export function buildJobsByLocationBreadcrumb(): BreadcrumbItem[] {
   return [
     ...buildHomeBreadcrumb(),

@@ -17,8 +17,8 @@ import JobBadge from "@/components/JobPage/JobBadge";
 import JobSection from "@/components/JobPage/JobSection";
 import JobCard from "@/components/JobPage/JobCard";
 import { Button } from "@/components/ui/button";
-import { getDomainSlug } from "@/utils/helper";
-import type { JobDetails } from "@/types/jobs";
+import { getDomainSlug, truncateLocation } from "@/utils/helper";
+import type { JobDetails, SkillJobGroup } from "@/types/jobs";
 import JobViewFeed from "@/components/JobViewFeed/JobViewFeed";
 
 type Props = {
@@ -95,6 +95,9 @@ export default function JobPageClient({ job }: Props) {
 
   const domainJobs = job.similarJobsByDomain || [];
   const companyJobs = job.otherJobsByCompany || [];
+  const jobsBySkill: SkillJobGroup[] = job.jobsBySkill || [];
+  const remainingSkills = job.remainingSkills || [];
+  const locationJobs = job.similarLocationJobs || [];
 
   return (
     <div className="flex min-h-screen justify-center bg-background">
@@ -177,9 +180,9 @@ export default function JobPageClient({ job }: Props) {
                   transition={{ duration: 0.4, delay: 0.2 }}
                   className="flex flex-wrap gap-3"
                 >
-                  <JobBadge variant="primary">
-                    <MapPin className="mr-1.5 h-3 w-3" />
-                    {job.location}
+                  <JobBadge variant="primary" title={job.location}>
+                    <MapPin className="mr-1.5 h-3 w-3 shrink-0" />
+                    {truncateLocation(job.location)}
                   </JobBadge>
                   <JobBadge>
                     <Briefcase className="mr-1.5 h-3 w-3" />
@@ -193,7 +196,17 @@ export default function JobPageClient({ job }: Props) {
                   {job?.metadata?.compensation && (
                     <JobBadge variant="primary">
                       <Banknote className="mr-2 h-4 w-4" />
-                      {job.metadata.compensation}
+                      {job.metadata.compensation.split("•")[0]?.trim()}
+                    </JobBadge>
+                  )}
+                  {job?.metadata?.compensation?.toLowerCase().includes("equity") && (
+                    <JobBadge variant="default" className="border-green-500/30 text-green-600 dark:text-green-400">
+                      Offers Equity
+                    </JobBadge>
+                  )}
+                  {job?.metadata?.compensation?.toLowerCase().includes("bonus") && (
+                    <JobBadge variant="default" className="border-amber-500/30 text-amber-600 dark:text-amber-400">
+                      Offers Bonus
                     </JobBadge>
                   )}
                   {timeAgo && (
@@ -262,6 +275,7 @@ export default function JobPageClient({ job }: Props) {
                       heading={section.heading}
                       content={section.content}
                       index={index}
+                      skills={job.skills}
                     />
                   ),
                 )}
@@ -288,11 +302,11 @@ export default function JobPageClient({ job }: Props) {
                       </span>
                     </div>
                     <div className="flex items-center justify-between border-b border-border pb-4">
-                      <span className="text-sm text-muted-foreground">
+                      <span className="text-sm text-muted-foreground shrink-0">
                         Location
                       </span>
-                      <span className="text-sm font-medium text-foreground">
-                        {job.location}
+                      <span className="text-sm font-medium text-foreground text-right max-w-[220px]" title={job.location}>
+                        {truncateLocation(job.location, 2)}
                       </span>
                     </div>
                     <div className="flex items-center justify-between border-b border-border pb-4">
@@ -426,6 +440,119 @@ export default function JobPageClient({ job }: Props) {
             </div>
           </div>
         </section>
+
+        {locationJobs.length > 0 && (
+          <section className="border-t border-border/50 py-16 md:py-24">
+            <div className="container">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4 }}
+                className="mb-8 flex items-center justify-between"
+              >
+                <div>
+                  <h2 className="text-2xl font-bold text-foreground">
+                    Jobs near {job.location?.split(",")[0]?.trim()}
+                  </h2>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Recent openings in a similar location
+                  </p>
+                </div>
+              </motion.div>
+
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {locationJobs.map((lJob: any, index: number) => (
+                  <motion.div
+                    key={lJob.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                  >
+                    <JobCard {...lJob} />
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {jobsBySkill.length > 0 && (
+          <section className="border-t border-dashed border-border/60 bg-muted/30 py-16 md:py-24">
+            <div className="container">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4 }}
+                className="mb-10"
+              >
+                <h2 className="text-2xl font-bold text-foreground">
+                  Explore jobs by skill
+                </h2>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Recent openings matching the skills in this role
+                </p>
+              </motion.div>
+
+              <div className="space-y-10">
+                {jobsBySkill.map((group, gIdx) => (
+                  <motion.div
+                    key={group.skill_slug}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: gIdx * 0.08 }}
+                  >
+                    <div className="mb-4 flex items-center justify-between">
+                      <Link
+                        href={`/skill/${group.skill_slug}`}
+                        className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-semibold text-primary transition-colors hover:bg-primary/10"
+                      >
+                        {group.skill_name}
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </Link>
+                    </div>
+                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                      {group.jobs.map((sJob: any, sIdx: number) => (
+                        <motion.div
+                          key={sJob.id}
+                          initial={{ opacity: 0, y: 10 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.3, delay: sIdx * 0.06 }}
+                        >
+                          <JobCard {...sJob} />
+                        </motion.div>
+                      ))}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+
+              {remainingSkills.length > 0 && (
+                <div className="mt-10 rounded-lg border border-border/50 bg-card p-6">
+                  <h3 className="mb-4 text-sm font-medium text-muted-foreground">
+                    More skills in this role
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {remainingSkills.map((skill) => (
+                      <Link
+                        key={skill.slug}
+                        href={`/skill/${skill.slug}`}
+                        className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1.5 text-sm text-foreground transition-colors hover:border-primary/30 hover:bg-primary/5 hover:text-primary"
+                      >
+                        {skill.name}
+                        <ArrowRight className="h-3 w-3" />
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );

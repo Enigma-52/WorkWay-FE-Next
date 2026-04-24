@@ -46,9 +46,18 @@ export type SkillJobsPayload = {
   meta: { page: number; total: number; total_pages: number };
 };
 
+export type SkillJobGroup = {
+  skill_name: string;
+  skill_slug: string;
+  jobs: JobListing[];
+};
+
 export type JobDetails = JobListing & {
   similarJobsByDomain?: JobListing[];
   otherJobsByCompany?: JobListing[];
+  jobsBySkill?: SkillJobGroup[];
+  remainingSkills?: Skill[];
+  similarLocationJobs?: JobListing[];
 };
 
 /** Response from GET /api/job/list */

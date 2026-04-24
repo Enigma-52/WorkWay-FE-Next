@@ -9,6 +9,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { truncateLocation } from "@/utils/helper";
 
 const DESCRIPTION_PREVIEW_MAX_CHARS = 160;
 
@@ -85,9 +86,9 @@ export function JobCard({ job }: JobCardProps) {
       <div className="pointer-events-none absolute inset-0 rounded-lg bg-primary/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
       <div className="relative flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <Link href={`/job/${job.slug}`} className="flex gap-4 min-w-0 flex-1">
+        <div className="flex gap-4 min-w-0 flex-1">
           {/* Company Logo */}
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full">
+          <Link href={`/job/${job.slug}`} className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full">
             {job.company_logo_url ? (
               <img
                 src={job.company_logo_url}
@@ -105,20 +106,20 @@ export function JobCard({ job }: JobCardProps) {
             <Building2
               className={`h-7 w-7 text-muted-foreground ${job.company_logo_url ? "hidden" : ""}`}
             />
-          </div>
+          </Link>
           {/* Job Info */}
           <div className="flex flex-col gap-2 min-w-0">
-            <div>
+            <Link href={`/job/${job.slug}`}>
               <h3 className="font-display text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                 {job.title}
               </h3>
               <p className="text-sm text-muted-foreground">{job.company}</p>
-            </div>
+            </Link>
 
             <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-              <span className="flex items-center gap-1.5">
+              <span className="flex items-center gap-1.5" title={job.location}>
                 <MapPin className="h-3.5 w-3.5" />
-                {job.location}
+                {truncateLocation(job.location)}
               </span>
               <span className="flex items-center gap-1.5">
                 <Clock className="h-3.5 w-3.5" />
@@ -139,7 +140,23 @@ export function JobCard({ job }: JobCardProps) {
                   variant="outline"
                   className="font-mono text-xs border-primary/30 text-primary"
                 >
-                  {job?.metadata?.compensation}
+                  {job?.metadata?.compensation?.split("•")[0]?.trim()}
+                </Badge>
+              )}
+              {job?.metadata?.compensation?.toLowerCase().includes("equity") && (
+                <Badge
+                  variant="outline"
+                  className="font-mono text-xs border-green-500/30 text-green-600 dark:text-green-400"
+                >
+                  Offers Equity
+                </Badge>
+              )}
+              {job?.metadata?.compensation?.toLowerCase().includes("bonus") && (
+                <Badge
+                  variant="outline"
+                  className="font-mono text-xs border-amber-500/30 text-amber-600 dark:text-amber-400"
+                >
+                  Offers Bonus
                 </Badge>
               )}
               <Badge
@@ -149,7 +166,7 @@ export function JobCard({ job }: JobCardProps) {
                 {job.platform?.charAt(0).toUpperCase() + job.platform?.slice(1)}
               </Badge>
             </div>
-            {/* Skill tags (separate links so no nested anchors) */}
+
             {skillsList.length > 0 ? (
               <div className="mt-3 flex flex-wrap gap-1.5">
                 {skillsList.slice(0, 10).map((s) => (
@@ -177,7 +194,7 @@ export function JobCard({ job }: JobCardProps) {
               </Link>
             ) : null}
           </div>
-        </Link>
+        </div>
 
         <div className="flex items-start shrink-0">
           <Button asChild variant="outline" size="sm" className="group/btn ...">

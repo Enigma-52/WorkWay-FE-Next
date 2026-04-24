@@ -46,6 +46,12 @@ const Navbar = () => {
             Skills
           </a>
           <a
+            href="/salary-insights"
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Salary Insights
+          </a>
+          <a
             href="/hireme"
             className="text-sm text-muted-foreground hover:text-foreground transition-colors"
           >

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MapPin, Briefcase, Building2 } from "lucide-react";
 import JobBadge from "./JobBadge";
+import { truncateLocation } from "@/utils/helper";
 
 function normalizedSkills(skills: unknown): { name: string; slug: string }[] {
   if (!skills) return [];
@@ -38,6 +39,7 @@ interface JobCardProps {
   domain: string;
   slug: string;
   skills?: { name: string; slug: string }[] | unknown;
+  metadata?: Record<string, any>;
 }
 
 const JobCard = ({
@@ -50,6 +52,7 @@ const JobCard = ({
   employment_type,
   domain,
   skills,
+  metadata,
 }: JobCardProps) => {
   const router = useRouter();
   const skillsList = normalizedSkills(skills);
@@ -81,9 +84,9 @@ const JobCard = ({
       </h4>
 
       <div className="flex flex-wrap gap-2">
-        <JobBadge variant="primary">
-          <MapPin className="mr-1 h-3 w-3" />
-          {location}
+        <JobBadge variant="primary" className="max-w-[200px]" title={location}>
+          <MapPin className="mr-1 h-3 w-3 shrink-0" />
+          <span className="truncate">{truncateLocation(location)}</span>
         </JobBadge>
         <JobBadge>
           <Briefcase className="mr-1 h-3 w-3" />
@@ -91,8 +94,18 @@ const JobCard = ({
         </JobBadge>
       </div>
 
-      <div className="mt-3 pt-3 border-t border-border">
+      <div className="mt-3 pt-3 border-t border-border flex flex-wrap items-center gap-2">
         <span className="text-xs text-muted-foreground">{domain}</span>
+        {metadata?.compensation?.toLowerCase().includes("equity") && (
+          <span className="inline-flex items-center rounded-md border border-green-500/30 bg-green-500/5 px-1.5 py-0.5 text-[10px] font-medium text-green-600 dark:text-green-400">
+            Offers Equity
+          </span>
+        )}
+        {metadata?.compensation?.toLowerCase().includes("bonus") && (
+          <span className="inline-flex items-center rounded-md border border-amber-500/30 bg-amber-500/5 px-1.5 py-0.5 text-[10px] font-medium text-amber-600 dark:text-amber-400">
+            Offers Bonus
+          </span>
+        )}
       </div>
 
       {skillsList.length > 0 ? (

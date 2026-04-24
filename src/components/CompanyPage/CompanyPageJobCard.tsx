@@ -3,6 +3,7 @@ import { MapPin, Clock, ArrowUpRight } from "lucide-react";
 import { type JobListing } from "@/data/companyData";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { truncateLocation } from "@/utils/helper";
 
 function normalizedSkills(skills: unknown): { name: string; slug: string }[] {
   if (!skills) return [];
@@ -62,7 +63,7 @@ export function JobCard({ job }: JobCardProps) {
           <div className="flex items-center gap-4 mt-1.5 text-sm text-muted-foreground flex-wrap">
             <span className="inline-flex items-center gap-1.5">
               <MapPin className="w-3.5 h-3.5" />
-              {job.location}
+              {truncateLocation(job.location)}
             </span>
             <span className="inline-flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5" />
@@ -73,7 +74,17 @@ export function JobCard({ job }: JobCardProps) {
             </span>
             {job?.metadata?.compensation && (
               <span className="text-xs font-mono px-2 py-0.5 rounded text-primary bg-secondary">
-                {job?.metadata?.compensation}
+                {job?.metadata?.compensation?.split("•")[0]?.trim()}
+              </span>
+            )}
+            {job?.metadata?.compensation?.toLowerCase().includes("equity") && (
+              <span className="text-xs font-mono px-2 py-0.5 rounded border border-green-500/30 text-green-600 dark:text-green-400">
+                Offers Equity
+              </span>
+            )}
+            {job?.metadata?.compensation?.toLowerCase().includes("bonus") && (
+              <span className="text-xs font-mono px-2 py-0.5 rounded border border-amber-500/30 text-amber-600 dark:text-amber-400">
+                Offers Bonus
               </span>
             )}
           </div>
