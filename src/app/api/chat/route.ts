@@ -28,8 +28,9 @@ export async function POST(req: Request) {
   return new Response(response.body, {
     headers: {
       "Content-Type": "text/event-stream",
-      "Cache-Control": "no-cache",
-      Connection: "keep-alive"
+      "Cache-Control": "no-cache, no-transform",
+      Connection: "keep-alive",
+      "X-Accel-Buffering": "no",
     }
   })
 }

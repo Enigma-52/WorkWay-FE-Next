@@ -12,6 +12,9 @@ export async function GET(req: Request) {
   const responseText = await response.text();
   return new Response(responseText, {
     status: response.status,
-    headers: { "Content-Type": response.headers.get("content-type") || "application/json" },
+    headers: {
+      "Content-Type": response.headers.get("content-type") || "application/json",
+      "Cache-Control": "public, max-age=30, stale-while-revalidate=30",
+    },
   });
 }

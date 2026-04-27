@@ -1,10 +1,12 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import OnboardingModal from "./OnboardingModal";
+
+const OnboardingModal = dynamic(() => import("./OnboardingModal"), { ssr: false });
 
 const stats = [
   { value: "200k+", label: "Jobs" },

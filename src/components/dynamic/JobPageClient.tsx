@@ -44,7 +44,7 @@ export default function JobPageClient({ job }: Props) {
   useEffect(() => {
     if (!job?.slug) return;
 
-    let cancelled = false;
+    const controller = new AbortController();
 
     async function trackView() {
       try {
@@ -52,7 +52,7 @@ export default function JobPageClient({ job }: Props) {
         let city: string | null = null;
 
         try {
-          const geoRes = await fetch("https://ipapi.co/json/");
+          const geoRes = await fetch("https://ipapi.co/json/", { signal: controller.signal });
           if (geoRes.ok) {
             const geo = (await geoRes.json()) as {
               country_name?: string;
@@ -62,10 +62,10 @@ export default function JobPageClient({ job }: Props) {
             city = geo.city ?? null;
           }
         } catch {
-          // ignore geo failures
+          // ignore geo failures (includes abort)
         }
 
-        if (cancelled) return;
+        if (controller.signal.aborted) return;
 
         await fetch("/api/job/view", {
           method: "POST",
@@ -89,7 +89,7 @@ export default function JobPageClient({ job }: Props) {
     trackView();
 
     return () => {
-      cancelled = true;
+      controller.abort();
     };
   }, [job?.slug]);
 

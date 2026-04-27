@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
-import JobPageClient from "@/components/dynamic/JobPageClient";
+
+const JobPageClient = dynamic(() => import("@/components/dynamic/JobPageClient"));
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
 import { backendGet } from "@/lib/api/server-client";

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
-import DomainPageClient from "@/components/dynamic/DomainPageClient";
+
+const DomainPageClient = dynamic(() => import("@/components/dynamic/DomainPageClient"));
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
 import { backendGet } from "@/lib/api/server-client";

@@ -6,9 +6,11 @@ import {
   buildJobsPageItemListJsonLd,
 } from "@/lib/seo/jsonld";
 import { buildJobsBreadcrumb } from "@/lib/seo/breadcrumbs";
+import dynamic from "next/dynamic";
 import type { JobListResponse } from "@/types/jobs";
-import JobsPageClient from "@/components/JobsPage/JobsPageClient";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
+
+const JobsPageClient = dynamic(() => import("@/components/JobsPage/JobsPageClient"));
 import JsonLd from "@/components/seo/JsonLd";
 
 type JobsPageProps = {

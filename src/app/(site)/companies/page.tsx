@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
-import CompaniesPageClient from "@/components/CompaniesPage/CompaniesPageClient";
+import dynamic from "next/dynamic";
+
+const CompaniesPageClient = dynamic(() => import("@/components/CompaniesPage/CompaniesPageClient"));
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import { backendGet } from "@/lib/api/server-client";
 import type {

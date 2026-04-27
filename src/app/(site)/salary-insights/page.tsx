@@ -3,9 +3,11 @@ import { backendGet } from "@/lib/api/server-client";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import { buildBreadcrumbJsonLd } from "@/lib/seo/jsonld";
 import { buildSalaryInsightsBreadcrumb } from "@/lib/seo/breadcrumbs";
+import dynamic from "next/dynamic";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
-import SalaryInsightsClient from "./SalaryInsightsClient";
+
+const SalaryInsightsClient = dynamic(() => import("./SalaryInsightsClient"));
 
 export type SalaryJob = {
   id: number;

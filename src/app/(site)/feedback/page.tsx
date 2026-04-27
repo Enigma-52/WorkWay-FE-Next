@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
-import { FeedbackForm } from "@/components/Feedback/FeedbackForm";
 import { buildPageMetadata } from "@/lib/seo/metadata";
+
+const FeedbackForm = dynamic(() =>
+  import("@/components/Feedback/FeedbackForm").then((m) => ({ default: m.FeedbackForm }))
+);
 import { buildBreadcrumbJsonLd } from "@/lib/seo/jsonld";
 import { buildFeedbackBreadcrumb } from "@/lib/seo/breadcrumbs";
 

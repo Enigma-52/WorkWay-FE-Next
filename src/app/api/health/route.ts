@@ -7,7 +7,10 @@ export async function GET() {
       app: "workway-next",
       timestamp: new Date().toISOString(),
     },
-    { status: 200 },
+    {
+      status: 200,
+      headers: { "Cache-Control": "no-store" },
+    },
   );
 }
 

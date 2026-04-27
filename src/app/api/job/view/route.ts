@@ -22,6 +22,9 @@ export async function POST(req: Request) {
   const responseText = await response.text();
   return new Response(responseText, {
     status: response.status,
-    headers: { "Content-Type": response.headers.get("content-type") || "application/json" },
+    headers: {
+      "Content-Type": response.headers.get("content-type") || "application/json",
+      "Cache-Control": "private, no-store",
+    },
   });
 }

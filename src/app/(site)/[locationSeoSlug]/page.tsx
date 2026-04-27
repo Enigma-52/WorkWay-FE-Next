@@ -23,10 +23,12 @@ import {
   ALL_ROLES,
   ALL_LOCATIONS,
 } from "@/data/locationSeoData";
+import dynamic from "next/dynamic";
 import type { JobListResponse } from "@/types/jobs";
-import LocationSeoPageClient from "@/components/LocationSeoPage/LocationSeoPageClient";
-import LocationOnlyPageClient from "@/components/LocationSeoPage/LocationOnlyPageClient";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
+
+const LocationSeoPageClient = dynamic(() => import("@/components/LocationSeoPage/LocationSeoPageClient"));
+const LocationOnlyPageClient = dynamic(() => import("@/components/LocationSeoPage/LocationOnlyPageClient"));
 import JsonLd from "@/components/seo/JsonLd";
 
 type Props = {

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { backendGet } from "@/lib/api/server-client";
-import AllSkillsPageClient from "@/components/dynamic/AllSkillsPageClient";
+
+const AllSkillsPageClient = dynamic(() => import("@/components/dynamic/AllSkillsPageClient"));
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
 import { buildPageMetadata } from "@/lib/seo/metadata";

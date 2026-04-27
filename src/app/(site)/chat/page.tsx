@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
+import dynamic from "next/dynamic"
 import { buildPageMetadata } from "@/lib/seo/metadata"
-import ChatUI from "@/components/Chat/ChatUI"
+
+const ChatUI = dynamic(() => import("@/components/Chat/ChatUI"), { ssr: false })
 
 export const metadata: Metadata = buildPageMetadata({
   title: "AI Job Assistant | WorkWay",

@@ -1,10 +1,12 @@
 "use client";
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { ArrowRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import OnboardingModal from "./OnboardingModal";
 import { redirect } from "next/navigation";
+
+const OnboardingModal = dynamic(() => import("./OnboardingModal"), { ssr: false });
 
 const refused = [
   "Social feeds",
