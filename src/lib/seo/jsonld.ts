@@ -16,14 +16,51 @@ export function buildOrganizationJsonLd(company: CompanyDetails) {
   };
 }
 
+function extractJobDescriptionText(
+  description: JobDetails["description"],
+): string {
+  if (!description) return "";
+  if (typeof description === "string") return description.slice(0, 2000);
+  return description
+    .map((s) => `${s.heading}\n${s.content.join(" ")}`)
+    .join("\n\n")
+    .slice(0, 2000);
+}
+
+function parseBaseSalary(compensation?: string) {
+  if (!compensation) return undefined;
+  const match = compensation.match(/\$?([\d,]+)[kK]?\s*[-–]\s*\$?([\d,]+)[kK]?/);
+  if (!match) return undefined;
+  const parse = (v: string) => {
+    const n = parseFloat(v.replace(/,/g, ""));
+    return compensation.toLowerCase().includes("k") ? n * 1000 : n;
+  };
+  return {
+    "@type": "MonetaryAmount",
+    currency: "USD",
+    value: {
+      "@type": "QuantitativeValue",
+      minValue: parse(match[1]),
+      maxValue: parse(match[2]),
+      unitText: "YEAR",
+    },
+  };
+}
+
 export function buildJobPostingJsonLd(job: JobDetails) {
+  const isRemote = /remote/i.test(job.location);
+  const descriptionText = extractJobDescriptionText(job.description);
+  const baseSalary = parseBaseSalary(job.metadata?.compensation);
+
   return {
     "@context": "https://schema.org",
     "@type": "JobPosting",
     title: job.title,
-    description: `${job.title} at ${job.company}`,
+    description: descriptionText || `${job.title} position at ${job.company} in ${job.location}.`,
     datePosted: job.created_at || undefined,
     employmentType: job.employment_type || undefined,
+    ...(isRemote ? { jobLocationType: "TELECOMMUTE" } : {}),
+    ...(baseSalary ? { baseSalary } : {}),
     hiringOrganization: {
       "@type": "Organization",
       name: job.company,

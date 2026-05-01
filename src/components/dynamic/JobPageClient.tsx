@@ -39,7 +39,7 @@ function getTimeAgo(updatedAt: string): string {
 }
 
 export default function JobPageClient({ job }: Props) {
-  const timeAgo = job.updated_at ? getTimeAgo(job.updated_at) : null;
+  const postedAgo = job.created_at ? getTimeAgo(job.created_at) : null;
 
   useEffect(() => {
     if (!job?.slug) return;
@@ -153,11 +153,12 @@ export default function JobPageClient({ job }: Props) {
                           href={job.company_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-primary"
-                        >
-                          {job.company_url
+                          title={job.company_url
                             .replace(/^https?:\/\//, "")
                             .replace(/\/$/, "")}
+                          className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-primary"
+                        >
+                          Visit {job.company} website
                           <ExternalLink className="h-3 w-3" />
                         </a>
                       )}
@@ -165,14 +166,14 @@ export default function JobPageClient({ job }: Props) {
                   </div>
                 </motion.div>
 
-                <motion.h1
+                <motion.h2
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: 0.15 }}
                   className="mb-6 text-3xl font-bold tracking-tight text-foreground md:text-4xl lg:text-5xl"
                 >
                   {job.title}
-                </motion.h1>
+                </motion.h2>
 
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -219,10 +220,10 @@ export default function JobPageClient({ job }: Props) {
                       Offers Bonus
                     </JobBadge>
                   )}
-                  {timeAgo && (
+                  {postedAgo && (
                     <JobBadge variant="muted">
                       <Clock className="mr-1.5 h-3 w-3" />
-                      {timeAgo}
+                      Posted {postedAgo}
                     </JobBadge>
                   )}
                 </motion.div>
@@ -346,13 +347,13 @@ export default function JobPageClient({ job }: Props) {
                         {job.domain}
                       </span>
                     </div>
-                    {timeAgo && (
+                    {postedAgo && (
                       <div className="flex items-center justify-between">
                         <span className="text-sm text-muted-foreground">
                           Posted
                         </span>
                         <span className="text-sm font-medium text-foreground">
-                          {timeAgo}
+                          {postedAgo}
                         </span>
                       </div>
                     )}

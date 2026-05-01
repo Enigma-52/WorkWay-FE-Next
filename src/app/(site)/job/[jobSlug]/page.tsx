@@ -28,19 +28,25 @@ export async function generateMetadata({
     };
   }
 
+  const topSkills = job.skills?.slice(0, 3).map((s) => s.name) ?? [];
+  const skillsText = topSkills.length > 0 ? ` Skills: ${topSkills.join(", ")}.` : "";
+
   return buildPageMetadata({
-    title: `${job.title} Jobs at ${job.company} - ${job.location} | WorkWay`,
-    description: `Apply for the ${job.title} role at ${job.company} in ${job.location}. ${job.experience_level} · ${job.employment_type}. View full job details and apply.`,
+    title: `${job.title} at ${job.company} — ${job.employment_type} Job in ${job.location} | WorkWay`,
+    description: `Apply for the ${job.title} role at ${job.company} in ${job.location}.${skillsText} ${job.experience_level} · ${job.employment_type}. View full details and apply on WorkWay.`,
     path: `/job/${jobSlug}`,
     image: job.company_logo_url || "/logo.png",
     keywords: [
-        job.title,
-        `${job.title} jobs`,
-        `${job.title} in ${job.location}`,
-        `${job.company} careers`,
-        `${job.company} jobs`,
-        `${job.company} hiring`,
-    ]
+      job.title,
+      `${job.title} jobs`,
+      `${job.title} at ${job.company}`,
+      `${job.title} in ${job.location}`,
+      `${job.company} careers`,
+      `${job.company} jobs`,
+      `${job.company} hiring`,
+      job.domain,
+      ...topSkills.map((s) => `${s} jobs`),
+    ],
   });
 }
 
@@ -60,6 +66,10 @@ export default async function JobPage({ params }: JobPageProps) {
     <>
       <JsonLd data={buildJobPostingJsonLd(job)} />
       <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
+      <h1 className="sr-only">
+        {job.title} at {job.company} — {job.employment_type},{" "}
+        {job.experience_level} Position in {job.location}
+      </h1>
       <div className="flex justify-center bg-background">
         <div className="w-full max-w-7xl px-4 pt-4 md:px-6 md:pt-6">
           <Breadcrumbs items={breadcrumbs} />
