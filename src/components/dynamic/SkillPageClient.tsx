@@ -70,9 +70,9 @@ export default function SkillPageClient({ data }: Props) {
               <span className="font-mono text-sm text-primary">{skill.name}</span>
             </div>
 
-            <h1 className="mb-4 font-display text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
+            <h2 className="mb-4 font-display text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
               {skill.name} <span className="text-primary">Jobs</span>
-            </h1>
+            </h2>
 
             <p className="mb-8 max-w-2xl text-lg text-muted-foreground">
               Browse latest {skill.name} roles across top companies.

@@ -98,10 +98,10 @@ export default function LocationOnlyPageClient({ data, location }: Props) {
 
         <div className="container relative mx-auto py-12 md:py-16">
           <div className="mx-auto max-w-3xl text-center">
-            <h1 className="font-display text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl mb-4">
+            <h2 className="font-display text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl mb-4">
               Jobs in{" "}
               <span className="text-primary">{location.name}</span>
-            </h1>
+            </h2>
 
             <p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground">
               {total > 0

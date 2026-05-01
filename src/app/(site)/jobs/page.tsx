@@ -126,6 +126,9 @@ export default async function JobsPage({ searchParams }: JobsPageProps) {
     <>
       <JsonLd data={buildJobsPageItemListJsonLd(payload.jobs)} />
       <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
+      <h1 className="sr-only">
+        Find Jobs — Search {payload.meta.total.toLocaleString()} Open Roles on WorkWay
+      </h1>
       <div className="mx-auto w-full max-w-6xl px-6 pt-6">
         <Breadcrumbs items={breadcrumbs} />
       </div>

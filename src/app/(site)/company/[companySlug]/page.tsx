@@ -73,10 +73,16 @@ export default async function CompanyPage({ params }: CompanyPageProps) {
 
   const breadcrumbs = buildCompanyDetailBreadcrumb(company.name);
 
+  const count = company.jobListings?.length || 0;
+
   return (
     <>
       <JsonLd data={buildOrganizationJsonLd(company)} />
       <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
+      <h1 className="sr-only">
+        {company.name} —{" "}
+        {count > 0 ? `${count} Open Jobs & Careers` : "Company Profile & Careers"} on WorkWay
+      </h1>
       <div className="mx-auto w-full max-w-6xl px-6 pt-10">
         <Breadcrumbs items={breadcrumbs} />
       </div>

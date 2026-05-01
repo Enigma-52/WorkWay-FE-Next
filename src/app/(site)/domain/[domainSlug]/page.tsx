@@ -115,6 +115,9 @@ export default async function DomainPage({
     <>
       <JsonLd data={buildItemListJsonLd(domainSlug, data.jobs)} />
       <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
+      <h1 className="sr-only">
+        {data.domain.name} Jobs — {(data.meta?.total || 0).toLocaleString()} Open Roles on WorkWay
+      </h1>
       <div className="mx-auto w-full max-w-6xl px-6 pt-10">
         <Breadcrumbs items={breadcrumbs} />
       </div>

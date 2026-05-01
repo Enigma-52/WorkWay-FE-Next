@@ -44,18 +44,19 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
                 </div>
               )}
               <div>
-                <h1 className="text-3xl font-bold tracking-tight gradient-text">
+                <h2 className="text-3xl font-bold tracking-tight gradient-text">
                   {company.name}
-                </h1>
+                </h2>
                 {company.website && (
                   <a
                     href={company.website}
                     target="_blank"
                     rel="noopener noreferrer"
+                    title={company.website.replace("https://", "")}
                     className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-primary transition-colors text-sm font-mono"
                   >
                     <Globe className="w-3.5 h-3.5" />
-                    {company.website.replace("https://", "")}
+                    Visit {company.name} website
                   </a>
                 )}
               </div>

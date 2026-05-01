@@ -70,9 +70,9 @@ export default function DomainPageClient({ data }: Props) {
               <span className="font-mono text-sm text-primary">{domain.name}</span>
             </div>
 
-            <h1 className="mb-4 font-display text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
+            <h2 className="mb-4 font-display text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
               {domain.name} <span className="text-primary">Jobs</span>
-            </h1>
+            </h2>
 
             <p className="mb-8 max-w-2xl text-lg text-muted-foreground">
               Browse latest {domain.name} roles across top companies.
