@@ -59,3 +59,7 @@
 - Do not rely on manual direct Vercel production deploys as the primary path.
 - Production deployment must happen through GitHub-connected auto deployment.
 - After pushing, verify the production deployment status and production URL health.
+
+## TODO
+
+- Add Workable Jobs
