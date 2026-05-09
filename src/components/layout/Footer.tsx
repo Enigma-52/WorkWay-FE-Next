@@ -136,6 +136,11 @@ const Footer = () => {
           </div>
         </div>
       </div>
+      <div className="border-border/60">
+        <div className="mx-auto max-w-8xl px-6 py-5 font-display italic text-center text-[14vw] sm:text-[10vw] leading-none text-gradient opacity-20 select-none -mb-4">
+          workway.dev
+        </div>
+      </div>
     </footer>
   );
 };

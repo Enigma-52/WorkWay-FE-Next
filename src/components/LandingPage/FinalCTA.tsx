@@ -1,94 +1,34 @@
-"use client";
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { ArrowRight, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import OnboardingModal from "./OnboardingModal";
-import { redirect } from "next/navigation";
-
-const refused = [
-  "Social feeds",
-  "Engagement farming",
-  '"Career guru" content',
-  "Fake urgency banners",
-];
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 const FinalCTA = () => {
-  const [showOnboarding, setShowOnboarding] = useState(false);
-
   return (
-    <section className="py-36 md:py-44 relative overflow-hidden">
-      {/* layered glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[420px] h-[420px] rounded-full bg-primary/[0.07] blur-[160px] pointer-events-none" />
-
-      <div className="relative z-10 max-w-3xl mx-auto text-center">
-        {/* "things we refused" strip */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="flex flex-wrap justify-center gap-2 mb-14"
-        >
-          {refused.map((t, i) => (
-            <span
-              key={i}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-red-400/[0.08] bg-red-400/[0.02] text-[11px] font-mono text-white/25"
-            >
-              <X className="w-3 h-3 text-red-400/30" />
-              {t}
-            </span>
-          ))}
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          viewport={{ once: true }}
-        >
-          <h2 className="text-4xl sm:text-5xl md:text-[3.5rem] font-bold leading-[0.95] tracking-[-0.03em]">
-            Stop fighting
-            <br />
-            <span className="text-gradient">job platforms.</span>
-          </h2>
-        </motion.div>
-
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          viewport={{ once: true }}
-          className="mt-5 text-base text-white/30"
-        >
+    <section className="relative py-32 overflow-hidden">
+      <div className="absolute inset-0 grid-bg opacity-50 pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-brand/10 blur-[140px] pointer-events-none" />
+      <div className="relative mx-auto max-w-4xl px-6 text-center">
+        <h2 className="font-display text-6xl sm:text-8xl leading-[0.95] tracking-tight">
+          <span className="text-gradient">Stop fighting</span>
+          <br />
+          <span className="italic text-brand-gradient">job platforms.</span>
+        </h2>
+        <p className="mt-8 text-xl text-muted-foreground">
           Use one that&apos;s on your side.
-        </motion.p>
+        </p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.35 }}
-          viewport={{ once: true }}
-          className="mt-10 flex flex-col items-center gap-3"
-        >
-          <Button
-            variant="hero"
-            size="xl"
-            className="group animate-pulse-glow"
-            onClick={() => {
-              redirect("/jobs");
-            }}
+        <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <Link
+            href="/jobs"
+            className="group inline-flex items-center gap-2 rounded-full bg-brand text-brand-foreground hover:bg-brand-glow transition-all px-8 py-4 text-lg font-medium shadow-glow"
           >
             Start using WorkWay
-            <ArrowRight className="ml-1 w-4 h-4 transition-transform group-hover:translate-x-1" />
-          </Button>
-          <span className="text-[11px] text-white/15 font-mono">
-            takes less time than opening LinkedIn
-          </span>
-        </motion.div>
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
+          </Link>
+        </div>
+        <p className="mt-4 text-xs text-muted-foreground font-mono">
+          takes less time than opening LinkedIn
+        </p>
       </div>
-
-      <OnboardingModal open={showOnboarding} onOpenChange={setShowOnboarding} />
     </section>
   );
 };

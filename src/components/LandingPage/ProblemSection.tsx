@@ -1,95 +1,98 @@
-"use client";
-import { motion } from "framer-motion";
+import { X } from "lucide-react";
+
+const tabs = [
+  "LinkedIn",
+  "Naukri",
+  "YC Jobs",
+  "Greenhouse",
+  "Lever",
+  "Ashby",
+  "final_v7.xlsx",
+];
+const pains = [
+  "apply to the same job twice",
+  "forget where you applied",
+  "rewrite the same intro",
+  "question your life choices",
+];
 
 const ProblemSection = () => {
-  const left = [
-    "LinkedIn",
-    "Naukri",
-    "YC Jobs",
-    "4 ATS tabs",
-    "final_final_v7.xlsx",
-  ];
-
-  const right = [
-    "apply to the same job twice",
-    "forget where you applied",
-    "rewrite the same intro",
-    "question your life choices",
-  ];
-
   return (
-    <section className="py-28 md:py-36">
-      <div className="max-w-4xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-        >
-          <h2 className="text-3xl sm:text-4xl md:text-[2.75rem] font-bold text-center mb-20 leading-tight">
+    <section className="relative py-32 noise">
+      <div className="mx-auto max-w-6xl px-6">
+        <div className="text-center mb-16">
+          <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-4">
+            The problem
+          </p>
+          <h2 className="font-display text-5xl sm:text-6xl text-gradient">
             Be honest.{" "}
-            <span className="text-white/30">This is your setup.</span>
+            <span className="italic text-brand-gradient">
+              This is your setup.
+            </span>
           </h2>
-        </motion.div>
-
-        <div className="grid md:grid-cols-2 gap-14">
-          {/* platforms */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.15 }}
-            viewport={{ once: true }}
-          >
-            <p className="text-[10px] font-mono uppercase tracking-[0.25em] text-white/20 mb-5">
-              Every morning you open
-            </p>
-            <div className="space-y-1.5">
-              {left.map((t, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-3 px-4 py-3 rounded-lg border border-white/[0.04] bg-white/[0.015] text-sm font-mono text-white/45"
-                >
-                  <span className="h-1.5 w-1.5 rounded-full bg-red-400/40 flex-shrink-0" />
-                  {t}
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* problems */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.25 }}
-            viewport={{ once: true }}
-          >
-            <p className="text-[10px] font-mono uppercase tracking-[0.25em] text-white/20 mb-5">
-              And then you
-            </p>
-            <div className="space-y-1.5">
-              {right.map((t, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-3 px-4 py-3 rounded-lg border border-red-400/[0.08] bg-red-400/[0.02] text-sm font-mono text-white/45"
-                >
-                  <span className="text-red-400/40 text-xs">✕</span>
-                  {t}
-                </div>
-              ))}
-            </div>
-          </motion.div>
         </div>
 
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          viewport={{ once: true }}
-          className="mt-16 text-center text-lg text-white/25"
-        >
-          This isn&apos;t &ldquo;the grind.&rdquo;{" "}
-          <span className="text-white font-semibold">It&apos;s bad software.</span>
-        </motion.p>
+        <div className="grid lg:grid-cols-2 gap-6">
+          {/* Browser mock */}
+          <div className="rounded-3xl border border-border bg-surface/60 backdrop-blur shadow-elevated overflow-hidden">
+            <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-surface-elevated/50">
+              <div className="flex gap-1.5">
+                <div className="w-2.5 h-2.5 rounded-full bg-destructive/70" />
+                <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
+                <div className="w-2.5 h-2.5 rounded-full bg-success/70" />
+              </div>
+              <div className="ml-3 text-xs text-muted-foreground font-mono">
+                every morning, you
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-1.5 px-4 py-3 border-b border-border">
+              {tabs.map((t, i) => (
+                <div
+                  key={t}
+                  className={`text-xs px-3 py-1.5 rounded-md border border-border/60 font-mono whitespace-nowrap ${i === 0 ? "bg-secondary text-foreground" : "text-muted-foreground bg-surface/40"}`}
+                >
+                  {t}
+                </div>
+              ))}
+            </div>
+            <div className="p-8 min-h-[280px] grid place-items-center">
+              <div className="text-center space-y-3">
+                <div className="text-7xl">🥲</div>
+                <p className="text-sm text-muted-foreground font-mono">
+                  12 tabs. 0 applications sent.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Pains list */}
+          <div className="rounded-3xl border border-border bg-gradient-to-br from-surface/80 to-surface-elevated/60 p-8 sm:p-10 shadow-elevated flex flex-col justify-center">
+            <p className="text-sm text-muted-foreground mb-6 font-mono">
+              and then you
+            </p>
+            <ul className="space-y-4">
+              {pains.map((p) => (
+                <li
+                  key={p}
+                  className="flex items-start gap-3 text-xl sm:text-2xl font-display"
+                >
+                  <span className="mt-2 w-6 h-6 rounded-full bg-destructive/15 grid place-items-center shrink-0">
+                    <X className="w-3.5 h-3.5 text-destructive" />
+                  </span>
+                  <span className="text-foreground/90">{p}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-10 pt-6 border-t border-border text-muted-foreground">
+              This isn&apos;t{" "}
+              <span className="line-through">&ldquo;the grind.&rdquo;</span>
+              <br />
+              <span className="text-foreground font-medium">
+                It&apos;s bad software.
+              </span>
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   );

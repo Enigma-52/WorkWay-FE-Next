@@ -1,72 +1,67 @@
-"use client";
-import { motion } from "framer-motion";
-import { User } from "lucide-react";
+import { Check } from "lucide-react";
 
-const HireMeProfiles = () => (
-  <section className="py-28 md:py-36 border-y border-white/[0.04] relative overflow-hidden">
-    <div className="absolute -right-40 top-0 bottom-0 w-[500px] bg-primary/[0.015] blur-[140px] rounded-full pointer-events-none" />
-
-    <div className="relative z-10 max-w-5xl mx-auto">
-      <div className="grid lg:grid-cols-[1fr,0.9fr] gap-16 items-center">
-        {/* copy */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-        >
-          <p className="text-[10px] font-mono uppercase tracking-[0.35em] text-primary/60 mb-5">
+const HireMeProfiles = () => {
+  return (
+    <section className="relative py-32 noise">
+      <div className="mx-auto max-w-7xl px-6 grid lg:grid-cols-2 gap-16 items-center">
+        <div>
+          <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-4">
             Hire Me Profiles
           </p>
-          <h2 className="text-3xl sm:text-4xl md:text-[2.75rem] font-bold leading-tight mb-5">
+          <h2 className="font-display text-5xl sm:text-6xl text-gradient leading-[1.05]">
             Your resume, but online{" "}
-            <span className="text-white/30">and not ugly.</span>
+            <span className="italic text-brand-gradient">and not ugly.</span>
           </h2>
-          <p className="text-[15px] text-white/30 leading-relaxed mb-8 max-w-md">
+          <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-lg">
             Every user gets a public Hire Me page. Recruiter opens it,
             understands you in 30 seconds. AI helps polish it — you stay in
             control.
           </p>
-
-          <div className="flex flex-wrap gap-2">
-            {["Skills", "Projects", "Experience", "Preferences"].map((t) => (
-              <span
-                key={t}
-                className="px-3 py-1.5 rounded-lg border border-white/[0.05] bg-white/[0.02] text-[11px] font-mono text-white/35"
-              >
-                {t}
-              </span>
+          <ul className="mt-8 space-y-3">
+            {[
+              "Public, shareable URL",
+              "AI-polished, human-edited",
+              "Recruiter-friendly layout",
+              "Always up to date",
+            ].map((item) => (
+              <li key={item} className="flex items-center gap-3 text-sm">
+                <span className="w-5 h-5 rounded-full bg-brand/15 grid place-items-center">
+                  <Check className="w-3 h-3 text-brand" />
+                </span>
+                {item}
+              </li>
             ))}
-          </div>
-        </motion.div>
+          </ul>
+        </div>
 
-        {/* card */}
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, delay: 0.15 }}
-          viewport={{ once: true }}
-          className="relative"
-        >
-          <div className="p-7 rounded-2xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm">
-            {/* header */}
-            <div className="flex items-center gap-4 mb-5 pb-5 border-b border-white/[0.05]">
-              <div className="w-12 h-12 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
-                <User className="w-6 h-6 text-primary/50" />
+        {/* Profile card */}
+        <div className="relative">
+          <div className="absolute -inset-8 bg-brand/10 blur-3xl rounded-full pointer-events-none" />
+          <div className="relative rounded-3xl border border-border bg-gradient-to-br from-surface to-surface-elevated p-8 shadow-elevated">
+            <div className="flex items-start justify-between mb-6">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-brand to-brand-glow grid place-items-center font-display text-2xl text-brand-foreground">
+                  A
+                </div>
+                <div>
+                  <div className="font-display text-2xl">Alex Chen</div>
+                  <div className="text-sm text-muted-foreground">
+                    Full-Stack Engineer
+                  </div>
+                </div>
               </div>
-              <div>
-                <h4 className="font-semibold text-white/85">Alex Chen</h4>
-                <p className="text-xs text-white/30">Full-Stack Engineer</p>
-              </div>
+              <span className="inline-flex items-center gap-1.5 text-xs font-mono px-2.5 py-1 rounded-full bg-success/15 text-success border border-success/20">
+                <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
+                Open
+              </span>
             </div>
 
-            {/* skills */}
-            <div className="flex flex-wrap gap-1.5 mb-5">
+            <div className="flex flex-wrap gap-1.5 mb-6">
               {["React", "Node.js", "TypeScript", "AWS", "PostgreSQL"].map(
                 (s) => (
                   <span
                     key={s}
-                    className="px-2.5 py-1 rounded-md text-[10px] font-mono bg-primary/[0.06] text-primary/60 border border-primary/10"
+                    className="text-xs font-mono px-2.5 py-1 rounded-md bg-secondary border border-border/60 text-foreground/80"
                   >
                     {s}
                   </span>
@@ -74,26 +69,40 @@ const HireMeProfiles = () => (
               )}
             </div>
 
-            {/* stats */}
-            <div className="grid grid-cols-3 gap-2 text-center">
+            <div className="grid grid-cols-3 gap-3 mb-6">
               {[
-                { v: "5+", l: "Years" },
-                { v: "12", l: "Projects" },
-                { v: "Open", l: "Status" },
-              ].map((s, i) => (
-                <div key={i} className="py-3 rounded-xl bg-white/[0.025]">
-                  <p className="text-lg font-bold text-gradient">{s.v}</p>
-                  <p className="text-[9px] mt-0.5 text-white/20 uppercase tracking-wider">
+                { n: "5+", l: "Years" },
+                { n: "12", l: "Projects" },
+                { n: "★ 4.9", l: "Rating" },
+              ].map((s) => (
+                <div
+                  key={s.l}
+                  className="rounded-xl border border-border bg-surface/60 p-3 text-center"
+                >
+                  <div className="font-display text-2xl text-gradient">
+                    {s.n}
+                  </div>
+                  <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-mono mt-0.5">
                     {s.l}
-                  </p>
+                  </div>
                 </div>
               ))}
             </div>
+
+            <div className="flex gap-2 border-t border-border pt-4 text-xs text-muted-foreground font-mono">
+              <span className="text-foreground">Skills</span>
+              <span>·</span>
+              <span>Projects</span>
+              <span>·</span>
+              <span>Experience</span>
+              <span>·</span>
+              <span>Preferences</span>
+            </div>
           </div>
-        </motion.div>
+        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 export default HireMeProfiles;

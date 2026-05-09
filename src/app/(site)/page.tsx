@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import CompanyLogoScroll from "@/components/LandingPage/CompanyLogoScroll";
-import Features from "@/components/LandingPage/Features";
-import FinalCTA from "@/components/LandingPage/FinalCTA";
-import ForEmployers from "@/components/LandingPage/ForEmployers";
 import Hero from "@/components/LandingPage/Hero";
-import HireMeProfiles from "@/components/LandingPage/HireMeProfiles";
+import CompanyLogoScroll from "@/components/LandingPage/CompanyLogoScroll";
 import ProblemSection from "@/components/LandingPage/ProblemSection";
+import Features from "@/components/LandingPage/Features";
+import HireMeProfiles from "@/components/LandingPage/HireMeProfiles";
+import ForEmployers from "@/components/LandingPage/ForEmployers";
+import FinalCTA from "@/components/LandingPage/FinalCTA";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 
 export const metadata: Metadata = buildPageMetadata({
@@ -19,20 +19,13 @@ export const metadata: Metadata = buildPageMetadata({
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <main>
-        <Hero />
-        <CompanyLogoScroll />
-        <div className="mx-auto max-w-6xl px-6">
-          <ProblemSection />
-          <Features />
-          <HireMeProfiles />
-          <section id="employers">
-            <ForEmployers />
-          </section>
-          <FinalCTA />
-        </div>
-      </main>
-    </div>
+    <main className="min-h-screen bg-background text-foreground overflow-x-hidden">
+      <Hero />
+      <CompanyLogoScroll />
+      <ProblemSection />
+      <Features />
+      <HireMeProfiles />
+      <FinalCTA />
+    </main>
   );
 }

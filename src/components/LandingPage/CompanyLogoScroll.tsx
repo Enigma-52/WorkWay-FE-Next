@@ -1,7 +1,5 @@
-"use client";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
 
 type Company = { name: string; slug: string; logo: string };
 
@@ -94,11 +92,7 @@ const row2: Company[] = [
     slug: "twilio",
     logo: "https://cdn.workway.dev/logos/twilio.webp",
   },
-  {
-    name: "n8n",
-    slug: "n8n",
-    logo: "https://cdn.workway.dev/logos/n8n.webp",
-  },
+  { name: "n8n", slug: "n8n", logo: "https://cdn.workway.dev/logos/n8n.webp" },
   {
     name: "New Relic",
     slug: "new-relic",
@@ -166,63 +160,62 @@ const row3: Company[] = [
 const Pill = ({ name, slug, logo }: Company) => (
   <Link
     href={`/company/${slug}`}
-    className="flex-shrink-0 mx-2.5 inline-flex items-center gap-3.5 px-6 py-3.5 rounded-xl border border-white/[0.08] bg-white/[0.03] hover:border-primary/25 hover:bg-white/[0.06] transition-all duration-400 select-none group"
+    className="group flex items-center justify-center shrink-0 mx-3"
   >
-    <Image
-      src={logo}
-      alt={name}
-      width={35}
-      height={35}
-      className="rounded-[4px] mr-2 object-contain"
-      unoptimized
-    />
-    <span className="text-[20px] font-medium tracking-wide text-white/70 group-hover:text-white transition-colors duration-400">
-      {name}
-    </span>
+    <div className="flex items-center gap-3 rounded-2xl border border-border/60 bg-surface/40 backdrop-blur px-6 py-4 hover:bg-surface-elevated hover:border-brand/30 transition-all duration-300">
+      <Image
+        src={logo}
+        alt={name}
+        width={32}
+        height={32}
+        className="rounded-lg object-contain"
+        unoptimized
+      />
+      <span className="font-display text-2xl tracking-tight whitespace-nowrap text-foreground/85 group-hover:text-foreground transition-colors">
+        {name}
+      </span>
+    </div>
   </Link>
 );
 
-const CompanyLogoScroll = () => (
-  <motion.section
-    initial={{ opacity: 0 }}
-    whileInView={{ opacity: 1 }}
-    transition={{ duration: 0.8 }}
-    viewport={{ once: true }}
-    className="relative py-20 overflow-hidden"
-  >
-    {/* edge fades */}
-    <div className="pointer-events-none absolute inset-y-0 left-0 w-48 z-10 bg-gradient-to-r from-background via-background/80 to-transparent" />
-    <div className="pointer-events-none absolute inset-y-0 right-0 w-48 z-10 bg-gradient-to-l from-background via-background/80 to-transparent" />
-
-    {/* top/bottom borders */}
-    <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
-    <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
-
-    <p className="text-center text-[20px] font-mono uppercase tracking-[0.35em] text-white/70 mb-12">
-      Companies hiring on WorkWay
-    </p>
-
-    <div className="space-y-4">
-      <div className="flex animate-marquee whitespace-nowrap">
-        {[...row1, ...row1, ...row1].map((c, i) => (
-          <Pill key={`a-${i}`} {...c} />
-        ))}
-      </div>
-      <div className="flex animate-marquee-reverse whitespace-nowrap">
-        {[...row2, ...row2, ...row2].map((c, i) => (
-          <Pill key={`b-${i}`} {...c} />
-        ))}
-      </div>
-      <div
-        className="flex animate-marquee whitespace-nowrap"
-        style={{ animationDuration: "38s" }}
-      >
-        {[...row3, ...row3, ...row3].map((c, i) => (
-          <Pill key={`c-${i}`} {...c} />
-        ))}
-      </div>
+function Row({ items, reverse }: { items: Company[]; reverse?: boolean }) {
+  const doubled = [...items, ...items];
+  return (
+    <div
+      className="flex"
+      style={{
+        animation: `marquee ${reverse ? 55 : 45}s linear infinite`,
+        animationDirection: reverse ? "reverse" : "normal",
+      }}
+    >
+      {doubled.map((c, i) => (
+        <Pill key={`${c.slug}-${i}`} {...c} />
+      ))}
     </div>
-  </motion.section>
+  );
+}
+
+const CompanyLogoScroll = () => (
+  <section className="relative py-24 border-y border-border/60 bg-surface/30">
+    <div className="absolute inset-0 bg-radial-gradient pointer-events-none opacity-50" />
+    <div className="relative mx-auto max-w-7xl px-6 mb-12 text-center">
+      <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-muted-foreground">
+        <span className="h-px w-8 bg-border" />
+        Companies hiring on WorkWay
+        <span className="h-px w-8 bg-border" />
+      </div>
+      <h2 className="mt-4 font-display text-4xl sm:text-5xl text-gradient">
+        4,000+ teams.{" "}
+        <span className="italic text-brand-gradient">One feed.</span>
+      </h2>
+    </div>
+
+    <div className="relative space-y-5 marquee-mask">
+      <Row items={row1} />
+      <Row items={row2} reverse />
+      <Row items={row3} />
+    </div>
+  </section>
 );
 
 export default CompanyLogoScroll;
