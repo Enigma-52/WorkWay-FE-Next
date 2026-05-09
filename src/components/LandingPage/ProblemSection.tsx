@@ -20,16 +20,17 @@ const ProblemSection = () => {
   return (
     <section className="py-28 md:py-36">
       <div className="max-w-4xl mx-auto">
-        <motion.h2
+        <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-3xl sm:text-4xl md:text-[2.75rem] font-bold text-center mb-20 leading-tight"
         >
-          Be honest.{" "}
-          <span className="text-white/30">This is your setup.</span>
-        </motion.h2>
+          <h2 className="text-3xl sm:text-4xl md:text-[2.75rem] font-bold text-center mb-20 leading-tight">
+            Be honest.{" "}
+            <span className="text-white/30">This is your setup.</span>
+          </h2>
+        </motion.div>
 
         <div className="grid md:grid-cols-2 gap-14">
           {/* platforms */}

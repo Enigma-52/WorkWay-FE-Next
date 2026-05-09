@@ -1,5 +1,6 @@
 "use client";
-import { ChevronDown, Folder } from "lucide-react";
+import { useState } from "react";
+import { Folder } from "lucide-react";
 import { type JobListing } from "@/data/companyData";
 import { JobCard } from "./CompanyPageJobCard";
 import {
@@ -9,8 +10,35 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
+const INITIAL_SHOW = 3;
+
 interface DomainAccordionProps {
   jobsByDomain: Record<string, JobListing[]>;
+}
+
+function DomainJobList({ jobs }: { jobs: JobListing[] }) {
+  const [expanded, setExpanded] = useState(false);
+  const hasMore = jobs.length > INITIAL_SHOW;
+  const visible = expanded ? jobs : jobs.slice(0, INITIAL_SHOW);
+
+  return (
+    <div className="border-t border-border">
+      {visible.map((job) => (
+        <JobCard key={job.id} job={job} />
+      ))}
+      {hasMore && (
+        <button
+          type="button"
+          onClick={() => setExpanded((prev) => !prev)}
+          className="w-full py-3 text-sm font-medium text-primary hover:text-primary/80 transition-colors border-t border-border bg-secondary/20 hover:bg-secondary/40"
+        >
+          {expanded
+            ? "Show fewer"
+            : `Show all ${jobs.length} roles`}
+        </button>
+      )}
+    </div>
+  );
 }
 
 export function DomainAccordion({ jobsByDomain }: DomainAccordionProps) {
@@ -47,11 +75,7 @@ export function DomainAccordion({ jobsByDomain }: DomainAccordionProps) {
           </AccordionTrigger>
 
           <AccordionContent className="pb-0">
-            <div className="border-t border-border">
-              {jobsByDomain[domain].map((job) => (
-                <JobCard key={job.id} job={job} />
-              ))}
-            </div>
+            <DomainJobList jobs={jobsByDomain[domain]} />
           </AccordionContent>
         </AccordionItem>
       ))}

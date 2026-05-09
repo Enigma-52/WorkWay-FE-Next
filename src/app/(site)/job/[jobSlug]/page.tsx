@@ -66,10 +66,6 @@ export default async function JobPage({ params }: JobPageProps) {
     <>
       <JsonLd data={buildJobPostingJsonLd(job)} />
       <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
-      <h1 className="sr-only">
-        {job.title} at {job.company} — {job.employment_type},{" "}
-        {job.experience_level} Position in {job.location}
-      </h1>
       <div className="flex justify-center bg-background">
         <div className="w-full max-w-7xl px-4 pt-4 md:px-6 md:pt-6">
           <Breadcrumbs items={breadcrumbs} />

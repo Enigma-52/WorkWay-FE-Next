@@ -54,16 +54,17 @@ const Hero = () => {
         </motion.div>
 
         {/* headline */}
-        <motion.h1
+        <motion.div
           initial={{ opacity: 0, y: 24, filter: "blur(6px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ duration: 0.7, delay: 0.1 }}
-          className="text-[clamp(2.5rem,7vw,5.5rem)] font-bold leading-[0.92] tracking-[-0.035em]"
         >
-          Job hunting is <span className="text-gradient">cooked.</span>
-          <br />
-          <span className="text-white/40">So we fixed it.</span>
-        </motion.h1>
+          <h1 className="text-[clamp(2.5rem,7vw,5.5rem)] font-bold leading-[0.92] tracking-[-0.035em]">
+            Job hunting is <span className="text-gradient">cooked.</span>
+            <br />
+            <span className="text-white/40">So we fixed it.</span>
+          </h1>
+        </motion.div>
 
         {/* sub */}
         <motion.p

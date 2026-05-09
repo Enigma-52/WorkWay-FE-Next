@@ -41,17 +41,18 @@ const FinalCTA = () => {
           ))}
         </motion.div>
 
-        <motion.h2
+        <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
           viewport={{ once: true }}
-          className="text-4xl sm:text-5xl md:text-[3.5rem] font-bold leading-[0.95] tracking-[-0.03em]"
         >
-          Stop fighting
-          <br />
-          <span className="text-gradient">job platforms.</span>
-        </motion.h2>
+          <h2 className="text-4xl sm:text-5xl md:text-[3.5rem] font-bold leading-[0.95] tracking-[-0.03em]">
+            Stop fighting
+            <br />
+            <span className="text-gradient">job platforms.</span>
+          </h2>
+        </motion.div>
 
         <motion.p
           initial={{ opacity: 0, y: 12 }}

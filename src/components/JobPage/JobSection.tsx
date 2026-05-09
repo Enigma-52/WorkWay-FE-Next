@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { useState, type ReactNode } from "react";
+import { type ReactNode } from "react";
 
 interface Skill {
   name: string;
@@ -14,8 +13,6 @@ interface JobSectionProps {
   index: number;
   skills?: Skill[];
 }
-
-const LONG_TEXT_THRESHOLD = 200;
 
 function highlightSkills(text: string, skills: Skill[]): ReactNode {
   if (!skills || skills.length === 0) return text;
@@ -60,48 +57,13 @@ function highlightSkills(text: string, skills: Skill[]): ReactNode {
   return result.length > 1 ? result : text;
 }
 
-function LongTextItem({ text, skills }: { text: string; skills: Skill[] }) {
-  const [expanded, setExpanded] = useState(false);
-  const isLong = text.length > LONG_TEXT_THRESHOLD;
-
-  if (!isLong) {
-    return (
-      <span className="break-words [overflow-wrap:anywhere]">
-        {highlightSkills(text, skills)}
-      </span>
-    );
-  }
-
-  const truncated = text.slice(0, LONG_TEXT_THRESHOLD).trim();
-
-  return (
-    <span className="break-words [overflow-wrap:anywhere]">
-      {expanded
-        ? highlightSkills(text, skills)
-        : highlightSkills(truncated + "…", skills)}
-      <button
-        onClick={() => setExpanded(!expanded)}
-        className="ml-1 text-primary hover:text-primary/80 text-sm font-medium transition-colors"
-      >
-        {expanded ? "Show less" : "Show more"}
-      </button>
-    </span>
-  );
-}
-
 const JobSection = ({
   heading,
   content,
-  index,
   skills = [],
 }: JobSectionProps) => {
   return (
-    <motion.section
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: index * 0.05 }}
-      className="job-card"
-    >
+    <section className="job-card">
       <h3
         className="section-heading"
         title={heading.length > 80 ? heading : undefined}
@@ -117,11 +79,13 @@ const JobSection = ({
             {content.length > 1 && (
               <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
             )}
-            <LongTextItem text={item} skills={skills} />
+            <span className="break-words [overflow-wrap:anywhere]">
+              {highlightSkills(item, skills)}
+            </span>
           </li>
         ))}
       </ul>
-    </motion.section>
+    </section>
   );
 };
 

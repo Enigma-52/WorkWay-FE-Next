@@ -3,7 +3,6 @@
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 import { Briefcase, TrendingUp, MapPin, Building2 } from "lucide-react";
-import { motion } from "framer-motion";
 import { JobCard } from "@/components/DomainPage/JobCard";
 import { JobPagination } from "@/components/DomainPage/JobPagination";
 import { JobsFacetsSidebar } from "@/components/JobsPage/JobsFacetsSidebar";
@@ -98,10 +97,10 @@ export default function LocationOnlyPageClient({ data, location }: Props) {
 
         <div className="container relative mx-auto py-12 md:py-16">
           <div className="mx-auto max-w-3xl text-center">
-            <h2 className="font-display text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl mb-4">
+            <h1 className="font-display text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl mb-4">
               Jobs in{" "}
               <span className="text-primary">{location.name}</span>
-            </h2>
+            </h1>
 
             <p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground">
               {total > 0
@@ -301,15 +300,10 @@ export default function LocationOnlyPageClient({ data, location }: Props) {
 
             {jobs.length > 0 ? (
               <div className="grid gap-4">
-                {jobs.map((job, index) => (
-                  <motion.div
-                    key={job.id}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: Math.min(index * 0.03, 0.3) }}
-                  >
+                {jobs.map((job) => (
+                  <div key={job.id}>
                     <JobCard job={job} />
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             ) : (

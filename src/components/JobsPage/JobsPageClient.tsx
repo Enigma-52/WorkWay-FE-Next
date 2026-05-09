@@ -8,13 +8,13 @@ import {
   TrendingUp,
   Building2,
 } from "lucide-react";
-import { motion } from "framer-motion";
 import { JobCard } from "@/components/DomainPage/JobCard";
 import { JobPagination } from "@/components/DomainPage/JobPagination";
 import { JobsListFilters } from "./JobsListFilters";
 import { JobsFacetsSidebar } from "./JobsFacetsSidebar";
 import type { JobListResponse } from "@/types/jobs";
 import JobViewFeed from "@/components/JobViewFeed/JobViewFeed";
+import LatestChangelogCard from "./LatestChangelogCard";
 
 type Props = {
   data: JobListResponse;
@@ -103,9 +103,9 @@ export default function JobsPageClient({ data }: Props) {
         <div className="container relative mx-auto py-12 md:py-16">
           <div className="mx-auto max-w-3xl text-center">
 
-            <h2 className="font-display text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl mb-4">
+            <h1 className="font-display text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl mb-4">
               Find your next <span className="text-primary">role</span>
-            </h2>
+            </h1>
 
             <p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground">
               Search and filter thousands of jobs across top companies. One feed,
@@ -189,18 +189,10 @@ export default function JobsPageClient({ data }: Props) {
 
             {jobs.length > 0 ? (
               <div className="grid gap-4">
-                {jobs.map((job, index) => (
-                  <motion.div
-                    key={job.id}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      duration: 0.3,
-                      delay: Math.min(index * 0.03, 0.3),
-                    }}
-                  >
+                {jobs.map((job) => (
+                  <div key={job.id}>
                     <JobCard job={job} />
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             ) : (
@@ -236,9 +228,10 @@ export default function JobsPageClient({ data }: Props) {
             )}
           </div>
 
-          {/* Live activity feed - right sidebar on large screens */}
-          <div className="hidden lg:block lg:sticky lg:top-24 lg:self-start">
+          {/* Live activity feed + changelog - right sidebar on large screens */}
+          <div className="hidden lg:block lg:sticky lg:top-24 lg:self-start space-y-4">
             <JobViewFeed />
+            <LatestChangelogCard />
           </div>
         </div>
       </main>

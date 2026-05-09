@@ -21,16 +21,17 @@ const WhatWeAreNot = () => {
     >
       <div className="container px-4">
         <div className="max-w-3xl mx-auto text-center">
-          <motion.h2
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-3xl sm:text-4xl md:text-5xl font-bold mb-14"
           >
-            Things we{" "}
-            <span className="text-red-400/80">refused</span> to build.
-          </motion.h2>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-14">
+              Things we{" "}
+              <span className="text-red-400/80">refused</span> to build.
+            </h2>
+          </motion.div>
 
           <motion.div
             initial={{ opacity: 0 }}

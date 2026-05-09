@@ -227,10 +227,6 @@ export default async function LocationSeoPage({ params, searchParams }: Props) {
       <>
         <JsonLd data={buildJobsPageItemListJsonLd(payload.jobs)} />
         <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
-        <h1 className="sr-only">
-          {role.name} Jobs in {location.name} —{" "}
-          {payload.meta.total.toLocaleString()} Open Roles on WorkWay
-        </h1>
         <div className="mx-auto w-full max-w-6xl px-6 pt-6">
           <Breadcrumbs items={breadcrumbs} />
         </div>
@@ -260,10 +256,6 @@ export default async function LocationSeoPage({ params, searchParams }: Props) {
       <>
         <JsonLd data={buildJobsPageItemListJsonLd(payload.jobs)} />
         <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
-        <h1 className="sr-only">
-          Jobs in {location.name} —{" "}
-          {payload.meta.total.toLocaleString()} Open Roles on WorkWay
-        </h1>
         <div className="mx-auto w-full max-w-6xl px-6 pt-6">
           <Breadcrumbs items={breadcrumbs} />
         </div>
