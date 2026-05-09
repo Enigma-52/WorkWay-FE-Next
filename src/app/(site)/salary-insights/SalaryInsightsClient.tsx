@@ -2,19 +2,14 @@
 
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
-import Link from "next/link";
-import { motion } from "framer-motion";
 import {
   DollarSign,
   TrendingUp,
   Award,
   Gift,
-  Search,
   X,
   SlidersHorizontal,
-  MapPin,
 } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -146,12 +141,9 @@ export default function SalaryInsightsClient({
               color: "text-amber-600 dark:text-amber-400",
               bg: "bg-amber-500/10",
             },
-          ].map((stat, i) => (
-            <motion.div
+          ].map((stat) => (
+            <div
               key={stat.label}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.06 }}
               className="rounded-xl border border-border bg-card p-5"
             >
               <div className="flex items-center gap-3">
@@ -167,19 +159,14 @@ export default function SalaryInsightsClient({
               <p className="mt-3 text-2xl font-bold text-foreground font-mono">
                 {stat.value}
               </p>
-            </motion.div>
+            </div>
           ))}
         </div>
 
         {/* Distribution + Breakdowns */}
         <div className="mb-10 grid gap-6 lg:grid-cols-3">
           {/* Salary Distribution */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.25 }}
-            className="rounded-xl border border-border bg-card p-6 lg:col-span-1"
-          >
+          <div className="rounded-xl border border-border bg-card p-6 lg:col-span-1">
             <h2 className="mb-5 text-base font-semibold text-foreground">
               Salary Distribution
             </h2>
@@ -203,15 +190,10 @@ export default function SalaryInsightsClient({
                 </div>
               ))}
             </div>
-          </motion.div>
+          </div>
 
           {/* By Domain */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="rounded-xl border border-border bg-card p-6"
-          >
+          <div className="rounded-xl border border-border bg-card p-6">
             <h2 className="mb-4 text-base font-semibold text-foreground">
               By Domain
             </h2>
@@ -238,15 +220,10 @@ export default function SalaryInsightsClient({
                 </button>
               ))}
             </div>
-          </motion.div>
+          </div>
 
           {/* By Level */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.35 }}
-            className="rounded-xl border border-border bg-card p-6"
-          >
+          <div className="rounded-xl border border-border bg-card p-6">
             <h2 className="mb-4 text-base font-semibold text-foreground">
               By Experience Level
             </h2>
@@ -274,7 +251,7 @@ export default function SalaryInsightsClient({
                 </button>
               ))}
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Filters */}
@@ -482,18 +459,10 @@ export default function SalaryInsightsClient({
         {/* Job Cards - reuse existing DomainPage/JobCard */}
         {jobs.length > 0 ? (
           <div className="grid gap-4">
-            {jobs.map((job, index) => (
-              <motion.div
-                key={job.id}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.3,
-                  delay: Math.min(index * 0.03, 0.3),
-                }}
-              >
+            {jobs.map((job) => (
+              <div key={job.id}>
                 <JobCard job={job} />
-              </motion.div>
+              </div>
             ))}
           </div>
         ) : (
