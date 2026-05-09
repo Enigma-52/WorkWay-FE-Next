@@ -1,6 +1,104 @@
 {
   "entries": [
     {
+      "id": "2026-05-09-workable-seo",
+      "date": "2026-05-09",
+      "title": "Workable integration & SEO overhaul",
+      "tag": "Major",
+      "icon": "/changelog/rocket.svg",
+      "highlights": [
+        "Added **Workable** as a new job source — companies posting on Workable now appear on WorkWay automatically.",
+        "Replaced all hidden headings and motion-animated content with proper semantic HTML, so every page is fully visible to search engines.",
+        "Job descriptions now display in full — no more \"Show more\" truncation.",
+        "Added the **latest changelog** card to the jobs feed sidebar."
+      ]
+    },
+    {
+      "id": "2026-05-01-job-detail-improvements",
+      "date": "2026-05-01",
+      "title": "Job detail page refresh",
+      "tag": "Update",
+      "icon": "/changelog/rocket.svg",
+      "highlights": [
+        "Redesigned the **single job page** for better readability on smaller screens.",
+        "Job pages now show the **posted time** (e.g. \"3 days ago\") so you know how fresh each listing is.",
+        "Improved page titles and canonical URLs across all job and company pages."
+      ]
+    },
+    {
+      "id": "2026-04-25-skills-salary",
+      "date": "2026-04-25",
+      "title": "Skills tagging & salary insights",
+      "tag": "Feature",
+      "icon": "/changelog/rocket.svg",
+      "highlights": [
+        "Skills mentioned in job descriptions are now **linked** — click any skill to see all related jobs.",
+        "Launched **Salary Insights** page for roles that include compensation data.",
+        "Jobs near your viewed listing now appear in a **\"Jobs near you\"** section.",
+        "Company matching is now smarter with **semantic embeddings** — better duplicate detection and related-company suggestions."
+      ]
+    },
+    {
+      "id": "2026-04-18-auth-saved-jobs",
+      "date": "2026-04-18",
+      "title": "User accounts & saved jobs",
+      "tag": "Feature",
+      "icon": "/changelog/rocket.svg",
+      "highlights": [
+        "Sign in with a **magic link** — no password needed.",
+        "**Save jobs** you're interested in and come back to them later.",
+        "**Follow companies** to get alerts when they post new roles.",
+        "Track your **applications** in one place."
+      ]
+    },
+    {
+      "id": "2026-04-12-ashby-compensation",
+      "date": "2026-04-12",
+      "title": "Ashby jobs & compensation data",
+      "tag": "Feature",
+      "icon": "/changelog/rocket.svg",
+      "highlights": [
+        "Added **Ashby** as a job source — hundreds of new roles from companies using Ashby's ATS.",
+        "Jobs with salary info now display **compensation badges** (salary range, equity, bonus).",
+        "Added **career guides** with FAQs and role-specific advice to help you prepare."
+      ]
+    },
+    {
+      "id": "2026-04-10-location-seo",
+      "date": "2026-04-10",
+      "title": "Location-based job pages",
+      "tag": "Feature",
+      "icon": "/changelog/rocket.svg",
+      "highlights": [
+        "Browse jobs by location — dedicated pages like **\"Software Engineer jobs in Bangalore\"** for every city and role combination.",
+        "Added a **Jobs by Location** hub page to explore all available cities.",
+        "Each location page includes proper SEO metadata and structured data for search engines."
+      ]
+    },
+    {
+      "id": "2026-03-29-company-search",
+      "date": "2026-03-29",
+      "title": "Company search & recently posted",
+      "tag": "Feature",
+      "icon": "/changelog/rocket.svg",
+      "highlights": [
+        "Search for any company on WorkWay with the new **company search**.",
+        "Company pages now show a **\"Recently Posted\"** section highlighting jobs added in the last few days.",
+        "Company logos are now hosted and served from **Cloudflare R2** for faster loading."
+      ]
+    },
+    {
+      "id": "2026-03-28-location-pseo",
+      "date": "2026-03-28",
+      "title": "Location programmatic SEO",
+      "tag": "Update",
+      "icon": "/changelog/rocket.svg",
+      "highlights": [
+        "Auto-generated **role + location** pages (e.g. \"Data Analyst jobs in Mumbai\") for better search discoverability.",
+        "Dynamic sitemaps now include all valid location combinations for Google indexing."
+      ]
+    },
+    {
       "id": "2026-03-14-recently-viewed",
       "date": "2026-03-14",
       "title": "Recently viewed jobs",
