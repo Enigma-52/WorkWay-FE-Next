@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
+import FeedbackButton from "@/components/layout/FeedbackButton";
 import AppProviders from "@/components/providers/AppProviders";
 import AnalyticsProvider from "@/components/providers/AnalyticsProvider";
 import { getSiteUrl } from "@/lib/seo/metadata";
@@ -82,6 +83,7 @@ export default function RootLayout({
             <Navbar />
             <main className="flex-1">{children}</main>
             <Footer />
+            <FeedbackButton />
           </div>
         </AppProviders>
       </body>
