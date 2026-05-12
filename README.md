@@ -29,4 +29,4 @@ npm run dev
 - `npm run lint` - lint codebase
 
 ## Production
-- Primary domain: `https://www.workway.dev`
+- Domain: `https://www.workway.dev`
