@@ -5,15 +5,18 @@ interface JobBadgeProps {
   children: React.ReactNode;
   variant?: "default" | "primary" | "muted";
   className?: string;
+  title?: string;
 }
 
 const JobBadge = ({
   children,
   variant = "default",
   className,
+  title,
 }: JobBadgeProps) => {
   return (
     <span
+      title={title}
       className={cn(
         "inline-flex items-center rounded-full px-3 py-1 text-xs font-medium transition-colors",
         variant === "default" &&

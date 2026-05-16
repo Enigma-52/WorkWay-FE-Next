@@ -1,20 +1,20 @@
 "use client";
 
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 import {
   Briefcase,
   Sparkles,
   TrendingUp,
   Building2,
 } from "lucide-react";
-import { motion } from "framer-motion";
 import { JobCard } from "@/components/DomainPage/JobCard";
 import { JobPagination } from "@/components/DomainPage/JobPagination";
 import { JobsListFilters } from "./JobsListFilters";
 import { JobsFacetsSidebar } from "./JobsFacetsSidebar";
 import type { JobListResponse } from "@/types/jobs";
 import JobViewFeed from "@/components/JobViewFeed/JobViewFeed";
+import LatestChangelogCard from "./LatestChangelogCard";
 
 type Props = {
   data: JobListResponse;
@@ -34,9 +34,7 @@ export default function JobsPageClient({ data }: Props) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const qParam = getParam(searchParams, "q", "");
-  const [qLocal, setQLocal] = useState(qParam);
-  const page = getParam(searchParams, "page", "1");
+  const q = getParam(searchParams, "q", "");
   const domain = getParam(searchParams, "domain", "all");
   const employmentType = getParam(searchParams, "employment_type", "all");
   const experienceLevel = getParam(searchParams, "experience_level", "all");
@@ -55,22 +53,23 @@ export default function JobsPageClient({ data }: Props) {
     [pathname, router, searchParams]
   );
 
-  useEffect(() => {
-    setQLocal(qParam);
-  }, [qParam]);
-
-  useEffect(() => {
-    const t = setTimeout(() => {
-      if (qLocal !== qParam) {
-        updateParams({ q: qLocal || null, page: "1" });
-      }
-    }, 400);
-    return () => clearTimeout(t);
-  }, [qLocal, qParam, updateParams]);
-
-  const handleFilterChange = (key: string) => (value: string) => {
+  const handleSidebarFilter = (key: string) => (value: string) => {
     updateParams({ [key]: value, page: "1" });
   };
+
+  const handleApply = useCallback(
+    (filters: { q: string; domain: string; employmentType: string; experienceLevel: string; location: string }) => {
+      updateParams({
+        q: filters.q || null,
+        domain: filters.domain,
+        employment_type: filters.employmentType,
+        experience_level: filters.experienceLevel,
+        location: filters.location || null,
+        page: "1",
+      });
+    },
+    [updateParams]
+  );
 
   const clearFilters = () => {
     updateParams({
@@ -84,7 +83,7 @@ export default function JobsPageClient({ data }: Props) {
   };
 
   const activeFiltersCount = [
-    qParam,
+    q,
     domain !== "all",
     employmentType !== "all",
     experienceLevel !== "all",
@@ -149,30 +148,24 @@ export default function JobsPageClient({ data }: Props) {
                 employment_type: applied_filters.employment_type,
                 experience_level: applied_filters.experience_level,
               }}
-              onDomainClick={(slug) => handleFilterChange("domain")(slug)}
+              onDomainClick={(slug) => handleSidebarFilter("domain")(slug)}
               onEmploymentTypeClick={(v) =>
-                handleFilterChange("employment_type")(v)
+                handleSidebarFilter("employment_type")(v)
               }
               onExperienceLevelClick={(v) =>
-                handleFilterChange("experience_level")(v)
+                handleSidebarFilter("experience_level")(v)
               }
             />
           </div>
 
           <div className="min-w-0 space-y-6">
             <JobsListFilters
-              q={qLocal}
-              onQChange={setQLocal}
+              q={q}
               domain={domain}
-              onDomainChange={handleFilterChange("domain")}
               employmentType={employmentType}
-              onEmploymentTypeChange={handleFilterChange("employment_type")}
               experienceLevel={experienceLevel}
-              onExperienceLevelChange={handleFilterChange("experience_level")}
               location={location}
-              onLocationChange={(v) =>
-                updateParams({ location: v || null, page: "1" })
-              }
+              onApply={handleApply}
               onClear={clearFilters}
               activeCount={activeFiltersCount}
               domainOptions={facets.domains}
@@ -196,18 +189,10 @@ export default function JobsPageClient({ data }: Props) {
 
             {jobs.length > 0 ? (
               <div className="grid gap-4">
-                {jobs.map((job, index) => (
-                  <motion.div
-                    key={job.id}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      duration: 0.3,
-                      delay: Math.min(index * 0.03, 0.3),
-                    }}
-                  >
+                {jobs.map((job) => (
+                  <div key={job.id}>
                     <JobCard job={job} />
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             ) : (
@@ -243,9 +228,10 @@ export default function JobsPageClient({ data }: Props) {
             )}
           </div>
 
-          {/* Live activity feed - right sidebar on large screens */}
-          <div className="hidden lg:block lg:sticky lg:top-24 lg:self-start">
+          {/* Live activity feed + changelog - right sidebar on large screens */}
+          <div className="hidden lg:block lg:sticky lg:top-24 lg:self-start space-y-4">
             <JobViewFeed />
+            <LatestChangelogCard />
           </div>
         </div>
       </main>

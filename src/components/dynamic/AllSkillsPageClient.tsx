@@ -3,7 +3,6 @@
 import { useState, useMemo } from "react";
 import SkillCard from "@/components/SkillPage/SkillCard";
 import CategoryFilter from "@/components/SkillPage/CategoryFilter";
-import { motion, AnimatePresence } from "framer-motion";
 import { Search, Briefcase, Layers, TrendingUp } from "lucide-react";
 import { type SkillsPageResponse } from "@/lib/api/contracts";
 
@@ -83,11 +82,7 @@ export default function AllSkillsPageClient({ data }: Props) {
         {/* HERO */}
         <section className="border-b border-border px-8 pt-5 pb-14 md:px-12 lg:pt-8">
           <div className="mx-auto max-w-7xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-            >
+            <div>
               <h1 className="mb-4 text-4xl font-bold tracking-tight text-foreground md:text-5xl lg:text-6xl">
                 Browse Jobs by{" "}
                 <span className="text-gradient-primary">Skill</span>
@@ -97,14 +92,10 @@ export default function AllSkillsPageClient({ data }: Props) {
                 {data.stats.total_skills}+ skills,{" "}
                 {totalJobs.toLocaleString()} open roles.
               </p>
-            </motion.div>
+            </div>
 
             {/* STATS */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="mb-12 flex flex-wrap gap-8"
-            >
+            <div className="mb-12 flex flex-wrap gap-8">
               {stats.map((s) => (
                 <div key={s.label} className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary">
@@ -120,7 +111,7 @@ export default function AllSkillsPageClient({ data }: Props) {
                   </div>
                 </div>
               ))}
-            </motion.div>
+            </div>
 
             {/* SEARCH */}
             <div className="relative max-w-xl">
@@ -161,68 +152,60 @@ export default function AllSkillsPageClient({ data }: Props) {
               )}
             </div>
 
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeCategory + search}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                {filtered.length === 0 ? (
-                  <div className="py-24 text-center text-muted-foreground">
-                    No skills found
-                  </div>
-                ) : activeCategory === "All" && !search ? (
-                  <div className="space-y-16">
-                    {allCategories.map((cat) => {
-                      const skills = grouped[cat];
-                      if (!skills?.length) return null;
+            <div>
+              {filtered.length === 0 ? (
+                <div className="py-24 text-center text-muted-foreground">
+                  No skills found
+                </div>
+              ) : activeCategory === "All" && !search ? (
+                <div className="space-y-16">
+                  {allCategories.map((cat) => {
+                    const skills = grouped[cat];
+                    if (!skills?.length) return null;
 
-                      return (
-                        <div
-                          key={cat}
-                          className="pb-10 border-b border-border/40 last:border-none"
-                        >
-                          <div className="mb-6 flex items-center gap-3">
-                            <h2 className="text-xl font-semibold text-foreground">
-                              {cat}
-                            </h2>
-                            <span className="rounded-full bg-secondary px-3 py-0.5 text-xs font-medium text-muted-foreground">
-                              {skills.length}
-                            </span>
-                          </div>
-
-                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
-                            {skills.map((skill, i) => (
-                              <SkillCard
-                                key={skill.slug}
-                                skill={skill.skill}
-                                slug={skill.slug}
-                                jobCount={skill.job_count}
-                                index={i}
-                              />
-                            ))}
-                          </div>
+                    return (
+                      <div
+                        key={cat}
+                        className="pb-10 border-b border-border/40 last:border-none"
+                      >
+                        <div className="mb-6 flex items-center gap-3">
+                          <h2 className="text-xl font-semibold text-foreground">
+                            {cat}
+                          </h2>
+                          <span className="rounded-full bg-secondary px-3 py-0.5 text-xs font-medium text-muted-foreground">
+                            {skills.length}
+                          </span>
                         </div>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
-                    {filtered.map((skill, i) => (
-                      <SkillCard
-                        key={skill.slug}
-                        skill={skill.skill}
-                        slug={skill.slug}
-                        jobCount={skill.job_count}
-                        index={i}
-                      />
-                    ))}
-                  </div>
-                )}
-              </motion.div>
-            </AnimatePresence>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
+                          {skills.map((skill, i) => (
+                            <SkillCard
+                              key={skill.slug}
+                              skill={skill.skill}
+                              slug={skill.slug}
+                              jobCount={skill.job_count}
+                              index={i}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
+                  {filtered.map((skill, i) => (
+                    <SkillCard
+                      key={skill.slug}
+                      skill={skill.skill}
+                      slug={skill.slug}
+                      jobCount={skill.job_count}
+                      index={i}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </section>
       </div>

@@ -1,105 +1,102 @@
-"use client";
-import { Sparkles, User, Code, Briefcase, Settings } from "lucide-react";
+import { Check } from "lucide-react";
 
 const HireMeProfiles = () => {
-  const profileItems = [
-    { icon: Code, label: "skills" },
-    { icon: Briefcase, label: "projects" },
-    { icon: User, label: "experience" },
-    { icon: Settings, label: "preferences" },
-  ];
-
   return (
-    <section className="py-24 md:py-32 bg-card/30 border-y border-border overflow-hidden">
-      <div className="container px-4">
-        <div className="max-w-5xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Content */}
-            <div>
-              <p className="text-primary font-mono text-sm uppercase tracking-wider mb-4">
-                Hire Me Profiles
-              </p>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
-                Your resume, but online{" "}
-                <span className="text-muted-foreground">and not ugly.</span>
-              </h2>
-              <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                Every user gets a Hire Me page. Recruiter opens it → understands
-                you in 30 seconds.
-              </p>
+    <section className="relative py-32 noise">
+      <div className="mx-auto max-w-7xl px-6 grid lg:grid-cols-2 gap-16 items-center">
+        <div>
+          <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-4">
+            Hire Me Profiles
+          </p>
+          <h2 className="font-display text-5xl sm:text-6xl text-gradient leading-[1.05]">
+            Your resume, but online{" "}
+            <span className="italic text-brand-gradient">and not ugly.</span>
+          </h2>
+          <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-lg">
+            Every user gets a public Hire Me page. Recruiter opens it,
+            understands you in 30 seconds. AI helps polish it — you stay in
+            control.
+          </p>
+          <ul className="mt-8 space-y-3">
+            {[
+              "Public, shareable URL",
+              "AI-polished, human-edited",
+              "Recruiter-friendly layout",
+              "Always up to date",
+            ].map((item) => (
+              <li key={item} className="flex items-center gap-3 text-sm">
+                <span className="w-5 h-5 rounded-full bg-brand/15 grid place-items-center">
+                  <Check className="w-3 h-3 text-brand" />
+                </span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
 
-              {/* Profile items */}
-              <div className="grid grid-cols-2 gap-4 mb-8">
-                {profileItems.map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center gap-3 p-3 rounded-lg border border-border bg-background/50"
-                  >
-                    <item.icon className="w-4 h-4 text-primary" />
-                    <span className="font-mono text-sm">{item.label}</span>
+        {/* Profile card */}
+        <div className="relative">
+          <div className="absolute -inset-8 bg-brand/10 blur-3xl rounded-full pointer-events-none" />
+          <div className="relative rounded-3xl border border-border bg-gradient-to-br from-surface to-surface-elevated p-8 shadow-elevated">
+            <div className="flex items-start justify-between mb-6">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-brand to-brand-glow grid place-items-center font-display text-2xl text-brand-foreground">
+                  A
+                </div>
+                <div>
+                  <div className="font-display text-2xl">Alex Chen</div>
+                  <div className="text-sm text-muted-foreground">
+                    Full-Stack Engineer
                   </div>
-                ))}
+                </div>
               </div>
-
-              <div className="space-y-3 text-muted-foreground">
-                <p className="flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-primary" />
-                  AI helps you polish it.
-                </p>
-                <p>You still stay in control.</p>
-                <p className="font-semibold text-foreground">
-                  No LinkedIn influencer energy.
-                </p>
-              </div>
+              <span className="inline-flex items-center gap-1.5 text-xs font-mono px-2.5 py-1 rounded-full bg-success/15 text-success border border-success/20">
+                <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
+                Open
+              </span>
             </div>
 
-            {/* Visual */}
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent rounded-3xl blur-3xl" />
-              <div className="relative p-8 rounded-2xl border border-border bg-card">
-                {/* Mock profile card */}
-                <div className="flex items-center gap-4 mb-6 pb-6 border-b border-border">
-                  <div className="w-16 h-16 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center">
-                    <User className="w-8 h-8 text-primary" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-lg">Alex Chen</h4>
-                    <p className="text-muted-foreground text-sm">
-                      Full-Stack Engineer
-                    </p>
-                  </div>
-                </div>
-                
-                {/* Skills */}
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {["React", "Node.js", "TypeScript", "AWS", "PostgreSQL"].map(
-                    (skill) => (
-                      <span
-                        key={skill}
-                        className="px-3 py-1 rounded-full text-xs font-mono bg-primary/10 text-primary border border-primary/20"
-                      >
-                        {skill}
-                      </span>
-                    )
-                  )}
-                </div>
+            <div className="flex flex-wrap gap-1.5 mb-6">
+              {["React", "Node.js", "TypeScript", "AWS", "PostgreSQL"].map(
+                (s) => (
+                  <span
+                    key={s}
+                    className="text-xs font-mono px-2.5 py-1 rounded-md bg-secondary border border-border/60 text-foreground/80"
+                  >
+                    {s}
+                  </span>
+                )
+              )}
+            </div>
 
-                {/* Stats */}
-                <div className="grid grid-cols-3 gap-4 text-center">
-                  <div className="p-3 rounded-lg bg-background/50">
-                    <p className="text-2xl font-bold text-primary">5+</p>
-                    <p className="text-xs text-muted-foreground">Years Exp</p>
+            <div className="grid grid-cols-3 gap-3 mb-6">
+              {[
+                { n: "5+", l: "Years" },
+                { n: "12", l: "Projects" },
+                { n: "★ 4.9", l: "Rating" },
+              ].map((s) => (
+                <div
+                  key={s.l}
+                  className="rounded-xl border border-border bg-surface/60 p-3 text-center"
+                >
+                  <div className="font-display text-2xl text-gradient">
+                    {s.n}
                   </div>
-                  <div className="p-3 rounded-lg bg-background/50">
-                    <p className="text-2xl font-bold text-primary">12</p>
-                    <p className="text-xs text-muted-foreground">Projects</p>
-                  </div>
-                  <div className="p-3 rounded-lg bg-background/50">
-                    <p className="text-2xl font-bold text-primary">Open</p>
-                    <p className="text-xs text-muted-foreground">Status</p>
+                  <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-mono mt-0.5">
+                    {s.l}
                   </div>
                 </div>
-              </div>
+              ))}
+            </div>
+
+            <div className="flex gap-2 border-t border-border pt-4 text-xs text-muted-foreground font-mono">
+              <span className="text-foreground">Skills</span>
+              <span>·</span>
+              <span>Projects</span>
+              <span>·</span>
+              <span>Experience</span>
+              <span>·</span>
+              <span>Preferences</span>
             </div>
           </div>
         </div>

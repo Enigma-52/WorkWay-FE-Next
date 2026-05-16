@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!guide) return {};
 
   return buildPageMetadata({
-    title: guide.title,
+    title: `${guide.title} | WorkWay Guides`,
     description: guide.description,
     path: `/guides/${guide.slug}`,
     keywords: guide.keywords,

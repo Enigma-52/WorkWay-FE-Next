@@ -1,72 +1,94 @@
-"use client";
-const ProblemSection = () => {
-  const platforms = ["LinkedIn", "Naukri", "YC Jobs", "4 ATS tabs", "a Google Sheet titled final_final_v7.xlsx"];
-  
-  const problems = [
-    "apply to the same job twice",
-    "forget where you applied",
-    "rewrite the same intro",
-    "lose track",
-    "question your life choices",
-  ];
+import { X } from "lucide-react";
 
+const tabs = [
+  "LinkedIn",
+  "Naukri",
+  "YC Jobs",
+  "Greenhouse",
+  "Lever",
+  "Ashby",
+  "final_v7.xlsx",
+];
+const pains = [
+  "apply to the same job twice",
+  "forget where you applied",
+  "rewrite the same intro",
+  "question your life choices",
+];
+
+const ProblemSection = () => {
   return (
-    <section className="py-24 md:py-32">
-      <div className="container px-4">
-        <div className="max-w-4xl mx-auto">
-          {/* Heading */}
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-16 text-center">
+    <section className="relative py-32 noise">
+      <div className="mx-auto max-w-6xl px-6">
+        <div className="text-center mb-16">
+          <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-4">
+            The problem
+          </p>
+          <h2 className="font-display text-5xl sm:text-6xl text-gradient">
             Be honest.{" "}
-            <span className="text-muted-foreground">
-              This is your current setup.
+            <span className="italic text-brand-gradient">
+              This is your setup.
             </span>
           </h2>
+        </div>
 
-          <div className="grid md:grid-cols-2 gap-12 md:gap-16">
-            {/* You open */}
-            <div className="space-y-6">
-              <p className="text-muted-foreground font-mono text-sm uppercase tracking-wider">
-                You open:
-              </p>
-              <div className="space-y-3">
-                {platforms.map((platform, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center gap-3 p-4 rounded-lg border border-border bg-card/50 hover:bg-card transition-colors"
-                  >
-                    <span className="w-2 h-2 rounded-full bg-destructive/60" />
-                    <span className="font-mono text-sm">{platform}</span>
-                  </div>
-                ))}
+        <div className="grid lg:grid-cols-2 gap-6">
+          {/* Browser mock */}
+          <div className="rounded-3xl border border-border bg-surface/60 backdrop-blur shadow-elevated overflow-hidden">
+            <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-surface-elevated/50">
+              <div className="flex gap-1.5">
+                <div className="w-2.5 h-2.5 rounded-full bg-destructive/70" />
+                <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
+                <div className="w-2.5 h-2.5 rounded-full bg-success/70" />
+              </div>
+              <div className="ml-3 text-xs text-muted-foreground font-mono">
+                every morning, you
               </div>
             </div>
-
-            {/* You: */}
-            <div className="space-y-6">
-              <p className="text-muted-foreground font-mono text-sm uppercase tracking-wider">
-                You:
-              </p>
-              <div className="space-y-3">
-                {problems.map((problem, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center gap-3 p-4 rounded-lg border border-destructive/30 bg-destructive/5 hover:bg-destructive/10 transition-colors"
-                  >
-                    <span className="text-destructive">✗</span>
-                    <span className="font-mono text-sm">{problem}</span>
-                  </div>
-                ))}
+            <div className="flex flex-wrap gap-1.5 px-4 py-3 border-b border-border">
+              {tabs.map((t, i) => (
+                <div
+                  key={t}
+                  className={`text-xs px-3 py-1.5 rounded-md border border-border/60 font-mono whitespace-nowrap ${i === 0 ? "bg-secondary text-foreground" : "text-muted-foreground bg-surface/40"}`}
+                >
+                  {t}
+                </div>
+              ))}
+            </div>
+            <div className="p-8 min-h-[280px] grid place-items-center">
+              <div className="text-center space-y-3">
+                <div className="text-7xl">🥲</div>
+                <p className="text-sm text-muted-foreground font-mono">
+                  12 tabs. 0 applications sent.
+                </p>
               </div>
             </div>
           </div>
 
-          {/* Punchline */}
-          <div className="mt-16 text-center">
-            <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed">
-              This is not "the grind".
+          {/* Pains list */}
+          <div className="rounded-3xl border border-border bg-gradient-to-br from-surface/80 to-surface-elevated/60 p-8 sm:p-10 shadow-elevated flex flex-col justify-center">
+            <p className="text-sm text-muted-foreground mb-6 font-mono">
+              and then you
+            </p>
+            <ul className="space-y-4">
+              {pains.map((p) => (
+                <li
+                  key={p}
+                  className="flex items-start gap-3 text-xl sm:text-2xl font-display"
+                >
+                  <span className="mt-2 w-6 h-6 rounded-full bg-destructive/15 grid place-items-center shrink-0">
+                    <X className="w-3.5 h-3.5 text-destructive" />
+                  </span>
+                  <span className="text-foreground/90">{p}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-10 pt-6 border-t border-border text-muted-foreground">
+              This isn&apos;t{" "}
+              <span className="line-through">&ldquo;the grind.&rdquo;</span>
               <br />
-              <span className="text-foreground font-semibold">
-                This is bad software.
+              <span className="text-foreground font-medium">
+                It&apos;s bad software.
               </span>
             </p>
           </div>

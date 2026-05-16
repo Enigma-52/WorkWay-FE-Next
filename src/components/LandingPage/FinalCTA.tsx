@@ -1,48 +1,34 @@
-"use client";
-import { useState } from "react";
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import OnboardingModal from "./OnboardingModal";
 
 const FinalCTA = () => {
-  const [showOnboarding, setShowOnboarding] = useState(false);
-
   return (
-    <section className="py-32 md:py-40 relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-3xl" />
-      </div>
+    <section className="relative py-32 overflow-hidden">
+      <div className="absolute inset-0 grid-bg opacity-50 pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-brand/10 blur-[140px] pointer-events-none" />
+      <div className="relative mx-auto max-w-4xl px-6 text-center">
+        <h2 className="font-display text-6xl sm:text-8xl leading-[0.95] tracking-tight">
+          <span className="text-gradient">Stop fighting</span>
+          <br />
+          <span className="italic text-brand-gradient">job platforms.</span>
+        </h2>
+        <p className="mt-8 text-xl text-muted-foreground">
+          Use one that&apos;s on your side.
+        </p>
 
-      <div className="container px-4 relative z-10">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">
-            Stop fighting
-            <br />
-            <span className="text-gradient">job platforms.</span>
-          </h2>
-          <p className="text-xl text-muted-foreground mb-12">
-            Use one that's on your side.
-          </p>
-
-          <div className="flex flex-col items-center gap-4">
-            <Button
-              variant="hero"
-              size="xl"
-              className="group animate-pulse-glow"
-              onClick={() => setShowOnboarding(true)}
-            >
-              Start using WorkWay
-              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-            </Button>
-            <span className="text-sm text-muted-foreground font-mono">
-              takes less time than opening LinkedIn
-            </span>
-          </div>
+        <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <Link
+            href="/jobs"
+            className="group inline-flex items-center gap-2 rounded-full bg-brand text-brand-foreground hover:bg-brand-glow transition-all px-8 py-4 text-lg font-medium shadow-glow"
+          >
+            Start using WorkWay
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
+          </Link>
         </div>
+        <p className="mt-4 text-xs text-muted-foreground font-mono">
+          takes less time than opening LinkedIn
+        </p>
       </div>
-
-      <OnboardingModal open={showOnboarding} onOpenChange={setShowOnboarding} />
     </section>
   );
 };

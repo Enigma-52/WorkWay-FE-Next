@@ -35,7 +35,7 @@ export async function generateMetadata({
   const count = company.jobListings?.length || 0;
   const title =
     count > 0
-      ? `${company.name} Careers — ${count} Open Jobs | WorkWay`
+      ? `${company.name} Jobs & Careers - ${count} Open Roles | WorkWay`
       : `${company.name} Careers & Company Profile | WorkWay`;
   const description =
     count > 0
