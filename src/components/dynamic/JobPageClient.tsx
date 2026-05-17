@@ -107,7 +107,7 @@ export default function JobPageClient({ job }: Props) {
             <div className="absolute left-1/2 top-0 h-[500px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/5 blur-[120px]" />
           </div>
 
-          <div className="relative mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 md:py-16 lg:px-8 lg:py-24">
+          <div className="container relative py-16 md:py-24">
             <div>
               <Link
                 href="/jobs"
@@ -337,16 +337,17 @@ export default function JobPageClient({ job }: Props) {
                   </div>
                 </div>
 
-                <JobViewFeed title="Live views on WorkWay" limit={5} />
+                <div>
+                  <JobViewFeed title="Live views on WorkWay" limit={5} />
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Similar roles */}
-        <section className="border-t border-border/50 py-12 md:py-16 lg:py-24">
-          <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="mb-7 flex items-center justify-between md:mb-8">
+        <section className="border-t border-border/50 py-16 md:py-24">
+          <div className="container">
+            <div className="mb-8 flex items-center justify-between">
               <h2 className="text-2xl font-bold text-foreground">
                 Similar roles you might like
               </h2>
@@ -359,7 +360,7 @@ export default function JobPageClient({ job }: Props) {
               </Link>
             </div>
 
-            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {domainJobs.map((dJob: any) => (
                 <div key={dJob.id}>
                   <JobCard {...dJob} />
@@ -369,10 +370,9 @@ export default function JobPageClient({ job }: Props) {
           </div>
         </section>
 
-        {/* More roles at company */}
-        <section className="border-t py-12 md:py-16 lg:py-24">
-          <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="mb-7 flex items-center justify-between md:mb-8">
+        <section className="border-t py-16 md:py-24">
+          <div className="container">
+            <div className="mb-8 flex items-center justify-between">
               <h2 className="text-2xl font-bold text-foreground">
                 More roles at {job.company}
               </h2>
@@ -385,7 +385,7 @@ export default function JobPageClient({ job }: Props) {
               </Link>
             </div>
 
-            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {companyJobs.map((cJob: any) => (
                 <div key={cJob.id}>
                   <JobCard {...cJob} />
