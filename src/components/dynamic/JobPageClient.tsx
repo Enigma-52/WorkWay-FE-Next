@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
 import {
   MapPin,
   Briefcase,
@@ -138,10 +137,7 @@ export default function JobPageClient({ job }: Props) {
           </div>
 
           <div className="container relative py-16 md:py-24">
-            <motion.div
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-            >
+            <div>
               <Link
                 href="/jobs"
                 className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
@@ -149,16 +145,11 @@ export default function JobPageClient({ job }: Props) {
                 <ArrowLeft className="h-4 w-4" />
                 Back to Jobs
               </Link>
-            </motion.div>
+            </div>
 
             <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
               <div className="max-w-3xl">
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.1 }}
-                  className="mb-6"
-                >
+                <div className="mb-6">
                   <div className="mb-3 flex items-center gap-3">
                     <div className="flex h-14 w-14 items-center justify-center rounded-xl">
                       {job.company_logo_url ? (
@@ -193,23 +184,13 @@ export default function JobPageClient({ job }: Props) {
                       )}
                     </div>
                   </div>
-                </motion.div>
+                </div>
 
-                <motion.h1
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.15 }}
-                  className="mb-6 text-3xl font-bold tracking-tight text-foreground md:text-4xl lg:text-5xl"
-                >
+                <h1 className="mb-6 text-3xl font-bold tracking-tight text-foreground md:text-4xl lg:text-5xl">
                   {job.title}
-                </motion.h1>
+                </h1>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.2 }}
-                  className="flex flex-wrap gap-3"
-                >
+                <div className="flex flex-wrap gap-3">
                   <JobBadge variant="primary">
                     <MapPin className="mr-1.5 h-3 w-3" />
                     {job.location}
@@ -235,15 +216,10 @@ export default function JobPageClient({ job }: Props) {
                       {timeAgo}
                     </JobBadge>
                   )}
-                </motion.div>
+                </div>
 
                 {job.skills?.length > 0 && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: 0.25 }}
-                    className="mt-6"
-                  >
+                  <div className="mt-6">
                     <h3 className="mb-3 text-sm font-medium text-muted-foreground">
                       Skills
                     </h3>
@@ -260,16 +236,11 @@ export default function JobPageClient({ job }: Props) {
                         </Link>
                       ))}
                     </div>
-                  </motion.div>
+                  </div>
                 )}
               </div>
 
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4, delay: 0.25 }}
-                className="flex flex-col gap-3"
-              >
+              <div className="flex flex-col gap-3">
                 <div className="flex items-center gap-2">
                   <a
                     href={job.url}
@@ -343,7 +314,7 @@ export default function JobPageClient({ job }: Props) {
                     You will be redirected to the company career page
                   </p>
                 )}
-              </motion.div>
+              </div>
             </div>
           </div>
         </section>
@@ -365,12 +336,7 @@ export default function JobPageClient({ job }: Props) {
               </div>
 
               <div className="lg:sticky lg:top-24 lg:h-fit space-y-4">
-                <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.4, delay: 0.3 }}
-                  className="job-card"
-                >
+                <div className="job-card">
                   <h3 className="mb-6 text-lg font-semibold text-foreground">
                     Job Summary
                   </h3>
@@ -436,15 +402,11 @@ export default function JobPageClient({ job }: Props) {
                       </Button>
                     </a>
                   </div>
-                </motion.div>
+                </div>
 
-                <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.4, delay: 0.35 }}
-                >
+                <div>
                   <JobViewFeed title="Live views on WorkWay" limit={5} />
-                </motion.div>
+                </div>
               </div>
             </div>
           </div>
@@ -452,13 +414,7 @@ export default function JobPageClient({ job }: Props) {
 
         <section className="border-t border-border/50 py-16 md:py-24">
           <div className="container">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4 }}
-              className="mb-8 flex items-center justify-between"
-            >
+            <div className="mb-8 flex items-center justify-between">
               <h2 className="text-2xl font-bold text-foreground">
                 Similar roles you might like
               </h2>
@@ -469,19 +425,13 @@ export default function JobPageClient({ job }: Props) {
                 View all {domainJobs[0]?.domain} roles
                 <ArrowRight className="h-4 w-4" />
               </Link>
-            </motion.div>
+            </div>
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {domainJobs.map((dJob: any, index: number) => (
-                <motion.div
-                  key={dJob.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: index * 0.1 }}
-                >
+              {domainJobs.map((dJob: any) => (
+                <div key={dJob.id}>
                   <JobCard {...dJob} />
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
@@ -489,13 +439,7 @@ export default function JobPageClient({ job }: Props) {
 
         <section className="border-t py-16 md:py-24">
           <div className="container">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4 }}
-              className="mb-8 flex items-center justify-between"
-            >
+            <div className="mb-8 flex items-center justify-between">
               <h2 className="text-2xl font-bold text-foreground">
                 More roles at {job.company}
               </h2>
@@ -506,19 +450,13 @@ export default function JobPageClient({ job }: Props) {
                 View company profile
                 <ArrowRight className="h-4 w-4" />
               </Link>
-            </motion.div>
+            </div>
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {companyJobs.map((cJob: any, index: number) => (
-                <motion.div
-                  key={cJob.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: index * 0.1 }}
-                >
+              {companyJobs.map((cJob: any) => (
+                <div key={cJob.id}>
                   <JobCard {...cJob} />
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
