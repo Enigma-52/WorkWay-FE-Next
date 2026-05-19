@@ -3,17 +3,12 @@ import { ArrowRight, Search, Sparkles } from "lucide-react";
 
 const Hero = () => {
   return (
-    <section className="relative overflow-hidden pt-40 pb-24 sm:pt-48 sm:pb-32 noise">
+    <section className="relative overflow-hidden pt-10 pb-24 sm:pt-10 sm:pb-32 noise">
       <div className="absolute inset-0 grid-bg pointer-events-none" />
       <div className="absolute inset-0 bg-hero-gradient pointer-events-none" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-brand/10 blur-[120px] pointer-events-none" />
 
       <div className="relative mx-auto max-w-5xl px-6 text-center">
-        <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/60 backdrop-blur px-3 py-1 text-xs text-muted-foreground mb-8 animate-fade-up">
-          <span className="w-1.5 h-1.5 rounded-full bg-brand animate-pulse" />
-          <span className="font-mono">v1.0 · Now in public beta</span>
-        </div>
-
         <h1
           className="font-display text-5xl sm:text-7xl md:text-8xl leading-[0.95] tracking-tight animate-fade-up"
           style={{ animationDelay: "100ms" }}
