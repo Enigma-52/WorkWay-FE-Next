@@ -58,7 +58,7 @@ const Hero = () => {
           style={{ animationDelay: "550ms" }}
         >
           {[
-            { n: "250k+", l: "Jobs" },
+            { n: "300k+", l: "Jobs" },
             { n: "5k+", l: "Companies" },
             { n: "50+", l: "Domains" },
           ].map((s) => (
