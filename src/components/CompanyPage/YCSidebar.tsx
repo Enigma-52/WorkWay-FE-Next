@@ -75,7 +75,7 @@ export function YCSidebar({ company }: Props) {
               <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
                 {partner.full_name}
               </p>
-              <p className="text-xs text-muted-foreground">Group Partner</p>
+              <p className="text-xs text-muted-foreground">General Partner</p>
             </div>
             <ExternalLink className="w-3.5 h-3.5 text-muted-foreground opacity-50 group-hover:opacity-100 transition-opacity" />
           </a>
