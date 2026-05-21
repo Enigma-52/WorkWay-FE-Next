@@ -57,7 +57,7 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
                     {company.name}
                   </h2>
                   {isYC && metadata?.ycBatch && (
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-md font-semibold bg-orange-500/10 text-orange-500 border border-orange-500/20">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 pt-1.5 text-md font-semibold text-orange-500">
                       <img
                         src="https://www.vectorlogo.zone/logos/ycombinator/ycombinator-icon.svg"
                         alt="Y Combinator"
