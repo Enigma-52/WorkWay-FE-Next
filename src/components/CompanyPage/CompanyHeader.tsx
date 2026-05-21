@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { Building2, Globe, MapPin, Briefcase, Users } from "lucide-react";
 import type { CompanyDetails } from "@/types/jobs";
 
@@ -56,11 +57,11 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
                     {company.name}
                   </h2>
                   {isYC && metadata?.ycBatch && (
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-orange-500/10 text-orange-500 border border-orange-500/20">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-md font-semibold bg-orange-500/10 text-orange-500 border border-orange-500/20">
                       <img
                         src="https://www.vectorlogo.zone/logos/ycombinator/ycombinator-icon.svg"
                         alt="Y Combinator"
-                        className="w-5 h-5 text-xl"
+                        className="w-5 h-5"
                       />
                       {metadata.ycBatch}
                     </span>
@@ -94,9 +95,7 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
               </div>
             </div>
 
-            <p className="text-muted-foreground leading-relaxed">
-              {company.description}
-            </p>
+            <ExpandableDescription text={company.description} />
 
             {/* Tags */}
             {metadata?.tags && metadata.tags.length > 0 && (
@@ -135,5 +134,28 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
         </div>
       </div>
     </header>
+  );
+}
+
+function ExpandableDescription({ text }: { text?: string }) {
+  const [expanded, setExpanded] = useState(false);
+  if (!text) return null;
+
+  return (
+    <div>
+      <p
+        className={`text-muted-foreground leading-relaxed ${expanded ? "" : "line-clamp-5"}`}
+      >
+        {text}
+      </p>
+      {text.length > 300 && (
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className="text-sm text-primary hover:text-primary/80 font-medium mt-1 transition-colors"
+        >
+          {expanded ? "Show less" : "Show more"}
+        </button>
+      )}
+    </div>
   );
 }
