@@ -4,20 +4,22 @@ import { useState, useEffect } from "react";
 import { Building2, Globe, MapPin, Briefcase, Users, Bell, BellOff, Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import AuthModal from "@/components/common/AuthModal";
-import {
-  type Company,
-  getUniqueLocations,
-  getUniqueDomains,
-} from "@/data/companyData";
+import type { CompanyDetails } from "@/types/jobs";
 
 interface CompanyHeaderProps {
-  company: Company;
+  company: CompanyDetails;
 }
 
 export function CompanyHeader({ company }: CompanyHeaderProps) {
   const { data: session, status } = useSession();
-  const locations = getUniqueLocations(company.jobListings);
-  const domains = getUniqueDomains(company.jobListings);
+  const isYC = company.platform === "ycombinator";
+  const metadata = company.metadata;
+  const jobs = company.jobListings || [];
+  const locations = [...new Set(jobs.map((j) => j.location))];
+  const domains = [...new Set(jobs.map((j) => j.domain))];
+
+  const companyLocation =
+    (company.location as { location?: string })?.location || null;
 
   const [isFollowing, setIsFollowing] = useState(false);
   const [alertId, setAlertId] = useState<number | null>(null);
@@ -26,7 +28,11 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
   const [authOpen, setAuthOpen] = useState(false);
 
   const stats = [
-    { label: "Open Roles", value: company.jobListings.length, icon: Briefcase },
+    {
+      label: "Open Roles",
+      value: company.jobListings?.length || 0,
+      icon: Briefcase,
+    },
     { label: "Locations", value: locations.length, icon: MapPin },
     { label: "Domains", value: domains.length, icon: Users },
   ];
@@ -101,6 +107,7 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
                     <img
                       src={company.logo_url}
                       alt={`${company.name} logo`}
+                      referrerPolicy="no-referrer"
                       className="w-full h-full object-contain p-2"
                     />
                   </div>
@@ -110,26 +117,66 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
                   </div>
                 )}
                 <div>
-                  <h1 className="text-3xl font-bold tracking-tight gradient-text">
-                    {company.name}
-                  </h1>
-                  {company.website && (
-                    <a
-                      href={company.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-primary transition-colors text-sm font-mono"
-                    >
-                      <Globe className="w-3.5 h-3.5" />
-                      {company.website.replace("https://", "")}
-                    </a>
+                  <div className="flex items-center gap-3">
+                    <h2 className="text-3xl font-bold tracking-tight gradient-text">
+                      {company.name}
+                    </h2>
+                    {isYC && metadata?.ycBatch && (
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-orange-500/10 text-orange-500 border border-orange-500/20">
+                        <img
+                          src="https://www.vectorlogo.zone/logos/ycombinator/ycombinator-icon.svg"
+                          alt="Y Combinator"
+                          className="w-5 h-5 text-xl"
+                        />
+                        {metadata.ycBatch}
+                      </span>
+                    )}
+                  </div>
+                  {metadata?.tagline && (
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {metadata.tagline}
+                    </p>
                   )}
+                  <div className="flex items-center gap-3 mt-2">
+                    {company.website && (
+                      <a
+                        href={company.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title={company.website.replace("https://", "")}
+                        className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-primary transition-colors text-sm font-mono"
+                      >
+                        <Globe className="w-3.5 h-3.5" />
+                        Website
+                      </a>
+                    )}
+                    {companyLocation && (
+                      <span className="inline-flex items-center gap-1.5 text-muted-foreground text-sm">
+                        <MapPin className="w-3.5 h-3.5" />
+                        {companyLocation}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
 
               <p className="text-muted-foreground leading-relaxed mb-5">
                 {company.description}
               </p>
+
+              {/* Tags */}
+              {metadata?.tags && metadata.tags.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-5">
+                  {metadata.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-3 py-1 rounded-full text-xs font-medium bg-secondary text-secondary-foreground border border-border"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
 
               {/* Follow button */}
               <button
@@ -153,7 +200,7 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
             </div>
 
             {/* Stats Cards */}
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-3">
               {stats.map((stat) => (
                 <div
                   key={stat.label}

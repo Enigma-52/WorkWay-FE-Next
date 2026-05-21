@@ -23,6 +23,43 @@ export type Skill = {
   slug: string;
 };
 
+export type CompanyFounder = {
+  bio: string;
+  name: string;
+  image: string;
+  title: string;
+  social: {
+    twitter?: string;
+    linkedin?: string;
+  };
+};
+
+export type CompanyYcPartner = {
+  id: number;
+  url: string;
+  full_name: string;
+  avatar_thumb_url: string;
+};
+
+export type CompanyMetadata = {
+  tags?: string[];
+  social?: {
+    github?: string;
+    twitter?: string;
+    facebook?: string;
+    linkedin?: string;
+    crunchbase?: string;
+  };
+  status?: string;
+  tagline?: string;
+  ycBatch?: string;
+  founders?: CompanyFounder[];
+  teamSize?: number | null;
+  ycPartner?: CompanyYcPartner;
+  banner_logo?: string;
+  foundedYear?: number;
+};
+
 export type CompanyDetails = {
   id: string | number;
   name: string;
@@ -30,8 +67,12 @@ export type CompanyDetails = {
   description?: string;
   website?: string | null;
   logo_url?: string | null;
+  location?: { location?: string } | Record<string, unknown>;
+  platform?: string;
+  namespace?: string;
+  metadata?: CompanyMetadata;
   jobListings: JobListing[];
-  recentlyPostedJobs : JobListing[];
+  recentlyPostedJobs: JobListing[];
 };
 
 export type DomainJobsPayload = {
