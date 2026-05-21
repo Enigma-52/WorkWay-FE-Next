@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { Linkedin, Twitter } from "lucide-react";
 import type { CompanyFounder } from "@/types/jobs";
 
@@ -36,11 +37,7 @@ export function YCFoundersSection({ founders }: Props) {
                 {founder.title && (
                   <p className="text-sm text-primary font-medium">{founder.title}</p>
                 )}
-                {founder.bio && (
-                  <p className="text-sm text-muted-foreground mt-2 line-clamp-3">
-                    {founder.bio}
-                  </p>
-                )}
+                {founder.bio && <ExpandableBio text={founder.bio} />}
                 <div className="flex items-center gap-3 mt-3">
                   {founder.social?.linkedin && (
                     <a
@@ -71,5 +68,25 @@ export function YCFoundersSection({ founders }: Props) {
         ))}
       </div>
     </section>
+  );
+}
+
+function ExpandableBio({ text }: { text: string }) {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div className="mt-2">
+      <p className={`text-sm text-muted-foreground ${expanded ? "" : "line-clamp-3"}`}>
+        {text}
+      </p>
+      {text.length > 120 && (
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className="text-xs text-primary hover:text-primary/80 font-medium mt-1 transition-colors"
+        >
+          {expanded ? "Show less" : "Show more"}
+        </button>
+      )}
+    </div>
   );
 }
