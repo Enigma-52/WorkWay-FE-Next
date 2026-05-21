@@ -122,11 +122,11 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
                       {company.name}
                     </h2>
                     {isYC && metadata?.ycBatch && (
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-orange-500/10 text-orange-500 border border-orange-500/20">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-md font-semibold bg-orange-500/10 text-orange-500 border border-orange-500/20">
                         <img
                           src="https://www.vectorlogo.zone/logos/ycombinator/ycombinator-icon.svg"
                           alt="Y Combinator"
-                          className="w-5 h-5 text-xl"
+                          className="w-5 h-5"
                         />
                         {metadata.ycBatch}
                       </span>
@@ -160,13 +160,11 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
                 </div>
               </div>
 
-              <p className="text-muted-foreground leading-relaxed mb-5">
-                {company.description}
-              </p>
+              <ExpandableDescription text={company.description} />
 
               {/* Tags */}
               {metadata?.tags && metadata.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-5">
+                <div className="flex flex-wrap gap-2 mt-4">
                   {metadata.tags.map((tag) => (
                     <span
                       key={tag}
@@ -182,7 +180,7 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
               <button
                 onClick={handleFollow}
                 disabled={followLoading || (status === "loading") || (!checkDone && !!session)}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
+                className={`mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
                   isFollowing
                     ? "bg-primary/10 text-primary border-primary/30 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30"
                     : "bg-card text-foreground border-border hover:bg-primary/10 hover:text-primary hover:border-primary/30"
@@ -222,5 +220,28 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
         </div>
       </header>
     </>
+  );
+}
+
+function ExpandableDescription({ text }: { text?: string }) {
+  const [expanded, setExpanded] = useState(false);
+  if (!text) return null;
+
+  return (
+    <div>
+      <p
+        className={`text-muted-foreground leading-relaxed ${expanded ? "" : "line-clamp-5"}`}
+      >
+        {text}
+      </p>
+      {text.length > 300 && (
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className="text-sm text-primary hover:text-primary/80 font-medium mt-1 transition-colors"
+        >
+          {expanded ? "Show less" : "Show more"}
+        </button>
+      )}
+    </div>
   );
 }
