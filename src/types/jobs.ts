@@ -16,6 +16,7 @@ export type JobListing = {
   url: string;
   skills : Skill[]
   metadata?: Record<string, any>;
+  platform?: string;
 };
 
 export type Skill = {

@@ -135,7 +135,8 @@ export function JobCard({ job }: JobCardProps) {
               <Badge variant="secondary" className="font-mono text-xs">
                 {job.experience_level}
               </Badge>
-              {job?.metadata?.compensation && (
+              {/* Non-YC compensation badges */}
+              {platform !== "ycombinator" && job?.metadata?.compensation && (
                 <Badge
                   variant="outline"
                   className="font-mono text-xs border-primary/30 text-primary"
@@ -143,7 +144,8 @@ export function JobCard({ job }: JobCardProps) {
                   {job?.metadata?.compensation?.split("•")[0]?.trim()}
                 </Badge>
               )}
-              {job?.metadata?.compensation?.toLowerCase().includes("equity") && (
+              {platform !== "ycombinator" &&
+                job?.metadata?.compensation?.toLowerCase().includes("equity") && (
                 <Badge
                   variant="outline"
                   className="font-mono text-xs border-green-500/30 text-green-600 dark:text-green-400"
@@ -151,7 +153,8 @@ export function JobCard({ job }: JobCardProps) {
                   Offers Equity
                 </Badge>
               )}
-              {job?.metadata?.compensation?.toLowerCase().includes("bonus") && (
+              {platform !== "ycombinator" &&
+                job?.metadata?.compensation?.toLowerCase().includes("bonus") && (
                 <Badge
                   variant="outline"
                   className="font-mono text-xs border-amber-500/30 text-amber-600 dark:text-amber-400"
@@ -159,12 +162,60 @@ export function JobCard({ job }: JobCardProps) {
                   Offers Bonus
                 </Badge>
               )}
-              <Badge
-                variant="outline"
-                className="font-mono text-xs border-primary/30 text-primary"
-              >
-                {job.platform?.charAt(0).toUpperCase() + job.platform?.slice(1)}
-              </Badge>
+              {/* YC-specific metadata badges */}
+              {platform === "ycombinator" && job?.metadata?.salaryRange && (
+                <Badge
+                  variant="outline"
+                  className="font-mono text-xs border-primary/30 text-primary"
+                >
+                  {job.metadata.salaryRange}
+                </Badge>
+              )}
+              {platform === "ycombinator" && job?.metadata?.equityRange && (
+                <Badge
+                  variant="outline"
+                  className="font-mono text-xs border-green-500/30 text-green-600 dark:text-green-400"
+                >
+                  {job.metadata.equityRange}
+                </Badge>
+              )}
+              {platform === "ycombinator" && job?.metadata?.minExperience && (
+                <Badge
+                  variant="outline"
+                  className="font-mono text-xs"
+                >
+                  {job.metadata.minExperience}
+                </Badge>
+              )}
+              {platform === "ycombinator" && job?.metadata?.visa && (
+                <Badge
+                  variant="outline"
+                  className="font-mono text-xs"
+                >
+                  {job.metadata.visa}
+                </Badge>
+              )}
+              {/* Platform tag */}
+              {platform === "ycombinator" ? (
+                <Badge
+                  variant="outline"
+                  className="font-mono text-xs border-orange-500/30 text-orange-500 gap-1"
+                >
+                  <img
+                    src="https://www.vectorlogo.zone/logos/ycombinator/ycombinator-icon.svg"
+                    alt="Y Combinator"
+                    className="h-3.5 w-3.5"
+                  />
+                  YC
+                </Badge>
+              ) : (
+                <Badge
+                  variant="outline"
+                  className="font-mono text-xs border-primary/30 text-primary"
+                >
+                  {platform?.charAt(0).toUpperCase() + platform?.slice(1)}
+                </Badge>
+              )}
             </div>
 
             {skillsList.length > 0 ? (

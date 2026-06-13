@@ -176,15 +176,18 @@ export default function JobPageClient({ job }: Props) {
                     {job.experience_level}
                   </JobBadge>
                   <JobBadge variant="muted">{job.domain}</JobBadge>
-                  {job?.metadata?.compensation && (
+                  {/* Non-YC compensation badges */}
+                  {job.platform !== "ycombinator" &&
+                    job?.metadata?.compensation && (
                     <JobBadge variant="primary">
                       <Banknote className="mr-2 h-4 w-4" />
                       {job.metadata.compensation.split("•")[0]?.trim()}
                     </JobBadge>
                   )}
-                  {job?.metadata?.compensation
-                    ?.toLowerCase()
-                    .includes("equity") && (
+                  {job.platform !== "ycombinator" &&
+                    job?.metadata?.compensation
+                      ?.toLowerCase()
+                      .includes("equity") && (
                     <JobBadge
                       variant="default"
                       className="border-green-500/30 text-green-600 dark:text-green-400"
@@ -192,9 +195,10 @@ export default function JobPageClient({ job }: Props) {
                       Offers Equity
                     </JobBadge>
                   )}
-                  {job?.metadata?.compensation
-                    ?.toLowerCase()
-                    .includes("bonus") && (
+                  {job.platform !== "ycombinator" &&
+                    job?.metadata?.compensation
+                      ?.toLowerCase()
+                      .includes("bonus") && (
                     <JobBadge
                       variant="default"
                       className="border-amber-500/30 text-amber-600 dark:text-amber-400"
@@ -202,6 +206,54 @@ export default function JobPageClient({ job }: Props) {
                       Offers Bonus
                     </JobBadge>
                   )}
+                  {/* YC-specific metadata badges */}
+                  {job.platform === "ycombinator" &&
+                    job?.metadata?.salaryRange && (
+                    <JobBadge variant="primary">
+                      <Banknote className="mr-2 h-4 w-4" />
+                      {job.metadata.salaryRange}
+                    </JobBadge>
+                  )}
+                  {job.platform === "ycombinator" &&
+                    job?.metadata?.equityRange && (
+                    <JobBadge
+                      variant="default"
+                      className="border-green-500/30 text-green-600 dark:text-green-400"
+                    >
+                      {job.metadata.equityRange}
+                    </JobBadge>
+                  )}
+                  {job.platform === "ycombinator" &&
+                    job?.metadata?.minExperience && (
+                    <JobBadge variant="default">
+                      {job.metadata.minExperience}
+                    </JobBadge>
+                  )}
+                  {job.platform === "ycombinator" &&
+                    job?.metadata?.visa && (
+                    <JobBadge variant="default">
+                      {job.metadata.visa}
+                    </JobBadge>
+                  )}
+                  {/* Platform tag */}
+                  {job.platform === "ycombinator" ? (
+                    <JobBadge
+                      variant="default"
+                      className="border-orange-500/30 text-orange-500 gap-1.5"
+                    >
+                      <img
+                        src="https://www.vectorlogo.zone/logos/ycombinator/ycombinator-icon.svg"
+                        alt="Y Combinator"
+                        className="h-4 w-4"
+                      />
+                      YC
+                    </JobBadge>
+                  ) : job.platform ? (
+                    <JobBadge variant="muted">
+                      {job.platform.charAt(0).toUpperCase() +
+                        job.platform.slice(1)}
+                    </JobBadge>
+                  ) : null}
                   {postedAgo && (
                     <JobBadge variant="muted">
                       <Clock className="mr-1.5 h-3 w-3" />
@@ -315,6 +367,63 @@ export default function JobPageClient({ job }: Props) {
                       </span>
                       <span className="text-sm font-medium text-foreground">
                         {job.domain}
+                      </span>
+                    </div>
+                    {job.platform === "ycombinator" &&
+                      job?.metadata?.salaryRange && (
+                      <div className="flex items-center justify-between border-b border-border pb-4">
+                        <span className="text-sm text-muted-foreground">
+                          Salary
+                        </span>
+                        <span className="text-sm font-medium text-foreground">
+                          {job.metadata.salaryRange}
+                        </span>
+                      </div>
+                    )}
+                    {job.platform === "ycombinator" &&
+                      job?.metadata?.equityRange && (
+                      <div className="flex items-center justify-between border-b border-border pb-4">
+                        <span className="text-sm text-muted-foreground">
+                          Equity
+                        </span>
+                        <span className="text-sm font-medium text-foreground">
+                          {job.metadata.equityRange}
+                        </span>
+                      </div>
+                    )}
+                    {job.platform === "ycombinator" &&
+                      job?.metadata?.visa && (
+                      <div className="flex items-center justify-between border-b border-border pb-4">
+                        <span className="text-sm text-muted-foreground">
+                          Visa
+                        </span>
+                        <span className="text-sm font-medium text-foreground">
+                          {job.metadata.visa}
+                        </span>
+                      </div>
+                    )}
+                    {job.platform === "ycombinator" &&
+                      job?.metadata?.minExperience && (
+                      <div className="flex items-center justify-between border-b border-border pb-4">
+                        <span className="text-sm text-muted-foreground">
+                          Experience
+                        </span>
+                        <span className="text-sm font-medium text-foreground">
+                          {job.metadata.minExperience}
+                        </span>
+                      </div>
+                    )}
+                    <div className="flex items-center justify-between border-b border-border pb-4">
+                      <span className="text-sm text-muted-foreground">
+                        Source
+                      </span>
+                      <span className="text-sm font-medium text-foreground">
+                        {job.platform === "ycombinator"
+                          ? "YC"
+                          : job.platform
+                            ? job.platform.charAt(0).toUpperCase() +
+                              job.platform.slice(1)
+                            : ""}
                       </span>
                     </div>
                     {postedAgo && (
