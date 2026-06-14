@@ -20,34 +20,6 @@ const Footer = () => {
               and find the right roles using real hiring data — not noise.
             </p>
 
-            <div className="mt-4 flex flex-col gap-3">
-              <a
-                href="https://startupfa.me"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block"
-              >
-                <img
-                  src="https://startupfa.me/badges/featured-badge-small.webp"
-                  alt="WorkWay - Featured on Startup Fame"
-                  width={224}
-                  height={36}
-                />
-              </a>
-              <a
-                href="https://turbo0.com/item/workway"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block"
-              >
-                <img
-                  src="https://img.turbo0.com/badge-listed-dark.svg"
-                  alt="Listed on Turbo0"
-                  className="h-[36px] w-auto"
-                />
-              </a>
-            </div>
-
             <p className="mt-6 text-xs text-muted-foreground/60">
               © {new Date().getFullYear()} WorkWay. Built in public.
             </p>
@@ -164,6 +136,55 @@ const Footer = () => {
           </div>
         </div>
       </div>
+      {/* Featured On badges */}
+      <div className="border-t border-border/40">
+        <div className="max-w-6xl mx-auto px-6 py-6">
+          <p className="text-xs uppercase tracking-widest text-muted-foreground/60 font-mono text-center mb-4">
+            Featured on
+          </p>
+          <div className="flex items-center justify-center gap-5 overflow-x-auto no-scrollbar">
+            <a
+              href="https://startupfa.me"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0 opacity-70 hover:opacity-100 transition-opacity"
+            >
+              <img
+                src="https://startupfa.me/badges/featured-badge-small.webp"
+                alt="WorkWay - Featured on Startup Fame"
+                width={180}
+                height={30}
+              />
+            </a>
+            <a
+              href="https://turbo0.com/item/workway"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0 opacity-70 hover:opacity-100 transition-opacity"
+            >
+              <img
+                src="https://img.turbo0.com/badge-listed-dark.svg"
+                alt="Listed on Turbo0"
+                className="h-[30px] w-auto"
+              />
+            </a>
+            <a
+              href="https://similarlabs.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0 opacity-70 hover:opacity-100 transition-opacity"
+            >
+              <img
+                src="https://similarlabs.com/similarlabs-embed-badge-dark.svg"
+                alt="Listed on Similarlabs"
+                width={124}
+                height={30}
+              />
+            </a>
+          </div>
+        </div>
+      </div>
+
       <div className="border-border/60">
         <div className="mx-auto max-w-8xl px-6 py-5 font-display italic text-center text-[14vw] sm:text-[10vw] leading-none text-gradient opacity-20 select-none -mb-4">
           workway.dev
