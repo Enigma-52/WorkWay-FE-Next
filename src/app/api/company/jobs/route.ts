@@ -4,11 +4,13 @@ import { NextResponse } from "next/server";
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const slug = searchParams.get("slug") || "";
+  const domain = searchParams.get("domain") || "";
   const page = searchParams.get("page") || "1";
   const limit = searchParams.get("limit") || "5";
 
   const backendUrl = new URL("/api/company/jobs", env.BACKEND_API_URL);
   if (slug) backendUrl.searchParams.set("slug", slug);
+  if (domain) backendUrl.searchParams.set("domain", domain);
   backendUrl.searchParams.set("page", page);
   backendUrl.searchParams.set("limit", limit);
 
