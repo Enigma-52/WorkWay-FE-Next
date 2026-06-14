@@ -9,6 +9,21 @@ const Hero = () => {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-brand/10 blur-[120px] pointer-events-none" />
 
       <div className="relative mx-auto max-w-5xl px-6 text-center">
+        <div
+          className="mb-6 flex justify-center animate-fade-up"
+          style={{ animationDelay: "50ms" }}
+        >
+          <a
+            href="https://startupfa.me/s/workway?utm_source=www.workway.dev"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/60 backdrop-blur px-4 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:border-primary/30 transition-colors"
+          >
+            <span className="text-primary">&#9733;</span>
+            Featured on <span className="text-foreground font-semibold">Startup Fame</span>
+          </a>
+        </div>
+
         <h1
           className="font-display text-5xl sm:text-7xl md:text-8xl leading-[0.95] tracking-tight animate-fade-up"
           style={{ animationDelay: "100ms" }}
