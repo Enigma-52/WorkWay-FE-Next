@@ -31,9 +31,11 @@ export async function generateMetadata({
   const topSkills = job.skills?.slice(0, 3).map((s) => s.name) ?? [];
   const skillsText = topSkills.length > 0 ? ` Skills: ${topSkills.join(", ")}.` : "";
 
+  const ycTag = job.platform === "ycombinator" ? " (YC)" : "";
+
   return buildPageMetadata({
-    title: `${job.title} at ${job.company} — ${job.employment_type} Job in ${job.location} | WorkWay`,
-    description: `Apply for the ${job.title} role at ${job.company} in ${job.location}.${skillsText} ${job.experience_level} · ${job.employment_type}. View full details and apply on WorkWay.`,
+    title: `${job.title} at ${job.company}${ycTag} — ${job.employment_type} Job in ${job.location} | WorkWay`,
+    description: `Apply for the ${job.title} role at ${job.company}${ycTag} in ${job.location}.${skillsText} ${job.experience_level} · ${job.employment_type}. View full details and apply on WorkWay.`,
     path: `/job/${jobSlug}`,
     image: job.company_logo_url || "/logo.png",
     keywords: [
