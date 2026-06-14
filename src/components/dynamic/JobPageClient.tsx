@@ -225,16 +225,18 @@ export default function JobPageClient({ job }: Props) {
                     </h3>
 
                     <div className="flex flex-wrap gap-3">
-                      {job.skills.map((skill) => (
-                        <Link key={skill.slug} href={`/skill/${skill.slug}`}>
-                          <JobBadge
-                            variant="default"
-                            className="cursor-pointer hover:bg-primary/10 transition-colors"
-                          >
-                            {skill.name}
-                          </JobBadge>
-                        </Link>
-                      ))}
+                      {job.skills
+                        .filter((skill) => skill.slug && skill.name)
+                        .map((skill) => (
+                          <Link key={skill.slug} href={`/skill/${skill.slug}`}>
+                            <JobBadge
+                              variant="default"
+                              className="cursor-pointer hover:bg-primary/10 transition-colors"
+                            >
+                              {skill.name}
+                            </JobBadge>
+                          </Link>
+                        ))}
                     </div>
                   </div>
                 )}
