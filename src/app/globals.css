@@ -271,6 +271,14 @@ code, pre, .font-mono {
   .bg-gradient-hero {
     background: var(--gradient-hero);
   }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @layer utilities {
