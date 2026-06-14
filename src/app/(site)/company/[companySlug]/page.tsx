@@ -32,7 +32,7 @@ export async function generateMetadata({
     });
   }
 
-  const count = company.jobListings?.length || 0;
+  const count = company.totalJobs || 0;
   const title =
     count > 0
       ? `${company.name} Jobs & Careers - ${count} Open Roles | WorkWay`

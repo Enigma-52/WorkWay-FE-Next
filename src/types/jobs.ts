@@ -72,8 +72,9 @@ export type CompanyDetails = {
   platform?: string;
   namespace?: string;
   metadata?: CompanyMetadata;
-  jobListings: JobListing[];
+  totalJobs: number;
   recentlyPostedJobs: JobListing[];
+  domainStats: { domain: string; count: number }[];
 };
 
 export type DomainJobsPayload = {

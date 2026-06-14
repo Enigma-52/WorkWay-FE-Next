@@ -14,9 +14,7 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
   const { data: session, status } = useSession();
   const isYC = company.platform === "ycombinator";
   const metadata = company.metadata;
-  const jobs = company.jobListings || [];
-  const locations = [...new Set(jobs.map((j) => j.location))];
-  const domains = [...new Set(jobs.map((j) => j.domain))];
+  const domainStats = company.domainStats || [];
 
   const companyLocation =
     (company.location as { location?: string })?.location || null;
@@ -30,11 +28,10 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
   const stats = [
     {
       label: "Open Roles",
-      value: company.jobListings?.length || 0,
+      value: company.totalJobs || 0,
       icon: Briefcase,
     },
-    { label: "Locations", value: locations.length, icon: MapPin },
-    { label: "Domains", value: domains.length, icon: Users },
+    { label: "Domains", value: domainStats.length, icon: Users },
   ];
 
   // Check follow status once session loads

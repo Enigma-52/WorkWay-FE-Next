@@ -1,55 +1,53 @@
 "use client";
-import { useState, useMemo } from "react";
-import { Briefcase } from "lucide-react";
-import {
-  type JobListing,
-  getUniqueLocations,
-  getUniqueExperienceLevels,
-  getJobsByDomain,
-} from "@/data/companyData";
-import { JobFilters } from "./JobFilters";
-import { DomainAccordion } from "./DomainAccordion";
+import { useState, useEffect, useCallback } from "react";
+import { Briefcase, Loader2 } from "lucide-react";
+import { JobCard } from "./CompanyPageJobCard";
+
+const PAGE_SIZE = 5;
 
 interface JobsSectionProps {
-  jobs: JobListing[];
+  companySlug: string;
+  totalJobs: number;
 }
 
-export function JobsSection({ jobs }: JobsSectionProps) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedLocation, setSelectedLocation] = useState("all");
-  const [selectedExperience, setSelectedExperience] = useState("all");
+export function JobsSection({ companySlug, totalJobs }: JobsSectionProps) {
+  const [jobs, setJobs] = useState<any[]>([]);
+  const [page, setPage] = useState(1);
+  const [hasNext, setHasNext] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
 
-  const locations = useMemo(() => getUniqueLocations(jobs), [jobs]);
-  const experienceLevels = useMemo(
-    () => getUniqueExperienceLevels(jobs),
-    [jobs]
-  );
+  const fetchJobs = useCallback(async (pageNum: number) => {
+    const res = await fetch(
+      `/api/company/jobs?slug=${encodeURIComponent(companySlug)}&page=${pageNum}&limit=${PAGE_SIZE}`
+    );
+    if (!res.ok) return;
+    const data = await res.json();
+    return data;
+  }, [companySlug]);
 
-  const filteredJobs = useMemo(() => {
-    return jobs.filter((job) => {
-      const matchesSearch =
-        searchQuery === "" ||
-        job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        job.domain.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesLocation =
-        selectedLocation === "all" || job.location === selectedLocation;
-      const matchesExperience =
-        selectedExperience === "all" ||
-        job.experience_level === selectedExperience;
-
-      return matchesSearch && matchesLocation && matchesExperience;
+  useEffect(() => {
+    setLoading(true);
+    fetchJobs(1).then((data) => {
+      if (data) {
+        setJobs(data.jobs);
+        setHasNext(data.meta.has_next);
+        setPage(1);
+      }
+      setLoading(false);
     });
-  }, [jobs, searchQuery, selectedLocation, selectedExperience]);
+  }, [fetchJobs]);
 
-  const jobsByDomain = useMemo(
-    () => getJobsByDomain(filteredJobs),
-    [filteredJobs]
-  );
-
-  const handleReset = () => {
-    setSearchQuery("");
-    setSelectedLocation("all");
-    setSelectedExperience("all");
+  const loadMore = async () => {
+    const nextPage = page + 1;
+    setLoadingMore(true);
+    const data = await fetchJobs(nextPage);
+    if (data) {
+      setJobs((prev) => [...prev, ...data.jobs]);
+      setHasNext(data.meta.has_next);
+      setPage(nextPage);
+    }
+    setLoadingMore(false);
   };
 
   return (
@@ -62,27 +60,45 @@ export function JobsSection({ jobs }: JobsSectionProps) {
           <div>
             <h2 className="text-xl font-semibold">Open Positions</h2>
             <p className="text-sm text-muted-foreground">
-              {filteredJobs.length} of {jobs.length} roles
+              {jobs.length} of {totalJobs} roles
             </p>
           </div>
         </div>
       </div>
 
-      <JobFilters
-        searchQuery={searchQuery}
-        selectedLocation={selectedLocation}
-        selectedExperience={selectedExperience}
-        onApply={({ searchQuery: q, selectedLocation: loc, selectedExperience: exp }) => {
-          setSearchQuery(q);
-          setSelectedLocation(loc);
-          setSelectedExperience(exp);
-        }}
-        locations={locations}
-        experienceLevels={experienceLevels}
-        onReset={handleReset}
-      />
+      {loading ? (
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+        </div>
+      ) : jobs.length === 0 ? (
+        <div className="text-center py-12 text-muted-foreground">
+          <p>No open positions found.</p>
+        </div>
+      ) : (
+        <div className="rounded-xl border border-border bg-card overflow-hidden">
+          {jobs.map((job) => (
+            <JobCard key={job.id} job={job} />
+          ))}
+        </div>
+      )}
 
-      <DomainAccordion jobsByDomain={jobsByDomain} />
+      {hasNext && !loading && (
+        <button
+          type="button"
+          onClick={loadMore}
+          disabled={loadingMore}
+          className="w-full py-3 text-sm font-medium text-primary hover:text-primary/80 transition-colors border border-border rounded-xl bg-secondary/20 hover:bg-secondary/40 disabled:opacity-50"
+        >
+          {loadingMore ? (
+            <span className="flex items-center justify-center gap-2">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              Loading...
+            </span>
+          ) : (
+            `Load more roles`
+          )}
+        </button>
+      )}
     </section>
   );
 }
