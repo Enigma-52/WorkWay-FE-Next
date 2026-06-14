@@ -27,7 +27,7 @@ export default function CompanyPageClient({ company }: Props) {
             {hasJobs && (
               <>
                 <RecentlyPostedSection jobs={company.recentlyPostedJobs as any} />
-                <JobsSection companySlug={company.slug} totalJobs={company.totalJobs} />
+                <JobsSection companySlug={company.slug} totalJobs={company.totalJobs} domainStats={company.domainStats} />
               </>
             )}
             {!hasJobs && !isYC && (
