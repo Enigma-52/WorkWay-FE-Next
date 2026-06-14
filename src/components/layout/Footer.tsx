@@ -154,7 +154,7 @@ const Footer = () => {
                 <a href="https://similarlabs.com" target="_blank" rel="noopener noreferrer" className="shrink-0 opacity-60 hover:opacity-100 transition-opacity">
                   <img src="https://similarlabs.com/similarlabs-embed-badge-dark.svg" alt="Listed on Similarlabs" width={155} height={40} />
                 </a>
-                <a href="https://drchecker.net/item/workway.dev" target="_blank" rel="noopener noreferrer" className="shrink-0 opacity-60 hover:opacity-100 transition-opacity">
+                <a href="https://drchecker.net" target="_blank" rel="noopener noreferrer" className="shrink-0 opacity-60 hover:opacity-100 transition-opacity">
                   <img src="https://drchecker.net/api/badge?domain=workway.dev" alt="DR Checker - Domain Rating" className="h-[40px] w-auto" />
                 </a>
                 <a href="https://findly.tools/workway?utm_source=workway" target="_blank" rel="noopener noreferrer" className="shrink-0 opacity-60 hover:opacity-100 transition-opacity">
@@ -165,6 +165,9 @@ const Footer = () => {
                 </a>
                 <a href="https://wired.business" target="_blank" rel="noopener noreferrer" className="shrink-0 opacity-60 hover:opacity-100 transition-opacity">
                   <img src="https://wired.business/badge0-dark.svg" alt="Featured on Wired Business" className="h-[40px] w-auto" />
+                </a>
+                <a href="https://frogdr.com/workway.dev?utm_source=workway.dev" target="_blank" rel="noopener noreferrer" className="shrink-0 opacity-60 hover:opacity-100 transition-opacity">
+                  <img src="https://frogdr.com/workway.dev/badge-dark.svg?badge=1" alt="Monitor your Domain Rating with FrogDR" className="h-[40px] w-auto" />
                 </a>
               </div>
             ))}
