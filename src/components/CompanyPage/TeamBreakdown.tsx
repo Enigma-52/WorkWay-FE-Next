@@ -1,13 +1,13 @@
 "use client";
-import { type JobListing, getDomainStats } from "@/data/companyData";
 
 interface TeamBreakdownProps {
-  jobs: JobListing[];
+  domainStats: { domain: string; count: number }[];
 }
 
-export function TeamBreakdown({ jobs }: TeamBreakdownProps) {
-  const stats = getDomainStats(jobs);
-  const maxCount = Math.max(...stats.map((s) => s.count));
+export function TeamBreakdown({ domainStats }: TeamBreakdownProps) {
+  if (!domainStats || domainStats.length === 0) return null;
+
+  const maxCount = Math.max(...domainStats.map((s) => s.count));
 
   return (
     <section className="border border-border rounded-xl gradient-card overflow-hidden">
@@ -17,14 +17,13 @@ export function TeamBreakdown({ jobs }: TeamBreakdownProps) {
       </div>
 
       <div className="divide-y divide-border">
-        {stats.map((stat) => (
+        {domainStats.map((stat) => (
           <div
             key={stat.domain}
             className="px-6 py-4 flex items-center gap-4 hover:bg-secondary/30 transition-colors"
           >
             <span className="flex-1 font-medium">{stat.domain}</span>
 
-            {/* Progress bar */}
             <div className="w-32 h-2 bg-secondary rounded-full overflow-hidden">
               <div
                 className="h-full bg-primary rounded-full transition-all duration-500"

@@ -12,7 +12,7 @@ type Props = {
 
 export default function CompanyPageClient({ company }: Props) {
   const isYC = company.platform === "ycombinator";
-  const hasJobs = (company.jobListings?.length || 0) > 0;
+  const hasJobs = (company.totalJobs || 0) > 0;
 
   return (
     <div className="min-h-screen bg-background">
@@ -27,7 +27,7 @@ export default function CompanyPageClient({ company }: Props) {
             {hasJobs && (
               <>
                 <RecentlyPostedSection jobs={company.recentlyPostedJobs as any} />
-                <JobsSection jobs={company.jobListings as any} />
+                <JobsSection companySlug={company.slug} totalJobs={company.totalJobs} />
               </>
             )}
             {!hasJobs && !isYC && (
@@ -48,7 +48,7 @@ export default function CompanyPageClient({ company }: Props) {
               {isYC ? (
                 <YCSidebar company={company} />
               ) : (
-                hasJobs && <TeamBreakdown jobs={company.jobListings as any} />
+                hasJobs && <TeamBreakdown domainStats={company.domainStats} />
               )}
             </div>
           </aside>
