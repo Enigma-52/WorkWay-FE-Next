@@ -136,51 +136,38 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      {/* Featured On badges */}
-      <div className="border-t border-border/40">
-        <div className="max-w-6xl mx-auto px-6 py-6">
-          <p className="text-xs uppercase tracking-widest text-muted-foreground/60 font-mono text-center mb-4">
-            Featured on
-          </p>
-          <div className="flex items-center justify-center gap-5 overflow-x-auto no-scrollbar">
-            <a
-              href="https://startupfa.me"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="shrink-0 opacity-70 hover:opacity-100 transition-opacity"
-            >
-              <img
-                src="https://startupfa.me/badges/featured-badge-small.webp"
-                alt="WorkWay - Featured on Startup Fame"
-                width={180}
-                height={30}
-              />
-            </a>
-            <a
-              href="https://turbo0.com/item/workway"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="shrink-0 opacity-70 hover:opacity-100 transition-opacity"
-            >
-              <img
-                src="https://img.turbo0.com/badge-listed-dark.svg"
-                alt="Listed on Turbo0"
-                className="h-[30px] w-auto"
-              />
-            </a>
-            <a
-              href="https://similarlabs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="shrink-0 opacity-70 hover:opacity-100 transition-opacity"
-            >
-              <img
-                src="https://similarlabs.com/similarlabs-embed-badge-dark.svg"
-                alt="Listed on Similarlabs"
-                width={124}
-                height={30}
-              />
-            </a>
+      {/* Featured On badges — auto-scrolling marquee */}
+      <div className="border-t border-border/40 py-6 overflow-hidden">
+        <p className="text-xs uppercase tracking-widest text-muted-foreground/60 font-mono text-center mb-4">
+          Featured on
+        </p>
+        <div className="marquee-mask">
+          <div className="flex" style={{ animation: "marquee 25s linear infinite", width: "max-content" }}>
+            {[0, 1].map((copy) => (
+              <div key={copy} className="flex items-center gap-12 px-6">
+                <a href="https://startupfa.me" target="_blank" rel="noopener noreferrer" className="shrink-0 opacity-60 hover:opacity-100 transition-opacity">
+                  <img src="https://startupfa.me/badges/featured-badge-small.webp" alt="WorkWay - Featured on Startup Fame" width={224} height={40} />
+                </a>
+                <a href="https://turbo0.com/item/workway" target="_blank" rel="noopener noreferrer" className="shrink-0 opacity-60 hover:opacity-100 transition-opacity">
+                  <img src="https://img.turbo0.com/badge-listed-dark.svg" alt="Listed on Turbo0" className="h-[40px] w-auto" />
+                </a>
+                <a href="https://similarlabs.com" target="_blank" rel="noopener noreferrer" className="shrink-0 opacity-60 hover:opacity-100 transition-opacity">
+                  <img src="https://similarlabs.com/similarlabs-embed-badge-dark.svg" alt="Listed on Similarlabs" width={155} height={40} />
+                </a>
+                <a href="https://drchecker.net/item/workway.dev" target="_blank" rel="noopener noreferrer" className="shrink-0 opacity-60 hover:opacity-100 transition-opacity">
+                  <img src="https://drchecker.net/api/badge?domain=workway.dev" alt="DR Checker - Domain Rating" className="h-[40px] w-auto" />
+                </a>
+                <a href="https://findly.tools/workway?utm_source=workway" target="_blank" rel="noopener noreferrer" className="shrink-0 opacity-60 hover:opacity-100 transition-opacity">
+                  <img src="https://findly.tools/badges/findly-tools-badge-dark.svg" alt="Featured on Findly.tools" width={220} height={40} />
+                </a>
+                <a href="https://fazier.com/launches/www.workway.dev" target="_blank" rel="noopener noreferrer" className="shrink-0 opacity-60 hover:opacity-100 transition-opacity">
+                  <img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=featured&theme=dark" alt="Featured on Fazier" className="h-[40px] w-auto" />
+                </a>
+                <a href="https://wired.business" target="_blank" rel="noopener noreferrer" className="shrink-0 opacity-60 hover:opacity-100 transition-opacity">
+                  <img src="https://wired.business/badge0-dark.svg" alt="Featured on Wired Business" className="h-[40px] w-auto" />
+                </a>
+              </div>
+            ))}
           </div>
         </div>
       </div>
