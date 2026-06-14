@@ -20,6 +20,20 @@ const Footer = () => {
               and find the right roles using real hiring data — not noise.
             </p>
 
+            <a
+              href="https://startupfa.me"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-block"
+            >
+              <img
+                src="https://startupfa.me/badges/featured-badge-small.webp"
+                alt="WorkWay - Featured on Startup Fame"
+                width={224}
+                height={36}
+              />
+            </a>
+
             <p className="mt-6 text-xs text-muted-foreground/60">
               © {new Date().getFullYear()} WorkWay. Built in public.
             </p>
