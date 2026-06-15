@@ -47,10 +47,32 @@ function parseBaseSalary(compensation?: string) {
   };
 }
 
+function extractCountryFromLocation(location: string): string {
+  const loc = location.toLowerCase();
+  const countryMap: Record<string, string> = {
+    "usa": "USA", "us": "USA", "united states": "USA",
+    "uk": "United Kingdom", "united kingdom": "United Kingdom",
+    "canada": "Canada", "india": "India", "germany": "Germany",
+    "france": "France", "australia": "Australia", "singapore": "Singapore",
+    "japan": "Japan", "brazil": "Brazil", "netherlands": "Netherlands",
+    "spain": "Spain", "italy": "Italy", "sweden": "Sweden",
+    "ireland": "Ireland", "israel": "Israel", "south korea": "South Korea",
+  };
+  for (const [key, name] of Object.entries(countryMap)) {
+    if (loc.includes(key)) return name;
+  }
+  // Check common US state/city patterns
+  if (/\b(ca|ny|tx|sf|nyc|san francisco|new york|seattle|austin|boston|chicago|denver|miami|la|los angeles)\b/i.test(loc)) {
+    return "USA";
+  }
+  return "";
+}
+
 export function buildJobPostingJsonLd(job: JobDetails) {
   const isRemote = /remote/i.test(job.location);
   const descriptionText = extractJobDescriptionText(job.description);
   const baseSalary = parseBaseSalary(job.metadata?.compensation);
+  const country = extractCountryFromLocation(job.location);
 
   return {
     "@context": "https://schema.org",
@@ -59,7 +81,15 @@ export function buildJobPostingJsonLd(job: JobDetails) {
     description: descriptionText || `${job.title} position at ${job.company} in ${job.location}.`,
     datePosted: job.created_at || undefined,
     employmentType: job.employment_type || undefined,
-    ...(isRemote ? { jobLocationType: "TELECOMMUTE" } : {}),
+    ...(isRemote
+      ? {
+          jobLocationType: "TELECOMMUTE",
+          applicantLocationRequirements: {
+            "@type": "Country",
+            name: country || "Worldwide",
+          },
+        }
+      : {}),
     ...(baseSalary ? { baseSalary } : {}),
     hiringOrganization: {
       "@type": "Organization",
