@@ -4,7 +4,7 @@ const goods = [
   "Post in under 5 minutes",
   "Get candidates who actually fit",
   "Clean pipeline, no spreadsheet chaos",
-  "Real signal from public Hire Me profiles",
+  "Real signal from public Talent Profiles",
 ];
 const bads = [
   "ATS bloat",
