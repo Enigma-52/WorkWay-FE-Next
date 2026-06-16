@@ -446,7 +446,7 @@ export default function JobPageClient({ job }: Props) {
                 More roles at {job.company}
               </h2>
               <Link
-                href={`/company/${companyJobs[0]?.company_slug || ""}`}
+                href={`/company/${job.company_slug}`}
                 className="hidden items-center gap-1 text-sm font-medium text-primary hover:underline md:flex"
               >
                 View company profile
