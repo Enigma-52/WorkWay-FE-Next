@@ -169,6 +169,12 @@ const Footer = () => {
                 <a href="https://frogdr.com/workway.dev?utm_source=workway.dev" target="_blank" rel="noopener noreferrer" className="shrink-0 opacity-60 hover:opacity-100 transition-opacity">
                   <img src="https://frogdr.com/workway.dev/badge-dark.svg?badge=1" alt="Monitor your Domain Rating with FrogDR" className="h-[40px] w-auto" />
                 </a>
+                <a href="https://ufind.best/products/workway?utm_source=ufind.best" target="_blank" rel="noopener" className="shrink-0 opacity-60 hover:opacity-100 transition-opacity">
+                  <img src="https://ufind.best/badges/ufind-best-badge-light.svg" alt="Featured on ufind.best" width={150} height={40} />
+                </a>
+                <a href="https://dang.ai" target="_blank" rel="dofollow noopener" className="shrink-0 opacity-60 hover:opacity-100 transition-opacity">
+                  <img src="https://assets.dang.ai/badges/dang-verified-dark.png" alt="Verified on DANG!" width={260} className="h-[40px] w-auto" />
+                </a>
               </div>
             ))}
           </div>
