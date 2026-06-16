@@ -29,7 +29,7 @@ const Navbar = () => {
           <a href="/companies" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Companies</a>
           <a href="/domains" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Domains</a>
           <a href="/skills" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Skills</a>
-          <a href="/hireme" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Create your Hire Me Profile</a>
+          <a href="/dashboard/seeker/talent-profile" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Talent Profile</a>
         </nav>
 
         {/* CTA */}

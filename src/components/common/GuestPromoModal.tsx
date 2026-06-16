@@ -50,7 +50,7 @@ export default function GuestPromoModal() {
         <ul className="space-y-2 mb-4">
           {[
             { icon: BarChart2, text: "Track all your applications" },
-            { icon: UserCircle, text: "Create a Hire Me profile" },
+            { icon: UserCircle, text: "Create a Talent Profile" },
             { icon: Sparkles, text: "AI-powered job search" },
           ].map(({ icon: Icon, text }) => (
             <li key={text} className="flex items-center gap-2 text-sm text-muted-foreground">

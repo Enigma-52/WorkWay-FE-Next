@@ -35,7 +35,7 @@ export default async function SeekerOverviewPage() {
     : [0, 0];
 
   return (
-    <div>
+    <div className="max-w-4xl mx-auto">
       <div className="mb-8">
         <h1 className="text-2xl font-bold mb-1">Welcome back, {name} 👋</h1>
         <p className="text-muted-foreground text-sm">Your job search dashboard — track, apply, and get hired.</p>

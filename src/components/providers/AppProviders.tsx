@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { SessionProvider } from "next-auth/react";
+import { Toaster } from "sonner";
 import GuestPromoModal from "@/components/common/GuestPromoModal";
 import { JobStatusProvider } from "@/contexts/JobStatusContext";
 
@@ -15,6 +16,7 @@ export default function AppProviders({ children }: AppProvidersProps) {
       <JobStatusProvider>
         {children}
         <GuestPromoModal />
+        <Toaster richColors position="bottom-right" />
       </JobStatusProvider>
     </SessionProvider>
   );

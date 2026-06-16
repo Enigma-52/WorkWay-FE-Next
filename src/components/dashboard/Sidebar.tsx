@@ -28,7 +28,7 @@ const seekerNav: NavItem[] = [
   { label: "Applications", href: "/dashboard/seeker/applications", icon: FileText },
   { label: "Saved Jobs", href: "/dashboard/seeker/saved-jobs", icon: Bookmark },
   { label: "Companies", href: "/dashboard/seeker/companies", icon: Building2 },
-  { label: "Hire Me Profile", href: "/dashboard/seeker/hireme", icon: UserCircle },
+  { label: "Talent Profile", href: "/dashboard/seeker/talent-profile", icon: UserCircle },
 ];
 
 const hirerNav: NavItem[] = [

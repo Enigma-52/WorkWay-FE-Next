@@ -382,7 +382,7 @@ export default function CompaniesPage() {
   const totalJobs = recentJobs.reduce((sum, c) => sum + c.totalOpenRoles, 0);
 
   return (
-    <div>
+    <div className="max-w-4xl mx-auto">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold mb-0.5">Companies</h1>

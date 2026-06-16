@@ -6,14 +6,14 @@ const HireMeProfiles = () => {
       <div className="mx-auto max-w-7xl px-6 grid lg:grid-cols-2 gap-16 items-center">
         <div>
           <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-4">
-            Hire Me Profiles
+            Talent Profiles
           </p>
           <h2 className="font-display text-5xl sm:text-6xl text-gradient leading-[1.05]">
             Your resume, but online{" "}
             <span className="italic text-brand-gradient">and not ugly.</span>
           </h2>
           <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-lg">
-            Every user gets a public Hire Me page. Recruiter opens it,
+            Every user gets a public Talent Profile. Recruiter opens it,
             understands you in 30 seconds. AI helps polish it — you stay in
             control.
           </p>

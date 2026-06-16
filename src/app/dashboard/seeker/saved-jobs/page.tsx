@@ -49,7 +49,7 @@ export default function SavedJobsPage() {
   }
 
   return (
-    <div>
+    <div className="max-w-4xl mx-auto">
       {/* Header */}
       <div className="mb-6 flex items-center justify-between gap-4">
         <div>
