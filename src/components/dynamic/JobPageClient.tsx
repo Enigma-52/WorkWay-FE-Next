@@ -16,8 +16,8 @@ import JobBadge from "@/components/JobPage/JobBadge";
 import JobSection from "@/components/JobPage/JobSection";
 import JobCard from "@/components/JobPage/JobCard";
 import { Button } from "@/components/ui/button";
-import { getDomainSlug } from "@/utils/helper";
-import type { JobDetails } from "@/types/jobs";
+import { getDomainSlug, truncateLocation } from "@/utils/helper";
+import type { JobDetails, SkillJobGroup } from "@/types/jobs";
 import JobViewFeed from "@/components/JobViewFeed/JobViewFeed";
 import AuthModal from "@/components/common/AuthModal";
 import SaveJobButton from "@/components/common/SaveJobButton";
@@ -46,7 +46,7 @@ export default function JobPageClient({ job }: Props) {
   const { data: session } = useSession();
   const pathname = usePathname();
   const { appliedSlugs, addApplied } = useJobStatus();
-  const timeAgo = job.updated_at ? getTimeAgo(job.updated_at) : null;
+  const postedAgo = job.created_at ? getTimeAgo(job.created_at) : null;
   const [applyClicked, setApplyClicked] = useState(false);
   const [appliedStatus, setAppliedStatus] = useState<"saving" | "yes" | "no" | null>(null);
   const [authOpen, setAuthOpen] = useState(false);
@@ -127,10 +127,14 @@ export default function JobPageClient({ job }: Props) {
 
   const domainJobs = job.similarJobsByDomain || [];
   const companyJobs = job.otherJobsByCompany || [];
+  const jobsBySkill: SkillJobGroup[] = job.jobsBySkill || [];
+  const remainingSkills = job.remainingSkills || [];
+  const locationJobs = job.similarLocationJobs || [];
 
   return (
     <div className="flex min-h-screen justify-center bg-background">
       <div className="w-full max-w-7xl">
+        {/* Hero — fully visible to crawlers, no motion */}
         <section className="relative overflow-hidden border-b border-border/50">
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute left-1/2 top-0 h-[500px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/5 blur-[120px]" />
@@ -147,7 +151,7 @@ export default function JobPageClient({ job }: Props) {
               </Link>
             </div>
 
-            <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between lg:gap-8">
               <div className="max-w-3xl">
                 <div className="mb-6">
                   <div className="mb-3 flex items-center gap-3">
@@ -174,11 +178,12 @@ export default function JobPageClient({ job }: Props) {
                           href={job.company_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-primary"
-                        >
-                          {job.company_url
+                          title={job.company_url
                             .replace(/^https?:\/\//, "")
                             .replace(/\/$/, "")}
+                          className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-primary"
+                        >
+                          Visit {job.company} website
                           <ExternalLink className="h-3 w-3" />
                         </a>
                       )}
@@ -191,9 +196,9 @@ export default function JobPageClient({ job }: Props) {
                 </h1>
 
                 <div className="flex flex-wrap gap-3">
-                  <JobBadge variant="primary">
-                    <MapPin className="mr-1.5 h-3 w-3" />
-                    {job.location}
+                  <JobBadge variant="primary" title={job.location}>
+                    <MapPin className="mr-1.5 h-3 w-3 shrink-0" />
+                    {truncateLocation(job.location)}
                   </JobBadge>
                   <JobBadge>
                     <Briefcase className="mr-1.5 h-3 w-3" />
@@ -204,16 +209,88 @@ export default function JobPageClient({ job }: Props) {
                     {job.experience_level}
                   </JobBadge>
                   <JobBadge variant="muted">{job.domain}</JobBadge>
-                  {job?.metadata?.compensation && (
+                  {/* Non-YC compensation badges */}
+                  {job.platform !== "ycombinator" &&
+                    job?.metadata?.compensation && (
                     <JobBadge variant="primary">
                       <Banknote className="mr-2 h-4 w-4" />
-                      {job.metadata.compensation}
+                      {job.metadata.compensation.split("•")[0]?.trim()}
                     </JobBadge>
                   )}
-                  {timeAgo && (
+                  {job.platform !== "ycombinator" &&
+                    job?.metadata?.compensation
+                      ?.toLowerCase()
+                      .includes("equity") && (
+                    <JobBadge
+                      variant="default"
+                      className="border-green-500/30 text-green-600 dark:text-green-400"
+                    >
+                      Offers Equity
+                    </JobBadge>
+                  )}
+                  {job.platform !== "ycombinator" &&
+                    job?.metadata?.compensation
+                      ?.toLowerCase()
+                      .includes("bonus") && (
+                    <JobBadge
+                      variant="default"
+                      className="border-amber-500/30 text-amber-600 dark:text-amber-400"
+                    >
+                      Offers Bonus
+                    </JobBadge>
+                  )}
+                  {/* YC-specific metadata badges */}
+                  {job.platform === "ycombinator" &&
+                    job?.metadata?.salaryRange && (
+                    <JobBadge variant="primary">
+                      <Banknote className="mr-2 h-4 w-4" />
+                      {job.metadata.salaryRange}
+                    </JobBadge>
+                  )}
+                  {job.platform === "ycombinator" &&
+                    job?.metadata?.equityRange && (
+                    <JobBadge
+                      variant="default"
+                      className="border-green-500/30 text-green-600 dark:text-green-400"
+                    >
+                      {job.metadata.equityRange}
+                    </JobBadge>
+                  )}
+                  {job.platform === "ycombinator" &&
+                    job?.metadata?.minExperience && (
+                    <JobBadge variant="default">
+                      {job.metadata.minExperience}
+                    </JobBadge>
+                  )}
+                  {job.platform === "ycombinator" &&
+                    job?.metadata?.visa && (
+                    <JobBadge variant="default">
+                      {job.metadata.visa}
+                    </JobBadge>
+                  )}
+                  {/* Platform tag */}
+                  {job.platform === "ycombinator" ? (
+                    <JobBadge
+                      variant="default"
+                      className="border-orange-500/30 text-orange-500 gap-1.5"
+                    >
+                      <img
+                        src="https://www.vectorlogo.zone/logos/ycombinator/ycombinator-icon.svg"
+                        alt="Y Combinator"
+                        className="h-4 w-4"
+                      />
+                      YC
+                    </JobBadge>
+                  ) : job.platform ? (
+                    <JobBadge variant="muted">
+                      {job.platform.charAt(0).toUpperCase() +
+                        job.platform.slice(1)}
+                    </JobBadge>
+                  ) : null}
+                  {postedAgo && (
                     <JobBadge variant="muted">
                       <Clock className="mr-1.5 h-3 w-3" />
-                      {timeAgo}
+                      Posted {postedAgo}
                     </JobBadge>
                   )}
                 </div>
@@ -242,7 +319,7 @@ export default function JobPageClient({ job }: Props) {
                 )}
               </div>
 
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-3 sm:max-w-sm">
                 <div className="flex items-center gap-2">
                   <a
                     href={job.url}
@@ -321,9 +398,10 @@ export default function JobPageClient({ job }: Props) {
           </div>
         </section>
 
-        <section className="py-16 md:py-24">
-          <div className="container">
-            <div className="grid gap-6 lg:grid-cols-[1fr_380px]">
+        {/* Description + sidebar — fully visible to crawlers */}
+        <section className="py-12 md:py-16 lg:py-24">
+          <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="grid gap-5 lg:grid-cols-[1fr_380px] lg:gap-6">
               <div className="space-y-6">
                 {(Array.isArray(job.description) ? job.description : []).map(
                   (section: any, index: number) => (
@@ -332,6 +410,7 @@ export default function JobPageClient({ job }: Props) {
                       heading={section.heading}
                       content={section.content}
                       index={index}
+                      skills={job.skills}
                     />
                   ),
                 )}
@@ -353,11 +432,14 @@ export default function JobPageClient({ job }: Props) {
                       </span>
                     </div>
                     <div className="flex items-center justify-between border-b border-border pb-4">
-                      <span className="text-sm text-muted-foreground">
+                      <span className="text-sm text-muted-foreground shrink-0">
                         Location
                       </span>
-                      <span className="text-sm font-medium text-foreground">
-                        {job.location}
+                      <span
+                        className="text-sm font-medium text-foreground text-right max-w-[220px]"
+                        title={job.location}
+                      >
+                        {truncateLocation(job.location, 2)}
                       </span>
                     </div>
                     <div className="flex items-center justify-between border-b border-border pb-4">
@@ -384,13 +466,70 @@ export default function JobPageClient({ job }: Props) {
                         {job.domain}
                       </span>
                     </div>
-                    {timeAgo && (
+                    {job.platform === "ycombinator" &&
+                      job?.metadata?.salaryRange && (
+                      <div className="flex items-center justify-between border-b border-border pb-4">
+                        <span className="text-sm text-muted-foreground">
+                          Salary
+                        </span>
+                        <span className="text-sm font-medium text-foreground">
+                          {job.metadata.salaryRange}
+                        </span>
+                      </div>
+                    )}
+                    {job.platform === "ycombinator" &&
+                      job?.metadata?.equityRange && (
+                      <div className="flex items-center justify-between border-b border-border pb-4">
+                        <span className="text-sm text-muted-foreground">
+                          Equity
+                        </span>
+                        <span className="text-sm font-medium text-foreground">
+                          {job.metadata.equityRange}
+                        </span>
+                      </div>
+                    )}
+                    {job.platform === "ycombinator" &&
+                      job?.metadata?.visa && (
+                      <div className="flex items-center justify-between border-b border-border pb-4">
+                        <span className="text-sm text-muted-foreground">
+                          Visa
+                        </span>
+                        <span className="text-sm font-medium text-foreground">
+                          {job.metadata.visa}
+                        </span>
+                      </div>
+                    )}
+                    {job.platform === "ycombinator" &&
+                      job?.metadata?.minExperience && (
+                      <div className="flex items-center justify-between border-b border-border pb-4">
+                        <span className="text-sm text-muted-foreground">
+                          Experience
+                        </span>
+                        <span className="text-sm font-medium text-foreground">
+                          {job.metadata.minExperience}
+                        </span>
+                      </div>
+                    )}
+                    <div className="flex items-center justify-between border-b border-border pb-4">
+                      <span className="text-sm text-muted-foreground">
+                        Source
+                      </span>
+                      <span className="text-sm font-medium text-foreground">
+                        {job.platform === "ycombinator"
+                          ? "YC"
+                          : job.platform
+                            ? job.platform.charAt(0).toUpperCase() +
+                              job.platform.slice(1)
+                            : ""}
+                      </span>
+                    </div>
+                    {postedAgo && (
                       <div className="flex items-center justify-between">
                         <span className="text-sm text-muted-foreground">
                           Posted
                         </span>
                         <span className="text-sm font-medium text-foreground">
-                          {timeAgo}
+                          {postedAgo}
                         </span>
                       </div>
                     )}
@@ -463,6 +602,91 @@ export default function JobPageClient({ job }: Props) {
             </div>
           </div>
         </section>
+
+        {/* Location jobs */}
+        {locationJobs.length > 0 && (
+          <section className="border-t border-border/50 py-16 md:py-24">
+            <div className="container">
+              <div className="mb-8 flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold text-foreground">
+                    Jobs near {job.location?.split(",")[0]?.trim()}
+                  </h2>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Recent openings in a similar location
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {locationJobs.map((lJob: any) => (
+                  <div key={lJob.id}>
+                    <JobCard {...lJob} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Jobs by skill */}
+        {jobsBySkill.length > 0 && (
+          <section className="border-t border-dashed border-border/60 py-16 md:py-24">
+            <div className="container">
+              <div className="mb-10">
+                <h2 className="text-2xl font-bold text-foreground">
+                  Explore jobs by skill
+                </h2>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Recent openings matching the skills in this role
+                </p>
+              </div>
+
+              <div className="space-y-10">
+                {jobsBySkill.map((group) => (
+                  <div key={group.skill_slug}>
+                    <div className="mb-4 flex items-center justify-between">
+                      <Link
+                        href={`/skill/${group.skill_slug}`}
+                        className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-semibold transition-colors hover:bg-primary/10"
+                      >
+                        {group.skill_name}
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </Link>
+                    </div>
+                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                      {group.jobs.map((sJob: any) => (
+                        <div key={sJob.id}>
+                          <JobCard {...sJob} />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {remainingSkills.length > 0 && (
+                <div className="mt-10 rounded-lg border border-border/50 bg-card p-6">
+                  <h3 className="mb-4 text-sm font-medium text-muted-foreground">
+                    More skills in this role
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {remainingSkills.map((skill) => (
+                      <Link
+                        key={skill.slug}
+                        href={`/skill/${skill.slug}`}
+                        className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1.5 text-sm text-foreground transition-colors hover:border-primary/30 hover:bg-primary/5 hover:text-primary"
+                      >
+                        {skill.name}
+                        <ArrowRight className="h-3 w-3" />
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
       </div>
       <AuthModal open={authOpen} onOpenChange={setAuthOpen} callbackUrl={pathname} />
     </div>

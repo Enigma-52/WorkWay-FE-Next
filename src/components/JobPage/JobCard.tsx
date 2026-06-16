@@ -6,6 +6,7 @@ import { MapPin, Briefcase, Building2, CheckCircle2 } from "lucide-react";
 import JobBadge from "./JobBadge";
 import SaveJobButton from "@/components/common/SaveJobButton";
 import { useJobStatus } from "@/contexts/JobStatusContext";
+import { truncateLocation } from "@/utils/helper";
 
 function normalizedSkills(skills: unknown): { name: string; slug: string }[] {
   if (!skills) return [];
@@ -43,6 +44,8 @@ interface JobCardProps {
   slug: string;
   url?: string;
   skills?: { name: string; slug: string }[] | unknown;
+  metadata?: Record<string, any>;
+  platform?: string;
 }
 
 const JobCard = ({
@@ -57,6 +60,8 @@ const JobCard = ({
   domain,
   url,
   skills,
+  metadata,
+  platform,
 }: JobCardProps) => {
   const router = useRouter();
   const { appliedSlugs } = useJobStatus();
@@ -108,9 +113,9 @@ const JobCard = ({
       </h4>
 
       <div className="flex flex-wrap gap-2">
-        <JobBadge variant="primary">
-          <MapPin className="mr-1 h-3 w-3" />
-          {location}
+        <JobBadge variant="primary" className="max-w-[200px]" title={location}>
+          <MapPin className="mr-1 h-3 w-3 shrink-0" />
+          <span className="truncate">{truncateLocation(location)}</span>
         </JobBadge>
         <JobBadge>
           <Briefcase className="mr-1 h-3 w-3" />
@@ -118,8 +123,57 @@ const JobCard = ({
         </JobBadge>
       </div>
 
-      <div className="mt-3 pt-3 border-t border-border">
+      <div className="mt-3 pt-3 border-t border-border flex flex-wrap items-center gap-2">
         <span className="text-xs text-muted-foreground">{domain}</span>
+        {/* Non-YC compensation badges */}
+        {platform !== "ycombinator" &&
+          metadata?.compensation?.toLowerCase().includes("equity") && (
+          <span className="inline-flex items-center rounded-md border border-green-500/30 bg-green-500/5 px-1.5 py-0.5 text-[10px] font-medium text-green-600 dark:text-green-400">
+            Offers Equity
+          </span>
+        )}
+        {platform !== "ycombinator" &&
+          metadata?.compensation?.toLowerCase().includes("bonus") && (
+          <span className="inline-flex items-center rounded-md border border-amber-500/30 bg-amber-500/5 px-1.5 py-0.5 text-[10px] font-medium text-amber-600 dark:text-amber-400">
+            Offers Bonus
+          </span>
+        )}
+        {/* YC-specific metadata */}
+        {platform === "ycombinator" && metadata?.salaryRange && (
+          <span className="inline-flex items-center rounded-md border border-primary/30 bg-primary/5 px-1.5 py-0.5 text-[10px] font-medium text-primary">
+            {metadata.salaryRange}
+          </span>
+        )}
+        {platform === "ycombinator" && metadata?.equityRange && (
+          <span className="inline-flex items-center rounded-md border border-green-500/30 bg-green-500/5 px-1.5 py-0.5 text-[10px] font-medium text-green-600 dark:text-green-400">
+            {metadata.equityRange}
+          </span>
+        )}
+        {platform === "ycombinator" && metadata?.minExperience && (
+          <span className="inline-flex items-center rounded-md border border-border bg-muted/60 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+            {metadata.minExperience}
+          </span>
+        )}
+        {platform === "ycombinator" && metadata?.visa && (
+          <span className="inline-flex items-center rounded-md border border-border bg-muted/60 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+            {metadata.visa}
+          </span>
+        )}
+        {/* Platform tag */}
+        {platform === "ycombinator" ? (
+          <span className="inline-flex items-center gap-1 rounded-md border border-orange-500/30 bg-orange-500/5 px-1.5 py-0.5 text-[10px] font-medium text-orange-500">
+            <img
+              src="https://www.vectorlogo.zone/logos/ycombinator/ycombinator-icon.svg"
+              alt="Y Combinator"
+              className="h-3 w-3"
+            />
+            YC
+          </span>
+        ) : platform ? (
+          <span className="inline-flex items-center rounded-md border border-primary/30 bg-primary/5 px-1.5 py-0.5 text-[10px] font-medium text-primary">
+            {platform.charAt(0).toUpperCase() + platform.slice(1)}
+          </span>
+        ) : null}
       </div>
 
       {skillsList.length > 0 ? (
