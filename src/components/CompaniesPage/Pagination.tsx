@@ -40,6 +40,7 @@ export default function Pagination({
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
+        aria-label="Previous page"
         className="flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-secondary text-foreground transition-all hover:border-primary/50 disabled:cursor-not-allowed disabled:opacity-50"
       >
         <ChevronLeft className="h-4 w-4" />
@@ -68,6 +69,7 @@ export default function Pagination({
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
+        aria-label="Next page"
         className="flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-secondary text-foreground transition-all hover:border-primary/50 disabled:cursor-not-allowed disabled:opacity-50"
       >
         <ChevronRight className="h-4 w-4" />

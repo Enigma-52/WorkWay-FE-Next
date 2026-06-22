@@ -120,6 +120,7 @@ export default function AllSkillsPageClient({ data }: Props) {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search skills..."
+                aria-label="Search skills"
                 className="w-full rounded-xl border border-border bg-card py-3.5 pl-11 pr-4 text-sm focus:outline-none focus:ring-1 focus:ring-primary/30 transition"
               />
             </div>

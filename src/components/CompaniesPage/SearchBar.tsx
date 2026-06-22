@@ -13,6 +13,7 @@ export default function SearchBar({ value, onChange }: SearchBarProps) {
       <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
       <input
         type="text"
+        aria-label="Search companies"
         placeholder='Search by company name (e.g. "Anthropic", "Discord", "Jane Street")'
         value={value}
         onChange={(e) => onChange(e.target.value)}
