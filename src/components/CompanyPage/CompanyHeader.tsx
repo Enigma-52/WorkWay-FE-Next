@@ -38,8 +38,11 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
                 <div className="w-20 h-20">
                   <img
                     src={company.logo_url}
-                    alt={`${company.name} logo`}
+                    alt={company.name}
                     referrerPolicy="no-referrer"
+                    width={80}
+                    height={80}
+                    decoding="async"
                     className="w-full h-full object-contain p-2"
                   />
                 </div>
@@ -50,14 +53,18 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
               )}
               <div>
                 <div className="flex items-center gap-3">
-                  <h2 className="text-3xl font-bold tracking-tight gradient-text">
+                  <h1 className="text-3xl font-bold tracking-tight gradient-text">
                     {company.name}
-                  </h2>
+                  </h1>
                   {isYC && metadata?.ycBatch && (
                     <span className="inline-flex items-center gap-1.5 px-2.5 pt-1.5 text-md font-semibold text-orange-500">
                       <img
                         src="https://www.vectorlogo.zone/logos/ycombinator/ycombinator-icon.svg"
-                        alt="Y Combinator"
+                        alt=""
+                        width={20}
+                        height={20}
+                        loading="lazy"
+                        decoding="async"
                         className="w-5 h-5"
                       />
                       {metadata.ycBatch}
