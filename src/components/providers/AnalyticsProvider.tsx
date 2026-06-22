@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useRef } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import Script from "next/script";
-import mixpanel from "mixpanel-browser";
 
 const GA_MEASUREMENT_ID =
   process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-PMBBRGCPM5";
@@ -14,7 +13,7 @@ declare global {
   interface Window {
     dataLayer?: unknown[];
     gtag?: (...args: unknown[]) => void;
-    mixpanel?: typeof mixpanel;
+    mixpanel?: { track: (event: string, props?: Record<string, unknown>) => void };
   }
 }
 
@@ -43,14 +42,16 @@ export default function AnalyticsProvider() {
   useEffect(() => {
     if (!MIXPANEL_TOKEN || mixpanelInitialized.current) return;
 
-    mixpanel.init(MIXPANEL_TOKEN, {
-      autocapture: true,
-      track_pageview: false,
-      record_sessions_percent: 0,
+    import("mixpanel-browser").then((mod) => {
+      const mixpanel = mod.default;
+      mixpanel.init(MIXPANEL_TOKEN, {
+        autocapture: true,
+        track_pageview: false,
+        record_sessions_percent: 0,
+      });
+      window.mixpanel = mixpanel;
+      mixpanelInitialized.current = true;
     });
-
-    window.mixpanel = mixpanel;
-    mixpanelInitialized.current = true;
   }, []);
 
   useEffect(() => {

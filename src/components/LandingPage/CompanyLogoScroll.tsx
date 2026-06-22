@@ -169,7 +169,8 @@ const Pill = ({ name, slug, logo }: Company) => (
         width={32}
         height={32}
         className="rounded-lg object-contain"
-        unoptimized
+        sizes="32px"
+        loading="lazy"
       />
       <span className="font-display text-2xl tracking-tight whitespace-nowrap text-foreground/85 group-hover:text-foreground transition-colors">
         {name}

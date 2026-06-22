@@ -11,17 +11,21 @@ import "./globals.css";
 
 const geist = Geist({
   subsets: ["latin"],
+  display: "swap",
   variable: "--font-geist",
 });
 
 const geistMono = Geist_Mono({
   subsets: ["latin"],
+  display: "swap",
   variable: "--font-geist-mono",
+  preload: false,
 });
 
 const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
   weight: "400",
+  display: "swap",
   style: ["normal", "italic"],
   variable: "--font-instrument-serif",
 });
@@ -81,6 +85,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://cdn.workway.dev" />
+        <link rel="dns-prefetch" href="https://cdn.workway.dev" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+      </head>
       <body className={`${geist.variable} ${geistMono.variable} ${instrumentSerif.variable}`}>
         <Suspense fallback={null}>
           <AnalyticsProvider />

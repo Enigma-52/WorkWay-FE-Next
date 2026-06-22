@@ -115,7 +115,7 @@ export function JobsListFilters({
         </div>
 
         <Select value={draftDomain} onValueChange={setDraftDomain}>
-          <SelectTrigger className="w-[180px] bg-secondary border-border rounded-lg">
+          <SelectTrigger className="w-[180px] bg-secondary border-border rounded-lg" aria-label="Filter by domain">
             <SelectValue placeholder="Domain" />
           </SelectTrigger>
           <SelectContent>
@@ -129,7 +129,7 @@ export function JobsListFilters({
         </Select>
 
         <Select value={draftExperienceLevel} onValueChange={setDraftExperienceLevel}>
-          <SelectTrigger className="w-[160px] bg-secondary border-border rounded-lg">
+          <SelectTrigger className="w-[160px] bg-secondary border-border rounded-lg" aria-label="Filter by experience level">
             <SelectValue placeholder="Experience" />
           </SelectTrigger>
           <SelectContent>
@@ -143,7 +143,7 @@ export function JobsListFilters({
         </Select>
 
         <Select value={draftEmploymentType} onValueChange={setDraftEmploymentType}>
-          <SelectTrigger className="w-[140px] bg-secondary border-border rounded-lg">
+          <SelectTrigger className="w-[140px] bg-secondary border-border rounded-lg" aria-label="Filter by employment type">
             <SelectValue placeholder="Type" />
           </SelectTrigger>
           <SelectContent>

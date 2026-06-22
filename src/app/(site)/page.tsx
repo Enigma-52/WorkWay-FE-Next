@@ -1,12 +1,17 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import Hero from "@/components/LandingPage/Hero";
 import CompanyLogoScroll from "@/components/LandingPage/CompanyLogoScroll";
-import ProblemSection from "@/components/LandingPage/ProblemSection";
-import Features from "@/components/LandingPage/Features";
-import HireMeProfiles from "@/components/LandingPage/HireMeProfiles";
-import ForEmployers from "@/components/LandingPage/ForEmployers";
-import FinalCTA from "@/components/LandingPage/FinalCTA";
 import { buildPageMetadata } from "@/lib/seo/metadata";
+
+const ProblemSection = dynamic(
+  () => import("@/components/LandingPage/ProblemSection")
+);
+const Features = dynamic(() => import("@/components/LandingPage/Features"));
+const HireMeProfiles = dynamic(
+  () => import("@/components/LandingPage/HireMeProfiles")
+);
+const FinalCTA = dynamic(() => import("@/components/LandingPage/FinalCTA"));
 
 export const metadata: Metadata = buildPageMetadata({
   title: "WorkWay — Jobs Simplified. Find Your Next Opportunity",

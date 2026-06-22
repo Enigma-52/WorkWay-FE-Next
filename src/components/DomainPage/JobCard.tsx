@@ -92,7 +92,11 @@ export function JobCard({ job }: JobCardProps) {
             {job.company_logo_url ? (
               <img
                 src={job.company_logo_url}
-                alt={`${job.company} logo`}
+                alt={job.company}
+                width={44}
+                height={44}
+                loading="lazy"
+                decoding="async"
                 className="h-full w-full object-cover"
                 onError={(e) => {
                   e.currentTarget.style.display = "none";
@@ -203,7 +207,11 @@ export function JobCard({ job }: JobCardProps) {
                 >
                   <img
                     src="https://www.vectorlogo.zone/logos/ycombinator/ycombinator-icon.svg"
-                    alt="Y Combinator"
+                    alt=""
+                    width={14}
+                    height={14}
+                    loading="lazy"
+                    decoding="async"
                     className="h-3.5 w-3.5"
                   />
                   YC
