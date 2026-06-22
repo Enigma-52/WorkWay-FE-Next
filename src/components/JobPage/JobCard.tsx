@@ -69,7 +69,11 @@ const JobCard = ({
           {company_logo_url ? (
             <img
               src={company_logo_url}
-              alt={`${company} logo`}
+              alt={company}
+              width={32}
+              height={32}
+              loading="lazy"
+              decoding="async"
               className="max-h-8 max-w-full object-contain"
             />
           ) : (
@@ -137,7 +141,11 @@ const JobCard = ({
           <span className="inline-flex items-center gap-1 rounded-md border border-orange-500/30 bg-orange-500/5 px-1.5 py-0.5 text-[10px] font-medium text-orange-500">
             <img
               src="https://www.vectorlogo.zone/logos/ycombinator/ycombinator-icon.svg"
-              alt="Y Combinator"
+              alt=""
+              width={12}
+              height={12}
+              loading="lazy"
+              decoding="async"
               className="h-3 w-3"
             />
             YC

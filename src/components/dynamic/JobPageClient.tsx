@@ -11,14 +11,16 @@ import {
   ArrowRight,
   Banknote,
 } from "lucide-react";
+import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import JobBadge from "@/components/JobPage/JobBadge";
 import JobSection from "@/components/JobPage/JobSection";
-import JobCard from "@/components/JobPage/JobCard";
 import { Button } from "@/components/ui/button";
 import { getDomainSlug, truncateLocation } from "@/utils/helper";
 import type { JobDetails, SkillJobGroup } from "@/types/jobs";
-import JobViewFeed from "@/components/JobViewFeed/JobViewFeed";
+
+const JobCard = dynamic(() => import("@/components/JobPage/JobCard"));
+const JobViewFeed = dynamic(() => import("@/components/JobViewFeed/JobViewFeed"));
 
 type Props = {
   job: JobDetails;
@@ -45,50 +47,54 @@ export default function JobPageClient({ job }: Props) {
 
     let cancelled = false;
 
-    async function trackView() {
-      try {
-        let country: string | null = null;
-        let city: string | null = null;
-
+    // Defer tracking to avoid competing with LCP resources
+    const timeoutId = setTimeout(() => {
+      async function trackView() {
         try {
-          const geoRes = await fetch("https://ipapi.co/json/");
-          if (geoRes.ok) {
-            const geo = (await geoRes.json()) as {
-              country_name?: string;
-              city?: string;
-            };
-            country = geo.country_name ?? null;
-            city = geo.city ?? null;
+          let country: string | null = null;
+          let city: string | null = null;
+
+          try {
+            const geoRes = await fetch("https://ipapi.co/json/");
+            if (geoRes.ok) {
+              const geo = (await geoRes.json()) as {
+                country_name?: string;
+                city?: string;
+              };
+              country = geo.country_name ?? null;
+              city = geo.city ?? null;
+            }
+          } catch {
+            // ignore geo failures
           }
+
+          if (cancelled) return;
+
+          await fetch("/api/job/view", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              jobSlug: job.slug,
+              viewer_country: country,
+              viewer_city: city,
+              source_page: "job",
+            }),
+          }).catch(() => {
+            // ignore tracking failures
+          });
         } catch {
-          // ignore geo failures
+          // swallow errors
         }
-
-        if (cancelled) return;
-
-        await fetch("/api/job/view", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            jobSlug: job.slug,
-            viewer_country: country,
-            viewer_city: city,
-            source_page: "job",
-          }),
-        }).catch(() => {
-          // ignore tracking failures
-        });
-      } catch {
-        // swallow errors
       }
-    }
 
-    trackView();
+      trackView();
+    }, 2000);
 
     return () => {
       cancelled = true;
+      clearTimeout(timeoutId);
     };
   }, [job?.slug]);
 
@@ -126,7 +132,10 @@ export default function JobPageClient({ job }: Props) {
                       {job.company_logo_url ? (
                         <img
                           src={job.company_logo_url}
-                          alt={`${job.company} logo`}
+                          alt={job.company}
+                          width={56}
+                          height={56}
+                          decoding="async"
                           className="max-h-14 max-w-full"
                         />
                       ) : (
@@ -243,7 +252,11 @@ export default function JobPageClient({ job }: Props) {
                     >
                       <img
                         src="https://www.vectorlogo.zone/logos/ycombinator/ycombinator-icon.svg"
-                        alt="Y Combinator"
+                        alt=""
+                        width={16}
+                        height={16}
+                        loading="lazy"
+                        decoding="async"
                         className="h-4 w-4"
                       />
                       YC
