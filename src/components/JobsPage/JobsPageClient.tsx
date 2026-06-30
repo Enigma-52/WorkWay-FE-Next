@@ -39,6 +39,7 @@ export default function JobsPageClient({ data }: Props) {
   const employmentType = getParam(searchParams, "employment_type", "all");
   const experienceLevel = getParam(searchParams, "experience_level", "all");
   const location = getParam(searchParams, "location", "");
+  const posted = getParam(searchParams, "posted", "all");
 
   const updateParams = useCallback(
     (next: Record<string, string | null>) => {
@@ -58,13 +59,14 @@ export default function JobsPageClient({ data }: Props) {
   };
 
   const handleApply = useCallback(
-    (filters: { q: string; domain: string; employmentType: string; experienceLevel: string; location: string }) => {
+    (filters: { q: string; domain: string; employmentType: string; experienceLevel: string; location: string; posted: string }) => {
       updateParams({
         q: filters.q || null,
         domain: filters.domain,
         employment_type: filters.employmentType,
         experience_level: filters.experienceLevel,
         location: filters.location || null,
+        posted: filters.posted,
         page: "1",
       });
     },
@@ -78,6 +80,7 @@ export default function JobsPageClient({ data }: Props) {
       employment_type: null,
       experience_level: null,
       location: null,
+      posted: null,
       page: "1",
     });
   };
@@ -88,6 +91,7 @@ export default function JobsPageClient({ data }: Props) {
     employmentType !== "all",
     experienceLevel !== "all",
     location,
+    posted !== "all",
   ].filter(Boolean).length;
 
   const { jobs, meta, applied_filters, facets } = data;
@@ -165,6 +169,7 @@ export default function JobsPageClient({ data }: Props) {
               employmentType={employmentType}
               experienceLevel={experienceLevel}
               location={location}
+              posted={posted}
               onApply={handleApply}
               onClear={clearFilters}
               activeCount={activeFiltersCount}

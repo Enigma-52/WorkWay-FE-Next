@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, X, SlidersHorizontal, MapPin } from "lucide-react";
+import { Search, X, SlidersHorizontal, MapPin, Clock } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -24,6 +24,12 @@ const EXPERIENCE_LEVELS = [
   "Director",
 ];
 const EMPLOYMENT_TYPES = ["Full-Time", "Part-Time", "Contract"];
+const POSTED_OPTIONS = [
+  { value: "today", label: "Today" },
+  { value: "3d", label: "Last 3 days" },
+  { value: "7d", label: "Last 1 week" },
+  { value: "30d", label: "Last 1 month" },
+];
 
 export type AppliedFilters = {
   q: string;
@@ -31,6 +37,7 @@ export type AppliedFilters = {
   employmentType: string;
   experienceLevel: string;
   location: string;
+  posted: string;
 };
 
 export type JobsListFiltersProps = {
@@ -40,6 +47,7 @@ export type JobsListFiltersProps = {
   employmentType: string;
   experienceLevel: string;
   location: string;
+  posted: string;
   onApply: (filters: AppliedFilters) => void;
   onClear: () => void;
   activeCount: number;
@@ -52,6 +60,7 @@ export function JobsListFilters({
   employmentType,
   experienceLevel,
   location,
+  posted,
   onApply,
   onClear,
   activeCount,
@@ -63,6 +72,7 @@ export function JobsListFilters({
   const [draftEmploymentType, setDraftEmploymentType] = useState(employmentType || "all");
   const [draftExperienceLevel, setDraftExperienceLevel] = useState(experienceLevel || "all");
   const [draftLocation, setDraftLocation] = useState(location);
+  const [draftPosted, setDraftPosted] = useState(posted || "all");
 
   // Sync draft when committed values change (e.g. after clear or external nav)
   useEffect(() => { setDraftQ(q); }, [q]);
@@ -70,6 +80,7 @@ export function JobsListFilters({
   useEffect(() => { setDraftEmploymentType(employmentType || "all"); }, [employmentType]);
   useEffect(() => { setDraftExperienceLevel(experienceLevel || "all"); }, [experienceLevel]);
   useEffect(() => { setDraftLocation(location); }, [location]);
+  useEffect(() => { setDraftPosted(posted || "all"); }, [posted]);
 
   const handleApply = () => {
     onApply({
@@ -78,6 +89,7 @@ export function JobsListFilters({
       employmentType: draftEmploymentType,
       experienceLevel: draftExperienceLevel,
       location: draftLocation,
+      posted: draftPosted,
     });
   };
 
@@ -167,6 +179,21 @@ export function JobsListFilters({
           />
         </div>
 
+        <Select value={draftPosted} onValueChange={setDraftPosted}>
+          <SelectTrigger className="w-[160px] bg-secondary border-border rounded-lg" aria-label="Filter by date posted">
+            <Clock className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
+            <SelectValue placeholder="Date posted" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Any time</SelectItem>
+            {POSTED_OPTIONS.map((opt) => (
+              <SelectItem key={opt.value} value={opt.value}>
+                {opt.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
         <Button
           size="sm"
           onClick={handleApply}
@@ -195,7 +222,7 @@ export function JobsListFilters({
             <Badge
               variant="secondary"
               className="gap-1 font-mono text-xs cursor-pointer hover:bg-secondary/80"
-              onClick={() => onApply({ q: "", domain, employmentType, experienceLevel, location })}
+              onClick={() => onApply({ q: "", domain, employmentType, experienceLevel, location, posted })}
             >
               {q}
               <X className="h-3 w-3" />
@@ -205,7 +232,7 @@ export function JobsListFilters({
             <Badge
               variant="secondary"
               className="gap-1 font-mono text-xs cursor-pointer hover:bg-secondary/80"
-              onClick={() => onApply({ q, domain: "all", employmentType, experienceLevel, location })}
+              onClick={() => onApply({ q, domain: "all", employmentType, experienceLevel, location, posted })}
             >
               Domain: {domain}
               <X className="h-3 w-3" />
@@ -215,7 +242,7 @@ export function JobsListFilters({
             <Badge
               variant="secondary"
               className="gap-1 font-mono text-xs cursor-pointer hover:bg-secondary/80"
-              onClick={() => onApply({ q, domain, employmentType, experienceLevel: "all", location })}
+              onClick={() => onApply({ q, domain, employmentType, experienceLevel: "all", location, posted })}
             >
               {experienceLevel}
               <X className="h-3 w-3" />
@@ -225,7 +252,7 @@ export function JobsListFilters({
             <Badge
               variant="secondary"
               className="gap-1 font-mono text-xs cursor-pointer hover:bg-secondary/80"
-              onClick={() => onApply({ q, domain, employmentType: "all", experienceLevel, location })}
+              onClick={() => onApply({ q, domain, employmentType: "all", experienceLevel, location, posted })}
             >
               {employmentType}
               <X className="h-3 w-3" />
@@ -235,9 +262,19 @@ export function JobsListFilters({
             <Badge
               variant="secondary"
               className="gap-1 font-mono text-xs cursor-pointer hover:bg-secondary/80"
-              onClick={() => onApply({ q, domain, employmentType, experienceLevel, location: "" })}
+              onClick={() => onApply({ q, domain, employmentType, experienceLevel, location: "", posted })}
             >
               {location}
+              <X className="h-3 w-3" />
+            </Badge>
+          )}
+          {posted && posted !== "all" && (
+            <Badge
+              variant="secondary"
+              className="gap-1 font-mono text-xs cursor-pointer hover:bg-secondary/80"
+              onClick={() => onApply({ q, domain, employmentType, experienceLevel, location, posted: "all" })}
+            >
+              {POSTED_OPTIONS.find((o) => o.value === posted)?.label ?? posted}
               <X className="h-3 w-3" />
             </Badge>
           )}
