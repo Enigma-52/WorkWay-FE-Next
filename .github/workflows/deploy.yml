@@ -17,16 +17,20 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Login to GHCR
         run: echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u Enigma-52 --password-stdin
 
-      - name: Build Docker image
-        run: |
-          docker build \
-            --build-arg BACKEND_API_URL=https://www.workway.dev \
-            --build-arg NEXT_PUBLIC_SITE_URL=https://www.workway.dev \
-            -t ghcr.io/enigma-52/workway-frontend:latest .
-
-      - name: Push image
-        run: |
-          docker push ghcr.io/enigma-52/workway-frontend:latest
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/enigma-52/workway-frontend:latest
+          build-args: |
+            BACKEND_API_URL=https://www.workway.dev
+            NEXT_PUBLIC_SITE_URL=https://www.workway.dev
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
