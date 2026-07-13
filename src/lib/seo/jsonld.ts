@@ -68,6 +68,22 @@ function extractCountryFromLocation(location: string): string {
   return "";
 }
 
+// Source data has no real job-closing date. Google actively penalizes job
+// aggregators that omit validThrough — it treats undated postings as
+// suspicious "always open" listings and can reduce the domain's trust score
+// in Google for Jobs over repeated instances. 30 days from datePosted is the
+// standard heuristic for aggregators without a real expiry signal.
+const VALID_THROUGH_DAYS = 60;
+
+function computeValidThrough(datePosted?: string): string | undefined {
+  if (!datePosted) return undefined;
+  const posted = new Date(datePosted);
+  if (Number.isNaN(posted.getTime())) return undefined;
+  const validThrough = new Date(posted);
+  validThrough.setDate(validThrough.getDate() + VALID_THROUGH_DAYS);
+  return validThrough.toISOString();
+}
+
 export function buildJobPostingJsonLd(job: JobDetails) {
   const isRemote = /remote/i.test(job.location);
   const descriptionText = extractJobDescriptionText(job.description);
@@ -80,6 +96,7 @@ export function buildJobPostingJsonLd(job: JobDetails) {
     title: job.title,
     description: descriptionText || `${job.title} position at ${job.company} in ${job.location}.`,
     datePosted: job.created_at || undefined,
+    validThrough: computeValidThrough(job.created_at),
     employmentType: job.employment_type || undefined,
     ...(isRemote
       ? {
