@@ -37,13 +37,15 @@ export async function generateMetadata({
   }
 
   const topSkills = job.skills?.slice(0, 3).map((s) => s.name) ?? [];
-  const skillsText = topSkills.length > 0 ? ` Skills: ${topSkills.join(", ")}.` : "";
 
   const ycTag = job.platform === "ycombinator" ? " (YC)" : "";
 
+  // Kept short (~60 chars title, ~155 chars description) so Google doesn't
+  // truncate these in search results — role + company first, since those are
+  // the highest-value keywords for job search intent.
   return buildPageMetadata({
-    title: `${job.title} at ${job.company}${ycTag} — ${job.employment_type} Job in ${job.location} | WorkWay`,
-    description: `Apply for the ${job.title} role at ${job.company}${ycTag} in ${job.location}.${skillsText} ${job.experience_level} · ${job.employment_type}. View full details and apply on WorkWay.`,
+    title: `${job.title} at ${job.company}${ycTag} | WorkWay`,
+    description: `${job.title} at ${job.company}${ycTag} in ${job.location}. ${job.employment_type} · ${job.experience_level}. Apply on WorkWay.`,
     path: `/job/${jobSlug}`,
     image: job.company_logo_url || "/logo.png",
     keywords: [
