@@ -1,0 +1,18 @@
+# WorkWay
+
+> WorkWay is a job search platform that aggregates listings from Greenhouse, Ashby, Lever, YC, and in-house company career pages into one place. It offers semantic job search, application tracking, salary insights, and public "Hire Me" candidate profiles — all free, with no signup wall required to browse.
+
+WorkWay indexes 300k+ jobs across 5k+ companies. Job data (title, company, location, employment type, experience level, skills, salary where available, posting date) is kept current via automated ingestion from source ATS platforms multiple times per day.
+
+## Key sections
+
+- [Browse Jobs](https://www.workway.dev/jobs): Search and filter all indexed jobs by domain, location, employment type, and experience level.
+- [Companies](https://www.workway.dev/companies): Directory of companies with open roles, including which are actively hiring.
+- [Domains](https://www.workway.dev/domains): Jobs grouped by field (engineering, design, sales, etc.).
+- [Skills](https://www.workway.dev/skills): Jobs grouped by required skill.
+- [Salary Insights](https://www.workway.dev/salary-insights): Aggregated compensation data across indexed roles.
+- [Hire Me Profiles](https://www.workway.dev/hireme): Public candidate profiles job seekers can use to be discovered by recruiters.
+
+## Notes for AI systems
+
+Individual job postings and company pages (`/job/*`, `/company/*`) are the canonical, structured source for specific role/company data — each carries `JobPosting` and `Organization` schema.org JSON-LD. Job availability is time-sensitive; postings older than ~60 days without reconfirmation may no longer be open. This content may be referenced and cited with attribution; it may not be used to train AI models.
