@@ -55,8 +55,10 @@ export async function generateMetadata({
 
   const domainName = data.domain?.name || "Jobs";
   const total = data.meta?.total || 0;
-  let title = `${domainName} Jobs (${total.toLocaleString()} Open Roles) | WorkWay`;
-  let description = `Browse ${total.toLocaleString()} open ${domainName.toLowerCase()} jobs across top companies. Find the latest roles, apply directly, and explore opportunities on WorkWay.`;
+  const roleWord = total === 1 ? "Role" : "Roles";
+  const jobWord = total === 1 ? "job" : "jobs";
+  let title = `${domainName} Jobs (${total.toLocaleString()} Open ${roleWord}) | WorkWay`;
+  let description = `Browse ${total.toLocaleString()} open ${domainName.toLowerCase()} ${jobWord} across top companies. Find the latest roles, apply directly, and explore opportunities on WorkWay.`;
 
   const parts: string[] = [];
   if (employmentLevel !== "all") parts.push(employmentLevel);

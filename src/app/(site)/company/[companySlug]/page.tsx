@@ -45,13 +45,14 @@ export async function generateMetadata({
     company.platform === "ycombinator" && company.metadata?.ycBatch
       ? ` (YC ${company.metadata.ycBatch})`
       : "";
+  const roleWord = count === 1 ? "Role" : "Roles";
   const title =
     count > 0
-      ? `${company.name}${ycTag} Jobs & Careers - ${count} Open Roles | WorkWay`
+      ? `${company.name}${ycTag} Jobs & Careers - ${count} Open ${roleWord} | WorkWay`
       : `${company.name}${ycTag} Careers & Company Profile | WorkWay`;
   const description =
     count > 0
-      ? `Apply to ${count} open roles at ${company.name}${ycTag}. View open jobs, teams, and hiring details on WorkWay.`
+      ? `Apply to ${count} open role${count === 1 ? "" : "s"} at ${company.name}${ycTag}. View open jobs, teams, and hiring details on WorkWay.`
       : `Explore ${company.name}${ycTag}'s company profile, teams, and hiring information on WorkWay.`;
 
   return buildPageMetadata({
