@@ -165,7 +165,7 @@ const Pill = ({ name, slug, logo }: Company) => (
     <div className="flex items-center gap-3 rounded-2xl border border-border/60 bg-surface/40 backdrop-blur px-6 py-4 hover:bg-surface-elevated hover:border-brand/30 transition-all duration-300">
       <Image
         src={logo}
-        alt={name}
+        alt=""
         width={32}
         height={32}
         className="rounded-lg object-contain"

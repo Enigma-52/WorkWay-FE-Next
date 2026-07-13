@@ -24,10 +24,7 @@ const Hero = () => {
           </a>
         </div>
 
-        <h1
-          className="font-display text-5xl sm:text-7xl md:text-8xl leading-[0.95] tracking-tight animate-fade-up"
-          style={{ animationDelay: "100ms" }}
-        >
+        <h1 className="font-display text-5xl sm:text-7xl md:text-8xl leading-[0.95] tracking-tight">
           <span className="text-gradient">Jobs that</span>
           <br />
           <span className="italic text-brand-gradient">respect your time.</span>

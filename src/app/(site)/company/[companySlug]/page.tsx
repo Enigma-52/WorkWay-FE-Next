@@ -12,6 +12,13 @@ import { buildCompanyDetailBreadcrumb } from "@/lib/seo/breadcrumbs";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import type { CompanyDetails } from "@/types/jobs";
 
+export const revalidate = 3600;
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  return [];
+}
+
 type CompanyPageProps = {
   params: Promise<{ companySlug: string }>;
 };
@@ -22,6 +29,7 @@ export async function generateMetadata({
   const { companySlug } = await params;
   const company = await backendGet<CompanyDetails>("/api/company/details", {
     query: { slug: companySlug },
+    forwardHeaders: false,
   }).catch(() => null);
 
   if (!company) {
@@ -69,6 +77,7 @@ export default async function CompanyPage({ params }: CompanyPageProps) {
   const { companySlug } = await params;
   const company = await backendGet<CompanyDetails>("/api/company/details", {
     query: { slug: companySlug },
+    forwardHeaders: false,
   }).catch(() => null);
 
   if (!company || !company.name) {

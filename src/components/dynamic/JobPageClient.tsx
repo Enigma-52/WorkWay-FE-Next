@@ -277,9 +277,9 @@ export default function JobPageClient({ job }: Props) {
 
                 {job.skills?.length > 0 && (
                   <div className="mt-6">
-                    <h3 className="mb-3 text-sm font-medium text-muted-foreground">
+                    <h2 className="mb-3 text-sm font-medium text-muted-foreground">
                       Skills
-                    </h3>
+                    </h2>
 
                     <div className="flex flex-wrap gap-3">
                       {job.skills

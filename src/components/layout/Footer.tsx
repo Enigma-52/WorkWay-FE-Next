@@ -11,7 +11,7 @@ const Footer = () => {
           <div className="flex flex-col items-center md:items-start text-center md:text-left">
             <div className="flex items-center gap-3 mb-4">
               <Link href="/" className="flex items-center gap-2">
-                <Image src="/logo.png" alt="WorkWay" width={40} height={40} loading="lazy" />
+                <Image src="/logo.png" alt="" width={40} height={40} loading="lazy" />
                 <span className="text-lg font-semibold">WorkWay</span>
               </Link>
             </div>
@@ -21,14 +21,14 @@ const Footer = () => {
               and find the right roles using real hiring data — not noise.
             </p>
 
-            <p className="mt-6 text-xs text-muted-foreground/60">
+            <p className="mt-6 text-xs text-muted-foreground">
               © {new Date().getFullYear()} WorkWay. Built in public.
             </p>
           </div>
 
           {/* Links Column */}
           <div className="flex flex-col items-center md:items-center text-center">
-            <h4 className="mb-4 text-sm font-medium">Product</h4>
+            <h3 className="mb-4 text-sm font-medium">Product</h3>
 
             <div className="flex flex-col gap-3 text-sm text-muted-foreground">
               <a
@@ -72,7 +72,7 @@ const Footer = () => {
 
           {/* Legal Column */}
           <div className="hidden md:flex flex-col items-center md:items-end text-center md:text-right">
-            <h4 className="mb-4 text-sm font-medium">Legal</h4>
+            <h3 className="mb-4 text-sm font-medium">Legal</h3>
 
             <div className="flex flex-col gap-3 text-sm text-muted-foreground">
               <a
@@ -104,7 +104,7 @@ const Footer = () => {
 
           {/* Creator Column */}
           <div className="flex flex-col items-center md:items-end text-center md:text-right">
-            <h4 className="text-sm font-medium mb-4">Creator</h4>
+            <h3 className="text-sm font-medium mb-4">Creator</h3>
 
             <div className="text-sm text-muted-foreground mb-3">
               <div className="font-medium text-foreground">Rohit Singh</div>
@@ -139,7 +139,7 @@ const Footer = () => {
       </div>
       {/* Featured On badges — auto-scrolling marquee */}
       <div className="border-t border-border/40 py-6 overflow-hidden">
-        <p className="text-xs uppercase tracking-widest text-muted-foreground/60 font-mono text-center mb-4">
+        <p className="text-xs uppercase tracking-widest text-muted-foreground font-mono text-center mb-4">
           Featured on
         </p>
         <div className="marquee-mask">

@@ -139,7 +139,7 @@ export default function JobViewFeed({
                   </Link>
                   .
                 </div>
-                <div className="mt-0.5 text-xs text-muted-foreground/80">
+                <div className="mt-0.5 text-xs text-muted-foreground">
                   {formatTimeAgo(e.created_at)}
                 </div>
               </li>

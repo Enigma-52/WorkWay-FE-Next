@@ -85,9 +85,9 @@ const JobCard = ({
         </span>
       </div>
 
-      <h4 className="mb-3 text-base font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2">
+      <h3 className="mb-3 text-base font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2">
         {title}
-      </h4>
+      </h3>
 
       <div className="flex flex-wrap gap-2">
         <JobBadge variant="primary" className="max-w-[200px]" title={location}>

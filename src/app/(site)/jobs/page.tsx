@@ -77,6 +77,7 @@ export async function generateMetadata({
   const query = buildListQuery(sp);
   const data = await backendGet<JobListResponse>("/api/job/list", {
     query: query as Record<string, string | number>,
+    forwardHeaders: false,
   }).catch(() => null);
 
   const total = data?.meta?.total ?? 0;
@@ -111,6 +112,7 @@ export default async function JobsPage({ searchParams }: JobsPageProps) {
 
   const data = await backendGet<JobListResponse>("/api/job/list", {
     query: query as Record<string, string | number>,
+    forwardHeaders: false,
   }).catch(() => EMPTY_LIST_RESPONSE);
 
   const payload: JobListResponse =

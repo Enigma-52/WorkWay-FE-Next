@@ -17,7 +17,8 @@ export const metadata: Metadata = buildPageMetadata({
 
 export default async function SkillsPage() {
   const data = await backendGet<SkillsPageResponse>(
-    "/api/filter/skills/all"
+    "/api/filter/skills/all",
+    { forwardHeaders: false }
   );
 
   const breadcrumbs = buildSkillsBreadcrumb();

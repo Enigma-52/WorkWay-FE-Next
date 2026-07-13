@@ -9,6 +9,13 @@ import { buildJobDetailBreadcrumb } from "@/lib/seo/breadcrumbs";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import type { JobDetails } from "@/types/jobs";
 
+export const revalidate = 3600;
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  return [];
+}
+
 type JobPageProps = {
   params: Promise<{ jobSlug: string }>;
 };
@@ -19,6 +26,7 @@ export async function generateMetadata({
   const { jobSlug } = await params;
   const job = await backendGet<JobDetails>("/api/job/details", {
     query: { slug: jobSlug },
+    forwardHeaders: false,
   }).catch(() => null);
 
   if (!job) {
@@ -56,6 +64,7 @@ export default async function JobPage({ params }: JobPageProps) {
   const { jobSlug } = await params;
   const job = await backendGet<JobDetails>("/api/job/details", {
     query: { slug: jobSlug },
+    forwardHeaders: false,
   }).catch(() => null);
 
   if (!job || !job.slug) {
