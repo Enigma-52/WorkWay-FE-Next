@@ -35,6 +35,7 @@ export async function generateMetadata({
   const location = getSingleParam(sp.location, "all");
 
   const data = await backendGet<DomainJobsPayload>("/api/filter/domain", {
+    forwardHeaders: false,
     query: {
       slug: domainSlug,
       page: Number(page),

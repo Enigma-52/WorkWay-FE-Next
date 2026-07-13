@@ -35,6 +35,7 @@ export async function generateMetadata({
   const location = getSingleParam(sp.location, "all");
 
   const data = await backendGet<SkillJobsPayload>("/api/filter/skill", {
+    forwardHeaders: false,
     query: {
       slug: skillSlug,
       page: Number(page),
