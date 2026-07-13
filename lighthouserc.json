@@ -1,0 +1,36 @@
+{
+  "ci": {
+    "collect": {
+      "startServerCommand": "npm run start",
+      "startServerReadyPattern": "Ready in",
+      "startServerReadyTimeout": 30000,
+      "url": [
+        "http://localhost:3000/",
+        "http://localhost:3000/jobs",
+        "http://localhost:3000/skills",
+        "http://localhost:3000/companies",
+        "http://localhost:3000/domains",
+        "http://localhost:3000/salary-insights",
+        "http://localhost:3000/company/openai",
+        "http://localhost:3000/job/sentinelone-software-engineer-7785500003",
+        "http://localhost:3000/domain/ai",
+        "http://localhost:3000/skill/agile"
+      ],
+      "numberOfRuns": 2,
+      "settings": {
+        "onlyCategories": ["performance", "accessibility", "best-practices", "seo"]
+      }
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["warn", { "minScore": 0.7 }],
+        "categories:accessibility": ["error", { "minScore": 0.9 }],
+        "categories:best-practices": ["warn", { "minScore": 0.9 }],
+        "categories:seo": ["warn", { "minScore": 0.9 }]
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}
