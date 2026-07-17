@@ -12,6 +12,8 @@ import JobsPageClient from "@/components/JobsPage/JobsPageClient";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
 
+const JOB_LIST_REVALIDATE = false;
+
 type JobsPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
@@ -78,6 +80,7 @@ export async function generateMetadata({
   const query = buildListQuery(sp);
   const data = await backendGet<JobListResponse>("/api/job/list", {
     query: query as Record<string, string | number>,
+    revalidate: JOB_LIST_REVALIDATE,
     forwardHeaders: false,
   }).catch(() => null);
 
@@ -117,6 +120,7 @@ async function JobsListSection({
 
   const data = await backendGet<JobListResponse>("/api/job/list", {
     query: query as Record<string, string | number>,
+    revalidate: JOB_LIST_REVALIDATE,
     forwardHeaders: false,
   }).catch(() => EMPTY_LIST_RESPONSE);
 
