@@ -12,12 +12,12 @@ import { buildCompanyDetailBreadcrumb } from "@/lib/seo/breadcrumbs";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import type { CompanyDetails } from "@/types/jobs";
 
-export const revalidate = 3600;
-export const dynamicParams = true;
-
-export async function generateStaticParams() {
-  return [];
-}
+// Company pages have large, ever-growing cardinality (one per company).
+// Statically caching each one via revalidate/dynamicParams writes a
+// permanent __PAGE__.segment.rsc file per slug that Next never evicts on
+// self-hosted deployments, contributing to unbounded disk growth. Render
+// fully dynamic instead — see job/[jobSlug]/page.tsx for the same fix.
+export const dynamic = "force-dynamic";
 
 type CompanyPageProps = {
   params: Promise<{ companySlug: string }>;
@@ -30,6 +30,7 @@ export async function generateMetadata({
   const company = await backendGet<CompanyDetails>("/api/company/details", {
     query: { slug: companySlug },
     forwardHeaders: false,
+    revalidate: false,
   }).catch(() => null);
 
   if (!company) {
@@ -79,6 +80,7 @@ export default async function CompanyPage({ params }: CompanyPageProps) {
   const company = await backendGet<CompanyDetails>("/api/company/details", {
     query: { slug: companySlug },
     forwardHeaders: false,
+    revalidate: false,
   }).catch(() => null);
 
   if (!company || !company.name) {

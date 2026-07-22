@@ -9,12 +9,12 @@ import { buildJobDetailBreadcrumb } from "@/lib/seo/breadcrumbs";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import type { JobDetails } from "@/types/jobs";
 
-export const revalidate = 3600;
-export const dynamicParams = true;
-
-export async function generateStaticParams() {
-  return [];
-}
+// Job pages have enormous, ever-growing cardinality (one per job posting,
+// most viewed only a handful of times ever). Statically caching each one
+// via revalidate/dynamicParams writes a permanent __PAGE__.segment.rsc file
+// per slug that Next never evicts on self-hosted deployments — this grew
+// to 2.85M files / 56.7GiB on disk. Render fully dynamic instead.
+export const dynamic = "force-dynamic";
 
 type JobPageProps = {
   params: Promise<{ jobSlug: string }>;
@@ -27,6 +27,7 @@ export async function generateMetadata({
   const job = await backendGet<JobDetails>("/api/job/details", {
     query: { slug: jobSlug },
     forwardHeaders: false,
+    revalidate: false,
   }).catch(() => null);
 
   if (!job) {
@@ -67,6 +68,7 @@ export default async function JobPage({ params }: JobPageProps) {
   const job = await backendGet<JobDetails>("/api/job/details", {
     query: { slug: jobSlug },
     forwardHeaders: false,
+    revalidate: false,
   }).catch(() => null);
 
   if (!job || !job.slug) {
