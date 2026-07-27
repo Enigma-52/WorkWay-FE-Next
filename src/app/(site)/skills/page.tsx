@@ -11,7 +11,7 @@ import type { SkillsPageResponse } from "@/lib/api/contracts";
 export const metadata: Metadata = buildPageMetadata({
   title: "Browse Jobs by Skills | WorkWay",
   description:
-    "Explore jobs across all major skills including software engineering, design, data science, finance, marketing, operations and more. Find your next role on WorkWay.",
+    "Explore jobs by skill — Python, React, SQL, AWS, and hundreds more. Find your next role on WorkWay.",
   path: "/skills",
 });
 

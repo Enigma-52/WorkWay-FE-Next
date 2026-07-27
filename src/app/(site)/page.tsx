@@ -11,6 +11,7 @@ const Features = dynamic(() => import("@/components/LandingPage/Features"));
 const HireMeProfiles = dynamic(
   () => import("@/components/LandingPage/HireMeProfiles")
 );
+const LandingFaq = dynamic(() => import("@/components/LandingPage/LandingFaq"));
 const FinalCTA = dynamic(() => import("@/components/LandingPage/FinalCTA"));
 
 export const metadata: Metadata = buildPageMetadata({
@@ -30,6 +31,7 @@ export default function LandingPage() {
       <ProblemSection />
       <Features />
       <HireMeProfiles />
+      <LandingFaq />
       <FinalCTA />
     </main>
   );

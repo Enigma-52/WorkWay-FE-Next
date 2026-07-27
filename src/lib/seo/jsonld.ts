@@ -4,6 +4,39 @@ import { getSiteUrl } from "@/lib/seo/metadata";
 
 const SITE_URL = "https://www.workway.dev";
 
+// Site-wide brand entity — distinct from buildOrganizationJsonLd, which
+// describes an employer being hired for, not WorkWay itself. Belongs on
+// every page (root layout) so Google/AI systems have one canonical
+// description of the brand to key off, separate from any one page's content.
+export function buildSiteOrganizationJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "WorkWay",
+    url: SITE_URL,
+    logo: `${SITE_URL}/logo.png`,
+    description:
+      "WorkWay is a job search platform that aggregates listings from Greenhouse, Ashby, Lever, YC, and in-house company career pages into one place — free, with no signup wall required to browse.",
+  };
+}
+
+export function buildWebSiteJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "WorkWay",
+    url: SITE_URL,
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${SITE_URL}/jobs?q={search_term_string}`,
+      },
+      "query-input": "required name=search_term_string",
+    },
+  };
+}
+
 export function buildOrganizationJsonLd(company: CompanyDetails) {
   return {
     "@context": "https://schema.org",
@@ -120,6 +153,11 @@ export function buildJobPostingJsonLd(job: JobDetails) {
         "@type": "PostalAddress",
         addressLocality: job.location,
       },
+    },
+    identifier: {
+      "@type": "PropertyValue",
+      name: "WorkWay",
+      value: job.slug,
     },
     url: `${SITE_URL}/job/${job.slug}`,
   };

@@ -6,7 +6,9 @@ import Navbar from "@/components/layout/Navbar";
 import FeedbackButton from "@/components/layout/FeedbackButton";
 import AppProviders from "@/components/providers/AppProviders";
 import AnalyticsProvider from "@/components/providers/AnalyticsProvider";
+import JsonLd from "@/components/seo/JsonLd";
 import { getSiteUrl } from "@/lib/seo/metadata";
+import { buildSiteOrganizationJsonLd, buildWebSiteJsonLd } from "@/lib/seo/jsonld";
 import "./globals.css";
 
 const geist = Geist({
@@ -92,6 +94,8 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
       </head>
       <body className={`${geist.variable} ${geistMono.variable} ${instrumentSerif.variable}`}>
+        <JsonLd data={buildSiteOrganizationJsonLd()} />
+        <JsonLd data={buildWebSiteJsonLd()} />
         <Suspense fallback={null}>
           <AnalyticsProvider />
         </Suspense>

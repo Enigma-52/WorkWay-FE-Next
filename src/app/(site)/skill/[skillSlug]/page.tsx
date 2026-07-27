@@ -82,7 +82,7 @@ export async function generateMetadata({
   return buildPageMetadata({
     title,
     description,
-    path: filteredView ? `/skill/${skillName}` : qp ? `/skill/${skillName}?${qp}` : `/skill/${skillName}`,
+    path: filteredView ? `/skill/${skillSlug}` : qp ? `/skill/${skillSlug}?${qp}` : `/skill/${skillSlug}`,
     robots: filteredView ? { index: false, follow: true } : { index: true, follow: true },
     keywords: [
         skillName,

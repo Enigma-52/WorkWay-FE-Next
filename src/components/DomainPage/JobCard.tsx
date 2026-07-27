@@ -9,6 +9,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Image from "next/image";
 import { truncateLocation } from "@/utils/helper";
 import { track } from "@/lib/analytics";
 
@@ -99,14 +100,14 @@ export function JobCard({ job }: JobCardProps) {
           {/* Company Logo */}
           <Link href={`/job/${job.slug}`} className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full">
             {job.company_logo_url ? (
-              <img
+              <Image
                 src={job.company_logo_url}
                 alt={job.company}
                 width={44}
                 height={44}
                 loading="lazy"
-                decoding="async"
                 className="h-full w-full object-cover"
+                unoptimized
                 onError={(e) => {
                   e.currentTarget.style.display = "none";
                   e.currentTarget.nextElementSibling?.classList.remove(

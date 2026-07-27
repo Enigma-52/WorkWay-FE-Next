@@ -12,7 +12,7 @@ import JsonLd from "@/components/seo/JsonLd";
 export const metadata: Metadata = buildPageMetadata({
   title: "Browse Jobs by Domain | WorkWay",
   description:
-    "Explore jobs across all major domains including software engineering, design, data science, finance, marketing, operations and more. Find your next role on WorkWay.",
+    "Explore jobs by domain — engineering, design, data, finance, marketing, and more. Find your next role on WorkWay.",
   path: "/domains",
 });
 
