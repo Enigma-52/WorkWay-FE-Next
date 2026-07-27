@@ -1,5 +1,9 @@
+"use client";
+
 import dynamic from "next/dynamic";
+import { useEffect } from "react";
 import { CompanyHeader } from "@/components/CompanyPage/CompanyHeader";
+import { track } from "@/lib/analytics";
 import type { CompanyDetails } from "@/types/jobs";
 
 const JobsSection = dynamic(() => import("@/components/CompanyPage/JobsSection").then(m => ({ default: m.JobsSection })));
@@ -15,6 +19,15 @@ type Props = {
 export default function CompanyPageClient({ company }: Props) {
   const isYC = company.platform === "ycombinator";
   const hasJobs = (company.totalJobs || 0) > 0;
+
+  useEffect(() => {
+    track("Company Page Viewed", {
+      company: company.name,
+      company_slug: company.slug,
+      platform: company.platform,
+      total_jobs: company.totalJobs,
+    });
+  }, [company.slug]);
 
   return (
     <div className="min-h-screen bg-background">

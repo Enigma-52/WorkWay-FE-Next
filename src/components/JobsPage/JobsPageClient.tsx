@@ -12,6 +12,7 @@ import { JobCard } from "@/components/DomainPage/JobCard";
 import { JobPagination } from "@/components/DomainPage/JobPagination";
 import { JobsListFilters } from "./JobsListFilters";
 import { JobsFacetsSidebar } from "./JobsFacetsSidebar";
+import { track } from "@/lib/analytics";
 import type { JobListResponse } from "@/types/jobs";
 import JobViewFeed from "@/components/JobViewFeed/JobViewFeed";
 import LatestChangelogCard from "./LatestChangelogCard";
@@ -69,6 +70,17 @@ export default function JobsPageClient({ data }: Props) {
         posted: filters.posted,
         page: "1",
       });
+      track("Jobs Filters Applied", {
+        query: filters.q || null,
+        domain: filters.domain,
+        employment_type: filters.employmentType,
+        experience_level: filters.experienceLevel,
+        location: filters.location || null,
+        posted: filters.posted,
+      });
+      if (filters.q.trim()) {
+        track("Search Performed", { query: filters.q.trim() });
+      }
     },
     [updateParams]
   );

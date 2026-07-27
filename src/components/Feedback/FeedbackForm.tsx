@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { identify, track } from "@/lib/analytics";
 
 type FeedbackCategory =
   | "bug"
@@ -75,6 +76,16 @@ export function FeedbackForm() {
       if (!res.ok) {
         throw new Error(`Failed with status ${res.status}`);
       }
+
+      if (form.email) {
+        identify(form.email, { $name: form.name || undefined, role: form.role });
+      }
+      track("Feedback Submitted", {
+        role: form.role,
+        category: form.category,
+        rating: form.rating ? Number(form.rating) : null,
+        has_email: Boolean(form.email),
+      });
 
       setStatus("success");
       setStatusMessage("Thanks for the feedback — it really helps.");

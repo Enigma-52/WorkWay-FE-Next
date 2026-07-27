@@ -17,6 +17,7 @@ import JobBadge from "@/components/JobPage/JobBadge";
 import JobSection from "@/components/JobPage/JobSection";
 import { Button } from "@/components/ui/button";
 import { getDomainSlug, truncateLocation } from "@/utils/helper";
+import { track } from "@/lib/analytics";
 import type { JobDetails, SkillJobGroup } from "@/types/jobs";
 
 const JobCard = dynamic(() => import("@/components/JobPage/JobCard"));
@@ -83,6 +84,15 @@ export default function JobPageClient({ job }: Props) {
             }),
           }).catch(() => {
             // ignore tracking failures
+          });
+
+          track("Job Viewed", {
+            job_slug: job.slug,
+            job_title: job.title,
+            company: job.company,
+            company_slug: job.company_slug,
+            viewer_country: country,
+            viewer_city: city,
           });
         } catch {
           // swallow errors
@@ -300,7 +310,20 @@ export default function JobPageClient({ job }: Props) {
               </div>
 
               <div className="flex flex-col gap-3 sm:max-w-sm">
-                <a href={job.url} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={job.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() =>
+                    track("Apply Click", {
+                      job_slug: job.slug,
+                      job_title: job.title,
+                      company: job.company,
+                      company_slug: job.company_slug,
+                      position: "hero",
+                    })
+                  }
+                >
                   <Button size="xl" className="w-full cursor-pointer lg:w-auto">
                     Apply Now
                     <ExternalLink className="ml-2 h-5 w-5" />
@@ -452,7 +475,20 @@ export default function JobPageClient({ job }: Props) {
                   </div>
 
                   <div className="mt-8">
-                    <a href={job.url} target="_blank" rel="noopener noreferrer">
+                    <a
+                      href={job.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() =>
+                        track("Apply Click", {
+                          job_slug: job.slug,
+                          job_title: job.title,
+                          company: job.company,
+                          company_slug: job.company_slug,
+                          position: "sidebar",
+                        })
+                      }
+                    >
                       <Button className="w-full cursor-pointer">
                         Apply for this role
                         <ExternalLink className="ml-2 h-4 w-4" />
