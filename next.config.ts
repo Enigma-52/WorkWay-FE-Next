@@ -19,6 +19,16 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      // Talent profiles moved from /profile/:username to the shorter /p/:username.
+      {
+        source: "/profile/:username",
+        destination: "/p/:username",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {
