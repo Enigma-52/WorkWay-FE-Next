@@ -335,7 +335,7 @@ const OnboardingModal = ({ open, onOpenChange }: OnboardingModalProps) => {
               </p>
               <ul className="text-sm text-muted-foreground space-y-1">
                 <li>• We'll curate jobs based on your preferences</li>
-                <li>• Your Hire Me page is live (you can edit anytime)</li>
+                <li>• Your Talent Profile is live (you can edit anytime)</li>
                 <li>• Start applying with one click</li>
               </ul>
             </div>

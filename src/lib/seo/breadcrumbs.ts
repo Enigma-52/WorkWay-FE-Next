@@ -102,12 +102,12 @@ export function buildAboutBreadcrumb(): BreadcrumbItem[] {
   ];
 }
 
-export function buildHireMeBreadcrumb(): BreadcrumbItem[] {
+export function buildTalentProfileBreadcrumb(): BreadcrumbItem[] {
   return [
     ...buildHomeBreadcrumb(),
     {
-      name: "Hire Me",
-      href: "/hireme",
+      name: "Talent Profile",
+      href: "/dashboard/seeker/talent-profile",
     },
   ];
 }
