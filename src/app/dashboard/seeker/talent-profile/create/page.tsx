@@ -185,6 +185,12 @@ export default function TalentProfileCreatePage() {
   const timezones = useMemo(() => {
     try { return Intl.supportedValuesOf("timeZone"); } catch { return []; }
   }, []);
+  // ~418 entries: build the option elements once, otherwise every keystroke
+  // anywhere in this form recreates all of them.
+  const timezoneItems = useMemo(
+    () => timezones.map((tz) => <SelectItem key={tz} value={tz}>{tz.replace(/_/g, " ")}</SelectItem>),
+    [timezones],
+  );
 
   // Social Links
   const [email, setEmail] = useState("");
@@ -789,7 +795,7 @@ export default function TalentProfileCreatePage() {
                 <label className="text-sm font-medium mb-1.5 block">Timezone</label>
                 <Select value={timezone} onValueChange={setTimezone}>
                   <SelectTrigger><SelectValue placeholder="Select timezone" /></SelectTrigger>
-                  <SelectContent>{timezones.map((tz) => <SelectItem key={tz} value={tz}>{tz.replace(/_/g, " ")}</SelectItem>)}</SelectContent>
+                  <SelectContent>{timezoneItems}</SelectContent>
                 </Select>
               </div>
             </div>
