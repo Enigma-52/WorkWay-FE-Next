@@ -28,6 +28,7 @@ import {
   ChevronUp,
   Pencil,
   GripVertical,
+  List,
 } from "lucide-react";
 import {
   CATEGORIES,
@@ -881,8 +882,14 @@ export default function TalentProfileCreatePage() {
                         </div>
                       </div>
                       <div>
-                        <label className="text-sm font-medium mb-1 block">Description <span className="text-xs text-muted-foreground font-normal">Markdown supported</span></label>
-                        <Textarea value={exp.description} onChange={(e) => updateExperience(exp._key, "description", e.target.value)} placeholder="Describe your responsibilities and achievements..." rows={3} />
+                        <div className="flex items-center justify-between mb-1">
+                          <label className="text-sm font-medium block">Description <span className="text-xs text-muted-foreground font-normal">Markdown supported</span></label>
+                          <Button type="button" variant="ghost" size="sm" className="h-6 px-2 text-xs text-muted-foreground hover:text-foreground" onClick={() => updateExperience(exp._key, "description", appendBullet(exp.description))}>
+                            <List className="w-3 h-3 mr-1" />
+                            Add bullet
+                          </Button>
+                        </div>
+                        <Textarea value={exp.description} onChange={(e) => updateExperience(exp._key, "description", e.target.value)} placeholder={"- Cut checkout latency by 40%\n- Led the payments migration"} rows={4} />
                       </div>
                       <div className="flex justify-end">
                         <Button type="button" variant="secondary" size="sm" onClick={() => setEditingExpKey(null)}>Done</Button>
@@ -940,8 +947,14 @@ export default function TalentProfileCreatePage() {
                         </div>
                       </div>
                       <div>
-                        <label className="text-sm font-medium mb-1 block">Description <span className="text-xs text-muted-foreground font-normal">Markdown supported</span></label>
-                        <Textarea value={edu.description} onChange={(e) => updateEducation(edu._key, "description", e.target.value)} placeholder="Notable achievements, activities..." rows={2} />
+                        <div className="flex items-center justify-between mb-1">
+                          <label className="text-sm font-medium block">Description <span className="text-xs text-muted-foreground font-normal">Markdown supported</span></label>
+                          <Button type="button" variant="ghost" size="sm" className="h-6 px-2 text-xs text-muted-foreground hover:text-foreground" onClick={() => updateEducation(edu._key, "description", appendBullet(edu.description))}>
+                            <List className="w-3 h-3 mr-1" />
+                            Add bullet
+                          </Button>
+                        </div>
+                        <Textarea value={edu.description} onChange={(e) => updateEducation(edu._key, "description", e.target.value)} placeholder={"- Dean's list, 2021\n- Led the robotics club"} rows={3} />
                       </div>
                       <div className="flex justify-end"><Button type="button" variant="secondary" size="sm" onClick={() => setEditingEduKey(null)}>Done</Button></div>
                     </div>
