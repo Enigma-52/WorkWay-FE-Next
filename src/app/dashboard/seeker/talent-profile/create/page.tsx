@@ -273,9 +273,12 @@ export default function TalentProfileCreatePage() {
     setAvailabilityStatus((p.availability_status as string) ?? "available");
     setSelectedEmploymentTypes(Array.isArray(p.employment_types) ? (p.employment_types as string[]) : []);
     setNoticePeriod(p.notice_period_days != null ? String(p.notice_period_days) : "");
-    setCurrency((p.currency as string) ?? "USD");
-    setHourlyRate(p.hourly_rate != null ? String(p.hourly_rate) : "");
-    setAnnualSalary(p.annual_salary != null ? String(p.annual_salary) : "");
+    // Amounts are persisted symbol-prefixed ("₹1500000"); recover the currency
+    // from the symbol and keep only digits in the input.
+    const storedAmount = (p.annual_salary ?? p.hourly_rate) as string | null;
+    setCurrency((p.currency as string) ?? currencyFromAmount(storedAmount));
+    setHourlyRate(p.hourly_rate != null ? String(p.hourly_rate).replace(/[^\d.]/g, "") : "");
+    setAnnualSalary(p.annual_salary != null ? String(p.annual_salary).replace(/[^\d.]/g, "") : "");
     setCompensationVisibility((p.compensation_visibility as string) ?? "public");
     setSkills(Array.isArray(p.skills) ? (p.skills as string[]) : []);
     setLanguages(Array.isArray(p.languages) ? (p.languages as LanguageEntry[]) : []);
@@ -421,13 +424,16 @@ export default function TalentProfileCreatePage() {
     setSubmitting(true);
     try {
       const currSymbol = CURRENCIES.find((c) => c.code === currency)?.symbol ?? "$";
+      // Amounts are stored symbol-prefixed, so strip any existing symbol first —
+      // otherwise re-saving an edited profile stacks them up ("$₹1500000").
+      const amount = (value: string) => value.replace(/[^\d.]/g, "");
       const profileBody = {
         username, display_name: displayName, professional_title: professionalTitle, category,
         experience_level: experienceLevel, years_of_experience: yearsOfExperience || null,
         about: bio, availability_status: availabilityStatus, employment_types: selectedEmploymentTypes,
         notice_period_days: noticePeriod ? Number(noticePeriod) : null,
-        hourly_rate: hourlyRate ? `${currSymbol}${hourlyRate}` : null,
-        annual_salary: annualSalary ? `${currSymbol}${annualSalary}` : null,
+        hourly_rate: amount(hourlyRate) ? `${currSymbol}${amount(hourlyRate)}` : null,
+        annual_salary: amount(annualSalary) ? `${currSymbol}${amount(annualSalary)}` : null,
         compensation_visibility: compensationVisibility, skills, languages, country, timezone,
         social_links: { email, website, github, linkedin, twitter },
       };
