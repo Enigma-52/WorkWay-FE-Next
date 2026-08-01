@@ -220,8 +220,10 @@ export default function TalentProfileCreatePage() {
         const res = await fetch("/api/talent-profiles");
         if (res.ok) {
           const data = await res.json();
-          if (data && !data.error && data.username) {
-            prefillFromProfile(data);
+          // The API wraps the row as { profile }; tolerate a bare row too.
+          const existing = data?.profile ?? data;
+          if (existing && !data?.error && existing.username) {
+            prefillFromProfile(existing);
             setIsEditMode(true);
           }
         }
