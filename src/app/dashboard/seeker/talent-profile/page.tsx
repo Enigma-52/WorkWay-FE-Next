@@ -144,7 +144,7 @@ export default function TalentProfilePage() {
 
   async function copyProfileUrl() {
     if (!profile) return;
-    const url = `${window.location.origin}/profile/${profile.username}`;
+    const url = `${window.location.origin}/p/${profile.username}`;
     await navigator.clipboard.writeText(url);
     toast.success("Profile URL copied to clipboard");
   }
@@ -368,7 +368,7 @@ export default function TalentProfilePage() {
           </Button>
         </Link>
         <a
-          href={`/profile/${profile.username}`}
+          href={`/p/${profile.username}`}
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -431,7 +431,7 @@ export default function TalentProfilePage() {
         </div>
         <div className="flex items-center gap-3">
           <code className="flex-1 text-xs bg-secondary rounded-lg px-3 py-2 text-muted-foreground truncate">
-            {typeof window !== "undefined" ? window.location.origin : ""}/profile/{profile.username}
+            {typeof window !== "undefined" ? window.location.origin : ""}/p/{profile.username}
           </code>
           <Button variant="ghost" size="sm" onClick={copyProfileUrl}>
             <Copy className="w-4 h-4" />
