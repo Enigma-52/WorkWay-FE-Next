@@ -33,7 +33,7 @@ const SolutionSection = () => {
               <span className="text-xs font-mono text-primary tracking-wider">The Solution</span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-              So we built a platform
+              So we built a platform{" "}
               <br />
               <span className="text-gradient">that isn&apos;t dumb.</span>
             </h2>

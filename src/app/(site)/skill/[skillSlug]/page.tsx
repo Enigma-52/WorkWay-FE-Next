@@ -35,6 +35,7 @@ export async function generateMetadata({
   const location = getSingleParam(sp.location, "all");
 
   const data = await backendGet<SkillJobsPayload>("/api/filter/skill", {
+    forwardHeaders: false,
     query: {
       slug: skillSlug,
       page: Number(page),
@@ -54,8 +55,10 @@ export async function generateMetadata({
 
   const skillName = data.skill?.name || "Jobs";
   const total = data.meta?.total || 0;
-  let title = `${skillName} Jobs (${total.toLocaleString()} Open Roles) | WorkWay`;
-  let description = `Browse ${total.toLocaleString()} open ${skillName.toLowerCase()} jobs across top companies. Find the latest roles, apply directly, and explore opportunities on WorkWay.`;
+  const roleWord = total === 1 ? "Role" : "Roles";
+  const jobWord = total === 1 ? "job" : "jobs";
+  let title = `${skillName} Jobs (${total.toLocaleString()} Open ${roleWord}) | WorkWay`;
+  let description = `Browse ${total.toLocaleString()} open ${skillName.toLowerCase()} ${jobWord} across top companies. Find the latest roles, apply directly, and explore opportunities on WorkWay.`;
 
   const parts: string[] = [];
   if (employmentLevel !== "all") parts.push(employmentLevel);
@@ -79,7 +82,7 @@ export async function generateMetadata({
   return buildPageMetadata({
     title,
     description,
-    path: filteredView ? `/skill/${skillName}` : qp ? `/skill/${skillName}?${qp}` : `/skill/${skillName}`,
+    path: filteredView ? `/skill/${skillSlug}` : qp ? `/skill/${skillSlug}?${qp}` : `/skill/${skillSlug}`,
     robots: filteredView ? { index: false, follow: true } : { index: true, follow: true },
     keywords: [
         skillName,

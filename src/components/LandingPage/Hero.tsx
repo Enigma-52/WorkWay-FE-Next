@@ -24,11 +24,8 @@ const Hero = () => {
           </a>
         </div>
 
-        <h1
-          className="font-display text-5xl sm:text-7xl md:text-8xl leading-[0.95] tracking-tight animate-fade-up"
-          style={{ animationDelay: "100ms" }}
-        >
-          <span className="text-gradient">Jobs that</span>
+        <h1 className="font-display text-5xl sm:text-7xl md:text-8xl leading-[0.95] tracking-tight">
+          <span className="text-gradient">Jobs that </span>
           <br />
           <span className="italic text-brand-gradient">respect your time.</span>
         </h1>
@@ -73,7 +70,7 @@ const Hero = () => {
           style={{ animationDelay: "550ms" }}
         >
           {[
-            { n: "300k+", l: "Jobs" },
+            { n: "400k+", l: "Jobs" },
             { n: "5k+", l: "Companies" },
             { n: "50+", l: "Domains" },
           ].map((s) => (

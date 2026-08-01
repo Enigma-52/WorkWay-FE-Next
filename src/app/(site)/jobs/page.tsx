@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { backendGet } from "@/lib/api/server-client";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import {
@@ -10,6 +11,8 @@ import type { JobListResponse } from "@/types/jobs";
 import JobsPageClient from "@/components/JobsPage/JobsPageClient";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
+
+const JOB_LIST_REVALIDATE = false;
 
 type JobsPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
@@ -35,6 +38,7 @@ function buildListQuery(
   const location = getSingleParam(sp.location, "");
   const company_slug = getSingleParam(sp.company_slug, "");
   const sort = getSingleParam(sp.sort, "recent");
+  const posted = getSingleParam(sp.posted, "all");
 
   const query: Record<string, string | number> = {
     page: Number(page) || 1,
@@ -47,6 +51,7 @@ function buildListQuery(
   if (q) query.q = q;
   if (location) query.location = location;
   if (company_slug) query.company_slug = company_slug;
+  if (posted && posted !== "all") query.posted = posted;
   return query;
 }
 
@@ -75,6 +80,8 @@ export async function generateMetadata({
   const query = buildListQuery(sp);
   const data = await backendGet<JobListResponse>("/api/job/list", {
     query: query as Record<string, string | number>,
+    revalidate: JOB_LIST_REVALIDATE,
+    forwardHeaders: false,
   }).catch(() => null);
 
   const total = data?.meta?.total ?? 0;
@@ -93,6 +100,7 @@ export async function generateMetadata({
   if (query.experience_level && query.experience_level !== "all")
     qs.set("experience_level", String(query.experience_level));
   if (query.location) qs.set("location", String(query.location));
+  if (query.posted) qs.set("posted", String(query.posted));
   const path = qs.toString() ? `/jobs?${qs.toString()}` : "/jobs";
 
   return buildPageMetadata({
@@ -102,12 +110,18 @@ export async function generateMetadata({
   });
 }
 
-export default async function JobsPage({ searchParams }: JobsPageProps) {
+async function JobsListSection({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const sp = await searchParams;
   const query = buildListQuery(sp);
 
   const data = await backendGet<JobListResponse>("/api/job/list", {
     query: query as Record<string, string | number>,
+    revalidate: JOB_LIST_REVALIDATE,
+    forwardHeaders: false,
   }).catch(() => EMPTY_LIST_RESPONSE);
 
   const payload: JobListResponse =
@@ -120,16 +134,46 @@ export default async function JobsPage({ searchParams }: JobsPageProps) {
         }
       : EMPTY_LIST_RESPONSE;
 
+  return (
+    <>
+      <JsonLd data={buildJobsPageItemListJsonLd(payload.jobs)} />
+      <JobsPageClient data={payload} />
+    </>
+  );
+}
+
+function JobsListSkeleton() {
+  return (
+    <div className="mx-auto w-full max-w-6xl px-6 py-6 animate-pulse">
+      <div className="grid gap-6 md:grid-cols-[240px_1fr]">
+        <div className="hidden md:block space-y-3">
+          <div className="h-4 w-24 rounded bg-secondary" />
+          <div className="h-8 rounded bg-secondary" />
+          <div className="h-8 rounded bg-secondary" />
+          <div className="h-8 rounded bg-secondary" />
+        </div>
+        <div className="space-y-4">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="h-24 rounded-xl bg-secondary" />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function JobsPage({ searchParams }: JobsPageProps) {
   const breadcrumbs = buildJobsBreadcrumb();
 
   return (
     <>
-      <JsonLd data={buildJobsPageItemListJsonLd(payload.jobs)} />
       <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
       <div className="mx-auto w-full max-w-6xl px-6 pt-6">
         <Breadcrumbs items={breadcrumbs} />
       </div>
-      <JobsPageClient data={payload} />
+      <Suspense fallback={<JobsListSkeleton />}>
+        <JobsListSection searchParams={searchParams} />
+      </Suspense>
     </>
   );
 }

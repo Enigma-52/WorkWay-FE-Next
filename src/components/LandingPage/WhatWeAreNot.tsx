@@ -62,7 +62,7 @@ const WhatWeAreNot = () => {
             viewport={{ once: true }}
             className="text-lg text-white/30"
           >
-            Just tools that help you get hired.
+            Just tools that help you get hired.{" "}
             <br />
             <span className="text-white/70 font-semibold">Or hire faster.</span>
           </motion.p>

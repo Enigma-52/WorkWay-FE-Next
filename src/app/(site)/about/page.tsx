@@ -36,7 +36,7 @@ export default function AboutPage() {
           <h2 className="mb-3 text-2xl font-semibold">What is WorkWay?</h2>
           <p className="leading-relaxed text-muted-foreground">
             Most job platforms show you a list of jobs. WorkWay shows you how
-            companies actually hire.
+            companies actually hire.{" "}
             <br />
             <br />
             We organize job postings into structured company pages where you can
@@ -54,7 +54,7 @@ export default function AboutPage() {
         <section className="mb-12">
           <h2 className="mb-3 text-2xl font-semibold">Why WorkWay Exists</h2>
           <p className="leading-relaxed text-muted-foreground">
-            Job searching today is noisy, repetitive, and inefficient.
+            Job searching today is noisy, repetitive, and inefficient.{" "}
             <br />
             <br />
             Candidates apply blindly. Companies repost the same roles. Nobody
@@ -92,7 +92,7 @@ export default function AboutPage() {
           <h2 className="mb-3 text-2xl font-semibold">Our Vision</h2>
           <p className="leading-relaxed text-muted-foreground">
             We believe hiring data is one of the most honest signals about a
-            company.
+            company.{" "}
             <br />
             <br />
             WorkWay aims to become the default place where:

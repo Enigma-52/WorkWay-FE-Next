@@ -7,6 +7,7 @@ import { JobCard } from "@/components/DomainPage/JobCard";
 import { JobPagination } from "@/components/DomainPage/JobPagination";
 import { JobsFacetsSidebar } from "@/components/JobsPage/JobsFacetsSidebar";
 import JobViewFeed from "@/components/JobViewFeed/JobViewFeed";
+import CategoryFaq from "@/components/seo/CategoryFaq";
 import {
   Select,
   SelectContent,
@@ -342,6 +343,8 @@ export default function LocationSeoPageClient({ data, role, location }: Props) {
             <JobViewFeed />
           </div>
         </div>
+
+        <CategoryFaq topic={`${role.name} jobs in ${location.name}`} total={total} jobs={jobs} />
       </main>
     </div>
   );

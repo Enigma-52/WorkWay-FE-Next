@@ -1,10 +1,16 @@
+"use client";
+
+import dynamic from "next/dynamic";
+import { useEffect } from "react";
 import { CompanyHeader } from "@/components/CompanyPage/CompanyHeader";
-import { JobsSection } from "@/components/CompanyPage/JobsSection";
-import { RecentlyPostedSection } from "@/components/CompanyPage/RecentlyPostedSection";
-import { TeamBreakdown } from "@/components/CompanyPage/TeamBreakdown";
-import { YCFoundersSection } from "@/components/CompanyPage/YCFoundersSection";
-import { YCSidebar } from "@/components/CompanyPage/YCSidebar";
+import { track } from "@/lib/analytics";
 import type { CompanyDetails } from "@/types/jobs";
+
+const JobsSection = dynamic(() => import("@/components/CompanyPage/JobsSection").then(m => ({ default: m.JobsSection })));
+const RecentlyPostedSection = dynamic(() => import("@/components/CompanyPage/RecentlyPostedSection").then(m => ({ default: m.RecentlyPostedSection })));
+const TeamBreakdown = dynamic(() => import("@/components/CompanyPage/TeamBreakdown").then(m => ({ default: m.TeamBreakdown })));
+const YCFoundersSection = dynamic(() => import("@/components/CompanyPage/YCFoundersSection").then(m => ({ default: m.YCFoundersSection })));
+const YCSidebar = dynamic(() => import("@/components/CompanyPage/YCSidebar").then(m => ({ default: m.YCSidebar })));
 
 type Props = {
   company: CompanyDetails;
@@ -13,6 +19,15 @@ type Props = {
 export default function CompanyPageClient({ company }: Props) {
   const isYC = company.platform === "ycombinator";
   const hasJobs = (company.totalJobs || 0) > 0;
+
+  useEffect(() => {
+    track("Company Page Viewed", {
+      company: company.name,
+      company_slug: company.slug,
+      platform: company.platform,
+      total_jobs: company.totalJobs,
+    });
+  }, [company.slug]);
 
   return (
     <div className="min-h-screen bg-background">

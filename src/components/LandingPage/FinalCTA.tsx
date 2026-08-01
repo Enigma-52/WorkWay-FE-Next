@@ -8,7 +8,7 @@ const FinalCTA = () => {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-brand/10 blur-[140px] pointer-events-none" />
       <div className="relative mx-auto max-w-4xl px-6 text-center">
         <h2 className="font-display text-6xl sm:text-8xl leading-[0.95] tracking-tight">
-          <span className="text-gradient">Stop fighting</span>
+          <span className="text-gradient">Stop fighting </span>
           <br />
           <span className="italic text-brand-gradient">job platforms.</span>
         </h2>

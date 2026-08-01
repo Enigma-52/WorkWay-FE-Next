@@ -4,6 +4,39 @@ import { getSiteUrl } from "@/lib/seo/metadata";
 
 const SITE_URL = "https://www.workway.dev";
 
+// Site-wide brand entity — distinct from buildOrganizationJsonLd, which
+// describes an employer being hired for, not WorkWay itself. Belongs on
+// every page (root layout) so Google/AI systems have one canonical
+// description of the brand to key off, separate from any one page's content.
+export function buildSiteOrganizationJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "WorkWay",
+    url: SITE_URL,
+    logo: `${SITE_URL}/logo.png`,
+    description:
+      "WorkWay is a job search platform that aggregates listings from Greenhouse, Ashby, Lever, YC, and in-house company career pages into one place — free, with no signup wall required to browse.",
+  };
+}
+
+export function buildWebSiteJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "WorkWay",
+    url: SITE_URL,
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${SITE_URL}/jobs?q={search_term_string}`,
+      },
+      "query-input": "required name=search_term_string",
+    },
+  };
+}
+
 export function buildOrganizationJsonLd(company: CompanyDetails) {
   return {
     "@context": "https://schema.org",
@@ -68,6 +101,22 @@ function extractCountryFromLocation(location: string): string {
   return "";
 }
 
+// Source data has no real job-closing date. Google actively penalizes job
+// aggregators that omit validThrough — it treats undated postings as
+// suspicious "always open" listings and can reduce the domain's trust score
+// in Google for Jobs over repeated instances. 30 days from datePosted is the
+// standard heuristic for aggregators without a real expiry signal.
+const VALID_THROUGH_DAYS = 60;
+
+function computeValidThrough(datePosted?: string): string | undefined {
+  if (!datePosted) return undefined;
+  const posted = new Date(datePosted);
+  if (Number.isNaN(posted.getTime())) return undefined;
+  const validThrough = new Date(posted);
+  validThrough.setDate(validThrough.getDate() + VALID_THROUGH_DAYS);
+  return validThrough.toISOString();
+}
+
 export function buildJobPostingJsonLd(job: JobDetails) {
   const isRemote = /remote/i.test(job.location);
   const descriptionText = extractJobDescriptionText(job.description);
@@ -80,6 +129,7 @@ export function buildJobPostingJsonLd(job: JobDetails) {
     title: job.title,
     description: descriptionText || `${job.title} position at ${job.company} in ${job.location}.`,
     datePosted: job.created_at || undefined,
+    validThrough: computeValidThrough(job.created_at),
     employmentType: job.employment_type || undefined,
     ...(isRemote
       ? {
@@ -103,6 +153,11 @@ export function buildJobPostingJsonLd(job: JobDetails) {
         "@type": "PostalAddress",
         addressLocality: job.location,
       },
+    },
+    identifier: {
+      "@type": "PropertyValue",
+      name: "WorkWay",
+      value: job.slug,
     },
     url: `${SITE_URL}/job/${job.slug}`,
   };

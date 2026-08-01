@@ -33,7 +33,8 @@ export default function RemoteLogo({
       width={width}
       height={height}
       className={className}
-      unoptimized
+      sizes={`${width}px`}
+      loading="lazy"
       onError={() => setFailed(true)}
     />
   );

@@ -9,6 +9,13 @@ import { buildJobDetailBreadcrumb } from "@/lib/seo/breadcrumbs";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import type { JobDetails } from "@/types/jobs";
 
+// Job pages have enormous, ever-growing cardinality (one per job posting,
+// most viewed only a handful of times ever). Statically caching each one
+// via revalidate/dynamicParams writes a permanent __PAGE__.segment.rsc file
+// per slug that Next never evicts on self-hosted deployments — this grew
+// to 2.85M files / 56.7GiB on disk. Render fully dynamic instead.
+export const dynamic = "force-dynamic";
+
 type JobPageProps = {
   params: Promise<{ jobSlug: string }>;
 };
@@ -19,6 +26,8 @@ export async function generateMetadata({
   const { jobSlug } = await params;
   const job = await backendGet<JobDetails>("/api/job/details", {
     query: { slug: jobSlug },
+    forwardHeaders: false,
+    revalidate: false,
   }).catch(() => null);
 
   if (!job) {
@@ -29,13 +38,15 @@ export async function generateMetadata({
   }
 
   const topSkills = job.skills?.slice(0, 3).map((s) => s.name) ?? [];
-  const skillsText = topSkills.length > 0 ? ` Skills: ${topSkills.join(", ")}.` : "";
 
   const ycTag = job.platform === "ycombinator" ? " (YC)" : "";
 
+  // Kept short (~60 chars title, ~155 chars description) so Google doesn't
+  // truncate these in search results — role + company first, since those are
+  // the highest-value keywords for job search intent.
   return buildPageMetadata({
-    title: `${job.title} at ${job.company}${ycTag} — ${job.employment_type} Job in ${job.location} | WorkWay`,
-    description: `Apply for the ${job.title} role at ${job.company}${ycTag} in ${job.location}.${skillsText} ${job.experience_level} · ${job.employment_type}. View full details and apply on WorkWay.`,
+    title: `${job.title} at ${job.company}${ycTag} | WorkWay`,
+    description: `${job.title} at ${job.company}${ycTag} in ${job.location}. ${job.employment_type} · ${job.experience_level}. Apply on WorkWay.`,
     path: `/job/${jobSlug}`,
     image: job.company_logo_url || "/logo.png",
     keywords: [
@@ -56,6 +67,8 @@ export default async function JobPage({ params }: JobPageProps) {
   const { jobSlug } = await params;
   const job = await backendGet<JobDetails>("/api/job/details", {
     query: { slug: jobSlug },
+    forwardHeaders: false,
+    revalidate: false,
   }).catch(() => null);
 
   if (!job || !job.slug) {

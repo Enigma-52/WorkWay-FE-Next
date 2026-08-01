@@ -17,6 +17,7 @@ export default function FilterBar({
         <select
           value={hiringFilter}
           onChange={(e) => onHiringFilterChange(e.target.value)}
+          aria-label="Filter by hiring status"
           className="cursor-pointer appearance-none rounded-lg border border-border bg-secondary px-4 py-2 pr-10 text-sm text-foreground focus:border-primary focus:outline-none"
         >
           <option value="all">All Companies</option>

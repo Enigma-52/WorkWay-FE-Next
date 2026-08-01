@@ -28,7 +28,7 @@ export default function FeaturedSection({
     <div className="rounded-xl border border-border bg-card/50 p-4">
       <div className="mb-3 flex items-center gap-2">
         <Icon className="h-4 w-4 text-primary" />
-        <h3 className="font-display font-semibold text-foreground">{title}</h3>
+        <h2 className="font-display font-semibold text-foreground">{title}</h2>
       </div>
       <div className="flex flex-wrap gap-2">
         {companies.map((company) => (

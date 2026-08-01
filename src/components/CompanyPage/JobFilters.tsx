@@ -61,7 +61,7 @@ export function JobFilters({
 
       {/* Location Filter */}
       <Select value={draftLocation} onValueChange={setDraftLocation}>
-        <SelectTrigger className="w-[180px] bg-secondary border-border">
+        <SelectTrigger className="w-[180px] bg-secondary border-border" aria-label="Filter by location">
           <SelectValue placeholder="Location" />
         </SelectTrigger>
         <SelectContent className="bg-card border-border">
@@ -76,7 +76,7 @@ export function JobFilters({
 
       {/* Experience Filter */}
       <Select value={draftExperience} onValueChange={setDraftExperience}>
-        <SelectTrigger className="w-[160px] bg-secondary border-border">
+        <SelectTrigger className="w-[160px] bg-secondary border-border" aria-label="Filter by experience level">
           <SelectValue placeholder="Experience" />
         </SelectTrigger>
         <SelectContent className="bg-card border-border">

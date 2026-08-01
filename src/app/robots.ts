@@ -9,9 +9,33 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: "GPTBot",
         disallow: "/",
       },
+      // Retrieval/citation bots, not training bots — these are what let
+      // ChatGPT/Claude/Perplexity actually cite our job listings when a user
+      // asks them a live question. Keep these allowed while GPTBot/ClaudeBot
+      // (training crawlers) stay blocked above/via Cloudflare.
       {
         userAgent: "ChatGPT-User",
-        disallow: "/",
+        allow: "/",
+      },
+      {
+        userAgent: "OAI-SearchBot",
+        allow: "/",
+      },
+      {
+        userAgent: "Claude-SearchBot",
+        allow: "/",
+      },
+      {
+        userAgent: "Claude-User",
+        allow: "/",
+      },
+      {
+        userAgent: "PerplexityBot",
+        allow: "/",
+      },
+      {
+        userAgent: "Perplexity-User",
+        allow: "/",
       },
       {
         userAgent: "CCBot",

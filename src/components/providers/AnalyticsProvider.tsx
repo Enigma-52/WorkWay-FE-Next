@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import Script from "next/script";
-import mixpanel from "mixpanel-browser";
+import { detectBot, track } from "@/lib/analytics";
 
 const GA_MEASUREMENT_ID =
   process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-PMBBRGCPM5";
@@ -14,20 +14,21 @@ declare global {
   interface Window {
     dataLayer?: unknown[];
     gtag?: (...args: unknown[]) => void;
-    mixpanel?: typeof mixpanel;
+    mixpanel?: {
+      track: (event: string, props?: Record<string, unknown>) => void;
+      register: (props: Record<string, unknown>) => void;
+      identify: (id: string) => void;
+      people: { set: (props: Record<string, unknown>) => void };
+    };
   }
 }
 
 function trackPageView(path: string) {
-  if (typeof window === "undefined") return;
-
-  if (GA_MEASUREMENT_ID && typeof window.gtag === "function") {
+  if (GA_MEASUREMENT_ID && typeof window !== "undefined" && typeof window.gtag === "function") {
     window.gtag("config", GA_MEASUREMENT_ID, { page_path: path });
   }
 
-  if (window.mixpanel) {
-    window.mixpanel.track("Page View", { path });
-  }
+  track("Page View", { path });
 }
 
 export default function AnalyticsProvider() {
@@ -43,14 +44,32 @@ export default function AnalyticsProvider() {
   useEffect(() => {
     if (!MIXPANEL_TOKEN || mixpanelInitialized.current) return;
 
-    mixpanel.init(MIXPANEL_TOKEN, {
-      autocapture: true,
-      track_pageview: false,
-      record_sessions_percent: 0,
-    });
+    import("mixpanel-browser").then((mod) => {
+      const mixpanel = mod.default;
+      mixpanel.init(MIXPANEL_TOKEN, {
+        // Page views and clicks are tracked manually with richer, named
+        // events (Page View, Apply Click, etc.) — autocapture's generic
+        // [Auto] Page View / Element Click / Dead Click would just
+        // duplicate them, so only keep the signals we don't send manually.
+        autocapture: {
+          pageview: false,
+          click: false,
+          dead_click: false,
+          rage_click: true,
+          input: false,
+          scroll: false,
+          submit: false,
+        },
+        track_pageview: false,
+        record_sessions_percent: 0,
+      });
+      window.mixpanel = mixpanel;
 
-    window.mixpanel = mixpanel;
-    mixpanelInitialized.current = true;
+      const { isBot, reason } = detectBot();
+      mixpanel.register({ is_bot: isBot, bot_reason: reason });
+
+      mixpanelInitialized.current = true;
+    });
   }, []);
 
   useEffect(() => {
@@ -62,11 +81,11 @@ export default function AnalyticsProvider() {
     <>
       <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-        strategy="afterInteractive"
+        strategy="lazyOnload"
       />
       <Script
         id="google-analytics-init"
-        strategy="afterInteractive"
+        strategy="lazyOnload"
         dangerouslySetInnerHTML={{
           __html: `
             window.dataLayer = window.dataLayer || [];

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { ArrowRight, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -17,7 +18,7 @@ const Navbar = () => {
         {/* Logo */}
         <div className="flex items-center gap-2">
           <Link href="/" className="flex items-center gap-2">
-            <img src="/logo.png" alt="WorkWay" className="w-9 h-9" />
+            <Image src="/logo.png" alt="" width={36} height={36} priority />
             <span className="text-base font-semibold">WorkWay</span>
           </Link>
         </div>

@@ -11,19 +11,22 @@ import {
   ArrowRight,
   Banknote,
 } from "lucide-react";
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import JobBadge from "@/components/JobPage/JobBadge";
 import JobSection from "@/components/JobPage/JobSection";
-import JobCard from "@/components/JobPage/JobCard";
 import { Button } from "@/components/ui/button";
 import { getDomainSlug, truncateLocation } from "@/utils/helper";
+import { track } from "@/lib/analytics";
 import type { JobDetails, SkillJobGroup } from "@/types/jobs";
-import JobViewFeed from "@/components/JobViewFeed/JobViewFeed";
 import AuthModal from "@/components/common/AuthModal";
 import SaveJobButton from "@/components/common/SaveJobButton";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useJobStatus } from "@/contexts/JobStatusContext";
+
+const JobCard = dynamic(() => import("@/components/JobPage/JobCard"));
+const JobViewFeed = dynamic(() => import("@/components/JobViewFeed/JobViewFeed"));
 
 type Props = {
   job: JobDetails;
@@ -78,50 +81,63 @@ export default function JobPageClient({ job }: Props) {
 
     let cancelled = false;
 
-    async function trackView() {
-      try {
-        let country: string | null = null;
-        let city: string | null = null;
-
+    // Defer tracking to avoid competing with LCP resources
+    const timeoutId = setTimeout(() => {
+      async function trackView() {
         try {
-          const geoRes = await fetch("https://ipapi.co/json/");
-          if (geoRes.ok) {
-            const geo = (await geoRes.json()) as {
-              country_name?: string;
-              city?: string;
-            };
-            country = geo.country_name ?? null;
-            city = geo.city ?? null;
+          let country: string | null = null;
+          let city: string | null = null;
+
+          try {
+            const geoRes = await fetch("https://ipapi.co/json/");
+            if (geoRes.ok) {
+              const geo = (await geoRes.json()) as {
+                country_name?: string;
+                city?: string;
+              };
+              country = geo.country_name ?? null;
+              city = geo.city ?? null;
+            }
+          } catch {
+            // ignore geo failures
           }
-        } catch {
-          // ignore geo failures
-        }
 
-        if (cancelled) return;
+          if (cancelled) return;
 
-        await fetch("/api/job/view", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            jobSlug: job.slug,
+          await fetch("/api/job/view", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              jobSlug: job.slug,
+              viewer_country: country,
+              viewer_city: city,
+              source_page: "job",
+            }),
+          }).catch(() => {
+            // ignore tracking failures
+          });
+
+          track("Job Viewed", {
+            job_slug: job.slug,
+            job_title: job.title,
+            company: job.company,
+            company_slug: job.company_slug,
             viewer_country: country,
             viewer_city: city,
-            source_page: "job",
-          }),
-        }).catch(() => {
-          // ignore tracking failures
-        });
-      } catch {
-        // swallow errors
+          });
+        } catch {
+          // swallow errors
+        }
       }
-    }
 
-    trackView();
+      trackView();
+    }, 2000);
 
     return () => {
       cancelled = true;
+      clearTimeout(timeoutId);
     };
   }, [job?.slug]);
 
@@ -159,7 +175,10 @@ export default function JobPageClient({ job }: Props) {
                       {job.company_logo_url ? (
                         <img
                           src={job.company_logo_url}
-                          alt={`${job.company} logo`}
+                          alt={job.company}
+                          width={56}
+                          height={56}
+                          decoding="async"
                           className="max-h-14 max-w-full"
                         />
                       ) : (
@@ -276,7 +295,11 @@ export default function JobPageClient({ job }: Props) {
                     >
                       <img
                         src="https://www.vectorlogo.zone/logos/ycombinator/ycombinator-icon.svg"
-                        alt="Y Combinator"
+                        alt=""
+                        width={16}
+                        height={16}
+                        loading="lazy"
+                        decoding="async"
                         className="h-4 w-4"
                       />
                       YC
@@ -297,9 +320,9 @@ export default function JobPageClient({ job }: Props) {
 
                 {job.skills?.length > 0 && (
                   <div className="mt-6">
-                    <h3 className="mb-3 text-sm font-medium text-muted-foreground">
+                    <h2 className="mb-3 text-sm font-medium text-muted-foreground">
                       Skills
-                    </h3>
+                    </h2>
 
                     <div className="flex flex-wrap gap-3">
                       {job.skills
@@ -325,7 +348,16 @@ export default function JobPageClient({ job }: Props) {
                     href={job.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={() => { if (!alreadyApplied) { setApplyClicked(true); setAppliedStatus(null); } }}
+                    onClick={() => {
+                      track("Apply Click", {
+                        job_slug: job.slug,
+                        job_title: job.title,
+                        company: job.company,
+                        company_slug: job.company_slug,
+                        position: "hero",
+                      });
+                      if (!alreadyApplied) { setApplyClicked(true); setAppliedStatus(null); }
+                    }}
                   >
                     <Button size="xl" className="cursor-pointer">
                       Apply Now
@@ -536,7 +568,20 @@ export default function JobPageClient({ job }: Props) {
                   </div>
 
                   <div className="mt-8">
-                    <a href={job.url} target="_blank" rel="noopener noreferrer">
+                    <a
+                      href={job.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() =>
+                        track("Apply Click", {
+                          job_slug: job.slug,
+                          job_title: job.title,
+                          company: job.company,
+                          company_slug: job.company_slug,
+                          position: "sidebar",
+                        })
+                      }
+                    >
                       <Button className="w-full cursor-pointer">
                         Apply for this role
                         <ExternalLink className="ml-2 h-4 w-4" />

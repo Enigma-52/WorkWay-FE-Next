@@ -9,10 +9,12 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Image from "next/image";
 import SaveJobButton from "@/components/common/SaveJobButton";
 import { useJobStatus } from "@/contexts/JobStatusContext";
 import { CheckCircle2 } from "lucide-react";
 import { truncateLocation } from "@/utils/helper";
+import { track } from "@/lib/analytics";
 
 const DESCRIPTION_PREVIEW_MAX_CHARS = 160;
 
@@ -86,6 +88,14 @@ export function JobCard({ job }: JobCardProps) {
   const skillsList = normalizedSkills(job.skills);
   const platform = job.platform;
 
+  const trackCardClick = () =>
+    track("Job Card Clicked", {
+      job_slug: job.slug,
+      job_title: job.title,
+      company: job.company,
+      company_slug: job.company_slug,
+    });
+
   return (
     <article className="group relative rounded-lg border border-border bg-card p-6 transition-all duration-300 hover:border-primary/40 hover:glow-subtle animate-fade-in">
       {/* Applied badge */}
@@ -102,10 +112,14 @@ export function JobCard({ job }: JobCardProps) {
           {/* Company Logo */}
           <Link href={`/job/${job.slug}`} className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full">
             {job.company_logo_url ? (
-              <img
+              <Image
                 src={job.company_logo_url}
-                alt={`${job.company} logo`}
+                alt={job.company}
+                width={44}
+                height={44}
+                loading="lazy"
                 className="h-full w-full object-cover"
+                unoptimized
                 onError={(e) => {
                   e.currentTarget.style.display = "none";
                   e.currentTarget.nextElementSibling?.classList.remove(
@@ -121,7 +135,7 @@ export function JobCard({ job }: JobCardProps) {
           </Link>
           {/* Job Info */}
           <div className="flex flex-col gap-2 min-w-0">
-            <Link href={`/job/${job.slug}`}>
+            <Link href={`/job/${job.slug}`} onClick={trackCardClick}>
               <h3 className="font-display text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                 {job.title}
               </h3>
@@ -215,7 +229,11 @@ export function JobCard({ job }: JobCardProps) {
                 >
                   <img
                     src="https://www.vectorlogo.zone/logos/ycombinator/ycombinator-icon.svg"
-                    alt="Y Combinator"
+                    alt=""
+                    width={14}
+                    height={14}
+                    loading="lazy"
+                    decoding="async"
                     className="h-3.5 w-3.5"
                   />
                   YC
@@ -271,7 +289,20 @@ export function JobCard({ job }: JobCardProps) {
             jobUrl={job.url}
           />
           <Button asChild variant="outline" size="sm" className="group/btn ...">
-            <a href={job.url} target="_blank" rel="noopener noreferrer">
+            <a
+              href={job.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() =>
+                track("Apply Click", {
+                  job_slug: job.slug,
+                  job_title: job.title,
+                  company: job.company,
+                  company_slug: job.company_slug,
+                  position: "listing_card",
+                })
+              }
+            >
               Apply
               <ExternalLink className="ml-1.5 h-3.5 w-3.5" />
             </a>

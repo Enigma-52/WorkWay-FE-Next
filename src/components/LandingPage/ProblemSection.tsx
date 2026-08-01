@@ -85,7 +85,7 @@ const ProblemSection = () => {
             </ul>
             <p className="mt-10 pt-6 border-t border-border text-muted-foreground">
               This isn&apos;t{" "}
-              <span className="line-through">&ldquo;the grind.&rdquo;</span>
+              <span className="line-through">&ldquo;the grind.&rdquo;</span>{" "}
               <br />
               <span className="text-foreground font-medium">
                 It&apos;s bad software.

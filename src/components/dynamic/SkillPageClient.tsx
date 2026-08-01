@@ -5,6 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { JobCard } from "@/components/DomainPage/JobCard";
 import { JobFilters } from "@/components/DomainPage/JobFilters";
 import { JobPagination } from "@/components/DomainPage/JobPagination";
+import CategoryFaq from "@/components/seo/CategoryFaq";
 import type { SkillJobsPayload } from "@/types/jobs";
 
 type Props = {
@@ -145,6 +146,8 @@ export default function SkillPageClient({ data }: Props) {
               />
             </div>
           )}
+
+          <CategoryFaq topic={`${skill.name} jobs`} total={meta.total} jobs={jobs} />
         </div>
       </main>
     </div>

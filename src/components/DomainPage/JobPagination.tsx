@@ -34,6 +34,7 @@ export function JobPagination({
         size="icon"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
+        aria-label="Previous page"
         className="border-border hover:border-primary hover:bg-primary hover:text-primary-foreground disabled:opacity-50"
       >
         <ChevronLeft className="h-4 w-4" />
@@ -92,6 +93,7 @@ export function JobPagination({
         size="icon"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
+        aria-label="Next page"
         className="border-border hover:border-primary hover:bg-primary hover:text-primary-foreground disabled:opacity-50"
       >
         <ChevronRight className="h-4 w-4" />

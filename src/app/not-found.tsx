@@ -1,4 +1,15 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+// Without its own metadata, this boundary inherited the root layout's
+// brand title/robots (index, follow) while Next separately injected its
+// own noindex for the 404 status — two conflicting robots tags on every
+// 404 page. Declaring both explicitly here replaces both with one.
+export const metadata: Metadata = {
+  title: "Page Not Found — WorkWay",
+  description: "The page you're looking for doesn't exist or may have been removed.",
+  robots: { index: false, follow: true },
+};
 
 export default function NotFound() {
   return (

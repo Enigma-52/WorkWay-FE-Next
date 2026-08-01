@@ -32,12 +32,24 @@ export async function backendGet<T>(
     query?: Query;
     revalidate?: number | false;
     tags?: string[];
+    forwardHeaders?: boolean;
   },
 ): Promise<T> {
   const url = buildUrl(path, options?.query);
-  const h = await headers();
-  const cookie = h.get("cookie") || "";
-  const auth = h.get("authorization") || "";
+
+  // Reading headers()/cookies() forces this route to render fully dynamically
+  // on every request, defeating the Data Cache below. Only pay that cost for
+  // endpoints that actually use the visitor's cookie/auth (e.g. personalized
+  // or session-scoped data) — pass forwardHeaders: false for public,
+  // unauthenticated endpoints (backend confirmed to ignore these headers).
+  const forwardHeaders = options?.forwardHeaders ?? true;
+  let cookie = "";
+  let auth = "";
+  if (forwardHeaders) {
+    const h = await headers();
+    cookie = h.get("cookie") || "";
+    auth = h.get("authorization") || "";
+  }
 
   const revalidateOption = options?.revalidate;
 

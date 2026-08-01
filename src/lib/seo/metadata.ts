@@ -21,11 +21,20 @@ export function getSiteUrl(): string {
   return withProtocol.replace(/\/+$/, "");
 }
 
+// The bundled default logo is a known 800x800 square. Arbitrary external
+// images (job/company logos passed via `image`) have unknown real
+// dimensions, so we don't claim width/height for those — a false claim
+// causes social platforms to mis-crop/distort the preview. Both fields
+// are optional per the OG spec; omitting them means the platform fetches
+// the image and determines its own dimensions.
+const DEFAULT_IMAGE = "/logo.png";
+const DEFAULT_IMAGE_DIMENSIONS = { width: 800, height: 800 };
+
 export function buildPageMetadata({
   title,
   description,
   path,
-  image = "/logo.png",
+  image,
   robots,
   keywords,
 }: BuildMetadataArgs): Metadata {
@@ -33,9 +42,13 @@ export function buildPageMetadata({
   const canonical = path.startsWith("http")
     ? path
     : new URL(path, `${siteUrl}/`).toString();
-  const imageUrl = image.startsWith("http")
-    ? image
-    : new URL(image, `${siteUrl}/`).toString();
+  const resolvedImage = image || DEFAULT_IMAGE;
+  const imageUrl = resolvedImage.startsWith("http")
+    ? resolvedImage
+    : new URL(resolvedImage, `${siteUrl}/`).toString();
+  const imageMeta = image
+    ? { url: imageUrl, alt: title }
+    : { url: imageUrl, ...DEFAULT_IMAGE_DIMENSIONS, alt: title };
 
   return {
     title,
@@ -51,7 +64,7 @@ export function buildPageMetadata({
       url: canonical,
       siteName: "WorkWay",
       type: "website",
-      images: [{ url: imageUrl, width: 1200, height: 630, alt: title }],
+      images: [imageMeta],
     },
     twitter: {
       card: "summary_large_image",
