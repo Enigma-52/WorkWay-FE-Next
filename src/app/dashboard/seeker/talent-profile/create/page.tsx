@@ -209,6 +209,10 @@ export default function TalentProfileCreatePage() {
   const [editingCertKey, setEditingCertKey] = useState<string | null>(null);
 
   const [originalUsername, setOriginalUsername] = useState("");
+  // Ids present when the profile was loaded, so a save can delete what was removed.
+  const [loadedExperienceIds, setLoadedExperienceIds] = useState<number[]>([]);
+  const [loadedEducationIds, setLoadedEducationIds] = useState<number[]>([]);
+  const [loadedCertificationIds, setLoadedCertificationIds] = useState<number[]>([]);
 
   // -------------------------------------------------------------------------
   // Load existing profile
@@ -417,6 +421,36 @@ export default function TalentProfileCreatePage() {
   }
 
   // Submit
+  /**
+   * Reconciles a repeatable section against the server: PATCH rows that already
+   * exist, POST new ones, DELETE rows the user removed while editing.
+   */
+  async function syncEntries<T extends { id?: number }>(
+    endpoint: string,
+    entries: T[],
+    loadedIds: number[],
+    toBody: (entry: T) => Record<string, unknown> | null,
+  ) {
+    const keptIds = new Set(entries.map((e) => e.id).filter((id): id is number => id != null));
+
+    for (const id of loadedIds) {
+      if (!keptIds.has(id)) {
+        await fetch(`${endpoint}/${id}`, { method: "DELETE" });
+      }
+    }
+
+    for (const entry of entries) {
+      const body = toBody(entry);
+      if (!body) continue;
+      const isExisting = entry.id != null;
+      await fetch(isExisting ? `${endpoint}/${entry.id}` : endpoint, {
+        method: isExisting ? "PATCH" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+    }
+  }
+
   async function handlePublish() {
     if (!username || usernameStatus === "taken" || usernameStatus === "reserved") {
       toast.error("Please fix the username before saving"); return;
@@ -450,18 +484,40 @@ export default function TalentProfileCreatePage() {
         const r = await fetch("/api/talent-profiles/resume", { method: "POST", body: f });
         if (!r.ok) toast.error("Profile saved but resume upload failed");
       }
-      for (const exp of experiences) {
-        if (!exp.company && !exp.role) continue;
-        await fetch("/api/talent-profiles/experiences", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ company: exp.company, role: exp.role, employment_type: exp.employment_type, start_date: exp.start_month && exp.start_year ? `${exp.start_year}-${String(MONTHS.indexOf(exp.start_month) + 1).padStart(2, "0")}` : null, end_date: exp.is_current ? null : (exp.end_month && exp.end_year ? `${exp.end_year}-${String(MONTHS.indexOf(exp.end_month) + 1).padStart(2, "0")}` : null), is_current: exp.is_current, location: exp.location, description: exp.description }) });
-      }
-      for (const edu of educations) {
-        if (!edu.institution && !edu.degree) continue;
-        await fetch("/api/talent-profiles/education", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ institution: edu.institution, degree: edu.degree, field_of_study: edu.field_of_study, start_year: edu.start_year ? Number(edu.start_year) : null, end_year: edu.is_current ? null : (edu.end_year ? Number(edu.end_year) : null), is_current: edu.is_current, description: edu.description, gpa: edu.gpa || null }) });
-      }
-      for (const cert of certifications) {
-        if (!cert.name && !cert.organization) continue;
-        await fetch("/api/talent-profiles/certifications", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: cert.name, organization: cert.organization, issue_date: cert.issue_date || null, expiration_date: cert.expiration_date || null, credential_id: cert.credential_id || null, credential_url: cert.credential_url || null }) });
-      }
+      // Rows loaded from the server carry an id: update those in place and delete
+      // the ones removed in this session, otherwise every save duplicates them.
+      await syncEntries(
+        "/api/talent-profiles/experiences",
+        experiences,
+        loadedExperienceIds,
+        (exp) => (!exp.company && !exp.role ? null : {
+          company: exp.company, role: exp.role, employment_type: exp.employment_type,
+          start_date: exp.start_month && exp.start_year ? `${exp.start_year}-${String(MONTHS.indexOf(exp.start_month) + 1).padStart(2, "0")}` : null,
+          end_date: exp.is_current ? null : (exp.end_month && exp.end_year ? `${exp.end_year}-${String(MONTHS.indexOf(exp.end_month) + 1).padStart(2, "0")}` : null),
+          is_current: exp.is_current, location: exp.location, description: exp.description,
+        }),
+      );
+      await syncEntries(
+        "/api/talent-profiles/education",
+        educations,
+        loadedEducationIds,
+        (edu) => (!edu.institution && !edu.degree ? null : {
+          institution: edu.institution, degree: edu.degree, field_of_study: edu.field_of_study,
+          start_year: edu.start_year ? Number(edu.start_year) : null,
+          end_year: edu.is_current ? null : (edu.end_year ? Number(edu.end_year) : null),
+          is_current: edu.is_current, description: edu.description, gpa: edu.gpa || null,
+        }),
+      );
+      await syncEntries(
+        "/api/talent-profiles/certifications",
+        certifications,
+        loadedCertificationIds,
+        (cert) => (!cert.name && !cert.organization ? null : {
+          name: cert.name, organization: cert.organization,
+          issue_date: cert.issue_date || null, expiration_date: cert.expiration_date || null,
+          credential_id: cert.credential_id || null, credential_url: cert.credential_url || null,
+        }),
+      );
       toast.success(isEditMode ? "Profile updated!" : "Profile published!");
       router.push("/dashboard/seeker/talent-profile");
     } catch (err) {
