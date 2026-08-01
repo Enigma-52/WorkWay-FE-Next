@@ -231,6 +231,36 @@ export default function TalentProfileCreatePage() {
     })();
   }, [sessionStatus]);
 
+  // Experiences are stored as "YYYY-MM"; the form edits month and year separately.
+  function splitMonthYear(value: unknown): { month: string; year: string } {
+    if (typeof value !== "string") return { month: "", year: "" };
+    const match = value.match(/^(\d{4})-(\d{2})/);
+    if (!match) return { month: "", year: "" };
+    return { month: MONTHS[Number(match[2]) - 1] ?? "", year: match[1] };
+  }
+
+  // Starts a new "- " line, so bullets are one click rather than remembered syntax.
+  function appendBullet(current: string): string {
+    if (!current.trim()) return "- ";
+    return current.endsWith("\n") ? `${current}- ` : `${current}\n- `;
+  }
+
+  // Longest symbols first so "C$" wins over "$".
+  function currencyFromAmount(value?: string | null): string {
+    if (!value) return "USD";
+    const match = [...CURRENCIES]
+      .sort((a, b) => b.symbol.length - a.symbol.length)
+      .find((c) => value.startsWith(c.symbol));
+    return match?.code ?? "USD";
+  }
+
+  // Certification dates come back as ISO timestamps; <input type="date"> needs YYYY-MM-DD.
+  function toDateInput(value: unknown): string {
+    if (typeof value !== "string" || !value) return "";
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? "" : date.toISOString().slice(0, 10);
+  }
+
   function prefillFromProfile(p: Record<string, unknown>) {
     setUsername((p.username as string) ?? "");
     setOriginalUsername((p.username as string) ?? "");
@@ -261,15 +291,21 @@ export default function TalentProfileCreatePage() {
     setExistingResumeFilename((p.resume_filename as string) ?? null);
 
     if (Array.isArray(p.experiences)) {
-      setExperiences((p.experiences as Record<string, unknown>[]).map((exp) => ({
-        _key: nextKey(), id: exp.id as number | undefined, company: (exp.company as string) ?? "", role: (exp.role as string) ?? "",
-        employment_type: (exp.employment_type as string) ?? "Full-time", start_month: (exp.start_month as string) ?? "",
-        start_year: exp.start_year != null ? String(exp.start_year) : "", end_month: (exp.end_month as string) ?? "",
-        end_year: exp.end_year != null ? String(exp.end_year) : "", is_current: (exp.is_current as boolean) ?? false,
-        location: (exp.location as string) ?? "", description: (exp.description as string) ?? "",
-      })));
+      setLoadedExperienceIds((p.experiences as { id?: number }[]).map((e) => e.id).filter((id): id is number => id != null));
+      setExperiences((p.experiences as Record<string, unknown>[]).map((exp) => {
+        const start = splitMonthYear(exp.start_date);
+        const end = splitMonthYear(exp.end_date);
+        return {
+          _key: nextKey(), id: exp.id as number | undefined, company: (exp.company as string) ?? "", role: (exp.role as string) ?? "",
+          employment_type: (exp.employment_type as string) ?? "Full-time", start_month: start.month,
+          start_year: start.year, end_month: end.month,
+          end_year: end.year, is_current: (exp.is_current as boolean) ?? false,
+          location: (exp.location as string) ?? "", description: (exp.description as string) ?? "",
+        };
+      }));
     }
     if (Array.isArray(p.education)) {
+      setLoadedEducationIds((p.education as { id?: number }[]).map((e) => e.id).filter((id): id is number => id != null));
       setEducations((p.education as Record<string, unknown>[]).map((edu) => ({
         _key: nextKey(), id: edu.id as number | undefined, institution: (edu.institution as string) ?? "", degree: (edu.degree as string) ?? "",
         field_of_study: (edu.field_of_study as string) ?? "", start_year: edu.start_year != null ? String(edu.start_year) : "",
