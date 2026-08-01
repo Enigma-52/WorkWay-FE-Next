@@ -314,9 +314,10 @@ export default function TalentProfileCreatePage() {
       })));
     }
     if (Array.isArray(p.certifications)) {
+      setLoadedCertificationIds((p.certifications as { id?: number }[]).map((e) => e.id).filter((id): id is number => id != null));
       setCertifications((p.certifications as Record<string, unknown>[]).map((cert) => ({
         _key: nextKey(), id: cert.id as number | undefined, name: (cert.name as string) ?? "", organization: (cert.organization as string) ?? "",
-        issue_date: (cert.issue_date as string) ?? "", expiration_date: (cert.expiration_date as string) ?? "",
+        issue_date: toDateInput(cert.issue_date), expiration_date: toDateInput(cert.expiration_date),
         credential_id: (cert.credential_id as string) ?? "", credential_url: (cert.credential_url as string) ?? "",
       })));
     }
