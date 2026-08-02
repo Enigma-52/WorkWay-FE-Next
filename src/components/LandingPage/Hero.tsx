@@ -31,11 +31,12 @@ const Hero = () => {
         </h1>
 
         <p
-          className="mt-8 max-w-xl mx-auto text-lg text-muted-foreground leading-relaxed animate-fade-up"
+          className="mt-8 max-w-2xl mx-auto text-lg text-muted-foreground leading-relaxed animate-fade-up"
           style={{ animationDelay: "200ms" }}
         >
-          Job hunting is cooked. So we fixed it. One platform. Real jobs. No
-          noise. Search, apply, track — done.
+          The best jobs never reach the big job sites. They sit on company
+          career pages you would have to find one by one. We track those boards,
+          so all 450k+ roles are searchable in one place.
         </p>
 
         <div
