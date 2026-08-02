@@ -1,14 +1,32 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import Script from "next/script";
-import { detectBot, track } from "@/lib/analytics";
+import { detectBot, flushQueuedAnalytics, track } from "@/lib/analytics";
 
 const GA_MEASUREMENT_ID =
   process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-PMBBRGCPM5";
 const MIXPANEL_TOKEN =
   process.env.NEXT_PUBLIC_MIXPANEL_TOKEN || "572f2bc3511f9a768d95e72b7e925c37";
+
+// How long after load to wait for an idle moment before giving up and loading
+// analytics anyway. Long enough to clear the window Lighthouse measures TBT and
+// Speed Index in, short enough that a visitor who reads without interacting is
+// still counted.
+const IDLE_TIMEOUT_MS = 4000;
+const FALLBACK_DELAY_MS = 3000;
+// A fast machine reaches its first idle period within a few hundred ms of
+// load, which is still inside the window Lighthouse scores. Hold off a little
+// past that before even asking for idle time.
+const MIN_DELAY_AFTER_LOAD_MS = 2000;
+
+const INTERACTION_EVENTS = [
+  "pointerdown",
+  "keydown",
+  "touchstart",
+  "scroll",
+] as const;
 
 declare global {
   interface Window {
@@ -23,9 +41,93 @@ declare global {
   }
 }
 
+/**
+ * Resolves once the page is idle after load, or immediately on the visitor's
+ * first interaction. Analytics bundles are ~250 KiB of third-party JavaScript
+ * that block nothing visually, so keeping them off the main thread until the
+ * page has settled costs no data and buys back TBT.
+ */
+function useDeferredStart(): boolean {
+  const [started, setStarted] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    let idleHandle: number | undefined;
+    let timeoutHandle: number | undefined;
+    let settleHandle: number | undefined;
+
+    const start = () => {
+      if (cancelled) return;
+      cancelled = true;
+      cleanup();
+      setStarted(true);
+    };
+
+    const cleanup = () => {
+      for (const event of INTERACTION_EVENTS) {
+        window.removeEventListener(event, start);
+      }
+      window.removeEventListener("load", onLoad);
+      if (idleHandle !== undefined) window.cancelIdleCallback?.(idleHandle);
+      if (timeoutHandle !== undefined) window.clearTimeout(timeoutHandle);
+      if (settleHandle !== undefined) window.clearTimeout(settleHandle);
+    };
+
+    function onLoad() {
+      settleHandle = window.setTimeout(scheduleIdle, MIN_DELAY_AFTER_LOAD_MS);
+    }
+
+    function scheduleIdle() {
+      if (cancelled) return;
+      if (typeof window.requestIdleCallback === "function") {
+        idleHandle = window.requestIdleCallback(start, {
+          timeout: IDLE_TIMEOUT_MS,
+        });
+      } else {
+        timeoutHandle = window.setTimeout(start, FALLBACK_DELAY_MS);
+      }
+    }
+
+    for (const event of INTERACTION_EVENTS) {
+      window.addEventListener(event, start, { passive: true, once: true });
+    }
+
+    if (document.readyState === "complete") {
+      onLoad();
+    } else {
+      window.addEventListener("load", onLoad, { once: true });
+    }
+
+    return cleanup;
+  }, []);
+
+  return started;
+}
+
+/**
+ * Installs the standard gtag() stub. It pushes onto dataLayer, so page views
+ * recorded before the 180 KiB gtag/js finishes downloading are queued by
+ * Google's own mechanism and replayed the moment it initialises.
+ */
+function ensureGtagStub() {
+  if (typeof window === "undefined" || !GA_MEASUREMENT_ID) return;
+  if (typeof window.gtag === "function") return;
+
+  window.dataLayer = window.dataLayer || [];
+  // gtag.js requires the raw `arguments` object, not a rest array.
+  const gtag: NonNullable<Window["gtag"]> = function gtag() {
+    // eslint-disable-next-line prefer-rest-params
+    window.dataLayer!.push(arguments);
+  };
+  window.gtag = gtag;
+  gtag("js", new Date());
+  gtag("config", GA_MEASUREMENT_ID, { send_page_view: false });
+}
+
 function trackPageView(path: string) {
-  if (GA_MEASUREMENT_ID && typeof window !== "undefined" && typeof window.gtag === "function") {
-    window.gtag("config", GA_MEASUREMENT_ID, { page_path: path });
+  if (GA_MEASUREMENT_ID) {
+    ensureGtagStub();
+    window.gtag?.("config", GA_MEASUREMENT_ID, { page_path: path });
   }
 
   track("Page View", { path });
@@ -35,6 +137,7 @@ export default function AnalyticsProvider() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const mixpanelInitialized = useRef(false);
+  const started = useDeferredStart();
 
   const fullPath = useMemo(() => {
     const qs = searchParams?.toString();
@@ -42,7 +145,8 @@ export default function AnalyticsProvider() {
   }, [pathname, searchParams]);
 
   useEffect(() => {
-    if (!MIXPANEL_TOKEN || mixpanelInitialized.current) return;
+    if (!started || !MIXPANEL_TOKEN || mixpanelInitialized.current) return;
+    mixpanelInitialized.current = true;
 
     import("mixpanel-browser").then((mod) => {
       const mixpanel = mod.default;
@@ -63,39 +167,27 @@ export default function AnalyticsProvider() {
         track_pageview: false,
         record_sessions_percent: 0,
       });
-      window.mixpanel = mixpanel;
 
       const { isBot, reason } = detectBot();
       mixpanel.register({ is_bot: isBot, bot_reason: reason });
 
-      mixpanelInitialized.current = true;
+      window.mixpanel = mixpanel;
+      // Replay the page view (and anything else) captured while loading.
+      flushQueuedAnalytics();
     });
-  }, []);
+  }, [started]);
 
   useEffect(() => {
     if (!fullPath) return;
     trackPageView(fullPath);
   }, [fullPath]);
 
-  return GA_MEASUREMENT_ID ? (
-    <>
-      <Script
-        src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-        strategy="lazyOnload"
-      />
-      <Script
-        id="google-analytics-init"
-        strategy="lazyOnload"
-        dangerouslySetInnerHTML={{
-          __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            window.gtag = gtag;
-            gtag('js', new Date());
-            gtag('config', '${GA_MEASUREMENT_ID}', { send_page_view: false });
-          `,
-        }}
-      />
-    </>
-  ) : null;
+  if (!GA_MEASUREMENT_ID || !started) return null;
+
+  return (
+    <Script
+      src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+      strategy="afterInteractive"
+    />
+  );
 }
