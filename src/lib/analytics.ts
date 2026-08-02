@@ -38,16 +38,43 @@ export function detectBot(): BotSignal {
   return { isBot: false, reason: null };
 }
 
-export function track(event: string, props?: Record<string, unknown>) {
+// The mixpanel bundle is loaded lazily (see AnalyticsProvider), so calls made
+// before it arrives — the first page view, or a click on a fast-loading page —
+// would otherwise be dropped. Queue them and replay once the SDK is present.
+type MixpanelApi = NonNullable<Window["mixpanel"]>;
+type QueuedOp = (mixpanel: MixpanelApi) => void;
+
+const MAX_QUEUED_OPS = 100;
+const queuedOps: QueuedOp[] = [];
+
+function withMixpanel(op: QueuedOp) {
+  if (typeof window === "undefined") return;
+  if (window.mixpanel) {
+    op(window.mixpanel);
+    return;
+  }
+  if (queuedOps.length >= MAX_QUEUED_OPS) queuedOps.shift();
+  queuedOps.push(op);
+}
+
+/** Replays everything captured before the SDK finished loading. */
+export function flushQueuedAnalytics() {
   if (typeof window === "undefined" || !window.mixpanel) return;
-  window.mixpanel.track(event, props);
+  const mixpanel = window.mixpanel;
+  const ops = queuedOps.splice(0, queuedOps.length);
+  for (const op of ops) op(mixpanel);
+}
+
+export function track(event: string, props?: Record<string, unknown>) {
+  withMixpanel((mixpanel) => mixpanel.track(event, props));
 }
 
 // Merges the visitor's anonymous event history onto a named profile.
 // Only call this once we actually have a voluntarily-given email
 // (e.g. a feedback or contact form) — never guess or infer identity.
 export function identify(email: string, extra?: Record<string, unknown>) {
-  if (typeof window === "undefined" || !window.mixpanel) return;
-  window.mixpanel.identify(email);
-  window.mixpanel.people.set({ $email: email, ...extra });
+  withMixpanel((mixpanel) => {
+    mixpanel.identify(email);
+    mixpanel.people.set({ $email: email, ...extra });
+  });
 }
