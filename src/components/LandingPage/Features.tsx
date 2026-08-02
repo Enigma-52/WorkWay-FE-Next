@@ -10,8 +10,8 @@ import {
 const features = [
   {
     icon: Layers,
-    title: "One feed, every source",
-    desc: "Greenhouse, Ashby, Lever, YC, in-house ATS — aggregated. No more 12 tabs.",
+    title: "450k+ roles, one feed",
+    desc: "Every tracked ATS board, deduplicated and refreshed daily. No more 12 tabs.",
   },
   {
     icon: SearchCode,
