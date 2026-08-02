@@ -1,19 +1,21 @@
 import { X } from "lucide-react";
 
+// Real ATS URL shapes — the point of the mock is that each open role lives on
+// a different company's own board, not on any one job site.
 const tabs = [
-  "LinkedIn",
-  "Naukri",
-  "YC Jobs",
-  "Greenhouse",
-  "Lever",
-  "Ashby",
+  "job-boards.greenhouse.io/…",
+  "jobs.lever.co/…",
+  "jobs.ashbyhq.com/…",
+  "workatastartup.com/…",
+  "careers.acme.com/…",
   "final_v7.xlsx",
 ];
+
 const pains = [
-  "apply to the same job twice",
-  "forget where you applied",
-  "rewrite the same intro",
-  "question your life choices",
+  "never see the role — it was only on their careers page",
+  "find it three weeks late, after it closed",
+  "check the same eight boards by hand, every morning",
+  "lose track of what you already applied to",
 ];
 
 const ProblemSection = () => {
@@ -25,11 +27,16 @@ const ProblemSection = () => {
             The problem
           </p>
           <h2 className="font-display text-5xl sm:text-6xl text-gradient">
-            Be honest.{" "}
+            The best jobs are posted{" "}
             <span className="italic text-brand-gradient">
-              This is your setup.
+              on one company&apos;s ATS.
             </span>
           </h2>
+          <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+            Not LinkedIn. Not Naukri. A Greenhouse board nobody links to, a
+            Lever page you&apos;d only find if you already knew the company
+            existed. So you bookmark boards and refresh them by hand.
+          </p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-6">
@@ -68,15 +75,15 @@ const ProblemSection = () => {
           {/* Pains list */}
           <div className="rounded-3xl border border-border bg-gradient-to-br from-surface/80 to-surface-elevated/60 p-8 sm:p-10 shadow-elevated flex flex-col justify-center">
             <p className="text-sm text-muted-foreground mb-6 font-mono">
-              and then you
+              so you
             </p>
             <ul className="space-y-4">
               {pains.map((p) => (
                 <li
                   key={p}
-                  className="flex items-start gap-3 text-xl sm:text-2xl font-display"
+                  className="flex items-start gap-3 text-lg sm:text-xl font-display"
                 >
-                  <span className="mt-2 w-6 h-6 rounded-full bg-destructive/15 grid place-items-center shrink-0">
+                  <span className="mt-1.5 w-6 h-6 rounded-full bg-destructive/15 grid place-items-center shrink-0">
                     <X className="w-3.5 h-3.5 text-destructive" />
                   </span>
                   <span className="text-foreground/90">{p}</span>
@@ -88,7 +95,7 @@ const ProblemSection = () => {
               <span className="line-through">&ldquo;the grind.&rdquo;</span>{" "}
               <br />
               <span className="text-foreground font-medium">
-                It&apos;s bad software.
+                It&apos;s a discovery problem.
               </span>
             </p>
           </div>
