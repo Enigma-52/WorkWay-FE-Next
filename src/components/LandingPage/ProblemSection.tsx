@@ -7,8 +7,6 @@ const tabs = [
   "jobs.lever.co/…",
   "jobs.ashbyhq.com/…",
   "workatastartup.com/…",
-  "careers.acme.com/…",
-  "final_v7.xlsx",
 ];
 
 const pains = [
