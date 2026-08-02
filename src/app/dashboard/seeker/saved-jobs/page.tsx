@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Building2, MapPin, Briefcase, ExternalLink, Bookmark, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { truncateLocation } from "@/utils/helper";
 
 type SavedJob = {
   id: number;
@@ -49,7 +50,7 @@ export default function SavedJobsPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6 flex items-center justify-between gap-4">
         <div>
@@ -124,9 +125,12 @@ export default function SavedJobsPage() {
                   {/* Location */}
                   <td className="px-4 py-3">
                     {job.location ? (
-                      <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <span
+                        className="flex items-center gap-1.5 whitespace-nowrap text-xs text-muted-foreground"
+                        title={job.location}
+                      >
                         <MapPin className="w-3 h-3 shrink-0" />
-                        {job.location}
+                        {truncateLocation(job.location)}
                       </span>
                     ) : (
                       <span className="text-xs text-muted-foreground/40">—</span>

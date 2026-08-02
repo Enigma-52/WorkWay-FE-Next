@@ -225,7 +225,7 @@ export default function TalentProfilePage() {
   // No profile — show create prompt
   if (!profile) {
     return (
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <div className="mb-8">
           <h1 className="text-2xl font-bold mb-1">Talent Profile</h1>
           <p className="text-muted-foreground text-sm">
@@ -261,7 +261,7 @@ export default function TalentProfilePage() {
 
   // Profile management view
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       <div className="mb-8">
         <h1 className="text-2xl font-bold mb-1">Talent Profile</h1>
         <p className="text-muted-foreground text-sm">

@@ -409,15 +409,6 @@ export default async function ProfilePage({ params }: Props) {
                 </div>
 
                 <div className="min-w-0 flex-1">
-                  {availability && (
-                    <span
-                      className={`mb-3 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium ${availability.chip}`}
-                    >
-                      <span className={`h-1.5 w-1.5 rounded-full ${availability.dot}`} />
-                      {availability.label}
-                    </span>
-                  )}
-
                   <h1 className="font-display text-4xl font-bold leading-tight tracking-tight text-foreground sm:text-5xl">
                     {profile.display_name}
                   </h1>
@@ -430,6 +421,14 @@ export default async function ProfilePage({ params }: Props) {
 
                   {/* The five facts that decide whether a recruiter reads on */}
                   <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 font-mono text-xs text-muted-foreground">
+                    {availability && (
+                      <span
+                        className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium ${availability.chip}`}
+                      >
+                        <span className={`h-1.5 w-1.5 rounded-full ${availability.dot}`} />
+                        {availability.label}
+                      </span>
+                    )}
                     <span className="text-primary">@{profile.username}</span>
                     {headlineFacts.map((fact) => (
                       <span key={fact} className="flex items-center gap-3">

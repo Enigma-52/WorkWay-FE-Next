@@ -124,7 +124,7 @@ export default function ApplicationsPage() {
     : applications.filter((a) => a.status === statusFilter);
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6 flex items-center justify-between gap-4">
         <div>

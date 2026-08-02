@@ -372,7 +372,7 @@ export default function JobPageClient({ job }: Props) {
                     location={job.location}
                     employmentType={job.employment_type}
                     jobUrl={job.url}
-                    size="md"
+                    size="lg"
                   />
                 </div>
 

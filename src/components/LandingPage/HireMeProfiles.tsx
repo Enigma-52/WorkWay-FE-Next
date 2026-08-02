@@ -150,6 +150,15 @@ const HireMeProfiles = () => {
                 {/* Main column */}
                 <div className="space-y-6 min-w-0">
                   <div>
+                    <div className="font-display text-base mb-2">About</div>
+                    <p className="text-sm leading-relaxed text-muted-foreground">
+                      Backend-leaning full-stack engineer. I build payment and
+                      billing systems, mostly in Node and Postgres, and I like
+                      the parts of the job where correctness matters.
+                    </p>
+                  </div>
+
+                  <div>
                     <div className="font-display text-base mb-2">Skills</div>
                     <div className="flex flex-wrap gap-1.5">
                       {["React", "Node.js", "TypeScript", "AWS", "PostgreSQL", "Docker"].map(
@@ -246,6 +255,30 @@ const HireMeProfiles = () => {
                           </dt>
                           <dd className="text-[11px] text-right truncate">
                             {g.v}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </div>
+
+                  <div className="hidden rounded-xl border border-border bg-surface/60 p-4 sm:block">
+                    <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-brand mb-2">
+                      Location
+                    </div>
+                    <dl>
+                      {[
+                        { k: "Country", v: "India" },
+                        { k: "Timezone", v: "Asia/Kolkata" },
+                      ].map((l) => (
+                        <div
+                          key={l.k}
+                          className="flex items-baseline justify-between gap-3 border-b border-border/60 py-1.5 last:border-b-0"
+                        >
+                          <dt className="font-mono text-[9px] uppercase tracking-[0.12em] text-muted-foreground shrink-0">
+                            {l.k}
+                          </dt>
+                          <dd className="text-[11px] text-right truncate">
+                            {l.v}
                           </dd>
                         </div>
                       ))}

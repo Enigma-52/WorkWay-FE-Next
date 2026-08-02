@@ -34,28 +34,42 @@ export default function CompaniesPageClient({
   const [searchResults, setSearchResults] = useState<CompanyListItem[] | null>(null);
   const [searching, setSearching] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const requestRef = useRef(0);
 
   const fetchSearch = useCallback(async (q: string) => {
     if (!q.trim()) {
+      requestRef.current += 1; // cancel any in-flight response
       setSearchResults(null);
+      setSearching(false);
       return;
     }
+    const requestId = ++requestRef.current;
     setSearching(true);
     try {
       const res = await fetch(`/api/company/search?q=${encodeURIComponent(q)}`);
+      // Typing fast can land responses out of order; only the newest counts.
+      if (requestId !== requestRef.current) return;
       if (res.ok) {
         const data: CompanyListItem[] = await res.json();
         setSearchResults(data);
       }
+    } catch {
+      if (requestId === requestRef.current) setSearchResults(null);
     } finally {
-      setSearching(false);
+      if (requestId === requestRef.current) setSearching(false);
     }
   }, []);
 
   function handleSearchChange(value: string) {
     setSearchQuery(value);
     if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => fetchSearch(value), 300);
+    // Clearing the field should feel instant rather than wait out the debounce.
+    if (!value.trim()) {
+      fetchSearch("");
+      return;
+    }
+    setSearching(true);
+    debounceRef.current = setTimeout(() => fetchSearch(value), 250);
   }
 
   function updateParams(next: Record<string, string | null>) {
@@ -94,6 +108,7 @@ export default function CompaniesPageClient({
                 <SearchBar
                   value={searchQuery}
                   onChange={handleSearchChange}
+                  busy={searching}
                 />
               </div>
             </div>

@@ -148,6 +148,7 @@ export default function CompaniesPage() {
 
   const [following, setFollowing] = useState<Set<string>>(new Set());
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
+  const requestRef = useRef(0);
 
   // pagination
   const [followPage, setFollowPage] = useState(1);
@@ -277,10 +278,13 @@ export default function CompaniesPage() {
 
   const search = useCallback(async (q: string) => {
     if (!q.trim()) {
+      requestRef.current += 1; // discard anything still in flight
       setResults([]);
       setHasSearched(false);
+      setSearching(false);
       return;
     }
+    const requestId = ++requestRef.current;
     setSearching(true);
     setHasSearched(true);
     try {
@@ -288,18 +292,26 @@ export default function CompaniesPage() {
         `${process.env.NEXT_PUBLIC_API_URL}/api/company/search?q=${encodeURIComponent(q)}`
       );
       const data = await res.json();
+      // Typing fast can land responses out of order; only the newest counts.
+      if (requestId !== requestRef.current) return;
       setResults(data.companies ?? data ?? []);
     } catch {
-      setResults([]);
+      if (requestId === requestRef.current) setResults([]);
     } finally {
-      setSearching(false);
+      if (requestId === requestRef.current) setSearching(false);
     }
   }, []);
 
   function handleQueryChange(v: string) {
     setQuery(v);
     if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => search(v), 300);
+    // Clearing should feel instant rather than wait out the debounce.
+    if (!v.trim()) {
+      search("");
+      return;
+    }
+    setSearching(true);
+    debounceRef.current = setTimeout(() => search(v), 250);
   }
 
   async function handleFollow(company: CompanyResult) {
@@ -382,7 +394,7 @@ export default function CompaniesPage() {
   const totalJobs = recentJobs.reduce((sum, c) => sum + c.totalOpenRoles, 0);
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold mb-0.5">Companies</h1>

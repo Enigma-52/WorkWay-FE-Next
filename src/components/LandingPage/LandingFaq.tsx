@@ -12,7 +12,7 @@ const FAQS = [
   {
     question: "How many jobs and companies are on WorkWay?",
     answer:
-      "WorkWay indexes 300,000+ jobs across 5,000+ companies, refreshed multiple times a day directly from source ATS platforms.",
+      "WorkWay indexes 450,000+ jobs across 6,000+ companies, refreshed multiple times a day directly from source ATS platforms.",
   },
   {
     question: "Is WorkWay free to use?",

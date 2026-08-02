@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Building2, Globe, MapPin, Briefcase, Users, Bell, BellOff, Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import AuthModal from "@/components/common/AuthModal";
+import { toast } from "sonner";
 import type { CompanyDetails } from "@/types/jobs";
 
 interface CompanyHeaderProps {
@@ -61,9 +62,13 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
     setFollowLoading(true);
     try {
       if (isFollowing && alertId) {
-        await fetch(`/api/alerts/${alertId}`, { method: "DELETE" });
+        const res = await fetch(`/api/alerts/${alertId}`, { method: "DELETE" });
+        if (!res.ok) throw new Error();
         setIsFollowing(false);
         setAlertId(null);
+        toast(`Unfollowed ${company.name}`, {
+          description: "You will not get alerts for their new roles.",
+        });
       } else {
         const res = await fetch("/api/alerts", {
           method: "POST",
@@ -75,12 +80,18 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
             company_logo_url: company.logo_url ?? null,
           }),
         });
+        if (!res.ok) throw new Error();
         const data = await res.json();
         setIsFollowing(true);
         setAlertId(data.alert?.id ?? null);
+        toast.success(`Following ${company.name}`, {
+          description: "You will get an alert when they post a new role.",
+        });
       }
     } catch {
-      // no-op
+      toast.error("That did not go through", {
+        description: "Check your connection and try again.",
+      });
     } finally {
       setFollowLoading(false);
     }

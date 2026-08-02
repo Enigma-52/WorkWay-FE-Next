@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { Bookmark } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { toast } from "sonner";
 import AuthModal from "./AuthModal";
 import { cn } from "@/lib/utils";
 import { useJobStatus } from "@/contexts/JobStatusContext";
@@ -17,7 +18,8 @@ interface SaveJobButtonProps {
   employmentType?: string | null;
   jobUrl?: string | null;
   className?: string;
-  size?: "sm" | "md";
+  /** `lg` matches the height of an xl Button, for sitting beside "Apply Now". */
+  size?: "sm" | "md" | "lg";
 }
 
 export default function SaveJobButton({
@@ -33,6 +35,7 @@ export default function SaveJobButton({
 }: SaveJobButtonProps) {
   const { data: session } = useSession();
   const pathname = usePathname();
+  const router = useRouter();
   const { savedSlugs, addSaved, removeSaved } = useJobStatus();
   const [authOpen, setAuthOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -50,14 +53,23 @@ export default function SaveJobButton({
 
     if (saved) {
       removeSaved(jobSlug);
-      fetch(`/api/saved-jobs/${jobSlug}`, { method: "DELETE" }).catch(() => addSaved(jobSlug));
+      try {
+        const res = await fetch(`/api/saved-jobs/${jobSlug}`, { method: "DELETE" });
+        if (!res.ok) throw new Error();
+        toast("Removed from saved jobs", { description: jobTitle });
+      } catch {
+        addSaved(jobSlug);
+        toast.error("Could not remove that job", {
+          description: "Check your connection and try again.",
+        });
+      }
       return;
     }
 
     setLoading(true);
     addSaved(jobSlug); // optimistic
     try {
-      await fetch("/api/saved-jobs", {
+      const res = await fetch("/api/saved-jobs", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -70,14 +82,32 @@ export default function SaveJobButton({
           job_url: jobUrl ?? null,
         }),
       });
+      if (!res.ok) throw new Error();
+      toast.success("Saved", {
+        description: `${jobTitle} at ${company}`,
+        action: { label: "View saved", onClick: () => router.push("/dashboard/seeker/saved-jobs") },
+      });
     } catch {
       removeSaved(jobSlug); // revert on failure
+      toast.error("Could not save that job", {
+        description: "Check your connection and try again.",
+      });
     } finally {
       setLoading(false);
     }
   }
 
-  const iconSize = size === "sm" ? "w-3.5 h-3.5" : "w-4 h-4";
+  const sizeClasses = {
+    sm: "h-9 w-9 rounded-md",
+    md: "h-10 w-10 rounded-md",
+    lg: "h-14 w-14 rounded-xl",
+  }[size];
+
+  const iconSize = {
+    sm: "w-3.5 h-3.5",
+    md: "w-4 h-4",
+    lg: "w-5 h-5",
+  }[size];
 
   return (
     <>
@@ -87,10 +117,8 @@ export default function SaveJobButton({
         disabled={loading}
         aria-label={saved ? "Unsave job" : "Save job"}
         className={cn(
-          "inline-flex items-center justify-center rounded-md border transition-colors disabled:opacity-50",
-          size === "sm"
-            ? "h-9 w-9 border-border bg-secondary hover:border-primary hover:text-primary"
-            : "h-9 w-9 border-border bg-secondary hover:border-primary hover:text-primary",
+          "inline-flex shrink-0 items-center justify-center border border-border bg-secondary transition-colors hover:border-primary hover:text-primary disabled:opacity-50",
+          sizeClasses,
           saved && "border-primary text-primary bg-primary/10",
           className
         )}

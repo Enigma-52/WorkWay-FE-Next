@@ -77,7 +77,7 @@ export default function AboutPage() {
           </p>
           <p className="mb-4 leading-relaxed text-muted-foreground">
             Everything we collect lands in a single feed of more than 450,000
-            roles across roughly 5,000 companies. Duplicates are collapsed, the
+            roles across roughly 6,000 companies. Duplicates are collapsed, the
             data is refreshed continuously, and every listing keeps its original
             apply link, so you always end up submitting through the company
             system rather than through an intermediary that slows the process

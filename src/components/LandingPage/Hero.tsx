@@ -20,7 +20,8 @@ const Hero = () => {
             className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/60 backdrop-blur px-4 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:border-primary/30 transition-colors"
           >
             <span className="text-primary">&#9733;</span>
-            Featured on <span className="text-foreground font-semibold">Startup Fame</span>
+            Featured on{" "}
+            <span className="text-foreground font-semibold">Startup Fame</span>
           </a>
         </div>
 
@@ -35,7 +36,7 @@ const Hero = () => {
           style={{ animationDelay: "200ms" }}
         >
           The best jobs never reach the big job sites. They sit on company
-          career pages, so we track those boards and put all 450k+ roles in one
+          career pages, so we track those boards and put all job roles in one
           search.
         </p>
 
@@ -65,7 +66,7 @@ const Hero = () => {
         >
           {[
             { n: "450k+", l: "Jobs" },
-            { n: "5k+", l: "Companies" },
+            { n: "6k+", l: "Companies" },
             { n: "50+", l: "Domains" },
           ].map((s) => (
             <div key={s.l} className="text-center">

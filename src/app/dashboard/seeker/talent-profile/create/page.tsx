@@ -14,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { SearchableSelect } from "@/components/ui/searchable-select";
 import { toast } from "sonner";
 import {
   Loader2,
@@ -186,10 +187,16 @@ export default function TalentProfileCreatePage() {
   const timezones = useMemo(() => {
     try { return Intl.supportedValuesOf("timeZone"); } catch { return []; }
   }, []);
-  // ~418 entries: build the option elements once, otherwise every keystroke
-  // anywhere in this form recreates all of them.
-  const timezoneItems = useMemo(
-    () => timezones.map((tz) => <SelectItem key={tz} value={tz}>{tz.replace(/_/g, " ")}</SelectItem>),
+  // ~418 entries, so build the option list once rather than on every keystroke
+  // elsewhere in this form. The city half is searchable on its own, since
+  // people look for "Kolkata" rather than "Asia/Kolkata".
+  const timezoneOptions = useMemo(
+    () =>
+      timezones.map((tz) => ({
+        value: tz,
+        label: tz.replace(/_/g, " "),
+        keywords: tz.split("/").pop()?.replace(/_/g, " ") ?? "",
+      })),
     [timezones],
   );
 
@@ -793,11 +800,16 @@ export default function TalentProfileCreatePage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div><label className="text-sm font-medium mb-1.5 block">Country</label><Input value={country} onChange={(e) => setCountry(e.target.value)} placeholder="United States" /></div>
               <div>
-                <label className="text-sm font-medium mb-1.5 block">Timezone</label>
-                <Select value={timezone} onValueChange={setTimezone}>
-                  <SelectTrigger><SelectValue placeholder="Select timezone" /></SelectTrigger>
-                  <SelectContent>{timezoneItems}</SelectContent>
-                </Select>
+                <label htmlFor="timezone" className="text-sm font-medium mb-1.5 block">Timezone</label>
+                <SearchableSelect
+                  id="timezone"
+                  options={timezoneOptions}
+                  value={timezone}
+                  onValueChange={setTimezone}
+                  placeholder="Select timezone"
+                  searchPlaceholder="Search city or region..."
+                  emptyMessage="No timezone matches that"
+                />
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

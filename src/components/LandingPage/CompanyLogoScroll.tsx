@@ -206,7 +206,7 @@ const CompanyLogoScroll = () => (
         <span className="h-px w-8 bg-border" />
       </div>
       <h2 className="mt-4 font-display text-4xl sm:text-5xl text-gradient">
-        5,000+ teams.{" "}
+        6,000+ teams.{" "}
         <span className="italic text-brand-gradient">One feed.</span>
       </h2>
     </div>
