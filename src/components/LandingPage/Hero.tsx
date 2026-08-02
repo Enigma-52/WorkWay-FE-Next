@@ -31,12 +31,12 @@ const Hero = () => {
         </h1>
 
         <p
-          className="mt-8 max-w-2xl mx-auto text-lg text-muted-foreground leading-relaxed animate-fade-up"
+          className="mt-8 max-w-xl mx-auto text-lg text-muted-foreground leading-relaxed animate-fade-up"
           style={{ animationDelay: "200ms" }}
         >
           The best jobs never reach the big job sites. They sit on company
-          career pages you would have to find one by one. We track those boards,
-          so all 450k+ roles are searchable in one place.
+          career pages, so we track those boards and put all 450k+ roles in one
+          search.
         </p>
 
         <div
@@ -58,13 +58,6 @@ const Hero = () => {
             How it works
           </Link>
         </div>
-        <p
-          className="mt-4 text-xs text-muted-foreground font-mono animate-fade-up"
-          style={{ animationDelay: "350ms" }}
-        >
-          no signup wall — just jobs
-        </p>
-
         {/* Stats */}
         <div
           className="mt-20 grid grid-cols-3 gap-6 max-w-3xl mx-auto animate-fade-up"
