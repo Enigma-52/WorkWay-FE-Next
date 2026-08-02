@@ -4,15 +4,20 @@ import {
   Check,
   Download,
   Eye,
+  ExternalLink,
   FileText,
   Link2,
   Mail,
 } from "lucide-react";
+import { getSiteUrl } from "@/lib/seo/metadata";
+
+// The live profile shown as the worked example behind "View sample profile".
+const SAMPLE_USERNAME = "rohit_singh";
 
 const features = [
   {
     title: "One public URL",
-    desc: "workway.dev/p/your-name. Send it in a DM, put it in a bio, paste it in an application.",
+    desc: "Send it in a DM, put it in a bio, paste it in an application.",
   },
   {
     title: "Labeled, not a wall of text",
@@ -41,6 +46,9 @@ const glance = [
 ];
 
 const HireMeProfiles = () => {
+  const host = new URL(getSiteUrl()).host;
+  const samplePath = `/p/${SAMPLE_USERNAME}`;
+
   return (
     <section className="relative py-32 noise">
       <div className="mx-auto max-w-7xl px-6">
@@ -69,6 +77,11 @@ const HireMeProfiles = () => {
                   <div>
                     <div className="text-sm font-medium">{f.title}</div>
                     <p className="mt-1 text-sm text-muted-foreground leading-relaxed">
+                      {f.title === "One public URL" && (
+                        <span className="font-mono text-foreground/80">
+                          {host}/p/your-name.{" "}
+                        </span>
+                      )}
                       {f.desc}
                     </p>
                   </div>
@@ -76,13 +89,22 @@ const HireMeProfiles = () => {
               ))}
             </ul>
 
-            <Link
-              href="/dashboard/seeker/talent-profile"
-              className="group mt-9 inline-flex items-center gap-2 rounded-full bg-brand text-brand-foreground hover:bg-brand-glow transition-all px-6 py-3 font-medium shadow-glow"
-            >
-              Build your profile
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-            </Link>
+            <div className="mt-9 flex flex-col sm:flex-row sm:items-center gap-3">
+              <Link
+                href="/dashboard/seeker/talent-profile"
+                className="group inline-flex items-center justify-center gap-2 rounded-full bg-brand text-brand-foreground hover:bg-brand-glow transition-all px-6 py-3 font-medium shadow-glow"
+              >
+                Build your profile
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+              </Link>
+              <Link
+                href={samplePath}
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-surface/60 backdrop-blur px-6 py-3 font-medium hover:bg-surface-elevated transition-colors"
+              >
+                View sample profile
+                <ExternalLink className="w-4 h-4" />
+              </Link>
+            </div>
           </div>
 
           {/* Profile preview — mirrors the real /p/[username] layout */}
@@ -94,7 +116,7 @@ const HireMeProfiles = () => {
               <div className="flex items-center gap-2 px-5 py-3 border-b border-border bg-surface-elevated/60">
                 <Link2 className="w-3.5 h-3.5 text-brand shrink-0" />
                 <span className="text-xs font-mono text-muted-foreground truncate">
-                  workway.dev/p/<span className="text-foreground">alex-chen</span>
+                  {host}/p/<span className="text-foreground">alex-chen</span>
                 </span>
               </div>
 
