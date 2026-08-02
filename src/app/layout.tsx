@@ -90,7 +90,9 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://cdn.workway.dev" />
         <link rel="dns-prefetch" href="https://cdn.workway.dev" />
-        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        {/* Analytics is deferred until the page is idle, so only resolve DNS
+            up front — an early preconnect would compete with critical
+            requests for a connection opened seconds later. */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
       </head>
       <body className={`${geist.variable} ${geistMono.variable} ${instrumentSerif.variable}`}>
