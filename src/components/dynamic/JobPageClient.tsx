@@ -18,7 +18,7 @@ import JobSection from "@/components/JobPage/JobSection";
 import { Button } from "@/components/ui/button";
 import { getDomainSlug, truncateLocation } from "@/utils/helper";
 import { track } from "@/lib/analytics";
-import type { JobDetails, SkillJobGroup } from "@/types/jobs";
+import type { JobDetails, JobInsights, SkillJobGroup } from "@/types/jobs";
 import AuthModal from "@/components/common/AuthModal";
 import SaveJobButton from "@/components/common/SaveJobButton";
 import { useSession } from "next-auth/react";
@@ -30,7 +30,12 @@ const JobViewFeed = dynamic(() => import("@/components/JobViewFeed/JobViewFeed")
 
 type Props = {
   job: JobDetails;
+  insights?: JobInsights;
 };
+
+function formatSalary(n: number): string {
+  return `$${Math.round(n / 1000)}K`;
+}
 
 function getTimeAgo(updatedAt: string): string {
   const diffMs = Date.now() - new Date(updatedAt).getTime();
@@ -45,7 +50,7 @@ function getTimeAgo(updatedAt: string): string {
   return `${diffD} days ago`;
 }
 
-export default function JobPageClient({ job }: Props) {
+export default function JobPageClient({ job, insights }: Props) {
   const { data: session } = useSession();
   const pathname = usePathname();
   const { appliedSlugs, addApplied } = useJobStatus();
@@ -435,6 +440,20 @@ export default function JobPageClient({ job }: Props) {
           <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid gap-5 lg:grid-cols-[1fr_380px] lg:gap-6">
               <div className="space-y-6">
+                {typeof insights?.companyOpenJobs === "number" && (
+                  <p className="rounded-lg border border-border bg-secondary/40 px-4 py-3 text-sm text-muted-foreground">
+                    This is one of{" "}
+                    <span className="font-medium text-foreground">
+                      {insights.companyOpenJobs.toLocaleString()} open roles
+                    </span>{" "}
+                    WorkWay tracks directly from {job.company}
+                    {job.platform && job.platform !== "ycombinator"
+                      ? `'s ${job.platform.charAt(0).toUpperCase() + job.platform.slice(1)} careers page`
+                      : "'s careers page"}
+                    , refreshed daily so listings here reflect current status
+                    even if the original posting has moved or closed.
+                  </p>
+                )}
                 {(Array.isArray(job.description) ? job.description : []).map(
                   (section: any, index: number) => (
                     <JobSection
@@ -463,6 +482,16 @@ export default function JobPageClient({ job }: Props) {
                         {job.company}
                       </span>
                     </div>
+                    {typeof insights?.companyOpenJobs === "number" && (
+                      <div className="flex items-center justify-between border-b border-border pb-4">
+                        <span className="text-sm text-muted-foreground">
+                          Open roles at {job.company}
+                        </span>
+                        <span className="text-sm font-medium text-foreground">
+                          {insights.companyOpenJobs.toLocaleString()}
+                        </span>
+                      </div>
+                    )}
                     <div className="flex items-center justify-between border-b border-border pb-4">
                       <span className="text-sm text-muted-foreground shrink-0">
                         Location
@@ -506,6 +535,20 @@ export default function JobPageClient({ job }: Props) {
                         </span>
                         <span className="text-sm font-medium text-foreground">
                           {job.metadata.salaryRange}
+                        </span>
+                      </div>
+                    )}
+                    {job.platform !== "ycombinator" &&
+                      !job?.metadata?.salaryRange &&
+                      (insights?.levelSalary || insights?.domainSalary) && (
+                      <div className="flex items-center justify-between border-b border-border pb-4">
+                        <span className="text-sm text-muted-foreground shrink-0">
+                          Avg. salary ({insights.levelSalary ? job.experience_level : job.domain})
+                        </span>
+                        <span className="text-sm font-medium text-foreground">
+                          {formatSalary(
+                            (insights.levelSalary ?? insights.domainSalary!).avg_salary
+                          )}
                         </span>
                       </div>
                     )}
