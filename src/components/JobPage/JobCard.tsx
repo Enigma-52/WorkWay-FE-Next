@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { MapPin, Briefcase, Building2, CheckCircle2 } from "lucide-react";
 import JobBadge from "./JobBadge";
 import SaveJobButton from "@/components/common/SaveJobButton";
@@ -63,16 +62,21 @@ const JobCard = ({
   metadata,
   platform,
 }: JobCardProps) => {
-  const router = useRouter();
   const { appliedSlugs } = useJobStatus();
   const skillsList = normalizedSkills(skills);
   const isApplied = appliedSlugs.has(slug);
 
   return (
-    <div
-      onClick={() => router.push(`/job/${slug}`)}
-      className="job-card h-full group block cursor-pointer relative"
-    >
+    <div className="job-card h-full group block relative">
+      {/* Full-card link: crawlable <a href>, kept behind nested interactive
+          elements (skill tags, save button) via z-index so both stay clickable
+          without nesting <a> inside <a>. */}
+      <Link
+        href={`/job/${slug}`}
+        aria-label={title}
+        className="absolute inset-0 z-0 cursor-pointer"
+      />
+
       {/* Applied badge */}
       {isApplied && (
         <div className="absolute top-0 right-0 flex items-center gap-1 text-[10px] font-medium text-green-500 bg-green-500/10 border border-green-500/20 rounded-full px-2 py-0.5">
@@ -108,7 +112,7 @@ const JobCard = ({
           location={location}
           employmentType={employment_type}
           jobUrl={url ?? null}
-          className="opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+          className="relative z-10 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
         />
       </div>
 
@@ -190,8 +194,7 @@ const JobCard = ({
             <Link
               key={s.slug}
               href={`/skill/${s.slug}`}
-              onClick={(e) => e.stopPropagation()}
-              className="inline-flex items-center rounded-md border border-border bg-muted/60 px-2 py-0.5 text-xs text-muted-foreground hover:bg-primary/10 hover:text-primary transition-colors"
+              className="relative z-10 inline-flex items-center rounded-md border border-border bg-muted/60 px-2 py-0.5 text-xs text-muted-foreground hover:bg-primary/10 hover:text-primary transition-colors"
             >
               {s.name}
             </Link>
