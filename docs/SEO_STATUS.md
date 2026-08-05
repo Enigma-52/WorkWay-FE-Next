@@ -102,6 +102,48 @@ shipped. This doc tracks current state, not a build plan.
    env var driving canonical generation is actually `https://www.workway.dev` before the next
    deploy.
 
+## Mobile Core Web Vitals (separate from indexing, still affects mobile-first ranking)
+
+Found via an untracked local scratchpad (`PERF_AUDIT_SCRATCHPAD.md`, dated 2026-07-13, since
+folded in here) plus a fresh header check against live prod today (2026-08-05):
+
+- **Root cause, confirmed still live today**: `backendGet()` in `src/lib/api/server-client.ts`
+  calls `next/headers`'s `headers()` unconditionally to forward cookies/auth — even on fully
+  public, unauthenticated endpoints. Reading `headers()` forces the whole route to render
+  dynamically on every request and stamps the response `Cache-Control: private, must-revalidate`,
+  which Cloudflare correctly refuses to edge-cache.
+  - Verified via direct header check on live prod just now: `/jobs`, `/job/[slug]`,
+    `/company/[slug]` still return `private, must-revalidate` + `cf-cache-status: MISS`.
+    `/` and `/skills` are correctly cached (`HIT`, no `private`) — those are fine.
+  - A `forwardHeaders: false` option already exists on `backendGet()` and is used by some public
+    calls (including the new job-insights fetch added today) — but `/jobs`, `/job/[jobSlug]`, and
+    `/company/[companySlug]` don't currently benefit from real caching regardless, because...
+- **The ISR fix (`generateStaticParams` + `revalidate`) for `/job/[jobSlug]` and
+  `/company/[companySlug]` was tried and reverted** — see the comment at the top of
+  `job/[jobSlug]/page.tsx`: it wrote a permanent cache segment file per job slug, which grew to
+  **2.85M files / 56.7GiB on disk** on the self-hosted deployment. Both routes are back to
+  `export const dynamic = "force-dynamic"`. This is a real constraint, not an oversight — any fix
+  here needs a caching strategy that doesn't scale a file-per-slug on an ever-growing, high-
+  cardinality route (e.g., cache at a layer that doesn't write per-param disk files, or a bounded
+  LRU/short-TTL cache instead of Next's on-disk ISR segment cache).
+- **GTM script loading**: scratchpad claims `strategy="lazyOnload"` was applied to reduce main-
+  thread contention; current code (`AnalyticsProvider.tsx`) still shows `strategy="afterInteractive"`
+  — that fix did not stick or was reverted.
+- Scratchpad's original live PSI mobile reading (pre-fix, 2026-07-13): **Performance 72**, LCP
+  5.7s, TTFB 1.6s, **Core Web Vitals Assessment: Failed** (this is CrUX real-user field data, the
+  trustworthy kind).
+- I ran Lighthouse mobile against live `/jobs` today for a fresh read — got implausible numbers
+  (Performance 33, TBT 11.2s) that contradicted a simple raw TTFB check (~90-100ms, 5 runs). This
+  mismatch means the Lighthouse run itself is unreliable from this environment (likely CPU/network-
+  constrained sandbox, same class of problem the scratchpad flagged on its own dev machine) — not
+  discarded as fixed, just not a number to trust. **Get a real PSI mobile run against
+  `www.workway.dev/jobs` directly (google PageSpeed Insights, ~30s, no signup) for the actual
+  current number** — same recommendation pattern as the DR check.
+- Not verified either way today: accessibility fixes (Footer contrast/heading-order/alt text),
+  backend query/caching fixes (`jobsDao.js`, `filterDao.js`, connection pool size), DB index
+  changes (partial index add, redundant index cleanup) — lower risk of having been reverted since
+  none of them share the ISR-specific disk-blowup failure mode, but not spot-checked.
+
 ## Not investigated / lower priority
 
 - `/hireme` currently just `redirect()`s to `/dashboard/seeker/talent-profile` with no metadata of
