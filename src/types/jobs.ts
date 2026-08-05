@@ -103,6 +103,21 @@ export type JobDetails = JobListing & {
   similarLocationJobs?: JobListing[];
 };
 
+/** Salary-insights breakdown row, reused from /api/job/salary-insights. */
+export type SalaryInsightRow = { avg_salary: number; count: number };
+
+/**
+ * Job-page-specific stats reused from existing endpoints (company overview,
+ * salary insights) to differentiate the page content from the raw source
+ * posting — no new data collection, just surfacing what WorkWay already
+ * computes elsewhere.
+ */
+export type JobInsights = {
+  companyOpenJobs?: number;
+  domainSalary?: SalaryInsightRow;
+  levelSalary?: SalaryInsightRow;
+};
+
 /** Response from GET /api/job/list */
 export type JobListResponse = {
   jobs: JobListing[];
