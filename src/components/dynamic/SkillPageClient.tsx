@@ -142,7 +142,13 @@ export default function SkillPageClient({ data }: Props) {
               <JobPagination
                 currentPage={currentPage}
                 totalPages={totalPages}
-                onPageChange={(p) => updateParams({ page: String(p) })}
+                buildHref={(p) => {
+                  const sp = new URLSearchParams(searchParams.toString());
+                  if (p <= 1) sp.delete("page");
+                  else sp.set("page", String(p));
+                  const qs = sp.toString();
+                  return qs ? `${pathname}?${qs}` : pathname;
+                }}
               />
             </div>
           )}
