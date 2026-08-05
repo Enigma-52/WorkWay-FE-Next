@@ -1,17 +1,18 @@
 "use client";
 
+import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
-  onPageChange: (page: number) => void;
+  buildHref: (page: number) => string;
 }
 
 export default function Pagination({
   currentPage,
   totalPages,
-  onPageChange,
+  buildHref,
 }: PaginationProps) {
   const getPageNumbers = () => {
     const pages: (number | string)[] = [];
@@ -37,20 +38,31 @@ export default function Pagination({
 
   return (
     <div className="mt-8 flex items-center justify-center gap-2">
-      <button
-        onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-        aria-label="Previous page"
-        className="flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-secondary text-foreground transition-all hover:border-primary/50 disabled:cursor-not-allowed disabled:opacity-50"
-      >
-        <ChevronLeft className="h-4 w-4" />
-      </button>
+      {currentPage === 1 ? (
+        <button
+          disabled
+          aria-label="Previous page"
+          className="flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-secondary text-foreground opacity-50"
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </button>
+      ) : (
+        <Link
+          href={buildHref(currentPage - 1)}
+          rel="prev"
+          aria-label="Previous page"
+          className="flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-secondary text-foreground transition-all hover:border-primary/50"
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </Link>
+      )}
 
       {getPageNumbers().map((page, index) =>
         typeof page === "number" ? (
-          <button
+          <Link
             key={index}
-            onClick={() => onPageChange(page)}
+            href={buildHref(page)}
+            aria-current={page === currentPage ? "page" : undefined}
             className={`flex h-10 w-10 items-center justify-center rounded-lg font-mono text-sm transition-all ${
               currentPage === page
                 ? "bg-primary text-primary-foreground"
@@ -58,7 +70,7 @@ export default function Pagination({
             }`}
           >
             {page}
-          </button>
+          </Link>
         ) : (
           <span key={index} className="px-2 text-muted-foreground">
             {page}
@@ -66,14 +78,24 @@ export default function Pagination({
         ),
       )}
 
-      <button
-        onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-        aria-label="Next page"
-        className="flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-secondary text-foreground transition-all hover:border-primary/50 disabled:cursor-not-allowed disabled:opacity-50"
-      >
-        <ChevronRight className="h-4 w-4" />
-      </button>
+      {currentPage === totalPages ? (
+        <button
+          disabled
+          aria-label="Next page"
+          className="flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-secondary text-foreground opacity-50"
+        >
+          <ChevronRight className="h-4 w-4" />
+        </button>
+      ) : (
+        <Link
+          href={buildHref(currentPage + 1)}
+          rel="next"
+          aria-label="Next page"
+          className="flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-secondary text-foreground transition-all hover:border-primary/50"
+        >
+          <ChevronRight className="h-4 w-4" />
+        </Link>
+      )}
     </div>
   );
 }
