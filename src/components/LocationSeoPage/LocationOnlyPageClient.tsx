@@ -333,7 +333,13 @@ export default function LocationOnlyPageClient({ data, location }: Props) {
                 <JobPagination
                   currentPage={meta.page}
                   totalPages={totalPages}
-                  onPageChange={(p) => updateParams({ page: String(p) })}
+                  buildHref={(p) => {
+                  const sp = new URLSearchParams(searchParams.toString());
+                  if (p <= 1) sp.delete("page");
+                  else sp.set("page", String(p));
+                  const qs = sp.toString();
+                  return qs ? `${pathname}?${qs}` : pathname;
+                }}
                 />
               </div>
             )}
