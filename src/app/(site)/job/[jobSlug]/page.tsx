@@ -7,7 +7,36 @@ import { backendGet } from "@/lib/api/server-client";
 import { buildJobPostingJsonLd, buildBreadcrumbJsonLd } from "@/lib/seo/jsonld";
 import { buildJobDetailBreadcrumb } from "@/lib/seo/breadcrumbs";
 import { buildPageMetadata } from "@/lib/seo/metadata";
-import type { JobDetails } from "@/types/jobs";
+import type { JobDetails, JobInsights, SalaryInsightRow } from "@/types/jobs";
+import type { CompanyListResponse } from "@/lib/api/contracts";
+
+type SalaryInsightsResponse = {
+  by_domain: { domain: string; avg_salary: number; count: number }[];
+  by_experience_level: { level: string; avg_salary: number; count: number }[];
+};
+
+async function fetchJobInsights(job: JobDetails): Promise<JobInsights> {
+  const [companyRes, salaryRes] = await Promise.all([
+    backendGet<CompanyListResponse>("/api/company", {
+      query: { q: job.company, limit: 1 },
+      forwardHeaders: false,
+      revalidate: 3600,
+    }).catch(() => null),
+    backendGet<SalaryInsightsResponse>("/api/job/salary-insights", {
+      forwardHeaders: false,
+      revalidate: 3600,
+    }).catch(() => null),
+  ]);
+
+  const companyOpenJobs = companyRes?.companies?.[0]?.jobs_open_count;
+  const domainSalary: SalaryInsightRow | undefined = salaryRes?.by_domain.find(
+    (r) => r.domain === job.domain
+  );
+  const levelSalary: SalaryInsightRow | undefined =
+    salaryRes?.by_experience_level.find((r) => r.level === job.experience_level);
+
+  return { companyOpenJobs, domainSalary, levelSalary };
+}
 
 // Job pages have enormous, ever-growing cardinality (one per job posting,
 // most viewed only a handful of times ever). Statically caching each one
@@ -76,6 +105,7 @@ export default async function JobPage({ params }: JobPageProps) {
   }
 
   const breadcrumbs = buildJobDetailBreadcrumb(job.title);
+  const insights = await fetchJobInsights(job);
 
   return (
     <>
@@ -86,7 +116,7 @@ export default async function JobPage({ params }: JobPageProps) {
           <Breadcrumbs items={breadcrumbs} />
         </div>
       </div>
-      <JobPageClient job={job} />
+      <JobPageClient job={job} insights={insights} />
     </>
   );
 }
