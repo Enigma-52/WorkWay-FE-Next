@@ -41,6 +41,7 @@ export default function JobsPageClient({ data }: Props) {
   const employmentType = getParam(searchParams, "employment_type", "all");
   const experienceLevel = getParam(searchParams, "experience_level", "all");
   const location = getParam(searchParams, "location", "");
+  const country = getParam(searchParams, "country", "all");
   const posted = getParam(searchParams, "posted", "all");
 
   const updateParams = useCallback(
@@ -61,13 +62,14 @@ export default function JobsPageClient({ data }: Props) {
   };
 
   const handleApply = useCallback(
-    (filters: { q: string; domain: string; employmentType: string; experienceLevel: string; location: string; posted: string }) => {
+    (filters: { q: string; domain: string; employmentType: string; experienceLevel: string; location: string; country: string; posted: string }) => {
       updateParams({
         q: filters.q || null,
         domain: filters.domain,
         employment_type: filters.employmentType,
         experience_level: filters.experienceLevel,
         location: filters.location || null,
+        country: filters.country || null,
         posted: filters.posted,
         page: "1",
       });
@@ -77,6 +79,7 @@ export default function JobsPageClient({ data }: Props) {
         employment_type: filters.employmentType,
         experience_level: filters.experienceLevel,
         location: filters.location || null,
+        country: filters.country || null,
         posted: filters.posted,
       });
       if (filters.q.trim()) {
@@ -93,6 +96,7 @@ export default function JobsPageClient({ data }: Props) {
       employment_type: null,
       experience_level: null,
       location: null,
+      country: null,
       posted: null,
       page: "1",
     });
@@ -104,6 +108,7 @@ export default function JobsPageClient({ data }: Props) {
     employmentType !== "all",
     experienceLevel !== "all",
     location,
+    country !== "all",
     posted !== "all",
   ].filter(Boolean).length;
 
@@ -153,9 +158,10 @@ export default function JobsPageClient({ data }: Props) {
 
       {/* Main content */}
       <main className="container mx-auto py-8 md:py-12">
-        <div className="grid gap-8 lg:grid-cols-[240px_minmax(0,1fr)_360px]">
+        <div className="grid gap-8 lg:grid-cols-[300px_minmax(0,1fr)_360px]">
           {/* Sidebar facets - hidden on small screens, show on lg */}
-          <div className="hidden lg:block lg:sticky lg:top-24 lg:self-start">
+          <div className="hidden lg:block lg:sticky lg:top-24 lg:self-start space-y-4">
+            <LatestChangelogCard />
             <JobsFacetsSidebar
               domains={facets.domains}
               employmentTypes={facets.employment_types}
@@ -182,6 +188,7 @@ export default function JobsPageClient({ data }: Props) {
               employmentType={employmentType}
               experienceLevel={experienceLevel}
               location={location}
+              country={country}
               posted={posted}
               onApply={handleApply}
               onClear={clearFilters}
@@ -252,11 +259,10 @@ export default function JobsPageClient({ data }: Props) {
             )}
           </div>
 
-          {/* Live activity feed + changelog - right sidebar on large screens */}
+          {/* Live activity feed - right sidebar on large screens */}
           <div className="hidden lg:block lg:sticky lg:top-24 lg:self-start space-y-4">
             <TalentProfilePromoCard />
             <JobViewFeed />
-            <LatestChangelogCard />
           </div>
         </div>
       </main>

@@ -36,6 +36,7 @@ function buildListQuery(
   const employment_type = getSingleParam(sp.employment_type, "all");
   const experience_level = getSingleParam(sp.experience_level, "all");
   const location = getSingleParam(sp.location, "");
+  const country = getSingleParam(sp.country, "");
   const company_slug = getSingleParam(sp.company_slug, "");
   const sort = getSingleParam(sp.sort, "recent");
   const posted = getSingleParam(sp.posted, "all");
@@ -50,6 +51,7 @@ function buildListQuery(
   };
   if (q) query.q = q;
   if (location) query.location = location;
+  if (country) query.country = country;
   if (company_slug) query.company_slug = company_slug;
   if (posted && posted !== "all") query.posted = posted;
   return query;

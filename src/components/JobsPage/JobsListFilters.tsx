@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState, useEffect } from "react";
+import { CountryCombobox } from "./CountryCombobox";
 
 const EXPERIENCE_LEVELS = [
   "Intern",
@@ -37,6 +38,7 @@ export type AppliedFilters = {
   employmentType: string;
   experienceLevel: string;
   location: string;
+  country: string;
   posted: string;
 };
 
@@ -47,6 +49,7 @@ export type JobsListFiltersProps = {
   employmentType: string;
   experienceLevel: string;
   location: string;
+  country: string;
   posted: string;
   onApply: (filters: AppliedFilters) => void;
   onClear: () => void;
@@ -60,6 +63,7 @@ export function JobsListFilters({
   employmentType,
   experienceLevel,
   location,
+  country,
   posted,
   onApply,
   onClear,
@@ -89,6 +93,21 @@ export function JobsListFilters({
       employmentType: draftEmploymentType,
       experienceLevel: draftExperienceLevel,
       location: draftLocation,
+      country,
+      posted: draftPosted,
+    });
+  };
+
+  // Country applies immediately on selection rather than waiting for the Search button —
+  // it's a discrete pick, not free text that benefits from a debounce/submit step.
+  const handleCountryChange = (cca3: string | null) => {
+    onApply({
+      q: draftQ,
+      domain: draftDomain,
+      employmentType: draftEmploymentType,
+      experienceLevel: draftExperienceLevel,
+      location: draftLocation,
+      country: cca3 ?? "",
       posted: draftPosted,
     });
   };
@@ -179,6 +198,8 @@ export function JobsListFilters({
           />
         </div>
 
+        <CountryCombobox value={country} onChange={handleCountryChange} />
+
         <Select value={draftPosted} onValueChange={setDraftPosted}>
           <SelectTrigger className="w-[160px] bg-secondary border-border rounded-lg" aria-label="Filter by date posted">
             <Clock className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
@@ -222,7 +243,7 @@ export function JobsListFilters({
             <Badge
               variant="secondary"
               className="gap-1 font-mono text-xs cursor-pointer hover:bg-secondary/80"
-              onClick={() => onApply({ q: "", domain, employmentType, experienceLevel, location, posted })}
+              onClick={() => onApply({ q: "", domain, employmentType, experienceLevel, location, country, posted })}
             >
               {q}
               <X className="h-3 w-3" />
@@ -232,7 +253,7 @@ export function JobsListFilters({
             <Badge
               variant="secondary"
               className="gap-1 font-mono text-xs cursor-pointer hover:bg-secondary/80"
-              onClick={() => onApply({ q, domain: "all", employmentType, experienceLevel, location, posted })}
+              onClick={() => onApply({ q, domain: "all", employmentType, experienceLevel, location, country, posted })}
             >
               Domain: {domain}
               <X className="h-3 w-3" />
@@ -242,7 +263,7 @@ export function JobsListFilters({
             <Badge
               variant="secondary"
               className="gap-1 font-mono text-xs cursor-pointer hover:bg-secondary/80"
-              onClick={() => onApply({ q, domain, employmentType, experienceLevel: "all", location, posted })}
+              onClick={() => onApply({ q, domain, employmentType, experienceLevel: "all", location, country, posted })}
             >
               {experienceLevel}
               <X className="h-3 w-3" />
@@ -252,7 +273,7 @@ export function JobsListFilters({
             <Badge
               variant="secondary"
               className="gap-1 font-mono text-xs cursor-pointer hover:bg-secondary/80"
-              onClick={() => onApply({ q, domain, employmentType: "all", experienceLevel, location, posted })}
+              onClick={() => onApply({ q, domain, employmentType: "all", experienceLevel, location, country, posted })}
             >
               {employmentType}
               <X className="h-3 w-3" />
@@ -262,9 +283,19 @@ export function JobsListFilters({
             <Badge
               variant="secondary"
               className="gap-1 font-mono text-xs cursor-pointer hover:bg-secondary/80"
-              onClick={() => onApply({ q, domain, employmentType, experienceLevel, location: "", posted })}
+              onClick={() => onApply({ q, domain, employmentType, experienceLevel, location: "", country, posted })}
             >
               {location}
+              <X className="h-3 w-3" />
+            </Badge>
+          )}
+          {country && country !== "all" && (
+            <Badge
+              variant="secondary"
+              className="gap-1 font-mono text-xs cursor-pointer hover:bg-secondary/80"
+              onClick={() => onApply({ q, domain, employmentType, experienceLevel, location, country: "", posted })}
+            >
+              {country}
               <X className="h-3 w-3" />
             </Badge>
           )}
@@ -272,7 +303,7 @@ export function JobsListFilters({
             <Badge
               variant="secondary"
               className="gap-1 font-mono text-xs cursor-pointer hover:bg-secondary/80"
-              onClick={() => onApply({ q, domain, employmentType, experienceLevel, location, posted: "all" })}
+              onClick={() => onApply({ q, domain, employmentType, experienceLevel, location, country, posted: "all" })}
             >
               {POSTED_OPTIONS.find((o) => o.value === posted)?.label ?? posted}
               <X className="h-3 w-3" />
