@@ -70,11 +70,18 @@ export function track(event: string, props?: Record<string, unknown>) {
 }
 
 // Merges the visitor's anonymous event history onto a named profile.
-// Only call this once we actually have a voluntarily-given email
-// (e.g. a feedback or contact form) — never guess or infer identity.
-export function identify(email: string, extra?: Record<string, unknown>) {
+// Only call this once we actually have a voluntarily-given identity
+// (a signed-in user's stable db id, or an email from a feedback/contact
+// form) — never guess or infer identity.
+export function identify(distinctId: string, extra?: Record<string, unknown>) {
   withMixpanel((mixpanel) => {
-    mixpanel.identify(email);
-    mixpanel.people.set({ $email: email, ...extra });
+    mixpanel.identify(distinctId);
+    if (extra) mixpanel.people.set(extra);
   });
+}
+
+// Call on sign-out so the next login (possibly a different person on a
+// shared machine) doesn't get attributed to the previous user's profile.
+export function resetIdentity() {
+  withMixpanel((mixpanel) => mixpanel.reset());
 }

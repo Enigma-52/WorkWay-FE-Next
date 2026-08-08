@@ -98,10 +98,10 @@ export default function RootLayout({
       <body className={`${geist.variable} ${geistMono.variable} ${instrumentSerif.variable}`}>
         <JsonLd data={buildSiteOrganizationJsonLd()} />
         <JsonLd data={buildWebSiteJsonLd()} />
-        <Suspense fallback={null}>
-          <AnalyticsProvider />
-        </Suspense>
         <AppProviders>
+          <Suspense fallback={null}>
+            <AnalyticsProvider />
+          </Suspense>
           <div className="flex min-h-screen flex-col bg-background text-foreground">
             <Navbar />
             <main className="flex-1">{children}</main>

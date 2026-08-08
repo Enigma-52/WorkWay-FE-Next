@@ -2,8 +2,9 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 import Script from "next/script";
-import { detectBot, flushQueuedAnalytics, track } from "@/lib/analytics";
+import { detectBot, flushQueuedAnalytics, identify, resetIdentity, track } from "@/lib/analytics";
 
 const GA_MEASUREMENT_ID =
   process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-PMBBRGCPM5";
@@ -36,6 +37,7 @@ declare global {
       track: (event: string, props?: Record<string, unknown>) => void;
       register: (props: Record<string, unknown>) => void;
       identify: (id: string) => void;
+      reset: () => void;
       people: { set: (props: Record<string, unknown>) => void };
     };
   }
@@ -136,7 +138,9 @@ function trackPageView(path: string) {
 export default function AnalyticsProvider() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { data: session, status } = useSession();
   const mixpanelInitialized = useRef(false);
+  const identifiedUserId = useRef<string | null>(null);
   const started = useDeferredStart();
 
   const fullPath = useMemo(() => {
@@ -181,6 +185,26 @@ export default function AnalyticsProvider() {
     if (!fullPath) return;
     trackPageView(fullPath);
   }, [fullPath]);
+
+  // Attribute events to the signed-in user so funnels/retention can be
+  // sliced per person instead of per anonymous device.
+  useEffect(() => {
+    const dbId = session?.user?.dbId;
+
+    if (status === "authenticated" && dbId && identifiedUserId.current !== dbId) {
+      identifiedUserId.current = dbId;
+      identify(dbId, {
+        $email: session.user.email ?? undefined,
+        $name: session.user.displayName || session.user.name || undefined,
+        roles: session.user.roles ?? [],
+      });
+    }
+
+    if (status === "unauthenticated" && identifiedUserId.current) {
+      identifiedUserId.current = null;
+      resetIdentity();
+    }
+  }, [status, session]);
 
   if (!GA_MEASUREMENT_ID || !started) return null;
 

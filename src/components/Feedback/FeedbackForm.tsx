@@ -78,7 +78,7 @@ export function FeedbackForm() {
       }
 
       if (form.email) {
-        identify(form.email, { $name: form.name || undefined, role: form.role });
+        identify(form.email, { $email: form.email, $name: form.name || undefined, role: form.role });
       }
       track("Feedback Submitted", {
         role: form.role,
