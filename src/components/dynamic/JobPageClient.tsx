@@ -21,6 +21,7 @@ import { track } from "@/lib/analytics";
 import type { JobDetails, JobInsights, SkillJobGroup } from "@/types/jobs";
 import AuthModal from "@/components/common/AuthModal";
 import SaveJobButton from "@/components/common/SaveJobButton";
+import ReportJobButton from "@/components/JobPage/ReportJobButton";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useJobStatus } from "@/contexts/JobStatusContext";
@@ -60,6 +61,9 @@ export default function JobPageClient({ job, insights }: Props) {
   const [authOpen, setAuthOpen] = useState(false);
 
   const alreadyApplied = appliedSlugs.has(job.slug);
+  const isStale = job.created_at
+    ? Date.now() - new Date(job.created_at).getTime() > 30 * 24 * 60 * 60 * 1000
+    : false;
 
   async function handleAppliedYes() {
     if (!session?.user?.dbId) {
@@ -321,6 +325,15 @@ export default function JobPageClient({ job, insights }: Props) {
                       Posted {postedAgo}
                     </JobBadge>
                   )}
+                  {isStale && (
+                    <JobBadge
+                      variant="default"
+                      className="border-amber-500/30 text-amber-600 dark:text-amber-400"
+                      title="This job was posted over 30 days ago and may no longer be active."
+                    >
+                      Possibly stale
+                    </JobBadge>
+                  )}
                 </div>
 
                 {job.skills?.length > 0 && (
@@ -430,6 +443,10 @@ export default function JobPageClient({ job, insights }: Props) {
                     You will be redirected to the company career page
                   </p>
                 )}
+
+                <div className="flex justify-center lg:justify-start">
+                  <ReportJobButton jobSlug={job.slug} />
+                </div>
               </div>
             </div>
           </div>
