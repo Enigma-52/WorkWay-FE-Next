@@ -102,6 +102,16 @@ export function buildAboutBreadcrumb(): BreadcrumbItem[] {
   ];
 }
 
+export function buildTalentsBreadcrumb(): BreadcrumbItem[] {
+  return [
+    ...buildHomeBreadcrumb(),
+    {
+      name: "Talents",
+      href: "/talents",
+    },
+  ];
+}
+
 export function buildTalentProfileBreadcrumb(): BreadcrumbItem[] {
   return [
     ...buildHomeBreadcrumb(),
