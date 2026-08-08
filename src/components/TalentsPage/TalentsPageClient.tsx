@@ -37,7 +37,6 @@ export default function TalentsPageClient({ data }: Props) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const q = getParam(searchParams, "q", "");
   const category = getParam(searchParams, "category", "all");
   const experienceLevel = getParam(searchParams, "experience_level", "all");
   const availabilityStatus = getParam(searchParams, "availability_status", "all");
@@ -46,10 +45,8 @@ export default function TalentsPageClient({ data }: Props) {
   const languages = getParam(searchParams, "languages", "all");
   const sort = getParam(searchParams, "sort", "newest");
 
-  const [draftQ, setDraftQ] = useState(q);
   const [draftCountry, setDraftCountry] = useState(country);
 
-  useEffect(() => setDraftQ(q), [q]);
   useEffect(() => setDraftCountry(country), [country]);
 
   const updateParams = useCallback(
@@ -66,8 +63,8 @@ export default function TalentsPageClient({ data }: Props) {
   );
 
   const handleSearch = () => {
-    updateParams({ q: draftQ || null, country: draftCountry || null, page: "1" });
-    track("Talents Filters Applied", { query: draftQ || null, country: draftCountry || null });
+    updateParams({ country: draftCountry || null, page: "1" });
+    track("Talents Filters Applied", { country: draftCountry || null });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -80,10 +77,8 @@ export default function TalentsPageClient({ data }: Props) {
   };
 
   const clearFilters = () => {
-    setDraftQ("");
     setDraftCountry("");
     updateParams({
-      q: null,
       category: null,
       experience_level: null,
       availability_status: null,
@@ -95,7 +90,6 @@ export default function TalentsPageClient({ data }: Props) {
   };
 
   const activeFiltersCount = [
-    q,
     category !== "all",
     experienceLevel !== "all",
     availabilityStatus !== "all",
@@ -148,27 +142,6 @@ export default function TalentsPageClient({ data }: Props) {
         <div className="space-y-6">
           {/* Filter bar */}
           <div className="space-y-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                placeholder="Search by name or title..."
-                value={draftQ}
-                onChange={(e) => setDraftQ(e.target.value)}
-                onKeyDown={handleKeyDown}
-                className="pl-10 bg-secondary border-border focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-xl py-2.5"
-              />
-              {draftQ && (
-                <button
-                  type="button"
-                  onClick={() => setDraftQ("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                  aria-label="Clear search"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              )}
-            </div>
-
             <div className="flex flex-wrap items-center gap-3">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <SlidersHorizontal className="h-4 w-4" />
