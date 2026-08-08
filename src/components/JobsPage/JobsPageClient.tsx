@@ -16,6 +16,7 @@ import { track } from "@/lib/analytics";
 import type { JobListResponse } from "@/types/jobs";
 import JobViewFeed from "@/components/JobViewFeed/JobViewFeed";
 import LatestChangelogCard from "./LatestChangelogCard";
+import TalentProfilePromoCard from "./TalentProfilePromoCard";
 
 type Props = {
   data: JobListResponse;
@@ -253,6 +254,7 @@ export default function JobsPageClient({ data }: Props) {
 
           {/* Live activity feed + changelog - right sidebar on large screens */}
           <div className="hidden lg:block lg:sticky lg:top-24 lg:self-start space-y-4">
+            <TalentProfilePromoCard />
             <JobViewFeed />
             <LatestChangelogCard />
           </div>
