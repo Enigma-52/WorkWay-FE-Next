@@ -8,6 +8,7 @@ import { buildPageMetadata } from "@/lib/seo/metadata";
 import { buildBreadcrumbJsonLd } from "@/lib/seo/jsonld";
 import { buildChangelogBreadcrumb } from "@/lib/seo/breadcrumbs";
 import changelogData from "@/content/changelog.json";
+import { getChangelogIcon } from "@/lib/changelogIcons";
 
 type ChangelogEntry = {
   id: string;
@@ -30,11 +31,9 @@ export const metadata: Metadata = buildPageMetadata({
 function formatDate(date: string) {
   const d = new Date(date);
   if (Number.isNaN(d.getTime())) return date;
-  return d.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+  const day = d.getUTCDate();
+  const month = d.toLocaleDateString("en-US", { month: "short", timeZone: "UTC" });
+  return `${day} ${month}, ${d.getUTCFullYear()}`;
 }
 
 export default function ChangelogPage() {
@@ -80,18 +79,14 @@ export default function ChangelogPage() {
                 className="relative rounded-xl border border-border bg-card/80 p-6 transition-all duration-300 hover:border-primary/40 hover:shadow-[0_0_40px_hsl(82_100%_55%/0.18)]"
               >
                 <div className="flex items-start gap-4">
-                  {entry.icon && (
-                    <div className="mt-1 flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-secondary/60">
-                      {/* SVG path from /public, e.g. /changelog/rocket.svg */}
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={entry.icon}
-                        alt=""
-                        className="h-6 w-6"
-                        aria-hidden="true"
-                      />
-                    </div>
-                  )}
+                  {(() => {
+                    const Icon = getChangelogIcon(entry.icon);
+                    return (
+                      <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border bg-secondary/60">
+                        <Icon className="h-5 w-5 text-primary" aria-hidden="true" />
+                      </div>
+                    );
+                  })()}
 
                   <div className="flex-1 space-y-2">
                     <div className="flex flex-wrap items-center gap-2">

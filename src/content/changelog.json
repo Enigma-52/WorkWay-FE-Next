@@ -1,15 +1,62 @@
 {
   "entries": [
     {
+      "id": "2026-08-08-talent-directory",
+      "date": "2026-08-08",
+      "title": "Talent Profiles directory & smarter job browsing",
+      "tag": "Major",
+      "icon": "rocket",
+      "highlights": [
+        "Launched **Talents** \u2014 a searchable directory of engineer, design, and product profiles. Filter by category, skills, languages, experience level, and availability to find who you're looking for.",
+        "Added a **country filter** to Jobs with proper autocomplete, so you can narrow listings to a specific country instead of guessing from free-text location.",
+        "**Report a job** as filled, broken, or spam directly from the job page \u2014 reported listings get reviewed and removed from search.",
+        "Job cards and detail pages now flag postings **over 30 days old** as possibly stale."
+      ]
+    },
+    {
+      "id": "2026-08-05-pagination-insights",
+      "date": "2026-08-05",
+      "title": "Real pagination links & job page insights",
+      "tag": "Update",
+      "icon": "search",
+      "highlights": [
+        "Every paginated list \u2014 jobs, companies, domains, skills, salary insights, location pages \u2014 now uses real links instead of JS-only buttons. Works with your browser's back/forward buttons and is fully crawlable by search engines.",
+        "Job detail pages now show the company's **other open roles** and relevant **salary insights** alongside the listing."
+      ]
+    },
+    {
+      "id": "2026-08-02-auth-dashboard",
+      "date": "2026-08-02",
+      "title": "Sign in and your new Dashboard",
+      "tag": "Major",
+      "icon": "eye",
+      "highlights": [
+        "Sign in with **Google** or a **magic link** \u2014 no password required.",
+        "New **Dashboard** to track Saved Jobs, Applications, followed Companies, and your Talent Profile all in one place.",
+        "Rewrote the landing page around how WorkWay actually helps \u2014 discovering roles across every company's own careers page, not just the big job boards."
+      ]
+    },
+    {
+      "id": "2026-06-16-talent-profiles-yc",
+      "date": "2026-06-16",
+      "title": "Talent Profiles & Y Combinator jobs",
+      "tag": "Feature",
+      "icon": "briefcase",
+      "highlights": [
+        "Create a public **Talent Profile** \u2014 headline, experience, skills, portfolio links \u2014 shareable at your own profile page.",
+        "Added **Y Combinator** company jobs as a new source, expanding coverage across YC-backed startups."
+      ]
+    },
+    {
       "id": "2026-05-09-workable-seo",
       "date": "2026-05-09",
       "title": "Workable integration & SEO overhaul",
       "tag": "Major",
-      "icon": "/changelog/rocket.svg",
+      "icon": "briefcase",
       "highlights": [
-        "Added **Workable** as a new job source — companies posting on Workable now appear on WorkWay automatically.",
+        "Added **Workable** as a new job source \u2014 companies posting on Workable now appear on WorkWay automatically.",
         "Replaced all hidden headings and motion-animated content with proper semantic HTML, so every page is fully visible to search engines.",
-        "Job descriptions now display in full — no more \"Show more\" truncation.",
+        "Job descriptions now display in full \u2014 no more \"Show more\" truncation.",
         "Added the **latest changelog** card to the jobs feed sidebar."
       ]
     },
@@ -18,7 +65,7 @@
       "date": "2026-05-01",
       "title": "Job detail page refresh",
       "tag": "Update",
-      "icon": "/changelog/rocket.svg",
+      "icon": "eye",
       "highlights": [
         "Redesigned the **single job page** for better readability on smaller screens.",
         "Job pages now show the **posted time** (e.g. \"3 days ago\") so you know how fresh each listing is.",
@@ -30,12 +77,12 @@
       "date": "2026-04-25",
       "title": "Skills tagging & salary insights",
       "tag": "Feature",
-      "icon": "/changelog/rocket.svg",
+      "icon": "search",
       "highlights": [
-        "Skills mentioned in job descriptions are now **linked** — click any skill to see all related jobs.",
+        "Skills mentioned in job descriptions are now **linked** \u2014 click any skill to see all related jobs.",
         "Launched **Salary Insights** page for roles that include compensation data.",
         "Jobs near your viewed listing now appear in a **\"Jobs near you\"** section.",
-        "Company matching is now smarter with **semantic embeddings** — better duplicate detection and related-company suggestions."
+        "Company matching is now smarter with **semantic embeddings** \u2014 better duplicate detection and related-company suggestions."
       ]
     },
     {
@@ -43,9 +90,9 @@
       "date": "2026-04-18",
       "title": "User accounts & saved jobs",
       "tag": "Feature",
-      "icon": "/changelog/rocket.svg",
+      "icon": "rocket",
       "highlights": [
-        "Sign in with a **magic link** — no password needed.",
+        "Sign in with a **magic link** \u2014 no password needed.",
         "**Save jobs** you're interested in and come back to them later.",
         "**Follow companies** to get alerts when they post new roles.",
         "Track your **applications** in one place."
@@ -56,9 +103,9 @@
       "date": "2026-04-12",
       "title": "Ashby jobs & compensation data",
       "tag": "Feature",
-      "icon": "/changelog/rocket.svg",
+      "icon": "briefcase",
       "highlights": [
-        "Added **Ashby** as a job source — hundreds of new roles from companies using Ashby's ATS.",
+        "Added **Ashby** as a job source \u2014 hundreds of new roles from companies using Ashby's ATS.",
         "Jobs with salary info now display **compensation badges** (salary range, equity, bonus).",
         "Added **career guides** with FAQs and role-specific advice to help you prepare."
       ]
@@ -68,9 +115,9 @@
       "date": "2026-04-10",
       "title": "Location-based job pages",
       "tag": "Feature",
-      "icon": "/changelog/rocket.svg",
+      "icon": "search",
       "highlights": [
-        "Browse jobs by location — dedicated pages like **\"Software Engineer jobs in Bangalore\"** for every city and role combination.",
+        "Browse jobs by location \u2014 dedicated pages like **\"Software Engineer jobs in Bangalore\"** for every city and role combination.",
         "Added a **Jobs by Location** hub page to explore all available cities.",
         "Each location page includes proper SEO metadata and structured data for search engines."
       ]
@@ -80,7 +127,7 @@
       "date": "2026-03-29",
       "title": "Company search & recently posted",
       "tag": "Feature",
-      "icon": "/changelog/rocket.svg",
+      "icon": "search",
       "highlights": [
         "Search for any company on WorkWay with the new **company search**.",
         "Company pages now show a **\"Recently Posted\"** section highlighting jobs added in the last few days.",
@@ -92,7 +139,7 @@
       "date": "2026-03-28",
       "title": "Location programmatic SEO",
       "tag": "Update",
-      "icon": "/changelog/rocket.svg",
+      "icon": "rocket",
       "highlights": [
         "Auto-generated **role + location** pages (e.g. \"Data Analyst jobs in Mumbai\") for better search discoverability.",
         "Dynamic sitemaps now include all valid location combinations for Google indexing."
@@ -103,9 +150,9 @@
       "date": "2026-03-14",
       "title": "Recently viewed jobs",
       "tag": "Feature",
-      "icon": "/changelog/rocket.svg",
+      "icon": "eye",
       "highlights": [
-        "Added a **Recently Viewed** section on the jobs feed — your last 10 visited job listings are saved locally and shown at the top.",
+        "Added a **Recently Viewed** section on the jobs feed \u2014 your last 10 visited job listings are saved locally and shown at the top.",
         "Works fully client-side using `localStorage`, so your history persists across page refreshes.",
         "Each recently viewed card shows the job title, company, and location for quick re-access."
       ]
@@ -115,7 +162,7 @@
       "date": "2026-03-10",
       "title": "Feedback page & changelog",
       "tag": "Update",
-      "icon": "/changelog/feedback.svg",
+      "icon": "feedback",
       "highlights": [
         "Added a dedicated **Feedback** page so you can tell us what to improve.",
         "Launched this public **Changelog** to track visible product changes.",
@@ -127,7 +174,7 @@
       "date": "2026-03-07",
       "title": "Job page improvements",
       "tag": "Update",
-      "icon": "/changelog/rocket.svg",
+      "icon": "eye",
       "highlights": [
         "Job detail pages now load significantly faster with improved server-side rendering.",
         "Added **Apply** button pinned to the bottom on mobile for easier access.",
@@ -139,10 +186,10 @@
       "date": "2026-03-04",
       "title": "Improved search & filters",
       "tag": "Feature",
-      "icon": "/changelog/rocket.svg",
+      "icon": "search",
       "highlights": [
         "Filter jobs by **employment type** (full-time, part-time, contract, internship).",
-        "Location filter now supports remote-first search — filter by `Remote` to find fully distributed roles.",
+        "Location filter now supports remote-first search \u2014 filter by `Remote` to find fully distributed roles.",
         "Search queries are now reflected in the URL, making filtered results shareable."
       ]
     },
@@ -151,7 +198,7 @@
       "date": "2026-03-01",
       "title": "Next.js migration & new job feed",
       "tag": "Major",
-      "icon": "/changelog/rocket.svg",
+      "icon": "rocket",
       "highlights": [
         "Migrated the main WorkWay experience to the new **Next.js** app.",
         "Introduced the new **Jobs** feed with better filters and faster navigation.",

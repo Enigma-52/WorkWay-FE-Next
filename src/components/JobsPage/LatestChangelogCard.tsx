@@ -1,22 +1,33 @@
 "use client";
 
 import Link from "next/link";
-import { Sparkles, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import changelogData from "@/content/changelog.json";
+import { getChangelogIcon } from "@/lib/changelogIcons";
+
+function formatDate(date: string) {
+  const d = new Date(date);
+  if (Number.isNaN(d.getTime())) return date;
+  const day = d.getUTCDate();
+  const month = d.toLocaleDateString("en-US", { month: "short", timeZone: "UTC" });
+  return `${day} ${month}, ${d.getUTCFullYear()}`;
+}
 
 export default function LatestChangelogCard() {
   const latest = changelogData.entries[0];
   if (!latest) return null;
 
+  const Icon = getChangelogIcon(latest.icon);
+
   return (
     <div className="rounded-xl border border-border bg-card/60 p-4 shadow-sm">
       <div className="mb-3 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <Sparkles className="h-4 w-4 text-primary" />
+          <Icon className="h-4 w-4 text-primary" />
           <h3 className="text-sm font-semibold text-foreground">Latest Update</h3>
         </div>
         <span className="text-[11px] font-mono text-muted-foreground">
-          {latest.date}
+          {formatDate(latest.date)}
         </span>
       </div>
 
