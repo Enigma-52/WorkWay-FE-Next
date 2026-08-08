@@ -20,21 +20,21 @@ export default function TalentProfilePromoCard() {
         </h3>
       </div>
       <p className="mb-3 text-sm text-foreground">
-        Companies are looking for talent like yours. Will they find you?
+        Recruiters browse WorkWay Talents every day looking for people like you. A live profile means opportunities find <span className="text-primary font-medium">you</span> — no applications needed.
       </p>
       {session ? (
         <Button size="sm" className="w-full" asChild>
-          <Link href="/dashboard/seeker/talent-profile">Create your profile</Link>
+          <Link href="/dashboard/seeker/talent-profile">Build my profile</Link>
         </Button>
       ) : (
         <>
           <Button size="sm" className="w-full" onClick={() => setAuthOpen(true)}>
-            Create your profile
+            Build my profile
           </Button>
           <AuthModal open={authOpen} onOpenChange={setAuthOpen} callbackUrl="/dashboard/seeker/talent-profile" />
         </>
       )}
-      <p className="mt-2 text-center text-xs text-muted-foreground">It&apos;s free.</p>
+      <p className="mt-2 text-center text-xs text-muted-foreground">Free &middot; takes 2 minutes</p>
     </div>
   );
 }
