@@ -1,10 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Building2, Globe, MapPin, Briefcase, Users, Bell, BellOff, Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import AuthModal from "@/components/common/AuthModal";
 import { toast } from "sonner";
+import { track } from "@/lib/analytics";
+import { isPro } from "@/lib/plans";
 import type { CompanyDetails } from "@/types/jobs";
 
 interface CompanyHeaderProps {
@@ -13,6 +16,8 @@ interface CompanyHeaderProps {
 
 export function CompanyHeader({ company }: CompanyHeaderProps) {
   const { data: session, status } = useSession();
+  const router = useRouter();
+  const userIsPro = isPro(session?.user ?? null);
   const isYC = company.platform === "ycombinator";
   const metadata = company.metadata;
   const domainStats = company.domainStats || [];
@@ -69,6 +74,7 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
         toast(`Unfollowed ${company.name}`, {
           description: "You will not get alerts for their new roles.",
         });
+        track("Company Unfollowed", { company_slug: (company as any).slug, company_name: company.name });
       } else {
         const res = await fetch("/api/alerts", {
           method: "POST",
@@ -84,9 +90,23 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
         const data = await res.json();
         setIsFollowing(true);
         setAlertId(data.alert?.id ?? null);
-        toast.success(`Following ${company.name}`, {
-          description: "You will get an alert when they post a new role.",
-        });
+        if (userIsPro) {
+          toast.success(`Following ${company.name}`, {
+            description: "You'll get an instant email the moment they post a new role.",
+          });
+        } else {
+          toast.success(`Following ${company.name}`, {
+            description: "Want an instant email the moment they post? That's a Pro feature.",
+            action: {
+              label: "Upgrade",
+              onClick: () => {
+                track("Pricing Plan Clicked", { plan_key: "pro", signed_in: true, source: "follow_company_nudge" });
+                router.push("/pricing");
+              },
+            },
+          });
+        }
+        track("Company Followed", { company_slug: (company as any).slug, company_name: company.name });
       }
     } catch {
       toast.error("That did not go through", {
@@ -99,7 +119,7 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
 
   return (
     <>
-      <AuthModal open={authOpen} onOpenChange={setAuthOpen} callbackUrl={`/company/${(company as any).slug}`} />
+      <AuthModal open={authOpen} onOpenChange={setAuthOpen} callbackUrl={`/company/${(company as any).slug}`} source="follow_company" />
 
       <header className="relative overflow-hidden border-b border-border">
         {/* Background glow effect */}
@@ -192,24 +212,39 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
               )}
 
               {/* Follow button */}
-              <button
-                onClick={handleFollow}
-                disabled={followLoading || (status === "loading") || (!checkDone && !!session)}
-                className={`mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
-                  isFollowing
-                    ? "bg-primary/10 text-primary border-primary/30 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30"
-                    : "bg-card text-foreground border-border hover:bg-primary/10 hover:text-primary hover:border-primary/30"
-                }`}
-              >
-                {followLoading ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : isFollowing ? (
-                  <BellOff className="w-4 h-4" />
-                ) : (
-                  <Bell className="w-4 h-4" />
+              <div className="mt-5 flex flex-wrap items-center gap-3">
+                <button
+                  onClick={handleFollow}
+                  disabled={followLoading || (status === "loading") || (!checkDone && !!session)}
+                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
+                    isFollowing
+                      ? "bg-primary/10 text-primary border-primary/30 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30"
+                      : "bg-card text-foreground border-border hover:bg-primary/10 hover:text-primary hover:border-primary/30"
+                  }`}
+                >
+                  {followLoading ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : isFollowing ? (
+                    <BellOff className="w-4 h-4" />
+                  ) : (
+                    <Bell className="w-4 h-4" />
+                  )}
+                  {isFollowing ? "Following" : "Follow"}
+                </button>
+
+                {isFollowing && !userIsPro && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      track("Pricing Plan Clicked", { plan_key: "pro", signed_in: !!session, source: "follow_company_inline_nudge" });
+                      router.push("/pricing");
+                    }}
+                    className="text-xs text-muted-foreground hover:text-primary transition-colors underline decoration-dotted underline-offset-2"
+                  >
+                    Get an instant email the moment they post — upgrade to Pro
+                  </button>
                 )}
-                {isFollowing ? "Following" : "Follow"}
-              </button>
+              </div>
             </div>
 
             {/* Stats Cards */}

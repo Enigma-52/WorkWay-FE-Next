@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { cn } from "@/lib/utils";
+import { isPro } from "@/lib/plans";
 import {
   LayoutDashboard,
   FileText,
@@ -15,6 +16,8 @@ import {
   BarChart2,
   LogOut,
   ShieldCheck,
+  Bell,
+  Crown,
 } from "lucide-react";
 
 type NavItem = {
@@ -22,6 +25,8 @@ type NavItem = {
   href?: string;
   icon: React.ElementType;
   comingSoon?: boolean;
+  /** Shows a Crown badge when the signed-in user isn't Pro yet. */
+  proBadge?: boolean;
 };
 
 const seekerNav: NavItem[] = [
@@ -29,6 +34,7 @@ const seekerNav: NavItem[] = [
   { label: "Applications", href: "/dashboard/seeker/applications", icon: FileText },
   { label: "Saved Jobs", href: "/dashboard/seeker/saved-jobs", icon: Bookmark },
   { label: "Companies", href: "/dashboard/seeker/companies", icon: Building2 },
+  { label: "Alerts", href: "/dashboard/seeker/alerts", icon: Bell, proBadge: true },
   { label: "Talent Profile", href: "/dashboard/seeker/talent-profile", icon: UserCircle },
 ];
 
@@ -43,6 +49,7 @@ export default function Sidebar({ role }: { role: "seeker" | "hirer" }) {
   const pathname = usePathname();
   const { data: session } = useSession();
   const isAdmin = session?.user?.roles?.includes("admin");
+  const userIsPro = isPro(session?.user ?? null);
   const baseNav = role === "seeker" ? seekerNav : hirerNav;
   const adminItem: NavItem = { label: "Admin", href: "/dashboard/admin", icon: ShieldCheck };
   const nav = isAdmin ? [...baseNav, adminItem] : baseNav;
@@ -90,7 +97,8 @@ export default function Sidebar({ role }: { role: "seeker" | "hirer" }) {
               )}
             >
               <Icon className="w-4 h-4 shrink-0" />
-              <span>{item.label}</span>
+              <span className="flex-1">{item.label}</span>
+              {item.proBadge && !userIsPro && <Crown className="w-3.5 h-3.5 shrink-0 text-primary" />}
             </Link>
           );
         })}
