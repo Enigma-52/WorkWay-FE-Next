@@ -14,6 +14,7 @@ import {
   Users,
   BarChart2,
   LogOut,
+  ShieldCheck,
 } from "lucide-react";
 
 type NavItem = {
@@ -41,7 +42,10 @@ const hirerNav: NavItem[] = [
 export default function Sidebar({ role }: { role: "seeker" | "hirer" }) {
   const pathname = usePathname();
   const { data: session } = useSession();
-  const nav = role === "seeker" ? seekerNav : hirerNav;
+  const isAdmin = session?.user?.roles?.includes("admin");
+  const baseNav = role === "seeker" ? seekerNav : hirerNav;
+  const adminItem: NavItem = { label: "Admin", href: "/dashboard/admin", icon: ShieldCheck };
+  const nav = isAdmin ? [...baseNav, adminItem] : baseNav;
 
   return (
     <aside className="w-60 shrink-0 h-screen sticky top-0 flex flex-col border-r border-border bg-card">

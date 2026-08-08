@@ -142,16 +142,6 @@ export function buildChangelogBreadcrumb(): BreadcrumbItem[] {
   ];
 }
 
-export function buildFeedbackBreadcrumb(): BreadcrumbItem[] {
-  return [
-    ...buildHomeBreadcrumb(),
-    {
-      name: "Feedback",
-      href: "/feedback",
-    },
-  ];
-}
-
 export function buildContactBreadcrumb(): BreadcrumbItem[] {
   return [
     ...buildHomeBreadcrumb(),

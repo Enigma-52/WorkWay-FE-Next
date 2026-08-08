@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
@@ -137,12 +136,14 @@ export default function ChangelogPage() {
         <div className="mt-10 border-t border-border pt-6 text-sm text-muted-foreground">
           <p>
             Have feedback or want to request something?{" "}
-            <Link
-              href="/feedback"
+            <a
+              href="https://workway.featurebase.app/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="font-medium text-primary hover:underline"
             >
               Share your thoughts
-            </Link>
+            </a>
             .
           </p>
         </div>

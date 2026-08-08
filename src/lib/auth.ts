@@ -55,7 +55,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         try {
           const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/sync`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json",
+              "x-internal-api-secret": process.env.INTERNAL_API_SECRET || "",
+            },
             body: JSON.stringify({
               email: user.email,
               display_name: user.name,

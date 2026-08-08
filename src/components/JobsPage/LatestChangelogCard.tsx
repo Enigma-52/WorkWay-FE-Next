@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { ArrowRight } from "lucide-react";
 import changelogData from "@/content/changelog.json";
 import { getChangelogIcon } from "@/lib/changelogIcons";
@@ -45,7 +47,26 @@ export default function LatestChangelogCard() {
             className="flex items-start gap-2 text-xs text-muted-foreground leading-relaxed"
           >
             <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-primary/60" />
-            <span>{h.replace(/\*\*/g, "")}</span>
+            <span>
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={{
+                  p: ({ children }) => <>{children}</>,
+                  strong: ({ children }) => (
+                    <strong className="font-semibold text-foreground">
+                      {children}
+                    </strong>
+                  ),
+                  code: ({ children }) => (
+                    <code className="rounded border border-border bg-secondary px-1 py-0.5 text-[11px] font-mono text-foreground">
+                      {children}
+                    </code>
+                  ),
+                }}
+              >
+                {h}
+              </ReactMarkdown>
+            </span>
           </li>
         ))}
       </ul>

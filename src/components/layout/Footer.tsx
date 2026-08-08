@@ -56,7 +56,9 @@ const Footer = () => {
                 Changelog
               </a>
               <a
-                href="/feedback"
+                href="https://workway.featurebase.app/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="transition-colors hover:text-foreground"
               >
                 Feedback

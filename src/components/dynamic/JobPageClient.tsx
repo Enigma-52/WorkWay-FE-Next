@@ -444,7 +444,7 @@ export default function JobPageClient({ job, insights }: Props) {
                   </p>
                 )}
 
-                <div className="flex justify-center lg:justify-start">
+                <div className="flex justify-center lg:justify-end">
                   <ReportJobButton jobSlug={job.slug} />
                 </div>
               </div>

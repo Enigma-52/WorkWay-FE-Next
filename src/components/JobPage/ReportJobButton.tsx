@@ -59,9 +59,9 @@ export default function ReportJobButton({ jobSlug }: { jobSlug: string }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-destructive transition-colors"
+        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-destructive transition-colors"
       >
-        <Flag className="h-3.5 w-3.5" />
+        <Flag className="h-4 w-4" />
         Report this job
       </button>
 

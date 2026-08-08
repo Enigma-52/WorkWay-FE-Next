@@ -62,7 +62,9 @@ export default function ContactPage() {
               — it helps us prioritise what to build next.
             </p>
             <a
-              href="/feedback"
+              href="https://workway.featurebase.app/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="mt-3 inline-block rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
             >
               Submit Feedback
