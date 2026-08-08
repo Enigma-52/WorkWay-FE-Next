@@ -31,6 +31,7 @@ const Navbar = () => {
           <a href="/companies" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Companies</a>
           <a href="/domains" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Domains</a>
           <a href="/skills" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Skills</a>
+          <a href="/pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Pricing</a>
         </nav>
 
         {/* CTA */}

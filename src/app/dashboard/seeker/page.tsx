@@ -1,7 +1,13 @@
 import { auth } from "@/lib/auth";
 import Link from "next/link";
-import { ArrowRight, FileText, Bookmark, Sparkles, ClipboardList } from "lucide-react";
+import { ArrowRight, FileText, Bookmark, Sparkles, ClipboardList, Crown } from "lucide-react";
 import { env } from "@/lib/config/env";
+
+const PLAN_LABELS: Record<string, string> = {
+  free: "Free",
+  pro: "Pro",
+  lifetime: "Lifetime",
+};
 
 async function fetchCount(path: string, userId: string) {
   try {
@@ -19,7 +25,6 @@ async function fetchCount(path: string, userId: string) {
 
 const comingSoon = [
   { title: "AI Job Match", desc: "Get ranked job recommendations based on your profile.", icon: Sparkles },
-  { title: "Resume Builder", desc: "Create a standout resume directly on WorkWay.", icon: ClipboardList },
 ];
 
 export default async function SeekerOverviewPage() {
@@ -34,6 +39,9 @@ export default async function SeekerOverviewPage() {
       ])
     : [0, 0];
 
+  const planKey = session?.user?.planKey ?? "free";
+  const isFree = planKey === "free";
+
   return (
     <div className="max-w-6xl mx-auto">
       <div className="mb-8">
@@ -41,8 +49,33 @@ export default async function SeekerOverviewPage() {
         <p className="text-muted-foreground text-sm">Your job search dashboard — track, apply, and get hired.</p>
       </div>
 
+      {/* Plan */}
+      <div className="flex items-center justify-between gap-3 rounded-xl border border-border bg-card p-4 mb-8">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+            <Crown className="w-4 h-4 text-primary" />
+          </div>
+          <div>
+            <p className="text-sm font-medium">
+              {PLAN_LABELS[planKey] ?? planKey} plan
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {isFree ? "Upgrade for premium features like company alert emails." : "You have access to premium features."}
+            </p>
+          </div>
+        </div>
+        {isFree && (
+          <Link
+            href="/pricing"
+            className="shrink-0 text-xs font-medium text-primary hover:underline"
+          >
+            See plans
+          </Link>
+        )}
+      </div>
+
       {/* Stats */}
-      <div className="grid grid-cols-2 gap-4 mb-8">
+      <div className="grid grid-cols-3 gap-4 mb-8">
         <Link
           href="/dashboard/seeker/applications"
           className="group bg-card border border-border rounded-xl p-5 hover:border-primary/50 transition-colors"
@@ -70,11 +103,25 @@ export default async function SeekerOverviewPage() {
           <p className="text-3xl font-bold mb-0.5">{savedCount}</p>
           <p className="text-sm text-muted-foreground">Saved Jobs</p>
         </Link>
+
+        <Link
+          href="/dashboard/seeker/talent-profile"
+          className="group bg-card border border-border rounded-xl p-5 hover:border-primary/50 transition-colors"
+        >
+          <div className="flex items-center justify-between mb-3">
+            <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
+              <ClipboardList className="w-4 h-4 text-primary" />
+            </div>
+            <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+          </div>
+          <p className="text-sm font-semibold mb-0.5">Resume</p>
+          <p className="text-sm text-muted-foreground">Manage it from your Talent Profile</p>
+        </Link>
       </div>
 
       {/* Coming soon */}
       <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-4">Coming soon</p>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4 max-w-sm">
         {comingSoon.map((f) => {
           const Icon = f.icon;
           return (
