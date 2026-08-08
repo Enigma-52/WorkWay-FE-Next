@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+/* Tailwind v4 dropped v3's default `cursor: pointer` on interactive
+   elements, so every <button> reverted to the browser's plain arrow
+   cursor. Restore the old default app-wide instead of patching cursor
+   classes onto each button individually. */
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
 /* -----------------------------
    THEME MAPPING (TAILWIND v4)
 ----------------------------- */
