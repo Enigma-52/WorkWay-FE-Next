@@ -1,9 +1,11 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "sonner";
 import GuestPromoModal from "@/components/common/GuestPromoModal";
+import AuthRedirectGate from "@/components/common/AuthRedirectGate";
+import OnboardingGate from "@/components/Onboarding/OnboardingGate";
 import { JobStatusProvider } from "@/contexts/JobStatusContext";
 
 type AppProvidersProps = {
@@ -16,6 +18,12 @@ export default function AppProviders({ children }: AppProvidersProps) {
       <JobStatusProvider>
         {children}
         <GuestPromoModal />
+        <Suspense fallback={null}>
+          <AuthRedirectGate />
+        </Suspense>
+        <Suspense fallback={null}>
+          <OnboardingGate />
+        </Suspense>
         {/* richColors floods the toast with green/red, which fights the acid
             brand colour. Style against the app's own surface tokens instead
             and let the icon alone carry the status. */}

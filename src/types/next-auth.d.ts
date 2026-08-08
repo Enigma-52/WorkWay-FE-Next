@@ -7,6 +7,9 @@ declare module "next-auth" {
       dbId: string;
       roles: string[];
       displayName: string;
+      planKey: string;
+      isNewUser: boolean;
+      authProvider: string;
     } & DefaultSession["user"];
   }
 }
@@ -16,5 +19,8 @@ declare module "next-auth/jwt" {
     dbId?: string;
     roles?: string[];
     displayName?: string;
+    planKey?: string;
+    isNewUser?: boolean;
+    authProvider?: string;
   }
 }

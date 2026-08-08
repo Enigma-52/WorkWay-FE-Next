@@ -3,6 +3,7 @@
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { isSafeRedirectPath } from "@/lib/safeRedirect";
 
 export default function VerifyClient() {
   const searchParams = useSearchParams();
@@ -14,7 +15,10 @@ export default function VerifyClient() {
     if (!token || called.current) return;
     called.current = true;
 
-    signIn("magic-link", { token, callbackUrl: "/dashboard", redirect: true }).catch(() => {
+    const requested = searchParams.get("callbackUrl");
+    const callbackUrl = requested && isSafeRedirectPath(requested) ? requested : "/dashboard";
+
+    signIn("magic-link", { token, callbackUrl, redirect: true }).catch(() => {
       setError(true);
     });
   }, [searchParams]);

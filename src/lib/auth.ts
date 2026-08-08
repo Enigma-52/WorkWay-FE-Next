@@ -33,6 +33,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             dbId: String(u.id),
             roles: u.roles ?? [],
             displayName: u.display_name ?? "",
+            planKey: u.plan_key ?? "free",
+            isNewUser: !!u.is_new,
           };
         } catch {
           return null;
@@ -43,10 +45,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
   callbacks: {
     async jwt({ token, user, account, profile, trigger, session }) {
-      // On session update (e.g. after onboarding saves role)
+      // On session update (e.g. after onboarding saves role, or after a plan purchase)
       if (trigger === "update" && session) {
         if (session.roles) token.roles = session.roles;
         if (session.displayName) token.displayName = session.displayName;
+        if (session.planKey) token.planKey = session.planKey;
         return token;
       }
 
@@ -73,6 +76,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               token.dbId = data.user.id;
               token.roles = data.user.roles ?? [];
               token.displayName = data.user.display_name ?? user.name ?? "";
+              token.planKey = data.user.plan_key ?? "free";
+              token.isNewUser = !!data.user.is_new;
             }
           }
         } catch {
@@ -80,6 +85,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         }
         if (!token.roles) token.roles = [];
         if (!token.displayName) token.displayName = user.name ?? "";
+        if (!token.planKey) token.planKey = "free";
+        token.authProvider = "google";
       }
 
       // On magic-link sign-in — Credentials authorize() already populated these fields
@@ -87,6 +94,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.dbId = (user as any).dbId ?? "";
         token.roles = (user as any).roles ?? [];
         token.displayName = (user as any).displayName ?? user.name ?? "";
+        token.planKey = (user as any).planKey ?? "free";
+        token.isNewUser = !!(user as any).isNewUser;
+        token.authProvider = "magic_link";
       }
 
       return token;
@@ -95,6 +105,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       session.user.dbId = (token.dbId as string) ?? "";
       session.user.roles = (token.roles as string[]) ?? [];
       session.user.displayName = (token.displayName as string) ?? session.user.name ?? "";
+      session.user.planKey = (token.planKey as string) ?? "free";
+      session.user.isNewUser = !!token.isNewUser;
+      session.user.authProvider = (token.authProvider as string) ?? "";
       return session;
     },
   },
