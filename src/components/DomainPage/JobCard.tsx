@@ -100,8 +100,8 @@ export function JobCard({ job }: JobCardProps) {
     <article className="group relative rounded-lg border border-border bg-card p-6 transition-all duration-300 hover:border-primary/40 hover:glow-subtle animate-fade-in">
       {/* Applied badge */}
       {isApplied && (
-        <div className="absolute top-3 right-3 flex items-center gap-1 text-[10px] font-medium text-green-500 bg-green-500/10 border border-green-500/20 rounded-full px-2 py-0.5 z-10">
-          <CheckCircle2 className="w-3 h-3" />
+        <div className="absolute bottom-3 right-3 flex items-center gap-1.5 text-xs font-medium text-green-500 bg-green-500/10 border border-green-500/20 rounded-full px-2.5 py-1 z-10">
+          <CheckCircle2 className="w-3.5 h-3.5" />
           Applied
         </div>
       )}

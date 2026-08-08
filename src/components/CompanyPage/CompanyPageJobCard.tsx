@@ -65,8 +65,8 @@ export function JobCard({ job }: JobCardProps) {
               {job.title}
             </h3>
             {isApplied && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-medium text-green-500 bg-green-500/10 border border-green-500/20 rounded-full px-2 py-0.5 shrink-0">
-                <CheckCircle2 className="w-3 h-3" />
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium text-green-500 bg-green-500/10 border border-green-500/20 rounded-full px-2.5 py-1 shrink-0">
+                <CheckCircle2 className="w-3.5 h-3.5" />
                 Applied
               </span>
             )}
