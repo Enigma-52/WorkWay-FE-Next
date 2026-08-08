@@ -32,5 +32,6 @@ jobs:
           build-args: |
             BACKEND_API_URL=https://www.workway.dev
             NEXT_PUBLIC_SITE_URL=https://www.workway.dev
+            NEXT_PUBLIC_API_URL=https://www.workway.dev
           cache-from: type=gha
           cache-to: type=gha,mode=max
