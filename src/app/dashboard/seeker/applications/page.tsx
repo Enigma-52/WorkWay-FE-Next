@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/select";
 import { ExternalLink, Building2, Pencil, Check, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { track } from "@/lib/analytics";
 
 type Application = {
   id: number;
@@ -102,12 +103,19 @@ export default function ApplicationsPage() {
   }, []);
 
   function handleStatusChange(id: number, status: string) {
+    const app = applications.find((a) => a.id === id);
     setApplications((prev) => prev.map((a) => a.id === id ? { ...a, status } : a));
     fetch(`/api/applications/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status }),
     }).catch(() => {});
+    track("Application Status Updated", {
+      job_slug: app?.job_slug,
+      company: app?.company,
+      previous_status: app?.status,
+      status,
+    });
   }
 
   function handleNotesSave(id: number, notes: string) {

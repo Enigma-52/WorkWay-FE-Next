@@ -82,7 +82,16 @@ export default function JobPageClient({ job, insights }: Props) {
         location: job.location ?? null,
         employment_type: job.employment_type ?? null,
       }),
-    }).then(() => { setAppliedStatus("yes"); addApplied(job.slug); }).catch(() => setAppliedStatus("yes"));
+    }).then(() => {
+      setAppliedStatus("yes");
+      addApplied(job.slug);
+      track("Application Logged", {
+        job_slug: job.slug,
+        job_title: job.title,
+        company: job.company,
+        company_slug: job.company_slug,
+      });
+    }).catch(() => setAppliedStatus("yes"));
   }
 
   useEffect(() => {
@@ -793,7 +802,7 @@ export default function JobPageClient({ job, insights }: Props) {
           </section>
         )}
       </div>
-      <AuthModal open={authOpen} onOpenChange={setAuthOpen} callbackUrl={pathname} />
+      <AuthModal open={authOpen} onOpenChange={setAuthOpen} callbackUrl={pathname} source="mark_applied" />
     </div>
   );
 }

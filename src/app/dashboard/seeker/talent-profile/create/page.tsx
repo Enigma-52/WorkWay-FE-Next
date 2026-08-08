@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { SearchableSelect } from "@/components/ui/searchable-select";
 import { toast } from "sonner";
+import { track } from "@/lib/analytics";
 import {
   Loader2,
   X,
@@ -243,6 +244,8 @@ export default function TalentProfileCreatePage() {
           if (existing && !data?.error && existing.username) {
             prefillFromProfile(existing);
             setIsEditMode(true);
+          } else {
+            track("Talent Profile Creation Started");
           }
         }
       } catch { /* no profile */ } finally { setInitialLoading(false); }
@@ -533,6 +536,12 @@ export default function TalentProfileCreatePage() {
         }),
       );
       toast.success(isEditMode ? "Profile updated!" : "Profile published!");
+      track(isEditMode ? "Talent Profile Updated" : "Talent Profile Created", {
+        username,
+        category,
+        experience_level: experienceLevel,
+        resume_uploaded_this_save: !!resumeFile,
+      });
       router.push("/dashboard/seeker/talent-profile");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Something went wrong");

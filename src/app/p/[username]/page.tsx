@@ -26,6 +26,7 @@ import { LocalTime } from "./LocalTime";
 import { ShareButton } from "./ShareButton";
 import { ProfileAbout } from "./ProfileAbout";
 import { ResumeViewer } from "./ResumeViewer";
+import { ProfileViewTracker } from "./ProfileViewTracker";
 import { getSiteUrl } from "@/lib/seo/metadata";
 
 /* ---------- types ---------- */
@@ -376,6 +377,11 @@ export default async function ProfilePage({ params }: Props) {
   return (
     <>
       <JsonLd data={jsonLd} />
+      <ProfileViewTracker
+        username={username}
+        category={profile.category ?? null}
+        experienceLevel={profile.experience_level ?? null}
+      />
 
       <div className="bg-background">
         <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">

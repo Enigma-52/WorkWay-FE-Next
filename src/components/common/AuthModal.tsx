@@ -10,14 +10,17 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Mail, ArrowRight, CheckCircle2 } from "lucide-react";
+import { track } from "@/lib/analytics";
 
 type AuthModalProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   callbackUrl?: string;
+  /** Where this modal was triggered from, e.g. "save_job", "pricing", "follow_company". */
+  source?: string;
 };
 
-export default function AuthModal({ open, onOpenChange, callbackUrl = "/dashboard" }: AuthModalProps) {
+export default function AuthModal({ open, onOpenChange, callbackUrl = "/dashboard", source = "unknown" }: AuthModalProps) {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [emailLoading, setEmailLoading] = useState(false);
@@ -26,6 +29,7 @@ export default function AuthModal({ open, onOpenChange, callbackUrl = "/dashboar
 
   async function handleGoogleSignIn() {
     setGoogleLoading(true);
+    track("Sign In Started", { method: "google", source });
     await signIn("google", { callbackUrl });
   }
 
@@ -34,23 +38,30 @@ export default function AuthModal({ open, onOpenChange, callbackUrl = "/dashboar
     if (!email.trim()) return;
     setEmailError("");
     setEmailLoading(true);
+    track("Sign In Started", { method: "magic_link", source });
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/auth/magic-link/send`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: email.trim() }),
+          body: JSON.stringify({ email: email.trim(), callback_url: callbackUrl }),
         }
       );
       const data = await res.json();
       if (!res.ok || !data.success) {
         setEmailError(data.message ?? "Failed to send link. Please try again.");
+        track("Magic Link Send Failed", {
+          source,
+          reason: data.message ?? `http_${res.status}`,
+        });
       } else {
         setEmailSent(true);
+        track("Magic Link Sent", { source });
       }
     } catch {
       setEmailError("Something went wrong. Please try again.");
+      track("Magic Link Send Failed", { source, reason: "network_error" });
     } finally {
       setEmailLoading(false);
     }

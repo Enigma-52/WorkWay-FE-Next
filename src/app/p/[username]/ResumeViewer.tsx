@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Download, ExternalLink, Eye, FileText, X } from "lucide-react";
+import { track } from "@/lib/analytics";
 
 type Props = {
   url: string;
@@ -51,11 +52,11 @@ export function ResumeViewer({ url, filename }: Props) {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <Button size="sm" onClick={() => setPreviewOpen(true)}>
+          <Button size="sm" onClick={() => { setPreviewOpen(true); track("Resume Previewed", { filename: label }); }}>
             <Eye className="mr-1.5 h-4 w-4" />
             Preview
           </Button>
-          <a href={url} download={label}>
+          <a href={url} download={label} onClick={() => track("Resume Downloaded", { filename: label })}>
             <Button variant="outline" size="sm">
               <Download className="mr-1.5 h-4 w-4" />
               Download
@@ -84,7 +85,7 @@ export function ResumeViewer({ url, filename }: Props) {
                   Open in new tab
                 </Button>
               </a>
-              <a href={url} download={label}>
+              <a href={url} download={label} onClick={() => track("Resume Downloaded", { filename: label })}>
                 <Button variant="outline" size="sm">
                   <Download className="mr-1.5 h-4 w-4" />
                   Download

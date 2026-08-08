@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import AuthModal from "./AuthModal";
 import { cn } from "@/lib/utils";
 import { useJobStatus } from "@/contexts/JobStatusContext";
+import { track } from "@/lib/analytics";
 
 interface SaveJobButtonProps {
   jobSlug: string;
@@ -57,6 +58,7 @@ export default function SaveJobButton({
         const res = await fetch(`/api/saved-jobs/${jobSlug}`, { method: "DELETE" });
         if (!res.ok) throw new Error();
         toast("Removed from saved jobs", { description: jobTitle });
+        track("Job Unsaved", { job_slug: jobSlug, job_title: jobTitle, company });
       } catch {
         addSaved(jobSlug);
         toast.error("Could not remove that job", {
@@ -87,6 +89,7 @@ export default function SaveJobButton({
         description: `${jobTitle} at ${company}`,
         action: { label: "View saved", onClick: () => router.push("/dashboard/seeker/saved-jobs") },
       });
+      track("Job Saved", { job_slug: jobSlug, job_title: jobTitle, company, location: location ?? null });
     } catch {
       removeSaved(jobSlug); // revert on failure
       toast.error("Could not save that job", {
@@ -125,7 +128,7 @@ export default function SaveJobButton({
       >
         <Bookmark className={cn(iconSize, saved && "fill-current")} />
       </button>
-      <AuthModal open={authOpen} onOpenChange={setAuthOpen} callbackUrl={pathname} />
+      <AuthModal open={authOpen} onOpenChange={setAuthOpen} callbackUrl={pathname} source="save_job" />
     </>
   );
 }

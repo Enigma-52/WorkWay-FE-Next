@@ -11,6 +11,38 @@ export type BotSignal = {
   reason: string | null;
 };
 
+const LOCALHOST_HOST_PATTERN = /^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\]|.*\.local)$/i;
+const LOCAL_DEBUG_OVERRIDE_KEY = "workway_mixpanel_local_debug";
+
+/**
+ * True for localhost/loopback/private dev hosts. Dev traffic was polluting
+ * production Mixpanel reports (759+ events from `localhost:3001` alone), so
+ * AnalyticsProvider skips loading the SDK entirely on these hosts unless a
+ * developer explicitly opts in via `?mp_debug=1` (persisted so a full local
+ * QA pass doesn't need the query param on every route).
+ */
+export function isLocalDevHost(): boolean {
+  if (typeof window === "undefined") return false;
+  const host = window.location.hostname;
+  if (LOCALHOST_HOST_PATTERN.test(host)) return true;
+  // RFC1918 private ranges — covers LAN-IP dev servers (e.g. testing on a phone).
+  if (/^(10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)/.test(host)) return true;
+  return false;
+}
+
+export function shouldLoadAnalytics(): boolean {
+  if (typeof window === "undefined") return false;
+  if (!isLocalDevHost()) return true;
+  try {
+    if (new URLSearchParams(window.location.search).get("mp_debug") === "1") {
+      window.localStorage.setItem(LOCAL_DEBUG_OVERRIDE_KEY, "1");
+    }
+    return window.localStorage.getItem(LOCAL_DEBUG_OVERRIDE_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
 export function detectBot(): BotSignal {
   if (typeof navigator === "undefined") {
     return { isBot: false, reason: null };

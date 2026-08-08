@@ -4,7 +4,14 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Script from "next/script";
-import { detectBot, flushQueuedAnalytics, identify, resetIdentity, track } from "@/lib/analytics";
+import {
+  detectBot,
+  flushQueuedAnalytics,
+  identify,
+  resetIdentity,
+  shouldLoadAnalytics,
+  track,
+} from "@/lib/analytics";
 
 const GA_MEASUREMENT_ID =
   process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-PMBBRGCPM5";
@@ -150,6 +157,7 @@ export default function AnalyticsProvider() {
 
   useEffect(() => {
     if (!started || !MIXPANEL_TOKEN || mixpanelInitialized.current) return;
+    if (!shouldLoadAnalytics()) return;
     mixpanelInitialized.current = true;
 
     import("mixpanel-browser").then((mod) => {
@@ -197,7 +205,23 @@ export default function AnalyticsProvider() {
         $email: session.user.email ?? undefined,
         $name: session.user.displayName || session.user.name || undefined,
         roles: session.user.roles ?? [],
+        plan_key: session.user.planKey ?? "free",
       });
+
+      // `isNewUser` reflects a fresh DB insert at sign-in and stays true for
+      // the lifetime of that JWT — guard with localStorage so a page reload
+      // mid-session doesn't refire "Signup Completed" as a second event.
+      const signupTrackedKey = `workway_signup_tracked_${dbId}`;
+      if (session.user.isNewUser && !localStorage.getItem(signupTrackedKey)) {
+        localStorage.setItem(signupTrackedKey, "1");
+        // No email here — identify() above already attaches it as `$email`
+        // on the profile, which is the correct scope for it. Duplicating it
+        // as a plain event property would put it in every raw event export
+        // and funnel breakdown for no added value.
+        track("Signup Completed", { method: session.user.authProvider || "unknown" });
+      } else if (!session.user.isNewUser) {
+        track("Login Completed", { method: session.user.authProvider || "unknown" });
+      }
     }
 
     if (status === "unauthenticated" && identifiedUserId.current) {
