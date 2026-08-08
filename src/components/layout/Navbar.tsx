@@ -9,7 +9,7 @@ import { useSession, signOut } from "next-auth/react";
 import AuthModal from "@/components/common/AuthModal";
 
 const Navbar = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [authOpen, setAuthOpen] = useState(false);
 
   return (
@@ -26,15 +26,17 @@ const Navbar = () => {
         {/* Links */}
         <nav className="hidden md:flex items-center gap-6">
           <a href="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Home</a>
+          <a href="/talents" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Talents</a>
           <a href="/jobs" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Jobs</a>
           <a href="/companies" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Companies</a>
           <a href="/domains" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Domains</a>
           <a href="/skills" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Skills</a>
-          <a href="/dashboard/seeker/talent-profile" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Talent Profile</a>
         </nav>
 
         {/* CTA */}
-        {session ? (
+        {status === "loading" ? (
+          <div className="h-8 w-24 rounded-md bg-muted animate-pulse" />
+        ) : session ? (
           <div className="flex items-center gap-2">
             <Button size="sm" className="gap-1" asChild>
               <Link href="/dashboard">
