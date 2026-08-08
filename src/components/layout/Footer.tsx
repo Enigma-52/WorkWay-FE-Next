@@ -178,6 +178,9 @@ const Footer = () => {
                 <a href="https://dang.ai" target="_blank" rel="dofollow noopener" className="shrink-0 opacity-60 hover:opacity-100 transition-opacity">
                   <img src="https://assets.dang.ai/badges/dang-verified-dark.png" alt="Verified on DANG!" width={260} height={40} className="h-[40px] w-auto" loading="lazy" />
                 </a>
+                <a href="https://submitforbacklinks.com/product/workway?utm_source=badge&utm_medium=embed&utm_campaign=workway&ref=submitforbacklinks" target="_blank" rel="noopener" className="shrink-0 opacity-60 hover:opacity-100 transition-opacity">
+                  <img src="https://submitforbacklinks.com/api/badge/VfFl2-w1Tef4ZjF68W-jNzek.svg?variant=verified&theme=dark" alt="WorkWay — Verified on SubmitForBacklinks" width={220} height={48} loading="lazy" />
+                </a>
               </div>
             ))}
           </div>
