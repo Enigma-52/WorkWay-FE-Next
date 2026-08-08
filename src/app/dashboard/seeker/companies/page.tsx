@@ -154,8 +154,9 @@ export default function CompaniesPage() {
   const [followPage, setFollowPage] = useState(1);
   const [recentPage, setRecentPage] = useState(1);
 
-  // recent jobs per company
-  const [recentJobs, setRecentJobs] = useState<CompanyRecentJobs[]>([]);
+  // recent jobs per company — fetched for ALL followed companies so we can
+  // filter down to only the ones with actual postings before paginating.
+  const [allRecentJobs, setAllRecentJobs] = useState<CompanyRecentJobs[]>([]);
   const [recentLoading, setRecentLoading] = useState(false);
   const recentCacheRef = useRef<Map<string, CompanyRecentJobs>>(new Map());
 
@@ -180,9 +181,18 @@ export default function CompaniesPage() {
     1,
     Math.ceil(companyAlerts.length / FOLLOWING_PER_PAGE)
   );
+
+  // Only companies that actually have a posting in the recent window count
+  // toward the "Recent Jobs" feed and its pagination.
+  const companiesWithRecentJobs = allRecentJobs.filter((c) => c.jobs.length > 0);
   const recentTotalPages = Math.max(
     1,
-    Math.ceil(companyAlerts.length / RECENT_COMPANIES_PER_PAGE)
+    Math.ceil(companiesWithRecentJobs.length / RECENT_COMPANIES_PER_PAGE)
+  );
+  const recentStart = (recentPage - 1) * RECENT_COMPANIES_PER_PAGE;
+  const recentJobs = companiesWithRecentJobs.slice(
+    recentStart,
+    recentStart + RECENT_COMPANIES_PER_PAGE
   );
 
   // clamp pages when alerts change
@@ -193,30 +203,26 @@ export default function CompaniesPage() {
     if (recentPage > recentTotalPages) setRecentPage(recentTotalPages);
   }, [recentTotalPages, recentPage]);
 
-  // Fetch recent jobs for the current page of companies
+  // Fetch recent jobs for every followed company so we know which ones
+  // actually have postings before deciding what to paginate/show.
   useEffect(() => {
     if (companyAlerts.length === 0) {
-      setRecentJobs([]);
+      setAllRecentJobs([]);
       return;
     }
 
-    const start = (recentPage - 1) * RECENT_COMPANIES_PER_PAGE;
-    const pageAlerts = companyAlerts.slice(
-      start,
-      start + RECENT_COMPANIES_PER_PAGE
-    );
-    const slugs = pageAlerts
+    const slugs = companyAlerts
       .map((a) => a.company_slug)
       .filter(Boolean) as string[];
 
     if (slugs.length === 0) {
-      setRecentJobs([]);
+      setAllRecentJobs([]);
       return;
     }
 
     const allCached = slugs.every((s) => recentCacheRef.current.has(s));
     if (allCached) {
-      setRecentJobs(slugs.map((s) => recentCacheRef.current.get(s)!));
+      setAllRecentJobs(slugs.map((s) => recentCacheRef.current.get(s)!));
       return;
     }
 
@@ -249,12 +255,12 @@ export default function CompaniesPage() {
             name: data.name ?? slug,
             logo_url: data.logo_url ?? null,
             jobs,
-            totalOpenRoles: data.jobListings?.length ?? 0,
+            totalOpenRoles: data.totalJobs ?? 0,
           };
           recentCacheRef.current.set(slug, entry);
           return entry;
         } catch {
-          const alert = pageAlerts.find((a) => a.company_slug === slug);
+          const alert = companyAlerts.find((a) => a.company_slug === slug);
           return {
             slug,
             name: alert?.company_name ?? slug,
@@ -265,10 +271,10 @@ export default function CompaniesPage() {
         }
       })
     )
-      .then(setRecentJobs)
+      .then(setAllRecentJobs)
       .finally(() => setRecentLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [recentPage, alerts.length, alertsLoading]);
+  }, [alerts.length, alertsLoading]);
 
   // Build a lookup of totalOpenRoles from cache
   function getOpenRoles(slug: string | null): number | null {
@@ -651,6 +657,16 @@ export default function CompaniesPage() {
                 Follow companies to see their latest job postings here.
               </p>
             </div>
+          ) : companiesWithRecentJobs.length === 0 ? (
+            <div className="bg-card border border-border rounded-xl px-6 py-12 text-center">
+              <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center mx-auto mb-3">
+                <Briefcase className="w-4 h-4 text-muted-foreground" />
+              </div>
+              <p className="text-sm font-medium mb-1">No recent postings</p>
+              <p className="text-xs text-muted-foreground">
+                None of your followed companies have posted a new job in the last few days.
+              </p>
+            </div>
           ) : (
             <>
               <div className="space-y-4">
@@ -686,12 +702,7 @@ export default function CompaniesPage() {
                     </div>
 
                     {/* Jobs list */}
-                    {company.jobs.length === 0 ? (
-                      <div className="px-4 py-6 text-center text-xs text-muted-foreground">
-                        No recent jobs posted
-                      </div>
-                    ) : (
-                      company.jobs.map((job) => {
+                    {company.jobs.map((job) => {
                         const postedAgo = job.created_at
                           ? getTimeAgo(job.created_at)
                           : job.updated_at
@@ -740,8 +751,7 @@ export default function CompaniesPage() {
                             </a>
                           </div>
                         );
-                      })
-                    )}
+                      })}
                   </div>
                 ))}
               </div>
