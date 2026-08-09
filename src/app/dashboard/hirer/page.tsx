@@ -14,8 +14,10 @@ export default async function HirerOverviewPage() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold mb-1">Welcome back, {name} 👋</h1>
-        <p className="text-muted-foreground text-sm">Your hiring dashboard — post jobs, find talent, grow your team.</p>
+        <h1 className="text-2xl font-bold mb-1">Welcome, {name} 👋</h1>
+        <p className="text-muted-foreground text-sm">
+          You're early — employer tools are still being built. Here's what's coming.
+        </p>
       </div>
 
       <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-4">Coming soon</p>
@@ -32,6 +34,17 @@ export default async function HirerOverviewPage() {
           </div>
         ))}
       </div>
+
+      <p className="mt-6 text-xs text-muted-foreground">
+        Want early access, or have a feature request?{" "}
+        <a
+          href="mailto:hello@workway.dev?subject=Employer%20early%20access"
+          className="text-primary underline underline-offset-2 hover:opacity-80"
+        >
+          Tell us
+        </a>{" "}
+        and we'll reach out first.
+      </p>
     </div>
   );
 }
