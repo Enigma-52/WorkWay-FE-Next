@@ -311,9 +311,9 @@ export default function LocationSeoPageClient({ data, role, location }: Props) {
                 <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-secondary">
                   <Building2 className="h-8 w-8 text-muted-foreground" />
                 </div>
-                <h3 className="font-display text-xl font-semibold mb-2">
+                <h2 className="font-display text-xl font-semibold mb-2">
                   No jobs match your filters
-                </h3>
+                </h2>
                 <p className="mb-4 max-w-sm text-muted-foreground">
                   Try broadening your search or clearing some filters.
                 </p>

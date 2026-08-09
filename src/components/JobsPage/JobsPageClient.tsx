@@ -16,6 +16,7 @@ import { track } from "@/lib/analytics";
 import type { JobListResponse } from "@/types/jobs";
 import JobViewFeed from "@/components/JobViewFeed/JobViewFeed";
 import LatestChangelogCard from "./LatestChangelogCard";
+import SiteStatsCard from "./SiteStatsCard";
 import TalentProfilePromoCard from "./TalentProfilePromoCard";
 
 type Props = {
@@ -161,6 +162,7 @@ export default function JobsPageClient({ data }: Props) {
         <div className="grid gap-8 lg:grid-cols-[300px_minmax(0,1fr)_360px]">
           {/* Sidebar facets - hidden on small screens, show on lg */}
           <div className="hidden lg:block lg:sticky lg:top-24 lg:self-start space-y-4">
+            <SiteStatsCard />
             <LatestChangelogCard />
             <JobsFacetsSidebar
               domains={facets.domains}
@@ -225,9 +227,9 @@ export default function JobsPageClient({ data }: Props) {
                 <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-secondary">
                   <Building2 className="h-8 w-8 text-muted-foreground" />
                 </div>
-                <h3 className="font-display text-xl font-semibold mb-2">
+                <h2 className="font-display text-xl font-semibold mb-2">
                   No jobs match your filters
-                </h3>
+                </h2>
                 <p className="mb-4 max-w-sm text-muted-foreground">
                   Try broadening your search or clearing some filters to see more
                   results.

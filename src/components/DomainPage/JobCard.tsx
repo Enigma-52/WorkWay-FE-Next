@@ -136,9 +136,9 @@ export function JobCard({ job }: JobCardProps) {
           {/* Job Info */}
           <div className="flex flex-col gap-2 min-w-0">
             <Link href={`/job/${job.slug}`} onClick={trackCardClick}>
-              <h3 className="font-display text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+              <h2 className="font-display text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                 {job.title}
-              </h3>
+              </h2>
               <p className="text-sm text-muted-foreground">{job.company}</p>
             </Link>
 
@@ -147,7 +147,7 @@ export function JobCard({ job }: JobCardProps) {
                 <MapPin className="h-3.5 w-3.5" />
                 {truncateLocation(job.location)}
               </span>
-              <span className="flex items-center gap-1.5">
+              <span className="flex items-center gap-1.5" suppressHydrationWarning>
                 <Clock className="h-3.5 w-3.5" />
                 {timeAgo}
               </span>

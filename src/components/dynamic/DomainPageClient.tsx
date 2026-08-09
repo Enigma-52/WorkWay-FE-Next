@@ -129,7 +129,7 @@ export default function DomainPageClient({ data }: Props) {
               <div className="mb-4 rounded-full bg-secondary p-4">
                 <Briefcase className="h-8 w-8 text-muted-foreground" />
               </div>
-              <h3 className="mb-2 font-display text-xl font-semibold">No jobs found</h3>
+              <h2 className="mb-2 font-display text-xl font-semibold">No jobs found</h2>
               <p className="mb-4 text-muted-foreground">Try adjusting your filters</p>
               <button onClick={clearFilters} className="font-mono text-sm text-primary hover:underline">
                 Clear all filters

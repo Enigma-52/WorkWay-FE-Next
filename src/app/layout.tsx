@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import Script from "next/script";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
@@ -34,8 +33,6 @@ const instrumentSerif = Instrument_Serif({
 });
 
 const siteUrl = getSiteUrl();
-const ADSENSE_CLIENT_ID =
-  process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || "ca-pub-4936731849151313";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -100,19 +97,9 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
       </head>
       <body className={`${geist.variable} ${geistMono.variable} ${instrumentSerif.variable}`}>
-        {/* AdSense's own docs ask for this on every page, loaded early, so
-            Auto Ads can scan the page for placements — afterInteractive
-            matches the same strategy already used for gtag.js above: it
-            still waits until after hydration, so it doesn't compete with
-            LCP/TBT-critical work, but doesn't get deferred to full idle the
-            way Mixpanel is (that deferral is specific to Mixpanel's own
-            non-time-sensitive event tracking). */}
-        <Script
-          async
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
+        {/* AdSense now loads inside AnalyticsProvider, deferred to idle-after-
+            load-or-first-interaction alongside GA4/Mixpanel — see the comment
+            there for why. */}
         <JsonLd data={buildSiteOrganizationJsonLd()} />
         <JsonLd data={buildWebSiteJsonLd()} />
         <AppProviders>

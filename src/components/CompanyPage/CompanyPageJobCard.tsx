@@ -92,7 +92,7 @@ export function JobCard({ job }: JobCardProps) {
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
-          <span className="text-xs text-muted-foreground font-mono">
+          <span className="text-xs text-muted-foreground font-mono" suppressHydrationWarning>
             {formatDate(job.updated_at)}
           </span>
           <SaveJobButton

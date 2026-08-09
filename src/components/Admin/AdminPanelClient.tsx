@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Mail, MessageSquareHeart, BarChart3, ShieldCheck, Loader2, Crown, Bell, Clock, Play } from "lucide-react";
+import { Mail, MessageSquareHeart, BarChart3, ShieldCheck, Loader2, Crown, Bell, Clock, Play, Eye, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -50,6 +50,15 @@ type CronJobStatus = {
   running: false | { runId: number; startedAt: string; runningFor: string };
   nextRunAt: string | null;
   nextRunInMinutes: number | null;
+};
+
+type AnalyticsTotals = { views: number; users: number };
+type AnalyticsOverview = {
+  configured: boolean;
+  error?: string;
+  last7Days: AnalyticsTotals | null;
+  last30Days: AnalyticsTotals | null;
+  mixpanelLast30Days: AnalyticsTotals | null;
 };
 
 type CronRun = {
@@ -120,6 +129,9 @@ export default function AdminPanelClient() {
   const [grantValue, setGrantValue] = useState(""); // "role:admin" or "plan:pro" etc
   const [durationDays, setDurationDays] = useState("unlimited");
 
+  const [analytics, setAnalytics] = useState<AnalyticsOverview | null>(null);
+  const [analyticsLoading, setAnalyticsLoading] = useState(true);
+
   const [cronJobs, setCronJobs] = useState<CronJobStatus[]>([]);
   const [cronJobsLoading, setCronJobsLoading] = useState(true);
   const [cronRuns, setCronRuns] = useState<CronRun[]>([]);
@@ -139,6 +151,12 @@ export default function AdminPanelClient() {
       .then((r) => r.json())
       .then((d) => setPlans(d.plans ?? []))
       .catch(() => toast.error("Failed to load plans"));
+
+    fetch(`/api/admin/analytics`)
+      .then((r) => r.json())
+      .then((d) => setAnalytics(d))
+      .catch(() => toast.error("Failed to load analytics"))
+      .finally(() => setAnalyticsLoading(false));
 
     loadCronStatus();
     loadCronRuns();
@@ -347,6 +365,46 @@ export default function AdminPanelClient() {
           Test lifecycle emails and control feature flags. Only visible to admin accounts.
         </p>
       </div>
+
+      {/* Live site analytics: GA4 (raw) vs Mixpanel (bot-filtered) */}
+      <section className="bg-card border border-border rounded-xl p-5">
+        <h2 className="text-sm font-semibold mb-1">Site analytics</h2>
+        <p className="text-xs text-muted-foreground mb-4">
+          GA4 numbers are raw (include bot traffic). Mixpanel filters events tagged{" "}
+          <code className="text-[11px]">is_bot</code> at collection time — treat it as the more
+          trustworthy number until GA4&apos;s own bot gate (shipped 2026-08-09) ages the old data
+          out.
+        </p>
+        {analyticsLoading ? (
+          <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
+        ) : !analytics?.configured ? (
+          <p className="text-xs text-muted-foreground">
+            GA4 not configured — set <code className="text-[11px]">GA4_SERVICE_ACCOUNT_KEY</code> and{" "}
+            <code className="text-[11px]">GA4_PROPERTY_ID</code> on the backend.
+          </p>
+        ) : analytics.error ? (
+          <p className="text-xs text-destructive">{analytics.error}</p>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {[
+              { label: "GA4 Views (7d)", value: analytics.last7Days?.views, icon: Eye },
+              { label: "GA4 Users (7d)", value: analytics.last7Days?.users, icon: Users },
+              { label: "GA4 Views (30d)", value: analytics.last30Days?.views, icon: Eye },
+              { label: "GA4 Users (30d)", value: analytics.last30Days?.users, icon: Users },
+              { label: "Mixpanel Views (30d)", value: analytics.mixpanelLast30Days?.views, icon: Eye },
+              { label: "Mixpanel Users (30d)", value: analytics.mixpanelLast30Days?.users, icon: Users },
+            ].map(({ label, value, icon: Icon }) => (
+              <div key={label} className="rounded-lg border border-border p-3">
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
+                  <Icon className="w-3.5 h-3.5" />
+                  {label}
+                </div>
+                <div className="text-xl font-bold tabular-nums">{(value ?? 0).toLocaleString()}</div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 items-start">
       {/* Lifecycle email tests */}

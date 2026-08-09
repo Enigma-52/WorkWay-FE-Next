@@ -331,7 +331,7 @@ export default function JobPageClient({ job, insights }: Props) {
                   {postedAgo && (
                     <JobBadge variant="muted">
                       <Clock className="mr-1.5 h-3 w-3" />
-                      Posted {postedAgo}
+                      <span suppressHydrationWarning>Posted {postedAgo}</span>
                     </JobBadge>
                   )}
                   {isStale && (
@@ -629,7 +629,7 @@ export default function JobPageClient({ job, insights }: Props) {
                         <span className="text-sm text-muted-foreground">
                           Posted
                         </span>
-                        <span className="text-sm font-medium text-foreground">
+                        <span className="text-sm font-medium text-foreground" suppressHydrationWarning>
                           {postedAgo}
                         </span>
                       </div>

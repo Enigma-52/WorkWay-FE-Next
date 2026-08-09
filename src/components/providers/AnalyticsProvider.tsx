@@ -17,6 +17,8 @@ const GA_MEASUREMENT_ID =
   process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-PMBBRGCPM5";
 const MIXPANEL_TOKEN =
   process.env.NEXT_PUBLIC_MIXPANEL_TOKEN || "572f2bc3511f9a768d95e72b7e925c37";
+const ADSENSE_CLIENT_ID =
+  process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || "ca-pub-4936731849151313";
 
 // How long after load to wait for an idle moment before giving up and loading
 // analytics anyway. Long enough to clear the window Lighthouse measures TBT and
@@ -149,6 +151,15 @@ export default function AnalyticsProvider() {
   const mixpanelInitialized = useRef(false);
   const identifiedUserId = useRef<string | null>(null);
   const started = useDeferredStart();
+  // Computed once per mount. Gates GA4 specifically (Mixpanel keeps loading
+  // for bots and just tags them via `is_bot`) because GA4's standard reports
+  // have no equivalent way to filter a dimension out after the fact — a
+  // farm of headless browsers that fully executes JS (real Chrome, real
+  // scroll events) was inflating session_start/first_visit/scroll counts by
+  // 50-100x versus real page_view counts. Safe on the server: `started` is
+  // false during SSR and the initial client render either way, so this
+  // doesn't change what's rendered until after hydration.
+  const [isBot] = useState(() => detectBot().isBot);
 
   const fullPath = useMemo(() => {
     const qs = searchParams?.toString();
@@ -190,9 +201,9 @@ export default function AnalyticsProvider() {
   }, [started]);
 
   useEffect(() => {
-    if (!fullPath) return;
+    if (!fullPath || isBot) return;
     trackPageView(fullPath);
-  }, [fullPath]);
+  }, [fullPath, isBot]);
 
   // Attribute events to the signed-in user so funnels/retention can be
   // sliced per person instead of per anonymous device.
@@ -230,12 +241,32 @@ export default function AnalyticsProvider() {
     }
   }, [status, session]);
 
-  if (!GA_MEASUREMENT_ID || !started) return null;
+  if (!started || isBot) return null;
 
   return (
-    <Script
-      src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-      strategy="afterInteractive"
-    />
+    <>
+      {GA_MEASUREMENT_ID && (
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+      )}
+      {/* Moved here from layout.tsx so it shares the same idle-after-load-or-
+          first-interaction gate as the rest of analytics, instead of firing
+          unconditionally at afterInteractive on every pageview. AdSense docs
+          ask for this loaded early so Auto Ads can scan the page for
+          placements, but a multi-second delay is standard practice and
+          doesn't meaningfully hurt fill rate — and skipping it for `isBot`
+          traffic avoids invalid-traffic ad impressions, which AdSense's own
+          policy considers a plus, not a downside. */}
+      {ADSENSE_CLIENT_ID && (
+        <Script
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+      )}
+    </>
   );
 }
