@@ -148,7 +148,27 @@ export default function TermsPage() {
 
           <section>
             <h2 className="mb-3 text-2xl font-semibold">
-              9. Modifications to Terms
+              9. Paid Subscriptions (WorkWay Pro)
+            </h2>
+            <p className="leading-relaxed text-muted-foreground">
+              Some features are offered under a paid subscription
+              (&quot;Pro&quot;), billed monthly and processed by our payment
+              processor, Dodo Payments. Subscriptions renew automatically
+              until cancelled. Billing, cancellation, and refund terms are set
+              out in full in our{" "}
+              <a
+                href="/refund-policy"
+                className="text-primary underline underline-offset-2 hover:opacity-80"
+              >
+                Refund &amp; Cancellation Policy
+              </a>
+              , which forms part of these Terms.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-3 text-2xl font-semibold">
+              10. Modifications to Terms
             </h2>
             <p className="leading-relaxed text-muted-foreground">
               We reserve the right to update these terms at any time. Changes
@@ -159,7 +179,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="mb-3 text-2xl font-semibold">10. Contact</h2>
+            <h2 className="mb-3 text-2xl font-semibold">11. Contact</h2>
             <p className="leading-relaxed text-muted-foreground">
               For any questions regarding these terms, contact us at{" "}
               <a
