@@ -16,9 +16,11 @@ Single DigitalOcean VPS, four containers via `workway-infra/docker-compose.yml`:
 | `frontend` | `ghcr.io/enigma-52/workway-frontend:latest` | Next.js (App Router, standalone output)  |
 | `nginx`    | `nginx:alpine`                            | TLS termination + routing                |
 
-Images are built and pushed to `ghcr.io` manually (no CI workflow in-repo yet —
-see the TODO in `workway-infra/README.md`), then pulled on the VPS and brought
-up with `docker compose up -d`. SSH: `ssh -L 5433:localhost:5432 root@<droplet-ip>`
+The frontend image is built and pushed to `ghcr.io` automatically on every
+push to `main` via `.github/workflows/deploy.yml`. The backend image is still
+built and pushed manually (no CI workflow for it yet — see the TODO in
+`workway-infra/README.md`). Either way, images are pulled on the VPS and
+brought up with `docker compose up -d`. SSH: `ssh -L 5433:localhost:5432 root@<droplet-ip>`
 (the local port-forward is for connecting a local `psql`/GUI client to prod
 Postgres over SSH, not for app traffic).
 
@@ -101,16 +103,22 @@ moving to an env file at some point, but out of scope here.
 | `NEXT_PUBLIC_SITE_URL`, `BACKEND_API_URL` | Also consumed at build time for static generation |
 | `NEXT_PUBLIC_MIXPANEL_TOKEN` *(optional)* | Falls back to a hardcoded token in `AnalyticsProvider.tsx` if unset — fine for now, but move to a real build-arg if the token ever needs to rotate |
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` *(optional)* | Same pattern — hardcoded fallback (`G-PMBBRGCPM5`) |
-| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` *(optional)* | Cloudflare Turnstile widget on the login modal. Falls back to Cloudflare's public always-pass test key if unset — functional but zero real bot protection. Not a secret (site keys are meant to be client-embedded), but still build-time only. |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` *(optional)* | Cloudflare Turnstile widget on the login modal. **Defaults to WorkWay's real site key, hardcoded in `Turnstile.tsx`** (same pattern as the Mixpanel/GA fallbacks — site keys are meant to be client-embedded, not secret) — a build that forgets this build-arg still ships the real widget, not Cloudflare's "for testing only" key. Only pass this to override with a *different* key (e.g. Cloudflare's public test key, `1x00000000000000000000AA`, for local dev without hitting a real challenge). |
 | `NEXT_PUBLIC_PAYMENTS_ENABLED` *(optional, default off)* | Set to the literal string `"true"` to show a real "Subscribe" button on `/pricing`; anything else (including unset) shows a disabled "Launching soon" button. Must match the backend's `PAYMENTS_ENABLED` — the backend independently refuses `POST /api/billing/checkout` with 503 if its own copy isn't `"true"`, so the frontend flag alone can't accidentally let a checkout through. |
 
-**Current full build command** (run wherever the frontend image is actually built — not something `workway-infra` triggers itself):
+**Actual build**: `.github/workflows/deploy.yml` runs this on every push to
+`main` and pushes straight to `ghcr.io` — no manual step needed for the
+frontend. It passes `BACKEND_API_URL`, `NEXT_PUBLIC_SITE_URL`,
+`NEXT_PUBLIC_API_URL`, and `NEXT_PUBLIC_PAYMENTS_ENABLED=false`. It does *not*
+pass `NEXT_PUBLIC_TURNSTILE_SITE_KEY` — harmless, since the code default is
+the real site key.
+
+**Equivalent manual command**, if ever building outside CI:
 ```
 docker build \
   --build-arg BACKEND_API_URL=http://backend:3000 \
   --build-arg NEXT_PUBLIC_SITE_URL=https://www.workway.dev \
   --build-arg NEXT_PUBLIC_API_URL=https://www.workway.dev \
-  --build-arg NEXT_PUBLIC_TURNSTILE_SITE_KEY=<site key from Cloudflare Turnstile dashboard> \
   --build-arg NEXT_PUBLIC_PAYMENTS_ENABLED=false \
   -t ghcr.io/enigma-52/workway-frontend:latest .
 ```
