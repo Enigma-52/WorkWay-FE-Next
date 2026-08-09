@@ -11,6 +11,9 @@ const SourcesSection = dynamic(
   () => import("@/components/LandingPage/SourcesSection")
 );
 const Features = dynamic(() => import("@/components/LandingPage/Features"));
+const ProAlertsSpotlight = dynamic(
+  () => import("@/components/LandingPage/ProAlertsSpotlight")
+);
 const HireMeProfiles = dynamic(
   () => import("@/components/LandingPage/HireMeProfiles")
 );
@@ -34,6 +37,7 @@ export default function LandingPage() {
       <ProblemSection />
       <SourcesSection />
       <Features />
+      <ProAlertsSpotlight />
       <HireMeProfiles />
       <LandingFaq />
       <FinalCTA />
