@@ -3,12 +3,17 @@
 import { useEffect, useId, useRef } from "react";
 import Script from "next/script";
 
-// Cloudflare's own documented always-passing test key — safe, non-secret
-// fallback for local dev when a real site key isn't configured, so the
-// widget still renders and the flow is testable without real Cloudflare
-// credentials. Never use this in production; set NEXT_PUBLIC_TURNSTILE_SITE_KEY.
-const TEST_SITE_KEY = "1x00000000000000000000AA";
-const SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || TEST_SITE_KEY;
+// WorkWay's real Turnstile site key, hardcoded as the default — same
+// pattern as the Mixpanel/GA tokens elsewhere in this codebase. Safe to
+// commit: Turnstile site keys (unlike the secret key, which stays in .env,
+// never in code) are meant to be embedded client-side. This means the
+// widget works correctly even on a build that forgot to pass
+// --build-arg NEXT_PUBLIC_TURNSTILE_SITE_KEY, instead of silently falling
+// back to a test key that shows Cloudflare's "for testing only" banner in
+// production. Override via NEXT_PUBLIC_TURNSTILE_SITE_KEY if ever needed —
+// e.g. set it to Cloudflare's public always-pass test key,
+// "1x00000000000000000000AA", for local dev without hitting a real challenge.
+const SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "0x4AAAAAACrzRt1Z9cZGoEY_";
 
 declare global {
   interface Window {
