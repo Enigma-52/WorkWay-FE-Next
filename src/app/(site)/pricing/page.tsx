@@ -5,6 +5,7 @@ import { buildPageMetadata } from "@/lib/seo/metadata";
 import { buildPricingBreadcrumb } from "@/lib/seo/breadcrumbs";
 import { buildBreadcrumbJsonLd } from "@/lib/seo/jsonld";
 import PricingCards from "@/components/Pricing/PricingCards";
+import ProAlertsDetail from "@/components/Pricing/ProAlertsDetail";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Pricing — WorkWay",
@@ -36,11 +37,28 @@ export default function PricingPage() {
 
         <PricingCards />
 
+        <p className="mt-4 text-center text-xs text-muted-foreground">
+          Cancel anytime. See our{" "}
+          <a href="/refund-policy" className="underline underline-offset-2 hover:text-foreground">
+            refund &amp; cancellation policy
+          </a>
+          .
+        </p>
+
+        <ProAlertsDetail />
+
         <div className="mx-auto mt-16 max-w-2xl rounded-2xl border border-dashed border-border bg-card/40 px-6 py-8 text-center">
-          <h2 className="mb-2 text-lg font-semibold">Hiring on WorkWay?</h2>
+          <h2 className="mb-2 text-lg font-semibold">Planning to hire through WorkWay?</h2>
           <p className="text-sm text-muted-foreground">
-            Employer plans — job posting, candidate search, and hiring tools — are
-            coming soon.
+            Job posting, candidate search, and hiring tools for employers are
+            on the way. Want early access when they launch?{" "}
+            <a
+              href="mailto:hello@workway.dev?subject=Employer%20early%20access"
+              className="text-primary underline underline-offset-2 hover:opacity-80"
+            >
+              Tell us
+            </a>{" "}
+            and we&apos;ll reach out first.
           </p>
         </div>
       </div>

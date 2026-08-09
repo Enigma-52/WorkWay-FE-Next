@@ -182,6 +182,16 @@ export function buildTermsBreadcrumb(): BreadcrumbItem[] {
   ];
 }
 
+export function buildRefundPolicyBreadcrumb(): BreadcrumbItem[] {
+  return [
+    ...buildHomeBreadcrumb(),
+    {
+      name: "Refund Policy",
+      href: "/refund-policy",
+    },
+  ];
+}
+
 export function buildDisclaimerBreadcrumb(): BreadcrumbItem[] {
   return [
     ...buildHomeBreadcrumb(),

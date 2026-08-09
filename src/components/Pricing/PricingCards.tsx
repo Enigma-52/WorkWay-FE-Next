@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { Check, Sparkles, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AuthModal from "@/components/common/AuthModal";
-import { isPro, hasPlan } from "@/lib/plans";
+import { isPro, hasPlan, formatLivePrice, type LivePrice } from "@/lib/plans";
 import { toast } from "sonner";
 import { track } from "@/lib/analytics";
 
@@ -19,34 +19,6 @@ type Plan = {
   highlighted?: boolean;
   comingSoon?: boolean;
 };
-
-type LivePrice = {
-  amount: number;
-  currency: string;
-  type: "recurring_price" | "one_time_price" | "usage_based_price";
-  interval: "Day" | "Week" | "Month" | "Year" | null;
-  intervalCount: number | null;
-};
-
-const INTERVAL_LABELS: Record<string, string> = { Day: "day", Week: "wk", Month: "mo", Year: "yr" };
-
-// Formats a live Dodo price into the same {price, period} shape the static
-// PLANS table below uses, so a price change in the Dodo dashboard shows up
-// here without a frontend deploy — falls back to the hardcoded value above
-// if this can't be fetched (Dodo hiccup, plan has no product yet, etc).
-function formatLivePrice(price: LivePrice): { price: string; period?: string } {
-  const amount = price.amount / 100;
-  const formatted = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: price.currency || "USD",
-    minimumFractionDigits: amount % 1 === 0 ? 0 : 2,
-  }).format(amount);
-  const period =
-    price.type === "recurring_price" && price.interval
-      ? INTERVAL_LABELS[price.interval] ?? price.interval.toLowerCase()
-      : undefined;
-  return { price: formatted, period };
-}
 
 const PLANS: Plan[] = [
   {
