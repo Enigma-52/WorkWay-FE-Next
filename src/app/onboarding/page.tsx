@@ -22,10 +22,10 @@ export default function OnboardingPage() {
     if (!role || !name.trim() || !session?.user?.email) return;
     setLoading(true);
 
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/me`, {
+    await fetch(`/api/user/me`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: session.user.email, role, display_name: name.trim() }),
+      body: JSON.stringify({ role, display_name: name.trim() }),
     });
 
     await update({ roles: [role], displayName: name.trim() });
@@ -62,7 +62,7 @@ export default function OnboardingPage() {
           >
             <Briefcase className="w-8 h-8 text-primary mb-4" />
             <h2 className="text-lg font-semibold mb-1">I'm hiring</h2>
-            <p className="text-sm text-muted-foreground">Post jobs, find candidates, grow your team.</p>
+            <p className="text-sm text-muted-foreground">Employer tools are in the works — get in early.</p>
           </button>
         </div>
       </div>

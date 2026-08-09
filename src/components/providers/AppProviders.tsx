@@ -5,6 +5,7 @@ import { SessionProvider } from "next-auth/react";
 import { Toaster } from "sonner";
 import GuestPromoModal from "@/components/common/GuestPromoModal";
 import AuthRedirectGate from "@/components/common/AuthRedirectGate";
+import PlanSyncGate from "@/components/common/PlanSyncGate";
 import OnboardingGate from "@/components/Onboarding/OnboardingGate";
 import { JobStatusProvider } from "@/contexts/JobStatusContext";
 
@@ -18,6 +19,7 @@ export default function AppProviders({ children }: AppProvidersProps) {
       <JobStatusProvider>
         {children}
         <GuestPromoModal />
+        <PlanSyncGate />
         <Suspense fallback={null}>
           <AuthRedirectGate />
         </Suspense>
