@@ -8,11 +8,19 @@
     ARG NEXT_PUBLIC_SITE_URL
     ARG NEXT_PUBLIC_BACKEND_API_URL
     ARG NEXT_PUBLIC_API_URL
+    # NEXT_PUBLIC_* vars are inlined into the client JS bundle at build time —
+    # setting them anywhere else (docker-compose's runtime `environment:`,
+    # the container's shell env at startup) has no effect once the app is
+    # built. Both of these MUST be passed as --build-arg on every build.
+    ARG NEXT_PUBLIC_TURNSTILE_SITE_KEY
+    ARG NEXT_PUBLIC_PAYMENTS_ENABLED
 
     ENV BACKEND_API_URL=$BACKEND_API_URL
     ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
     ENV NEXT_PUBLIC_BACKEND_API_URL=$NEXT_PUBLIC_BACKEND_API_URL
     ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+    ENV NEXT_PUBLIC_TURNSTILE_SITE_KEY=$NEXT_PUBLIC_TURNSTILE_SITE_KEY
+    ENV NEXT_PUBLIC_PAYMENTS_ENABLED=$NEXT_PUBLIC_PAYMENTS_ENABLED
     
     # Install dependencies (cached if package.json unchanged)
     COPY package*.json ./

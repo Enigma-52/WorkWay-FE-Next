@@ -101,6 +101,19 @@ moving to an env file at some point, but out of scope here.
 | `NEXT_PUBLIC_SITE_URL`, `BACKEND_API_URL` | Also consumed at build time for static generation |
 | `NEXT_PUBLIC_MIXPANEL_TOKEN` *(optional)* | Falls back to a hardcoded token in `AnalyticsProvider.tsx` if unset — fine for now, but move to a real build-arg if the token ever needs to rotate |
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` *(optional)* | Same pattern — hardcoded fallback (`G-PMBBRGCPM5`) |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` *(optional)* | Cloudflare Turnstile widget on the login modal. Falls back to Cloudflare's public always-pass test key if unset — functional but zero real bot protection. Not a secret (site keys are meant to be client-embedded), but still build-time only. |
+| `NEXT_PUBLIC_PAYMENTS_ENABLED` *(optional, default off)* | Set to the literal string `"true"` to show a real "Subscribe" button on `/pricing`; anything else (including unset) shows a disabled "Launching soon" button. Must match the backend's `PAYMENTS_ENABLED` — the backend independently refuses `POST /api/billing/checkout` with 503 if its own copy isn't `"true"`, so the frontend flag alone can't accidentally let a checkout through. |
+
+**Current full build command** (run wherever the frontend image is actually built — not something `workway-infra` triggers itself):
+```
+docker build \
+  --build-arg BACKEND_API_URL=http://backend:3000 \
+  --build-arg NEXT_PUBLIC_SITE_URL=https://www.workway.dev \
+  --build-arg NEXT_PUBLIC_API_URL=https://www.workway.dev \
+  --build-arg NEXT_PUBLIC_TURNSTILE_SITE_KEY=<site key from Cloudflare Turnstile dashboard> \
+  --build-arg NEXT_PUBLIC_PAYMENTS_ENABLED=false \
+  -t ghcr.io/enigma-52/workway-frontend:latest .
+```
 
 ## External services — current live configuration
 

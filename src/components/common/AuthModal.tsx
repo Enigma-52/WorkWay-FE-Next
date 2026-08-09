@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Mail, ArrowRight, CheckCircle2 } from "lucide-react";
 import { track } from "@/lib/analytics";
+import Turnstile from "./Turnstile";
 
 type AuthModalProps = {
   open: boolean;
@@ -26,8 +27,14 @@ export default function AuthModal({ open, onOpenChange, callbackUrl = "/dashboar
   const [emailLoading, setEmailLoading] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
   const [emailError, setEmailError] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  // Bumped to force Turnstile to remount (fresh challenge, fresh token) —
+  // needed after a failed send, since a token is single-use and the backend
+  // will reject a reused one.
+  const [turnstileKey, setTurnstileKey] = useState(0);
 
   async function handleGoogleSignIn() {
+    if (!turnstileToken) return;
     setGoogleLoading(true);
     track("Sign In Started", { method: "google", source });
     await signIn("google", { callbackUrl });
@@ -35,7 +42,7 @@ export default function AuthModal({ open, onOpenChange, callbackUrl = "/dashboar
 
   async function handleEmailSignIn(e: React.FormEvent) {
     e.preventDefault();
-    if (!email.trim()) return;
+    if (!email.trim() || !turnstileToken) return;
     setEmailError("");
     setEmailLoading(true);
     track("Sign In Started", { method: "magic_link", source });
@@ -45,7 +52,11 @@ export default function AuthModal({ open, onOpenChange, callbackUrl = "/dashboar
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: email.trim(), callback_url: callbackUrl }),
+          body: JSON.stringify({
+            email: email.trim(),
+            callback_url: callbackUrl,
+            turnstile_token: turnstileToken,
+          }),
         }
       );
       const data = await res.json();
@@ -55,6 +66,7 @@ export default function AuthModal({ open, onOpenChange, callbackUrl = "/dashboar
           source,
           reason: data.message ?? `http_${res.status}`,
         });
+        resetTurnstile();
       } else {
         setEmailSent(true);
         track("Magic Link Sent", { source });
@@ -62,9 +74,15 @@ export default function AuthModal({ open, onOpenChange, callbackUrl = "/dashboar
     } catch {
       setEmailError("Something went wrong. Please try again.");
       track("Magic Link Send Failed", { source, reason: "network_error" });
+      resetTurnstile();
     } finally {
       setEmailLoading(false);
     }
+  }
+
+  function resetTurnstile() {
+    setTurnstileToken(null);
+    setTurnstileKey((k) => k + 1);
   }
 
   function handleOpenChange(v: boolean) {
@@ -72,6 +90,7 @@ export default function AuthModal({ open, onOpenChange, callbackUrl = "/dashboar
       setEmail("");
       setEmailSent(false);
       setEmailError("");
+      resetTurnstile();
     }
     onOpenChange(v);
   }
@@ -92,7 +111,7 @@ export default function AuthModal({ open, onOpenChange, callbackUrl = "/dashboar
           {/* Google */}
           <Button
             onClick={handleGoogleSignIn}
-            disabled={googleLoading}
+            disabled={googleLoading || !turnstileToken}
             variant="outline"
             className="w-full gap-3 h-11"
           >
@@ -145,7 +164,7 @@ export default function AuthModal({ open, onOpenChange, callbackUrl = "/dashboar
               )}
               <Button
                 type="submit"
-                disabled={emailLoading || !email.trim()}
+                disabled={emailLoading || !email.trim() || !turnstileToken}
                 className="w-full h-11 gap-2"
               >
                 {emailLoading ? "Sending..." : (
@@ -157,6 +176,9 @@ export default function AuthModal({ open, onOpenChange, callbackUrl = "/dashboar
               </Button>
             </form>
           )}
+
+          {/* Bot check — gates both sign-in methods above until solved */}
+          <Turnstile key={turnstileKey} onVerify={setTurnstileToken} onExpire={() => setTurnstileToken(null)} />
 
           <p className="text-center text-xs text-muted-foreground">
             By signing in you agree to our{" "}

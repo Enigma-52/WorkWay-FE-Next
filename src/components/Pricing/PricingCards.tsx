@@ -9,6 +9,13 @@ import { isPro, hasPlan, formatLivePrice, type LivePrice } from "@/lib/plans";
 import { toast } from "sonner";
 import { track } from "@/lib/analytics";
 
+// Off by default — flip to "true" (as a frontend build-arg, since
+// NEXT_PUBLIC_* vars are baked in at build time) once Dodo live-mode
+// verification clears. Until then the price still shows live from Dodo
+// (that's independent of this flag), but nobody can actually start a
+// checkout.
+const PAYMENTS_ENABLED = process.env.NEXT_PUBLIC_PAYMENTS_ENABLED === "true";
+
 type Plan = {
   key: string;
   name: string;
@@ -193,6 +200,10 @@ export default function PricingCards() {
                     Get started
                   </Button>
                 )
+              ) : !PAYMENTS_ENABLED ? (
+                <Button size="sm" variant="outline" disabled className="w-full">
+                  Launching soon
+                </Button>
               ) : (
                 <Button
                   size="sm"
