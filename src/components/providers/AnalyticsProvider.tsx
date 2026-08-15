@@ -17,8 +17,6 @@ const GA_MEASUREMENT_ID =
   process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-PMBBRGCPM5";
 const MIXPANEL_TOKEN =
   process.env.NEXT_PUBLIC_MIXPANEL_TOKEN || "572f2bc3511f9a768d95e72b7e925c37";
-const ADSENSE_CLIENT_ID =
-  process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || "ca-pub-4936731849151313";
 
 // How long after load to wait for an idle moment before giving up and loading
 // analytics anyway. Long enough to clear the window Lighthouse measures TBT and
@@ -248,22 +246,6 @@ export default function AnalyticsProvider() {
       {GA_MEASUREMENT_ID && (
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-          strategy="afterInteractive"
-        />
-      )}
-      {/* Moved here from layout.tsx so it shares the same idle-after-load-or-
-          first-interaction gate as the rest of analytics, instead of firing
-          unconditionally at afterInteractive on every pageview. AdSense docs
-          ask for this loaded early so Auto Ads can scan the page for
-          placements, but a multi-second delay is standard practice and
-          doesn't meaningfully hurt fill rate — and skipping it for `isBot`
-          traffic avoids invalid-traffic ad impressions, which AdSense's own
-          policy considers a plus, not a downside. */}
-      {ADSENSE_CLIENT_ID && (
-        <Script
-          async
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
-          crossOrigin="anonymous"
           strategy="afterInteractive"
         />
       )}
