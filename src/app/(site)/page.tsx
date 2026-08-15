@@ -17,6 +17,7 @@ const ProAlertsSpotlight = dynamic(
 const HireMeProfiles = dynamic(
   () => import("@/components/LandingPage/HireMeProfiles")
 );
+const Testimonials = dynamic(() => import("@/components/LandingPage/Testimonials"));
 const LandingFaq = dynamic(() => import("@/components/LandingPage/LandingFaq"));
 const FinalCTA = dynamic(() => import("@/components/LandingPage/FinalCTA"));
 
@@ -39,6 +40,7 @@ export default function LandingPage() {
       <Features />
       <ProAlertsSpotlight />
       <HireMeProfiles />
+      <Testimonials />
       <LandingFaq />
       <FinalCTA />
     </main>

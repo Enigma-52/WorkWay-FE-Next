@@ -6,6 +6,7 @@ import { buildPricingBreadcrumb } from "@/lib/seo/breadcrumbs";
 import { buildBreadcrumbJsonLd } from "@/lib/seo/jsonld";
 import PricingCards from "@/components/Pricing/PricingCards";
 import ProAlertsDetail from "@/components/Pricing/ProAlertsDetail";
+import Testimonials from "@/components/LandingPage/Testimonials";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Pricing — WorkWay",
@@ -47,7 +48,11 @@ export default function PricingPage() {
 
         <ProAlertsDetail />
 
-        <div className="mx-auto mt-16 max-w-2xl rounded-2xl border border-dashed border-border bg-card/40 px-6 py-8 text-center">
+        <div className="-mx-6">
+          <Testimonials variant="compact" />
+        </div>
+
+        <div className="mx-auto mt-4 max-w-2xl rounded-2xl border border-dashed border-border bg-card/40 px-6 py-8 text-center">
           <h2 className="mb-2 text-lg font-semibold">Planning to hire through WorkWay?</h2>
           <p className="text-sm text-muted-foreground">
             Job posting, candidate search, and hiring tools for employers are
