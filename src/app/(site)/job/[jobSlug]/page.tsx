@@ -10,6 +10,18 @@ import { buildPageMetadata } from "@/lib/seo/metadata";
 import type { JobDetails, JobInsights, SalaryInsightRow } from "@/types/jobs";
 import type { CompanyListResponse } from "@/lib/api/contracts";
 
+// Stopgap until real job-closure tracking exists (no cron currently marks a
+// job inactive when its source ATS listing closes) — age is used as a proxy
+// for "likely closed" to stop feeding Google's index a growing backlog of
+// probably-dead postings. See docs/FEATURES.md's SEO section.
+const NOINDEX_AFTER_DAYS = 60;
+
+function isOlderThanNoindexThreshold(createdAt: string | undefined): boolean {
+  if (!createdAt) return false;
+  const ageMs = Date.now() - new Date(createdAt).getTime();
+  return ageMs > NOINDEX_AFTER_DAYS * 24 * 60 * 60 * 1000;
+}
+
 type SalaryInsightsResponse = {
   by_domain: { domain: string; avg_salary: number; count: number }[];
   by_experience_level: { level: string; avg_salary: number; count: number }[];
@@ -78,6 +90,14 @@ export async function generateMetadata({
     description: `${job.title} at ${job.company}${ycTag} in ${job.location}. ${job.employment_type} · ${job.experience_level}. Apply on WorkWay.`,
     path: `/job/${jobSlug}`,
     image: job.company_logo_url || "/logo.png",
+    // Stopgap until real job-closure tracking exists: postings past this age
+    // are increasingly likely closed, and there's no signal yet that marks a
+    // job inactive when it actually closes. `follow: true` keeps links on the
+    // page (similar jobs, company page) crawlable — only this page itself
+    // drops out of the index.
+    robots: isOlderThanNoindexThreshold(job.created_at)
+      ? { index: false, follow: true }
+      : undefined,
     keywords: [
       job.title,
       `${job.title} jobs`,
