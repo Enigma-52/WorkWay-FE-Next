@@ -16,6 +16,32 @@ import type { CompanyListResponse } from "@/lib/api/contracts";
 // probably-dead postings. See docs/FEATURES.md's SEO section.
 const NOINDEX_AFTER_DAYS = 60;
 
+// Minimum chars of real content the visible excerpt should carry before
+// cutting off remaining sections — a fixed "first section" cutoff can leave
+// almost nothing visible (some sections are just a location line, see
+// job/[jobSlug] discussion in FEATURES.md), so this accumulates whole
+// sections until the threshold is met rather than trusting section
+// boundaries alone.
+const DESCRIPTION_PREVIEW_MIN_CHARS = 250;
+
+function buildDescriptionPreview(
+  description: JobDetails["description"],
+): { preview: JobDetails["description"]; hasMore: boolean } {
+  if (!Array.isArray(description) || description.length === 0) {
+    return { preview: description, hasMore: false };
+  }
+
+  const preview: typeof description = [];
+  let charCount = 0;
+  for (const section of description) {
+    preview.push(section);
+    charCount += (section.content || []).join(" ").length;
+    if (charCount >= DESCRIPTION_PREVIEW_MIN_CHARS) break;
+  }
+
+  return { preview, hasMore: preview.length < description.length };
+}
+
 function isOlderThanNoindexThreshold(createdAt: string | undefined): boolean {
   if (!createdAt) return false;
   const ageMs = Date.now() - new Date(createdAt).getTime();
@@ -127,18 +153,17 @@ export default async function JobPage({ params }: JobPageProps) {
   const breadcrumbs = buildJobDetailBreadcrumb(job.title);
   const insights = await fetchJobInsights(job);
 
-  // Only the first description section ships in the initial HTML/RSC
+  // Only an excerpt of the description ships in the initial HTML/RSC
   // payload — JobPageClient fetches the rest client-side on "View full
   // description" so the full verbatim ATS text isn't part of what
   // Googlebot's default render sees. JSON-LD above still uses the full
   // `job` object (buildJobPostingJsonLd already caps at 2000 chars on its
   // own, unrelated to this).
-  const hasMoreDescription =
-    Array.isArray(job.description) && job.description.length > 1;
-  const previewJob =
-    Array.isArray(job.description) && job.description.length > 1
-      ? { ...job, description: job.description.slice(0, 1) }
-      : job;
+  const { preview: descriptionPreview, hasMore: hasMoreDescription } =
+    buildDescriptionPreview(job.description);
+  const previewJob = hasMoreDescription
+    ? { ...job, description: descriptionPreview }
+    : job;
 
   return (
     <>
