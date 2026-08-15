@@ -19,9 +19,18 @@ type AuthModalProps = {
   callbackUrl?: string;
   /** Where this modal was triggered from, e.g. "save_job", "pricing", "follow_company". */
   source?: string;
+  title?: string;
+  description?: string;
 };
 
-export default function AuthModal({ open, onOpenChange, callbackUrl = "/dashboard", source = "unknown" }: AuthModalProps) {
+export default function AuthModal({
+  open,
+  onOpenChange,
+  callbackUrl = "/dashboard",
+  source = "unknown",
+  title = "Welcome to WorkWay",
+  description = "Sign in to track applications, save jobs, and more.",
+}: AuthModalProps) {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [emailLoading, setEmailLoading] = useState(false);
@@ -100,10 +109,10 @@ export default function AuthModal({ open, onOpenChange, callbackUrl = "/dashboar
       <DialogContent className="sm:max-w-sm bg-card border-border">
         <DialogHeader>
           <DialogTitle className="text-center text-xl font-semibold">
-            Welcome to WorkWay
+            {title}
           </DialogTitle>
           <p className="text-center text-sm text-muted-foreground pt-1">
-            Sign in to track applications, save jobs, and more.
+            {description}
           </p>
         </DialogHeader>
 

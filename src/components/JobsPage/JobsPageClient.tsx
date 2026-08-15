@@ -1,7 +1,8 @@
 "use client";
 
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
+import { useSession } from "next-auth/react";
 import {
   Briefcase,
   Sparkles,
@@ -18,6 +19,7 @@ import JobViewFeed from "@/components/JobViewFeed/JobViewFeed";
 import LatestChangelogCard from "./LatestChangelogCard";
 import SiteStatsCard from "./SiteStatsCard";
 import TalentProfilePromoCard from "./TalentProfilePromoCard";
+import AuthModal from "@/components/common/AuthModal";
 
 type Props = {
   data: JobListResponse;
@@ -36,6 +38,9 @@ export default function JobsPageClient({ data }: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { data: session } = useSession();
+  const [authOpen, setAuthOpen] = useState(false);
+  const [pendingFilterUrl, setPendingFilterUrl] = useState<string | null>(null);
 
   const q = getParam(searchParams, "q", "");
   const domain = getParam(searchParams, "domain", "all");
@@ -45,7 +50,7 @@ export default function JobsPageClient({ data }: Props) {
   const country = getParam(searchParams, "country", "all");
   const posted = getParam(searchParams, "posted", "all");
 
-  const updateParams = useCallback(
+  const buildParamsUrl = useCallback(
     (next: Record<string, string | null>) => {
       const sp = new URLSearchParams(searchParams.toString());
       Object.entries(next).forEach(([k, v]) => {
@@ -53,18 +58,43 @@ export default function JobsPageClient({ data }: Props) {
         else sp.set(k, v);
       });
       const query = sp.toString();
-      router.push(query ? `${pathname}?${query}` : pathname);
+      return query ? `${pathname}?${query}` : pathname;
     },
-    [pathname, router, searchParams]
+    [pathname, searchParams]
+  );
+
+  const updateParams = useCallback(
+    (next: Record<string, string | null>) => {
+      router.push(buildParamsUrl(next));
+    },
+    [router, buildParamsUrl]
+  );
+
+  // Search/filter is gated behind sign-in — landing on /jobs unfiltered stays
+  // fully open (this only fires once someone actively changes something), so
+  // it doesn't touch SEO/crawlability of the default listing. Redirects back
+  // to the exact filtered URL after sign-in via callbackUrl, so the search
+  // the visitor was mid-way through just resumes instead of being lost.
+  const requireAuthOrRun = useCallback(
+    (next: Record<string, string | null>, run: () => void) => {
+      if (session?.user?.dbId) {
+        run();
+        return;
+      }
+      setPendingFilterUrl(buildParamsUrl(next));
+      setAuthOpen(true);
+    },
+    [session, buildParamsUrl]
   );
 
   const handleSidebarFilter = (key: string) => (value: string) => {
-    updateParams({ [key]: value, page: "1" });
+    const next = { [key]: value, page: "1" };
+    requireAuthOrRun(next, () => updateParams(next));
   };
 
   const handleApply = useCallback(
     (filters: { q: string; domain: string; employmentType: string; experienceLevel: string; location: string; country: string; posted: string }) => {
-      updateParams({
+      const next = {
         q: filters.q || null,
         domain: filters.domain,
         employment_type: filters.employmentType,
@@ -73,21 +103,24 @@ export default function JobsPageClient({ data }: Props) {
         country: filters.country || null,
         posted: filters.posted,
         page: "1",
+      };
+      requireAuthOrRun(next, () => {
+        updateParams(next);
+        track("Jobs Filters Applied", {
+          query: filters.q || null,
+          domain: filters.domain,
+          employment_type: filters.employmentType,
+          experience_level: filters.experienceLevel,
+          location: filters.location || null,
+          country: filters.country || null,
+          posted: filters.posted,
+        });
+        if (filters.q.trim()) {
+          track("Search Performed", { query: filters.q.trim() });
+        }
       });
-      track("Jobs Filters Applied", {
-        query: filters.q || null,
-        domain: filters.domain,
-        employment_type: filters.employmentType,
-        experience_level: filters.experienceLevel,
-        location: filters.location || null,
-        country: filters.country || null,
-        posted: filters.posted,
-      });
-      if (filters.q.trim()) {
-        track("Search Performed", { query: filters.q.trim() });
-      }
     },
-    [updateParams]
+    [requireAuthOrRun, updateParams]
   );
 
   const clearFilters = () => {
@@ -268,6 +301,15 @@ export default function JobsPageClient({ data }: Props) {
           </div>
         </div>
       </main>
+
+      <AuthModal
+        open={authOpen}
+        onOpenChange={setAuthOpen}
+        callbackUrl={pendingFilterUrl ?? pathname}
+        source="jobs_filter"
+        title="Unlock the full power of WorkWay"
+        description="Sign in to filter and search jobs, save roles, track applications, and get instant alerts when companies you follow post new roles."
+      />
     </div>
   );
 }

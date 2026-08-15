@@ -17,7 +17,7 @@ export default function GuestPromoModal() {
   useEffect(() => {
     if (status === "loading") return;
     if (session) return;
-    if (typeof window !== "undefined" && sessionStorage.getItem(STORAGE_KEY)) return;
+    if (typeof window !== "undefined" && localStorage.getItem(STORAGE_KEY)) return;
 
     const t = setTimeout(() => {
       setVisible(true);
@@ -27,7 +27,7 @@ export default function GuestPromoModal() {
   }, [status, session]);
 
   function dismiss(reason: "cta" | "close" | "later") {
-    sessionStorage.setItem(STORAGE_KEY, "1");
+    localStorage.setItem(STORAGE_KEY, "1");
     setVisible(false);
     track("Guest Promo Dismissed", { reason });
   }
