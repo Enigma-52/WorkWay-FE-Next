@@ -17,6 +17,12 @@ import {
   TestTube,
   UserCog,
   FileSearch,
+  Stethoscope,
+  HardHat,
+  GraduationCap,
+  Home,
+  ShoppingBag,
+  ClipboardList,
 } from "lucide-react";
 
 type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;
@@ -42,6 +48,12 @@ export const DOMAIN_ICON_MAP: Record<string, IconComponent> = {
   "Admin / Office": UserCog,
   Research: FileSearch,
   Analyst: LineChart,
+  Healthcare: Stethoscope,
+  "Skilled Trades": HardHat,
+  Education: GraduationCap,
+  "Real Estate": Home,
+  "Retail / Hospitality": ShoppingBag,
+  Management: ClipboardList,
   Other: Briefcase,
 };
 
