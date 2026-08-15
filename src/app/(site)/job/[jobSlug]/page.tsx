@@ -127,6 +127,19 @@ export default async function JobPage({ params }: JobPageProps) {
   const breadcrumbs = buildJobDetailBreadcrumb(job.title);
   const insights = await fetchJobInsights(job);
 
+  // Only the first description section ships in the initial HTML/RSC
+  // payload — JobPageClient fetches the rest client-side on "View full
+  // description" so the full verbatim ATS text isn't part of what
+  // Googlebot's default render sees. JSON-LD above still uses the full
+  // `job` object (buildJobPostingJsonLd already caps at 2000 chars on its
+  // own, unrelated to this).
+  const hasMoreDescription =
+    Array.isArray(job.description) && job.description.length > 1;
+  const previewJob =
+    Array.isArray(job.description) && job.description.length > 1
+      ? { ...job, description: job.description.slice(0, 1) }
+      : job;
+
   return (
     <>
       <JsonLd data={buildJobPostingJsonLd(job)} />
@@ -136,7 +149,11 @@ export default async function JobPage({ params }: JobPageProps) {
           <Breadcrumbs items={breadcrumbs} />
         </div>
       </div>
-      <JobPageClient job={job} insights={insights} />
+      <JobPageClient
+        job={previewJob}
+        insights={insights}
+        hasMoreDescription={hasMoreDescription}
+      />
     </>
   );
 }

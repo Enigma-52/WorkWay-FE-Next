@@ -32,6 +32,12 @@ const JobViewFeed = dynamic(() => import("@/components/JobViewFeed/JobViewFeed")
 type Props = {
   job: JobDetails;
   insights?: JobInsights;
+  // Server only sends the first description section in `job.description` —
+  // the rest is fetched client-side on demand (see the "View full
+  // description" handler below) so the full verbatim ATS text never lands
+  // in the page's initial HTML/RSC payload. Real applicants still get the
+  // complete posting; Googlebot's default (non-interactive) render doesn't.
+  hasMoreDescription?: boolean;
 };
 
 function formatSalary(n: number): string {
@@ -51,7 +57,7 @@ function getTimeAgo(updatedAt: string): string {
   return `${diffD} days ago`;
 }
 
-export default function JobPageClient({ job, insights }: Props) {
+export default function JobPageClient({ job, insights, hasMoreDescription }: Props) {
   const { data: session } = useSession();
   const pathname = usePathname();
   const { appliedSlugs, addApplied } = useJobStatus();
@@ -59,6 +65,31 @@ export default function JobPageClient({ job, insights }: Props) {
   const [applyClicked, setApplyClicked] = useState(false);
   const [appliedStatus, setAppliedStatus] = useState<"saving" | "yes" | "no" | null>(null);
   const [authOpen, setAuthOpen] = useState(false);
+  const [fullDescription, setFullDescription] = useState<
+    JobDetails["description"] | null
+  >(null);
+  const [loadingFullDescription, setLoadingFullDescription] = useState(false);
+  const descriptionSections = fullDescription ?? job.description;
+
+  async function handleViewFullDescription() {
+    if (fullDescription || loadingFullDescription) return;
+    setLoadingFullDescription(true);
+    try {
+      const res = await fetch(
+        `/api/job/details?slug=${encodeURIComponent(job.slug)}`,
+      );
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      if (Array.isArray(data?.description)) {
+        setFullDescription(data.description);
+      }
+    } catch {
+      // Silent — the "View full description" button just stays clickable
+      // to retry; there's nothing else on the page that depends on this.
+    } finally {
+      setLoadingFullDescription(false);
+    }
+  }
 
   const alreadyApplied = appliedSlugs.has(job.slug);
   const isStale = job.created_at
@@ -480,7 +511,7 @@ export default function JobPageClient({ job, insights }: Props) {
                     even if the original posting has moved or closed.
                   </p>
                 )}
-                {(Array.isArray(job.description) ? job.description : []).map(
+                {(Array.isArray(descriptionSections) ? descriptionSections : []).map(
                   (section: any, index: number) => (
                     <JobSection
                       key={index}
@@ -490,6 +521,18 @@ export default function JobPageClient({ job, insights }: Props) {
                       skills={job.skills}
                     />
                   ),
+                )}
+                {hasMoreDescription && !fullDescription && (
+                  <Button
+                    variant="outline"
+                    className="w-full cursor-pointer"
+                    onClick={handleViewFullDescription}
+                    disabled={loadingFullDescription}
+                  >
+                    {loadingFullDescription
+                      ? "Loading full description…"
+                      : "View full description"}
+                  </Button>
                 )}
               </div>
 
