@@ -56,6 +56,12 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: "Claude-User",
         allow: "/",
       },
+      // Fetches docs for coding-assistant tasks, not training — same
+      // user-driven-fetch category as Claude-User/ChatGPT-User.
+      {
+        userAgent: "Claude-Code",
+        allow: "/",
+      },
       {
         userAgent: "PerplexityBot",
         allow: "/",
