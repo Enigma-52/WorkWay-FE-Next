@@ -61,6 +61,11 @@ export async function generateMetadata({
     description,
     path: `/company/${companySlug}`,
     image: company.logo_url || "/logo.png",
+    // A company with zero open roles renders no domain-breakdown table
+    // (that's built from job counts) — just the static description, same
+    // thin-page shape as the >60-day job noindex in job/[jobSlug]/page.tsx.
+    // `follow: true` keeps the page's own links crawlable either way.
+    robots: count === 0 ? { index: false, follow: true } : undefined,
     keywords: [
       company.name,
       `${company.name} careers`,

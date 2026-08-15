@@ -327,8 +327,44 @@ related-job cards on job pages are now crawlable.
    and drop from the sitemap the same cycle; currently nothing marks a job
    closed until a human notices.
 4. Domain/skill hub pages share near-identical templated intro copy.
-5. A handful of internal duplicate postings exist in the raw sitemap
-   (same job title, different trailing numeric ID) — not yet deduped.
+5. **Repost churn from high-turnover employers, much bigger than previously
+   tracked here — flagging this as a major open item.** Not literal
+   duplicate rows (each has a distinct `job_id`/`url`, genuinely a separate
+   ATS posting), but functionally the same scaled-content problem: some
+   employers repost the identical role title, often for the same location,
+   over and over as positions turn over. Measured on prod (2026-08-14):
+   grouping active jobs by `(company_id, title)`, **52,843 groups have more
+   than one posting, totaling 160,758 "excess" rows** beyond one-per-group.
+   Ratio of `total_postings / distinct_titles` per company cleanly separates
+   the real signal from noise — e.g. Speechify (6,562 postings / 5,598
+   titles) and Anduril (5,564/3,574) are near 1:1, genuinely diverse hiring,
+   not a problem. The actual offenders repeat far more than their title
+   count would suggest: **Launch Potato 2,398/53 (45x), Hibu 3,512/47
+   (75x), Ouihelp 6,864/349 (20x), EquipmentShare 7,094/513 (14x), ACCEL
+   Schools 4,444/661 (7x)**. Sampled Hibu's "Outside Sales Representative"
+   (1,655 rows, all distinct real `job_id`s): the same city recurs multiple
+   times months apart (Albuquerque posted 2026-03-14, 04-04, 04-29, and
+   05-31) — this is the ingestion cron picking up each repost as a brand
+   new row and giving it a brand new indexable page, rather than recognizing
+   "this employer's role reopened" and updating something that already
+   exists.
+   **Proposed direction, not built**: the ingestion cron
+   (`dailyService.js`/`cronService.js`) should detect this pattern at
+   write time — same company + same/fuzzy-matched title (+ same location,
+   for the reopens-in-place case) — and either (a) append the new
+   location to an existing posting's location set instead of inserting a
+   new row, or (b) resurface/bump the existing matching row (refresh
+   `created_at`/`updated_at`, mark active again) instead of creating a
+   parallel one. Either way the goal is the same: stop every repost from
+   minting a new URL that goes straight into the sitemap and the index —
+   that's a much larger and more targeted cut to the scaled-content
+   footprint than the blunt age-based `noindex` (see job/[jobSlug]/page.tsx)
+   or the blanket 30k-recency sitemap cap, since it specifically removes
+   low-marginal-value repetition instead of uniformly cutting anything old.
+   Needs real design work before building: what counts as "same role" for
+   fuzzy title matching, and whether a same-location repost should merge
+   into the existing row or genuinely deserves its own (a role reopening
+   after 3 months arguably is new demand, not the same listing).
 6. **Strategic question, undecided**: RemoteYeah's total catalog (~19k URLs)
    is ~25x smaller than WorkWay's (~472k) and presents descriptions as a
    labeled fact sheet rather than narrative text. Worth deciding whether to
