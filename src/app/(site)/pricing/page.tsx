@@ -8,6 +8,13 @@ import PricingCards from "@/components/Pricing/PricingCards";
 import ProAlertsDetail from "@/components/Pricing/ProAlertsDetail";
 import Testimonials from "@/components/LandingPage/Testimonials";
 
+// No dynamic data fetching on this page, so Next's default full-route-cache
+// falls back to an effectively unbounded `s-maxage=31536000` — Cloudflare
+// then edge-caches that for a full year with no way to pick up new deploys
+// short of a manual purge. Pin a short bound instead so content changes
+// (pricing copy, testimonials) show up within minutes on their own.
+export const revalidate = 300;
+
 export const metadata: Metadata = buildPageMetadata({
   title: "Pricing — WorkWay",
   description:
