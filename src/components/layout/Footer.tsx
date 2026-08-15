@@ -1,6 +1,32 @@
 import Image from "next/image";
 import { Github, Linkedin } from "lucide-react";
 import Link from "next/link";
+import {
+  FOOTER_DOMAINS,
+  FOOTER_LOCATIONS,
+  FOOTER_ROLES,
+  FOOTER_SKILLS,
+  footerRoleHref,
+} from "@/data/footerLinks";
+
+const FOOTER_LINK_COLUMNS = [
+  {
+    title: "Jobs by Location",
+    links: FOOTER_LOCATIONS.map((l) => ({ name: `Jobs in ${l.name}`, href: `/jobs-in-${l.slug}` })),
+  },
+  {
+    title: "Jobs by Domain",
+    links: FOOTER_DOMAINS.map((d) => ({ name: `${d.name} Jobs`, href: `/domain/${d.slug}` })),
+  },
+  {
+    title: "Jobs by Skill",
+    links: FOOTER_SKILLS.map((s) => ({ name: `${s.name} Jobs`, href: `/skill/${s.slug}` })),
+  },
+  {
+    title: "Jobs by Role",
+    links: FOOTER_ROLES.map((r) => ({ name: `Remote ${r.name} Jobs`, href: footerRoleHref(r.slug) })),
+  },
+];
 
 const Footer = () => {
   return (
@@ -145,6 +171,28 @@ const Footer = () => {
           </div>
         </div>
       </div>
+      {/* Explore Jobs — curated SEO category links */}
+      <div className="border-t border-border/60">
+        <div className="max-w-6xl mx-auto px-6 py-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {FOOTER_LINK_COLUMNS.map((column) => (
+              <div key={column.title}>
+                <h3 className="mb-4 text-sm font-medium">{column.title}</h3>
+                <ul className="flex flex-col gap-3 text-sm text-muted-foreground">
+                  {column.links.map((link) => (
+                    <li key={link.href}>
+                      <Link href={link.href} className="transition-colors hover:text-foreground">
+                        {link.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* Featured On badges — auto-scrolling marquee */}
       <div className="border-t border-border/40 py-6 overflow-hidden">
         <p className="text-xs uppercase tracking-widest text-muted-foreground font-mono text-center mb-4">
