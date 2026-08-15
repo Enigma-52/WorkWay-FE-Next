@@ -42,23 +42,11 @@ export default function robots(): MetadataRoute.Robots {
         disallow: "/",
       },
       {
-        userAgent: "MetaBot",
-        disallow: "/",
-      },
-      {
-        userAgent: "AhrefsSiteAudit",
-        disallow: "/",
-      },
-      {
         userAgent: "Bytespider",
         disallow: "/",
       },
       {
         userAgent: "Meta-ExternalAgent",
-        disallow: "/",
-      },
-      {
-        userAgent: "AhrefsBot",
         disallow: "/",
       },
       {
