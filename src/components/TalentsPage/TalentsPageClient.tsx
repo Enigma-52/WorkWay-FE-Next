@@ -141,15 +141,15 @@ export default function TalentsPageClient({ data }: Props) {
       <main className="container mx-auto py-8 md:py-12">
         <div className="space-y-6">
           {/* Filter bar */}
-          <div className="space-y-4">
-            <div className="flex flex-wrap items-center gap-3">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="space-y-5 md:space-y-4">
+            <div className="flex flex-wrap items-center gap-y-4 gap-x-3 md:gap-y-3">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground w-full md:w-auto">
                 <SlidersHorizontal className="h-4 w-4" />
                 <span className="font-mono tracking-wide">Filters</span>
               </div>
 
               <Select value={category} onValueChange={setFilter("category")}>
-                <SelectTrigger className="w-[190px] bg-secondary border-border rounded-lg" aria-label="Filter by job title">
+                <SelectTrigger className="w-full md:w-[190px] bg-secondary border-border rounded-lg" aria-label="Filter by job title">
                   <SelectValue placeholder="Job titles" />
                 </SelectTrigger>
                 <SelectContent>
@@ -163,7 +163,7 @@ export default function TalentsPageClient({ data }: Props) {
               </Select>
 
               <Select value={skills} onValueChange={setFilter("skills")}>
-                <SelectTrigger className="w-[160px] bg-secondary border-border rounded-lg" aria-label="Filter by skill">
+                <SelectTrigger className="w-full md:w-[160px] bg-secondary border-border rounded-lg" aria-label="Filter by skill">
                   <SelectValue placeholder="Skills" />
                 </SelectTrigger>
                 <SelectContent>
@@ -177,7 +177,7 @@ export default function TalentsPageClient({ data }: Props) {
               </Select>
 
               <Select value={languages} onValueChange={setFilter("languages")}>
-                <SelectTrigger className="w-[160px] bg-secondary border-border rounded-lg" aria-label="Filter by language">
+                <SelectTrigger className="w-full md:w-[160px] bg-secondary border-border rounded-lg" aria-label="Filter by language">
                   <SelectValue placeholder="Languages" />
                 </SelectTrigger>
                 <SelectContent>
@@ -191,7 +191,7 @@ export default function TalentsPageClient({ data }: Props) {
               </Select>
 
               <Select value={experienceLevel} onValueChange={setFilter("experience_level")}>
-                <SelectTrigger className="w-[150px] bg-secondary border-border rounded-lg" aria-label="Filter by experience level">
+                <SelectTrigger className="w-full md:w-[150px] bg-secondary border-border rounded-lg" aria-label="Filter by experience level">
                   <SelectValue placeholder="Experience" />
                 </SelectTrigger>
                 <SelectContent>
@@ -205,7 +205,7 @@ export default function TalentsPageClient({ data }: Props) {
               </Select>
 
               <Select value={availabilityStatus} onValueChange={setFilter("availability_status")}>
-                <SelectTrigger className="w-[170px] bg-secondary border-border rounded-lg" aria-label="Filter by availability">
+                <SelectTrigger className="w-full md:w-[170px] bg-secondary border-border rounded-lg" aria-label="Filter by availability">
                   <SelectValue placeholder="Availability" />
                 </SelectTrigger>
                 <SelectContent>
@@ -218,7 +218,7 @@ export default function TalentsPageClient({ data }: Props) {
                 </SelectContent>
               </Select>
 
-              <div className="relative flex-1 min-w-[140px] max-w-[200px]">
+              <div className="relative w-full md:flex-1 md:w-auto md:min-w-[140px] md:max-w-[200px]">
                 <Input
                   placeholder="Location"
                   value={draftCountry}
@@ -228,7 +228,7 @@ export default function TalentsPageClient({ data }: Props) {
                 />
               </div>
 
-              <Button size="sm" onClick={handleSearch} className="font-mono">
+              <Button size="sm" onClick={handleSearch} className="font-mono w-full md:w-auto">
                 <Search className="mr-1.5 h-3.5 w-3.5" />
                 Search
               </Button>
@@ -238,7 +238,7 @@ export default function TalentsPageClient({ data }: Props) {
                   variant="ghost"
                   size="sm"
                   onClick={clearFilters}
-                  className="text-muted-foreground hover:text-foreground font-mono"
+                  className="text-muted-foreground hover:text-foreground font-mono w-full md:w-auto"
                 >
                   <X className="mr-1 h-3.5 w-3.5" />
                   Clear ({activeFiltersCount})
@@ -246,7 +246,7 @@ export default function TalentsPageClient({ data }: Props) {
               )}
 
               <Select value={sort} onValueChange={setFilter("sort")}>
-                <SelectTrigger className="ml-auto w-[160px] bg-secondary border-border rounded-lg" aria-label="Sort by">
+                <SelectTrigger className="w-full md:ml-auto md:w-[160px] bg-secondary border-border rounded-lg" aria-label="Sort by">
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
                 <SelectContent>

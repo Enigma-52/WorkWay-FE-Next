@@ -154,11 +154,11 @@ export default function LocationOnlyPageClient({ data, location }: Props) {
           {/* Center — filters + job list */}
           <div className="min-w-0 space-y-6">
             {/* Role + Location selectors */}
-            <div className="space-y-4">
-              <div className="flex flex-wrap items-center gap-3">
+            <div className="space-y-5 md:space-y-4">
+              <div className="flex flex-wrap items-center gap-y-4 gap-x-3 md:gap-y-3">
                 {/* Role selector — "All roles" is the default for location-only pages */}
                 <Select value="all" onValueChange={handleRoleChange}>
-                  <SelectTrigger className="w-[220px] bg-secondary border-border rounded-lg">
+                  <SelectTrigger className="w-full md:w-[220px] bg-secondary border-border rounded-lg">
                     <SelectValue placeholder="All roles" />
                   </SelectTrigger>
                   <SelectContent>
@@ -173,7 +173,7 @@ export default function LocationOnlyPageClient({ data, location }: Props) {
 
                 {/* Location selector */}
                 <Select value={location.slug} onValueChange={handleLocationChange}>
-                  <SelectTrigger className="w-[180px] bg-secondary border-border rounded-lg">
+                  <SelectTrigger className="w-full md:w-[180px] bg-secondary border-border rounded-lg">
                     <MapPin className="h-4 w-4 text-muted-foreground mr-1" />
                     <SelectValue placeholder="Location" />
                   </SelectTrigger>
@@ -188,14 +188,14 @@ export default function LocationOnlyPageClient({ data, location }: Props) {
               </div>
 
               {/* Secondary filters */}
-              <div className="flex flex-wrap items-center gap-3">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <div className="flex flex-wrap items-center gap-y-4 gap-x-3 md:gap-y-3">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground w-full md:w-auto">
                   <SlidersHorizontal className="h-4 w-4" />
                   <span className="font-mono tracking-wide">Filters</span>
                 </div>
 
                 <Select value={domain || "all"} onValueChange={handleFilterChange("domain")}>
-                  <SelectTrigger className="w-[180px] bg-secondary border-border rounded-lg">
+                  <SelectTrigger className="w-full md:w-[180px] bg-secondary border-border rounded-lg">
                     <SelectValue placeholder="Domain" />
                   </SelectTrigger>
                   <SelectContent>
@@ -209,7 +209,7 @@ export default function LocationOnlyPageClient({ data, location }: Props) {
                 </Select>
 
                 <Select value={experienceLevel || "all"} onValueChange={handleFilterChange("experience_level")}>
-                  <SelectTrigger className="w-[160px] bg-secondary border-border rounded-lg">
+                  <SelectTrigger className="w-full md:w-[160px] bg-secondary border-border rounded-lg">
                     <SelectValue placeholder="Experience" />
                   </SelectTrigger>
                   <SelectContent>
@@ -223,7 +223,7 @@ export default function LocationOnlyPageClient({ data, location }: Props) {
                 </Select>
 
                 <Select value={employmentType || "all"} onValueChange={handleFilterChange("employment_type")}>
-                  <SelectTrigger className="w-[140px] bg-secondary border-border rounded-lg">
+                  <SelectTrigger className="w-full md:w-[140px] bg-secondary border-border rounded-lg">
                     <SelectValue placeholder="Type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -241,7 +241,7 @@ export default function LocationOnlyPageClient({ data, location }: Props) {
                     variant="ghost"
                     size="sm"
                     onClick={clearFilters}
-                    className="text-muted-foreground hover:text-foreground font-mono"
+                    className="text-muted-foreground hover:text-foreground font-mono w-full md:w-auto"
                   >
                     <X className="mr-1 h-3.5 w-3.5" />
                     Clear ({activeFiltersCount})

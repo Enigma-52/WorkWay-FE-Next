@@ -43,7 +43,7 @@ export function CountryCombobox({ value, onChange }: CountryComboboxProps) {
   }
 
   return (
-    <div ref={containerRef} className="relative min-w-[160px] max-w-[220px] flex-1">
+    <div ref={containerRef} className="relative w-full md:flex-1 md:w-auto md:min-w-[160px] md:max-w-[220px]">
       <Globe className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
       <input
         type="text"

@@ -2,15 +2,26 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { ArrowRight, LogOut } from "lucide-react";
+import { ArrowRight, LogOut, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import AuthModal from "@/components/common/AuthModal";
 
+const NAV_LINKS = [
+  { href: "/", label: "Home" },
+  { href: "/talents", label: "Talents" },
+  { href: "/jobs", label: "Jobs" },
+  { href: "/companies", label: "Companies" },
+  { href: "/domains", label: "Domains" },
+  { href: "/skills", label: "Skills" },
+  { href: "/pricing", label: "Pricing" },
+];
+
 const Navbar = () => {
   const { data: session, status } = useSession();
   const [authOpen, setAuthOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur-sm">
@@ -25,14 +36,23 @@ const Navbar = () => {
 
         {/* Links */}
         <nav className="hidden md:flex items-center gap-6">
-          <a href="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Home</a>
-          <a href="/talents" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Talents</a>
-          <a href="/jobs" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Jobs</a>
-          <a href="/companies" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Companies</a>
-          <a href="/domains" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Domains</a>
-          <a href="/skills" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Skills</a>
-          <a href="/pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Pricing</a>
+          {NAV_LINKS.map(({ href, label }) => (
+            <a key={href} href={href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              {label}
+            </a>
+          ))}
         </nav>
+
+        {/* Mobile menu toggle */}
+        <button
+          type="button"
+          className="md:hidden inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:text-foreground order-3"
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={mobileMenuOpen}
+          onClick={() => setMobileMenuOpen((v) => !v)}
+        >
+          {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        </button>
 
         {/* CTA */}
         {status === "loading" ? (
@@ -64,6 +84,21 @@ const Navbar = () => {
           </>
         )}
       </div>
+
+      {mobileMenuOpen && (
+        <nav className="md:hidden border-t bg-background px-6 py-3 flex flex-col gap-1">
+          {NAV_LINKS.map(({ href, label }) => (
+            <a
+              key={href}
+              href={href}
+              className="py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              {label}
+            </a>
+          ))}
+        </nav>
+      )}
     </header>
   );
 };

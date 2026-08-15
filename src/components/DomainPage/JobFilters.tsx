@@ -75,7 +75,7 @@ export function JobFilters({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5 md:space-y-4">
       {/* Search bar */}
       <div className="relative">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -97,14 +97,14 @@ export function JobFilters({
       </div>
 
       {/* Filter row */}
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+      <div className="flex flex-wrap items-center gap-y-4 gap-x-3 md:gap-y-3">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground w-full md:w-auto">
           <SlidersHorizontal className="h-4 w-4" />
           <span className="font-mono">Filters</span>
         </div>
 
         <Select value={draftExperience} onValueChange={setDraftExperience}>
-          <SelectTrigger className="w-[160px] bg-secondary border-border">
+          <SelectTrigger className="w-full md:w-[160px] bg-secondary border-border">
             <SelectValue placeholder="Experience" />
           </SelectTrigger>
           <SelectContent>
@@ -118,7 +118,7 @@ export function JobFilters({
         </Select>
 
         <Select value={draftEmployment} onValueChange={setDraftEmployment}>
-          <SelectTrigger className="w-[140px] bg-secondary border-border">
+          <SelectTrigger className="w-full md:w-[140px] bg-secondary border-border">
             <SelectValue placeholder="Type" />
           </SelectTrigger>
           <SelectContent>
@@ -131,18 +131,18 @@ export function JobFilters({
           </SelectContent>
         </Select>
 
-        <div className="relative">
+        <div className="relative w-full md:w-auto">
           <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
           <Input
             placeholder="Location (e.g. Remote)"
             value={draftLocation === "all" ? "" : draftLocation}
             onChange={(e) => setDraftLocation(e.target.value || "all")}
             onKeyDown={handleKeyDown}
-            className="pl-10 w-[200px] bg-secondary border-border focus:border-primary focus:ring-primary/20"
+            className="pl-10 w-full md:w-[200px] bg-secondary border-border focus:border-primary focus:ring-primary/20"
           />
         </div>
 
-        <Button size="sm" onClick={handleApply} className="font-mono">
+        <Button size="sm" onClick={handleApply} className="font-mono w-full md:w-auto">
           <Search className="mr-1.5 h-3.5 w-3.5" />
           Search
         </Button>
@@ -152,7 +152,7 @@ export function JobFilters({
             variant="ghost"
             size="sm"
             onClick={onClearFilters}
-            className="text-muted-foreground hover:text-foreground"
+            className="text-muted-foreground hover:text-foreground w-full md:w-auto"
           >
             <X className="mr-1 h-3 w-3" />
             Clear ({activeFiltersCount})

@@ -46,9 +46,9 @@ export function JobFilters({
   const hasFilters = searchQuery || selectedLocation !== "all" || selectedExperience !== "all";
 
   return (
-    <div className="flex flex-wrap gap-3 items-center">
+    <div className="flex flex-wrap gap-y-4 gap-x-3 md:gap-y-3 items-center">
       {/* Search */}
-      <div className="relative flex-1 min-w-[200px]">
+      <div className="relative w-full md:flex-1 md:w-auto md:min-w-[200px]">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <Input
           placeholder="Search roles..."
@@ -61,7 +61,7 @@ export function JobFilters({
 
       {/* Location Filter */}
       <Select value={draftLocation} onValueChange={setDraftLocation}>
-        <SelectTrigger className="w-[180px] bg-secondary border-border" aria-label="Filter by location">
+        <SelectTrigger className="w-full md:w-[180px] bg-secondary border-border" aria-label="Filter by location">
           <SelectValue placeholder="Location" />
         </SelectTrigger>
         <SelectContent className="bg-card border-border">
@@ -76,7 +76,7 @@ export function JobFilters({
 
       {/* Experience Filter */}
       <Select value={draftExperience} onValueChange={setDraftExperience}>
-        <SelectTrigger className="w-[160px] bg-secondary border-border" aria-label="Filter by experience level">
+        <SelectTrigger className="w-full md:w-[160px] bg-secondary border-border" aria-label="Filter by experience level">
           <SelectValue placeholder="Experience" />
         </SelectTrigger>
         <SelectContent className="bg-card border-border">
@@ -89,7 +89,7 @@ export function JobFilters({
         </SelectContent>
       </Select>
 
-      <Button size="sm" onClick={handleApply} className="font-mono">
+      <Button size="sm" onClick={handleApply} className="font-mono w-full md:w-auto">
         <Search className="mr-1.5 w-3.5 h-3.5" />
         Search
       </Button>
@@ -100,7 +100,7 @@ export function JobFilters({
           variant="ghost"
           size="sm"
           onClick={onReset}
-          className="text-muted-foreground hover:text-foreground"
+          className="text-muted-foreground hover:text-foreground w-full md:w-auto"
         >
           <X className="w-4 h-4 mr-1" />
           Clear

@@ -117,7 +117,7 @@ export function JobsListFilters({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5 md:space-y-4">
       <div className="relative">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
@@ -139,14 +139,14 @@ export function JobsListFilters({
         )}
       </div>
 
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+      <div className="flex flex-wrap items-center gap-y-4 gap-x-3 md:gap-y-3">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground w-full md:w-auto">
           <SlidersHorizontal className="h-4 w-4" />
           <span className="font-mono tracking-wide">Filters</span>
         </div>
 
         <Select value={draftDomain} onValueChange={setDraftDomain}>
-          <SelectTrigger className="w-[180px] bg-secondary border-border rounded-lg" aria-label="Filter by domain">
+          <SelectTrigger className="w-full md:w-[180px] bg-secondary border-border rounded-lg" aria-label="Filter by domain">
             <SelectValue placeholder="Domain" />
           </SelectTrigger>
           <SelectContent>
@@ -160,7 +160,7 @@ export function JobsListFilters({
         </Select>
 
         <Select value={draftExperienceLevel} onValueChange={setDraftExperienceLevel}>
-          <SelectTrigger className="w-[160px] bg-secondary border-border rounded-lg" aria-label="Filter by experience level">
+          <SelectTrigger className="w-full md:w-[160px] bg-secondary border-border rounded-lg" aria-label="Filter by experience level">
             <SelectValue placeholder="Experience" />
           </SelectTrigger>
           <SelectContent>
@@ -174,7 +174,7 @@ export function JobsListFilters({
         </Select>
 
         <Select value={draftEmploymentType} onValueChange={setDraftEmploymentType}>
-          <SelectTrigger className="w-[140px] bg-secondary border-border rounded-lg" aria-label="Filter by employment type">
+          <SelectTrigger className="w-full md:w-[140px] bg-secondary border-border rounded-lg" aria-label="Filter by employment type">
             <SelectValue placeholder="Type" />
           </SelectTrigger>
           <SelectContent>
@@ -187,7 +187,7 @@ export function JobsListFilters({
           </SelectContent>
         </Select>
 
-        <div className="relative flex-1 min-w-[160px] max-w-[220px]">
+        <div className="relative w-full md:flex-1 md:w-auto md:min-w-[160px] md:max-w-[220px]">
           <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
           <Input
             placeholder="Location (e.g. Remote)"
@@ -201,7 +201,7 @@ export function JobsListFilters({
         <CountryCombobox value={country} onChange={handleCountryChange} />
 
         <Select value={draftPosted} onValueChange={setDraftPosted}>
-          <SelectTrigger className="w-[160px] bg-secondary border-border rounded-lg" aria-label="Filter by date posted">
+          <SelectTrigger className="w-full md:w-[160px] bg-secondary border-border rounded-lg" aria-label="Filter by date posted">
             <Clock className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
             <SelectValue placeholder="Date posted" />
           </SelectTrigger>
@@ -218,7 +218,7 @@ export function JobsListFilters({
         <Button
           size="sm"
           onClick={handleApply}
-          className="font-mono"
+          className="font-mono w-full md:w-auto"
         >
           <Search className="mr-1.5 h-3.5 w-3.5" />
           Search
@@ -229,7 +229,7 @@ export function JobsListFilters({
             variant="ghost"
             size="sm"
             onClick={onClear}
-            className="text-muted-foreground hover:text-foreground font-mono"
+            className="text-muted-foreground hover:text-foreground font-mono w-full md:w-auto"
           >
             <X className="mr-1 h-3.5 w-3.5" />
             Clear ({activeCount})
