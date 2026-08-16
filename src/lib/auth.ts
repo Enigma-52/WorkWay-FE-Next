@@ -31,7 +31,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             name: u.display_name ?? u.email.split("@")[0],
             image: u.avatar_url ?? null,
             dbId: String(u.id),
-            roles: u.roles ?? [],
+            roles: u.roles ?? ["seeker"],
             displayName: u.display_name ?? "",
             planKey: u.plan_key ?? "free",
             isNewUser: !!u.is_new,
@@ -74,16 +74,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             const data = await res.json();
             if (data.user) {
               token.dbId = data.user.id;
-              token.roles = data.user.roles ?? [];
+              token.roles = data.user.roles ?? ["seeker"];
               token.displayName = data.user.display_name ?? user.name ?? "";
               token.planKey = data.user.plan_key ?? "free";
               token.isNewUser = !!data.user.is_new;
             }
           }
         } catch {
-          // backend unreachable — allow sign-in, roles will be empty
+          // backend unreachable — allow sign-in, default to seeker
         }
-        if (!token.roles) token.roles = [];
+        if (!token.roles) token.roles = ["seeker"];
         if (!token.displayName) token.displayName = user.name ?? "";
         if (!token.planKey) token.planKey = "free";
         token.authProvider = "google";
@@ -92,7 +92,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       // On magic-link sign-in — Credentials authorize() already populated these fields
       if (account?.provider === "magic-link" && user) {
         token.dbId = (user as any).dbId ?? "";
-        token.roles = (user as any).roles ?? [];
+        token.roles = (user as any).roles ?? ["seeker"];
         token.displayName = (user as any).displayName ?? user.name ?? "";
         token.planKey = (user as any).planKey ?? "free";
         token.isNewUser = !!(user as any).isNewUser;
@@ -103,7 +103,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
     async session({ session, token }) {
       session.user.dbId = (token.dbId as string) ?? "";
-      session.user.roles = (token.roles as string[]) ?? [];
+      session.user.roles = (token.roles as string[]) ?? ["seeker"];
       session.user.displayName = (token.displayName as string) ?? session.user.name ?? "";
       session.user.planKey = (token.planKey as string) ?? "free";
       session.user.isNewUser = !!token.isNewUser;
