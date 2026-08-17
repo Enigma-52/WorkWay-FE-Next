@@ -1,6 +1,15 @@
 import type { MetadataRoute } from "next";
 import { getSiteUrl } from "@/lib/seo/metadata";
 
+// robots.txt is hit by every crawler on essentially every visit, including
+// Google before it's willing to crawl anything else on the domain — if it
+// can't be fetched, Google backs off crawling broadly rather than skipping
+// one page. The content changes rarely, so serve it from Cloudflare's edge
+// cache instead of hitting origin on every single fetch (previously
+// `Cache-Control: max-age=0, must-revalidate` — zero cushion against any
+// transient origin blip).
+export const revalidate = 3600;
+
 export default function robots(): MetadataRoute.Robots {
   const siteUrl = getSiteUrl();
   return {
