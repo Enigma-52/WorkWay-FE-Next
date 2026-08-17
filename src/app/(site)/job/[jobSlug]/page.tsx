@@ -10,32 +10,6 @@ import { buildPageMetadata } from "@/lib/seo/metadata";
 import type { JobDetails, JobInsights, SalaryInsightRow } from "@/types/jobs";
 import type { CompanyListResponse } from "@/lib/api/contracts";
 
-// Minimum chars of real content the visible excerpt should carry before
-// cutting off remaining sections — a fixed "first section" cutoff can leave
-// almost nothing visible (some sections are just a location line, see
-// job/[jobSlug] discussion in FEATURES.md), so this accumulates whole
-// sections until the threshold is met rather than trusting section
-// boundaries alone.
-const DESCRIPTION_PREVIEW_MIN_CHARS = 250;
-
-function buildDescriptionPreview(
-  description: JobDetails["description"],
-): { preview: JobDetails["description"]; hasMore: boolean } {
-  if (!Array.isArray(description) || description.length === 0) {
-    return { preview: description, hasMore: false };
-  }
-
-  const preview: typeof description = [];
-  let charCount = 0;
-  for (const section of description) {
-    preview.push(section);
-    charCount += (section.content || []).join(" ").length;
-    if (charCount >= DESCRIPTION_PREVIEW_MIN_CHARS) break;
-  }
-
-  return { preview, hasMore: preview.length < description.length };
-}
-
 type SalaryInsightsResponse = {
   by_domain: { domain: string; avg_salary: number; count: number }[];
   by_experience_level: { level: string; avg_salary: number; count: number }[];
@@ -133,18 +107,6 @@ export default async function JobPage({ params }: JobPageProps) {
   const breadcrumbs = buildJobDetailBreadcrumb(job.title);
   const insights = await fetchJobInsights(job);
 
-  // Only an excerpt of the description ships in the initial HTML/RSC
-  // payload — JobPageClient fetches the rest client-side on "View full
-  // description" so the full verbatim ATS text isn't part of what
-  // Googlebot's default render sees. JSON-LD above still uses the full
-  // `job` object (buildJobPostingJsonLd already caps at 2000 chars on its
-  // own, unrelated to this).
-  const { preview: descriptionPreview, hasMore: hasMoreDescription } =
-    buildDescriptionPreview(job.description);
-  const previewJob = hasMoreDescription
-    ? { ...job, description: descriptionPreview }
-    : job;
-
   return (
     <>
       <JsonLd data={buildJobPostingJsonLd(job)} />
@@ -154,11 +116,7 @@ export default async function JobPage({ params }: JobPageProps) {
           <Breadcrumbs items={breadcrumbs} />
         </div>
       </div>
-      <JobPageClient
-        job={previewJob}
-        insights={insights}
-        hasMoreDescription={hasMoreDescription}
-      />
+      <JobPageClient job={job} insights={insights} />
     </>
   );
 }
