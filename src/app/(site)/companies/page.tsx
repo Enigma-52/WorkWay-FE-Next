@@ -11,13 +11,6 @@ import { buildCompaniesBreadcrumb } from "@/lib/seo/breadcrumbs";
 import { buildBreadcrumbJsonLd } from "@/lib/seo/jsonld";
 import JsonLd from "@/components/seo/JsonLd";
 
-export const metadata: Metadata = buildPageMetadata({
-  title: "Browse Companies Hiring on WorkWay — Find Top Employers & Open Jobs",
-  description:
-    "Explore thousands of companies hiring across startups and tech firms. Browse company profiles, open roles, teams, and hiring details on WorkWay.",
-  path: "/companies",
-});
-
 type CompaniesPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
@@ -28,6 +21,32 @@ function getSingleParam(
 ): string {
   if (!value) return fallback;
   return Array.isArray(value) ? value[0] || fallback : value;
+}
+
+// Plain pagination (?page=N, nothing else) is a real, distinct, crawlable
+// listing — each page should canonicalize to itself so Google indexes the
+// full sequence rather than folding every page's links into page 1. Any
+// other filter (q/letter/hiring) produces near-infinite low-value
+// combinations, so those collapse to the bare /companies canonical instead.
+export async function generateMetadata({
+  searchParams,
+}: CompaniesPageProps): Promise<Metadata> {
+  const sp = await searchParams;
+  const q = getSingleParam(sp.q, "");
+  const page = getSingleParam(sp.page, "1");
+  const letter = getSingleParam(sp.letter, "ALL");
+  const hiring = getSingleParam(sp.hiring, "false");
+
+  const isPlainPagination = !q && letter === "ALL" && hiring === "false";
+  const path =
+    isPlainPagination && page !== "1" ? `/companies?page=${page}` : "/companies";
+
+  return buildPageMetadata({
+    title: "Browse Companies Hiring on WorkWay — Find Top Employers & Open Jobs",
+    description:
+      "Explore thousands of companies hiring across startups and tech firms. Browse company profiles, open roles, teams, and hiring details on WorkWay.",
+    path,
+  });
 }
 
 export default async function CompaniesPage({ searchParams }: CompaniesPageProps) {
