@@ -94,16 +94,6 @@ export default function RootLayout({
             up front — an early preconnect would compete with critical
             requests for a connection opened seconds later. */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-        <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
-        {/* Google's literal AdSense snippet, unconditional, plain <script> (not
-            next/script) so it's guaranteed to render into the server HTML with
-            no strategy/hydration behavior to second-guess. Verification needs
-            to find this synchronously in every page's <head>. */}
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4936731849151313"
-          crossOrigin="anonymous"
-        />
       </head>
       <body className={`${geist.variable} ${geistMono.variable} ${instrumentSerif.variable}`}>
         <JsonLd data={buildSiteOrganizationJsonLd()} />
