@@ -192,6 +192,119 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
   },
+  {
+    slug: "finding-remote-software-engineering-jobs",
+    title: "Finding Remote Software Engineering Jobs That Are Actually Open",
+    description:
+      "Remote listings go stale faster than on-site ones and get flooded with applicants the moment they're posted. Here's how to actually find current, open remote engineering roles instead of a wall of dead links.",
+    keywords: [
+      "remote software engineering jobs",
+      "remote developer jobs",
+      "find remote tech jobs",
+      "remote engineering roles",
+      "work from home software jobs",
+    ],
+    publishedAt: "2026-08-19",
+    updatedAt: "2026-08-19",
+    author: "WorkWay Team",
+    intro:
+      "Remote roles behave differently from on-site roles in ways that matter for how you search for them. A remote posting is visible and applicable from anywhere in the world, which means it draws a larger applicant pool relative to an equivalent on-site role in a single city, and it also tends to get filled and taken down faster once a strong candidate pool has come in. Both of those facts push in the same direction: the cost of applying to a stale remote listing is higher than for an on-site one, because you're competing against a global pool for a role that may already be closed.",
+    sections: [
+      {
+        heading: "Why remote listings go stale faster",
+        paragraphs: [
+          "An on-site role posted for a specific office has a naturally bounded applicant pool — people who live in or are willing to relocate to that city — which slows down how quickly a hiring manager accumulates enough strong applicants to close the search. A remote role has no such geographic bound, so the same posting can accumulate a comparable applicant pool in a fraction of the time. This is part of why remote postings that circulate for months on general job boards are disproportionately likely to be either genuinely difficult, narrowly-scoped searches or postings the company simply forgot to take down — the ordinary case of a well-defined mid-level remote role usually doesn't stay open nearly that long.",
+          "The practical takeaway is that recency matters more for remote roles than for on-site ones when you're deciding where to spend your limited application time. A remote posting that went up in the last few days is a meaningfully stronger signal of \"this is actually still being actively worked\" than the same posting age would be for an on-site role in a smaller market.",
+        ],
+      },
+      {
+        heading: "The specific problem with remote listings on general job boards",
+        paragraphs: [
+          "General job boards typically re-index listings on their own schedule rather than pulling live from the company's own career page, which means the gap between a remote role actually closing and that closure showing up on a third-party board can run into weeks. Because remote roles close faster than on-site ones on average, this indexing lag disproportionately hurts remote job seekers specifically — you're more likely to click through to a remote listing that's already gone than an equivalent on-site one, purely because of how much faster the underlying posting turned over in the time since the board last refreshed it.",
+          "WorkWay pulls job data directly from Greenhouse, Lever, and Ashby on a daily cycle, which narrows that gap considerably for remote roles specifically, since a listing that comes down on the company's own career page also disappears from WorkWay within the same refresh cycle rather than lingering for weeks on a stale index.",
+        ],
+      },
+      {
+        heading: "What to actually filter for",
+        paragraphs: [
+          "\"Remote\" as a label covers a wide range of actual arrangements — fully distributed teams with no location restriction at all, teams that require you to be within a specific country for tax and legal reasons, and teams that are only remote-friendly within commuting distance of a hub city for occasional in-person meetings. Reading the actual location field on a posting rather than just the word \"remote\" in the title avoids the common frustration of applying to a role that turns out to require, for example, US work authorization or residency in a specific country you don't live in. Filtering by domain in addition to remote status also matters more here than for on-site search, since a broad \"remote jobs\" search returns a mix of engineering, sales, support, and design roles that a location-only search for a single city wouldn't.",
+        ],
+      },
+    ],
+    relatedLinks: [
+      { label: "Browse remote-friendly software engineer roles", href: "/software-engineer-jobs-in-remote" },
+      { label: "Browse backend engineering jobs", href: "/domain/backend" },
+      { label: "How ATS systems handle your application", href: "/blog/how-ats-systems-actually-work" },
+    ],
+    faq: [
+      {
+        question: "Are all remote job postings actually fully remote?",
+        answer:
+          "No — \"remote\" can mean fully distributed, remote within a specific country, or remote within commuting distance of a hub office. Always check the actual location requirement on the posting itself, not just the word in the title.",
+      },
+      {
+        question: "Should I apply to older remote postings?",
+        answer:
+          "It's not disqualifying, but recency matters more for remote roles than on-site ones, since remote postings tend to accumulate a large applicant pool and close faster. Prioritize your time toward recently posted remote roles when you have to choose.",
+      },
+    ],
+  },
+  {
+    slug: "contract-vs-full-time-tech-roles",
+    title: "Contract vs Full-Time Tech Roles: What Actually Changes",
+    description:
+      "Contract and full-time postings for the same kind of engineering work can look nearly identical on the surface. Here's what actually differs in scope, pace, and what companies are looking for in each.",
+    keywords: [
+      "contract vs full time jobs",
+      "contract engineering roles",
+      "should i take a contract job",
+      "freelance vs full time developer",
+      "contract to hire tech jobs",
+    ],
+    publishedAt: "2026-08-19",
+    updatedAt: "2026-08-19",
+    author: "WorkWay Team",
+    intro:
+      "A contract engineering posting and a full-time posting for the same kind of role often use nearly identical language for the actual day-to-day work — same tech stack, same seniority level, sometimes even the same team. What differs isn't usually the work itself, but the scope of what a company is hiring for and how quickly they need someone productive, and understanding that difference changes both how you should read a contract posting and how you should present yourself if you apply to one.",
+    sections: [
+      {
+        heading: "Why companies open a contract role instead of a full-time one",
+        paragraphs: [
+          "A contract opening most often signals one of three things: a fixed-scope project with a known end date that doesn't justify a permanent headcount, a hiring freeze on full-time seats that still leaves room for contractor budget, or a \"contract-to-hire\" arrangement where the company wants to evaluate fit before committing to a permanent offer. Each of these has a different implication for you as a candidate — a fixed-scope project wants someone who can ramp up fast and deliver against a specific, often narrower task list; a hiring-freeze contract role often does the same work as a full-time seat but without the same job security; and a contract-to-hire role is worth treating as an extended interview, since performance during the contract period usually determines whether a full-time offer follows.",
+          "This is worth reading directly from the posting or asking about directly in a screening call, because the three cases call for different things from you as a candidate. A fixed-scope contract rewards someone who can be productive from day one with minimal ramp-up, which is worth emphasizing if you have direct, closely-matching experience with the exact stack or problem domain named in the posting. A contract-to-hire role rewards the same signals a full-time application would, since it's effectively a full-time search with an extra evaluation step in front of it.",
+        ],
+      },
+      {
+        heading: "What genuinely changes about the day-to-day work",
+        paragraphs: [
+          "Contract engineers are more often brought in against a specific, scoped deliverable rather than an open-ended set of team responsibilities, which in practice means less time spent in the kind of cross-team coordination and long-range planning that full-time engineers on the same team are doing, and more time spent heads-down on the specific thing the contract was opened for. This isn't universal — a contract-to-hire role especially tends to blur back toward normal full-time responsibilities fairly quickly — but it's a real and common enough pattern that it's worth asking directly what the actual scope of work looks like day to day before accepting a contract offer, since the answer varies more between individual roles than the posting title alone tells you.",
+        ],
+      },
+      {
+        heading: "Finding contract roles that are actually current",
+        paragraphs: [
+          "Contract postings are tagged by employment type directly on the ATS a company uses — Greenhouse, Lever, or Ashby — the same way full-time and part-time roles are, and WorkWay's contract jobs page pulls specifically from that tag rather than trying to infer contract status from posting text, which avoids the false positives that come from a full-time posting merely mentioning contract work is negotiable somewhere in its description.",
+        ],
+      },
+    ],
+    relatedLinks: [
+      { label: "Browse open contract roles", href: "/contract-jobs" },
+      { label: "Browse senior-level roles", href: "/senior-jobs" },
+      { label: "How ATS systems handle your application", href: "/blog/how-ats-systems-actually-work" },
+    ],
+    faq: [
+      {
+        question: "Is a contract-to-hire role worth taking over a full-time offer?",
+        answer:
+          "It depends on what other offers are available, but a contract-to-hire role is worth treating as a real hiring process with an extended evaluation window, not a lesser opportunity — performance during the contract period is usually the deciding factor for a full-time offer afterward.",
+      },
+      {
+        question: "Do contract roles pay differently than full-time roles for the same work?",
+        answer:
+          "Compensation structures for contract work commonly differ from full-time salary and benefits packages, and the specifics vary by company and contract type — it's worth clarifying the full compensation structure, including any benefits gap, directly with the recruiter before accepting.",
+      },
+    ],
+  },
 ];
 
 export const ALL_BLOG_SLUGS: string[] = BLOG_POSTS.map((p) => p.slug);
