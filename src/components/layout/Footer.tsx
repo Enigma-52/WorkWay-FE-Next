@@ -76,6 +76,30 @@ const Footer = () => {
                 Browse Companies
               </a>
               <a
+                href="/internships"
+                className="transition-colors hover:text-foreground"
+              >
+                Internships
+              </a>
+              <a
+                href="/senior-jobs"
+                className="transition-colors hover:text-foreground"
+              >
+                Senior Jobs
+              </a>
+              <a
+                href="/blog"
+                className="transition-colors hover:text-foreground"
+              >
+                Blog
+              </a>
+              <a
+                href="/tools/ats-finder"
+                className="transition-colors hover:text-foreground"
+              >
+                ATS Finder
+              </a>
+              <a
                 href="/changelog"
                 className="transition-colors hover:text-foreground"
               >
