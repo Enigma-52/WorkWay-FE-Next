@@ -8,6 +8,7 @@ import { JobPagination } from "@/components/DomainPage/JobPagination";
 import { JobsFacetsSidebar } from "@/components/JobsPage/JobsFacetsSidebar";
 import JobViewFeed from "@/components/JobViewFeed/JobViewFeed";
 import CategoryFaq from "@/components/seo/CategoryFaq";
+import ExploreMoreLinks from "@/components/seo/ExploreMoreLinks";
 import {
   Select,
   SelectContent,
@@ -352,6 +353,9 @@ export default function LocationOnlyPageClient({ data, location }: Props) {
         </div>
 
         <CategoryFaq topic={`Jobs in ${location.name}`} total={meta.total ?? 0} jobs={jobs} />
+        <div className="mt-10">
+          <ExploreMoreLinks />
+        </div>
       </main>
     </div>
   );
