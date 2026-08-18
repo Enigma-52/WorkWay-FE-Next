@@ -11,6 +11,7 @@ import { buildJobListQuery } from "@/lib/jobs/listQuery";
 import type { JobListResponse } from "@/types/jobs";
 import JobsPageClient from "@/components/JobsPage/JobsPageClient";
 import CategoryFaq from "@/components/seo/CategoryFaq";
+import ExploreMoreLinks from "@/components/seo/ExploreMoreLinks";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
 
@@ -96,8 +97,9 @@ async function InternshipsListSection({
       <JsonLd data={buildJobsPageItemListJsonLd(payload.jobs)} />
       <JobsPageClient data={payload} />
       {payload.meta.total > 0 && (
-        <div className="mx-auto w-full max-w-6xl px-6 pb-16">
+        <div className="mx-auto w-full max-w-6xl px-6 pb-16 space-y-10">
           <CategoryFaq topic="internships" total={payload.meta.total} jobs={payload.jobs} />
+          <ExploreMoreLinks exclude="/internships" />
         </div>
       )}
     </>

@@ -13,10 +13,16 @@ const LINKS = [
   { href: "/blog", label: "Job search & hiring blog", icon: Newspaper },
 ];
 
-export default function ExploreMoreLinks() {
+type Props = {
+  exclude?: string;
+};
+
+export default function ExploreMoreLinks({ exclude }: Props = {}) {
+  const links = exclude ? LINKS.filter((l) => l.href !== exclude) : LINKS;
+
   return (
     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-      {LINKS.map(({ href, label, icon: Icon }) => (
+      {links.map(({ href, label, icon: Icon }) => (
         <Link
           key={href}
           href={href}
