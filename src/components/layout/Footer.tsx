@@ -88,6 +88,12 @@ const Footer = () => {
                 Senior Jobs
               </a>
               <a
+                href="/contract-jobs"
+                className="transition-colors hover:text-foreground"
+              >
+                Contract Jobs
+              </a>
+              <a
                 href="/blog"
                 className="transition-colors hover:text-foreground"
               >

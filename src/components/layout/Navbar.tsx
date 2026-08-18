@@ -15,6 +15,7 @@ import {
   BookOpen,
   Newspaper,
   Wrench,
+  FileText,
 } from "lucide-react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { Button } from "@/components/ui/button";
@@ -34,6 +35,7 @@ const EXPLORE_LINKS = [
   { href: "/skills", label: "Skills", description: "Jobs by specific skill", icon: Code2 },
   { href: "/internships", label: "Internships", description: "Roles tagged intern-level", icon: GraduationCap },
   { href: "/senior-jobs", label: "Senior Jobs", description: "Senior, staff & lead roles", icon: TrendingUp },
+  { href: "/contract-jobs", label: "Contract Jobs", description: "Fixed-term & freelance roles", icon: FileText },
   { href: "/guides", label: "Guides", description: "WorkWay vs the old way", icon: BookOpen },
   { href: "/blog", label: "Blog", description: "Job search, ATS & hiring data", icon: Newspaper },
   { href: "/tools/ats-finder", label: "ATS Finder", description: "Find any company's careers page", icon: Wrench },

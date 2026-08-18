@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, GraduationCap, TrendingUp, Wrench, Newspaper } from "lucide-react";
+import { ArrowRight, GraduationCap, TrendingUp, Wrench, Newspaper, FileText } from "lucide-react";
 
 // Reused across domain/skill/location category pages to pass internal link
 // equity to newer page types (blog, tools, internships, senior-jobs) that
@@ -9,6 +9,7 @@ import { ArrowRight, GraduationCap, TrendingUp, Wrench, Newspaper } from "lucide
 const LINKS = [
   { href: "/internships", label: "Internship roles", icon: GraduationCap },
   { href: "/senior-jobs", label: "Senior-level roles", icon: TrendingUp },
+  { href: "/contract-jobs", label: "Contract roles", icon: FileText },
   { href: "/tools/ats-finder", label: "Find any company's ATS", icon: Wrench },
   { href: "/blog", label: "Job search & hiring blog", icon: Newspaper },
 ];
@@ -21,7 +22,7 @@ export default function ExploreMoreLinks({ exclude }: Props = {}) {
   const links = exclude ? LINKS.filter((l) => l.href !== exclude) : LINKS;
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
       {links.map(({ href, label, icon: Icon }) => (
         <Link
           key={href}

@@ -283,6 +283,16 @@ export function buildSeniorJobsBreadcrumb(): BreadcrumbItem[] {
   ];
 }
 
+export function buildContractJobsBreadcrumb(): BreadcrumbItem[] {
+  return [
+    ...buildHomeBreadcrumb(),
+    {
+      name: "Contract Jobs",
+      href: "/contract-jobs",
+    },
+  ];
+}
+
 export function buildToolsBreadcrumb(): BreadcrumbItem[] {
   return [
     ...buildHomeBreadcrumb(),
