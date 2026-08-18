@@ -206,6 +206,28 @@ export function buildFaqJsonLd(faqs: { question: string; answer: string }[]) {
   };
 }
 
+export function buildBlogPostingJsonLd(post: {
+  slug: string;
+  title: string;
+  description: string;
+  publishedAt: string;
+  updatedAt: string;
+  author: string;
+}) {
+  const siteUrl = getSiteUrl();
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.description,
+    datePublished: post.publishedAt,
+    dateModified: post.updatedAt,
+    author: { "@type": "Organization", name: post.author },
+    publisher: { "@type": "Organization", name: "WorkWay" },
+    mainEntityOfPage: `${siteUrl}/blog/${post.slug}`,
+  };
+}
+
 export function buildBreadcrumbJsonLd(items: BreadcrumbItem[]) {
   const siteUrl = getSiteUrl();
 
