@@ -263,6 +263,65 @@ export function buildJobsByLocationBreadcrumb(): BreadcrumbItem[] {
   ];
 }
 
+export function buildInternshipsBreadcrumb(): BreadcrumbItem[] {
+  return [
+    ...buildHomeBreadcrumb(),
+    {
+      name: "Internships",
+      href: "/internships",
+    },
+  ];
+}
+
+export function buildSeniorJobsBreadcrumb(): BreadcrumbItem[] {
+  return [
+    ...buildHomeBreadcrumb(),
+    {
+      name: "Senior Jobs",
+      href: "/senior-jobs",
+    },
+  ];
+}
+
+export function buildToolsBreadcrumb(): BreadcrumbItem[] {
+  return [
+    ...buildHomeBreadcrumb(),
+    {
+      name: "Tools",
+      href: "/tools",
+    },
+  ];
+}
+
+export function buildAtsFinderBreadcrumb(): BreadcrumbItem[] {
+  return [
+    ...buildToolsBreadcrumb(),
+    {
+      name: "ATS Finder",
+      href: "/tools/ats-finder",
+    },
+  ];
+}
+
+export function buildBlogBreadcrumb(): BreadcrumbItem[] {
+  return [
+    ...buildHomeBreadcrumb(),
+    {
+      name: "Blog",
+      href: "/blog",
+    },
+  ];
+}
+
+export function buildBlogPostBreadcrumb(title: string): BreadcrumbItem[] {
+  return [
+    ...buildBlogBreadcrumb(),
+    {
+      name: title,
+    },
+  ];
+}
+
 export function buildLocationOnlyDetailBreadcrumb(
   locationName: string,
 ): BreadcrumbItem[] {
