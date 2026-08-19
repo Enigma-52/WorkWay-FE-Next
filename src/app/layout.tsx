@@ -63,14 +63,14 @@ export const metadata: Metadata = {
     url: "/",
     siteName: "WorkWay",
     type: "website",
-    images: [{ url: "/logo.png" }],
+    images: [{ url: "/og.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
     title: "WorkWay — Jobs Simplified. Find Your Next Opportunity",
     description:
       "WorkWay helps you discover the right jobs faster. Browse thousands of opportunities, explore companies, and apply with confidence.",
-    images: ["/logo.png"],
+    images: ["/og.png"],
   },
   verification: {
     google:

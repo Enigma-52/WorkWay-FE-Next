@@ -27,8 +27,8 @@ export function getSiteUrl(): string {
 // causes social platforms to mis-crop/distort the preview. Both fields
 // are optional per the OG spec; omitting them means the platform fetches
 // the image and determines its own dimensions.
-const DEFAULT_IMAGE = "/logo.png";
-const DEFAULT_IMAGE_DIMENSIONS = { width: 800, height: 800 };
+const DEFAULT_IMAGE = "/og.png";
+const DEFAULT_IMAGE_DIMENSIONS = { width: 1200, height: 630 };
 
 export function buildPageMetadata({
   title,
