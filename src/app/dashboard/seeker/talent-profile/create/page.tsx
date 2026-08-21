@@ -468,10 +468,23 @@ export default function TalentProfileCreatePage() {
     }
   }
 
+  // Required so a published profile always has enough content to look
+  // complete — otherwise near-empty profiles show up in search/listings.
+  function validateRequired(): string | null {
+    if (!username || usernameStatus === "taken" || usernameStatus === "reserved") return "Please fix the username before saving";
+    if (!displayName.trim()) return "Display Name is required";
+    if (!professionalTitle.trim()) return "Professional Title is required";
+    if (!category) return "Category is required";
+    if (!experienceLevel) return "Experience Level is required";
+    if (bio.trim().length < 50) return "About must be at least 50 characters";
+    if (skills.length < 3) return "Add at least 3 skills";
+    if (!country.trim()) return "Country is required";
+    return null;
+  }
+
   async function handlePublish() {
-    if (!username || usernameStatus === "taken" || usernameStatus === "reserved") {
-      toast.error("Please fix the username before saving"); return;
-    }
+    const validationError = validateRequired();
+    if (validationError) { toast.error(validationError); return; }
     setSubmitting(true);
     try {
       const currSymbol = CURRENCIES.find((c) => c.code === currency)?.symbol ?? "$";
@@ -588,30 +601,30 @@ export default function TalentProfileCreatePage() {
           <div className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-sm font-medium mb-1.5 block">Username</label>
+                <label className="text-sm font-medium mb-1.5 block">Username <span className="text-destructive">*</span></label>
                 <Input value={username} onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, "").slice(0, 30))} placeholder="your_username" maxLength={30} />
                 <div className="mt-1">{usernameStatusEl()}</div>
               </div>
               <div>
-                <label className="text-sm font-medium mb-1.5 block">Display Name</label>
+                <label className="text-sm font-medium mb-1.5 block">Display Name <span className="text-destructive">*</span></label>
                 <Input value={displayName} onChange={(e) => setDisplayName(e.target.value)} placeholder="John Doe" />
               </div>
             </div>
             <div>
-              <label className="text-sm font-medium mb-1.5 block">Professional Title</label>
+              <label className="text-sm font-medium mb-1.5 block">Professional Title <span className="text-destructive">*</span></label>
               <Input value={professionalTitle} onChange={(e) => setProfessionalTitle(e.target.value)} placeholder="Senior Software Engineer" list="title-suggestions" />
               <datalist id="title-suggestions">{PROFESSIONAL_TITLE_SUGGESTIONS.map((t) => <option key={t} value={t} />)}</datalist>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="text-sm font-medium mb-1.5 block">Category</label>
+                <label className="text-sm font-medium mb-1.5 block">Category <span className="text-destructive">*</span></label>
                 <Select value={category} onValueChange={setCategory}>
                   <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
                   <SelectContent>{CATEGORIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
                 </Select>
               </div>
               <div>
-                <label className="text-sm font-medium mb-1.5 block">Experience Level</label>
+                <label className="text-sm font-medium mb-1.5 block">Experience Level <span className="text-destructive">*</span></label>
                 <Select value={experienceLevel} onValueChange={setExperienceLevel}>
                   <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
                   <SelectContent>{EXPERIENCE_LEVELS.map((l) => <SelectItem key={l} value={l}>{l}</SelectItem>)}</SelectContent>
@@ -627,12 +640,12 @@ export default function TalentProfileCreatePage() {
 
         {/* ── About ── */}
         <section className="bg-card border border-border rounded-xl p-6">
-          <h2 className="text-base font-semibold mb-1">About</h2>
-          <p className="text-xs text-muted-foreground mb-4">Markdown supported</p>
+          <h2 className="text-base font-semibold mb-1">About <span className="text-destructive">*</span></h2>
+          <p className="text-xs text-muted-foreground mb-4">Markdown supported. Minimum 50 characters.</p>
           <Textarea value={bio} onChange={(e) => setBio(e.target.value)} placeholder="Tell employers about yourself, your expertise, and what you're looking for..." rows={6} maxLength={2000} />
           <div className="flex justify-between mt-1.5">
             <span className={`text-xs ${bio.length < 50 ? "text-amber-500" : "text-muted-foreground"}`}>
-              {bio.length < 50 ? `${50 - bio.length} more characters recommended` : ""}
+              {bio.length < 50 ? `${50 - bio.length} more characters required` : ""}
             </span>
             <span className="text-xs text-muted-foreground">{bio.length}/2000</span>
           </div>
@@ -755,7 +768,7 @@ export default function TalentProfileCreatePage() {
           <h2 className="text-base font-semibold mb-5">Skills & Languages</h2>
           <div className="space-y-6">
             <div>
-              <label className="text-sm font-medium mb-1.5 block">Skills</label>
+              <label className="text-sm font-medium mb-1.5 block">Skills <span className="text-destructive">*</span> <span className="text-xs text-muted-foreground font-normal">(at least 3)</span></label>
               <div className="relative">
                 <Input ref={skillInputRef} value={skillInput} onChange={(e) => { setSkillInput(e.target.value); setShowSkillSuggestions(true); }} onFocus={() => setShowSkillSuggestions(true)}
                   onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); if (filteredSkillSuggestions.length > 0) addSkill(filteredSkillSuggestions[0]); else if (skillInput.trim()) addSkill(skillInput); } }}
@@ -807,7 +820,7 @@ export default function TalentProfileCreatePage() {
           <h2 className="text-base font-semibold mb-5">Location & Links</h2>
           <div className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div><label className="text-sm font-medium mb-1.5 block">Country</label><Input value={country} onChange={(e) => setCountry(e.target.value)} placeholder="United States" /></div>
+              <div><label className="text-sm font-medium mb-1.5 block">Country <span className="text-destructive">*</span></label><Input value={country} onChange={(e) => setCountry(e.target.value)} placeholder="United States" /></div>
               <div>
                 <label htmlFor="timezone" className="text-sm font-medium mb-1.5 block">Timezone</label>
                 <SearchableSelect
