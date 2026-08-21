@@ -138,25 +138,11 @@ export default function SeniorJobsPage({ searchParams }: SeniorJobsPageProps) {
         <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
           Senior Jobs
         </h1>
-        <p className="text-muted-foreground leading-relaxed max-w-3xl">
-          Senior-level roles rarely show up on the front page of a general
-          job board, because most boards rank listings by recency rather
-          than by seniority, which buries a senior opening under a wall of
-          entry-level postings within a day of it going live. WorkWay tags
-          experience level directly from the source posting on Greenhouse,
-          Lever, and Ashby, so this page only shows roles a company itself
-          marked as senior, staff, lead, or manager level, rather than
-          roles that merely mention &quot;senior&quot; somewhere in a long
-          job description. That distinction matters if you are past the
-          point in your career where you want to filter through a hundred
-          junior postings to find the handful that actually match your
-          level — everything below is pulled from live company career
-          pages and updated daily, with the original apply link intact, so
-          you are applying on the same page the hiring team is actually
-          watching. Narrow the list by domain or location using the
-          filters below, and follow a company from its WorkWay page if you
-          want to hear about new senior openings the moment they go live
-          instead of checking back manually.
+        <p className="text-muted-foreground leading-relaxed max-w-2xl">
+          Roles a company itself tagged senior, staff, lead, or manager on
+          Greenhouse, Lever, or Ashby — not postings that just mention
+          &quot;senior&quot; in passing. Filter by domain or location below
+          and apply directly on the company&apos;s own page.
         </p>
       </div>
 

@@ -139,27 +139,11 @@ export default function InternshipsPage({ searchParams }: InternshipsPageProps) 
         <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
           Internship Jobs
         </h1>
-        <p className="text-muted-foreground leading-relaxed max-w-3xl">
-          Most internship listings are buried on individual company career
-          pages, posted for a few weeks around campus recruiting season and
-          then taken down the moment the cohort fills up, which means the
-          window to actually find one is short and easy to miss if you are
-          relying on a general job board that only re-indexes postings once
-          every few days. WorkWay pulls internship-tagged roles directly from
-          the same Greenhouse, Lever, and Ashby feeds that companies use to
-          publish full-time openings, updates them daily, and links straight
-          through to the original application, so what you see here is the
-          same live internship pipeline the company itself is running, not a
-          stale copy scraped from somewhere else. That matters most for
-          internships specifically, because the difference between applying
-          on day one of a posting and applying on day twenty is often the
-          difference between getting a response and getting nothing at all —
-          internship classes tend to be small, they fill in rolling batches,
-          and the roles most worth having close first. Use the filters below
-          to narrow this list down to a specific domain, like backend
-          engineering or data science, or a specific location if you need
-          something on-site or in a particular time zone, and apply directly
-          on the company&apos;s own page with one click.
+        <p className="text-muted-foreground leading-relaxed max-w-2xl">
+          Pulled daily from the same Greenhouse, Lever, and Ashby feeds
+          companies use to publish full-time roles — not stale re-posted
+          listings. Filter by domain or location below and apply directly on
+          the company&apos;s own page.
         </p>
       </div>
 

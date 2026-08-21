@@ -137,25 +137,11 @@ export default function ContractJobsPage({ searchParams }: ContractJobsPageProps
         <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
           Contract Jobs
         </h1>
-        <p className="text-muted-foreground leading-relaxed max-w-3xl">
-          Contract roles get filtered out of most job searches by accident,
-          not on purpose — a lot of general job boards default their search
-          to full-time roles and require you to know in advance that a
-          separate contract filter exists, and a company's own career page
-          often lists a contract opening in the exact same undifferentiated
-          feed as every full-time role, with nothing to signal it's actually
-          fixed-term or freelance work until you open the posting itself.
-          WorkWay tags employment type directly from what each company
-          marked the role as on Greenhouse, Lever, or Ashby, so this page
-          only shows postings a company itself labeled as contract work,
-          updated daily from their live career pages with the original
-          apply link intact. That distinction matters if you're
-          specifically looking for fixed-term or freelance engagements
-          rather than a permanent seat — whether because you're
-          between full-time roles, prefer project-based work, or are
-          evaluating a company before a longer-term commitment. Use the
-          filters below to narrow by domain or location, and apply
-          directly on the company's own page.
+        <p className="text-muted-foreground leading-relaxed max-w-2xl">
+          Roles a company itself labeled contract or freelance on
+          Greenhouse, Lever, or Ashby — not full-time postings you have to
+          guess about. Filter by domain or location below and apply directly
+          on the company&apos;s own page.
         </p>
       </div>
 
