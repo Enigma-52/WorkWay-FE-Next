@@ -4,9 +4,26 @@ import JsonLd from "@/components/seo/JsonLd";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import { buildPricingBreadcrumb } from "@/lib/seo/breadcrumbs";
 import { buildBreadcrumbJsonLd } from "@/lib/seo/jsonld";
+import { backendGet } from "@/lib/api/server-client";
 import PricingCards from "@/components/Pricing/PricingCards";
 import ProAlertsDetail from "@/components/Pricing/ProAlertsDetail";
 import Testimonials from "@/components/LandingPage/Testimonials";
+import type { LivePrice } from "@/lib/plans";
+
+type PlansResponse = { plans?: { key: string; price: LivePrice | null }[] };
+
+// Fetched here (server-side) rather than left to PricingCards' own client
+// fetch, so first paint already has the live Dodo price — otherwise the
+// page briefly shows the hardcoded $5 before flipping to the real price.
+async function getInitialLivePrices(): Promise<Record<string, LivePrice | null>> {
+  const data = await backendGet<PlansResponse>("/api/billing/plans", {
+    revalidate: 300,
+    forwardHeaders: false,
+  }).catch(() => null);
+  const map: Record<string, LivePrice | null> = {};
+  for (const p of data?.plans ?? []) map[p.key] = p.price ?? null;
+  return map;
+}
 
 // No dynamic data fetching on this page, so Next's default full-route-cache
 // falls back to an effectively unbounded `s-maxage=31536000` — Cloudflare
@@ -22,8 +39,9 @@ export const metadata: Metadata = buildPageMetadata({
   path: "/pricing",
 });
 
-export default function PricingPage() {
+export default async function PricingPage() {
   const breadcrumbs = buildPricingBreadcrumb();
+  const initialLivePrices = await getInitialLivePrices();
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -43,7 +61,7 @@ export default function PricingPage() {
           </p>
         </header>
 
-        <PricingCards />
+        <PricingCards initialLivePrices={initialLivePrices} />
 
         <p className="mt-4 text-center text-xs text-muted-foreground">
           Cancel anytime. See our{" "}

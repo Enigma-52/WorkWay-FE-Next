@@ -18,6 +18,7 @@ import type { JobListResponse } from "@/types/jobs";
 import JobViewFeed from "@/components/JobViewFeed/JobViewFeed";
 import LatestChangelogCard from "./LatestChangelogCard";
 import SiteStatsCard from "./SiteStatsCard";
+import RecentTalentsCard from "./RecentTalentsCard";
 import TalentProfilePromoCard from "./TalentProfilePromoCard";
 import AuthModal from "@/components/common/AuthModal";
 
@@ -196,6 +197,7 @@ export default function JobsPageClient({ data }: Props) {
           {/* Sidebar facets - hidden on small screens, show on lg */}
           <div className="hidden lg:block lg:sticky lg:top-24 lg:self-start space-y-4">
             <SiteStatsCard />
+            <RecentTalentsCard />
             <LatestChangelogCard />
             <JobsFacetsSidebar
               domains={facets.domains}

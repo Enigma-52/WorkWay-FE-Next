@@ -21,6 +21,10 @@ type Plan = {
   name: string;
   price: string;
   period?: string;
+  // Struck-through "was" price shown next to the live price, e.g. "$8.99".
+  // Anchors the discount — keep in sync with whatever's actually configured
+  // as the plan's list price, not just decorative.
+  compareAtPrice?: string;
   description: string;
   features: string[];
   highlighted?: boolean;
@@ -43,7 +47,8 @@ const PLANS: Plan[] = [
   {
     key: "pro",
     name: "Pro",
-    price: "$5",
+    price: "$3.99",
+    compareAtPrice: "$8.99",
     period: "mo",
     description: "For an active job search.",
     highlighted: true,
@@ -68,14 +73,27 @@ const PLANS: Plan[] = [
   },
 ];
 
-export default function PricingCards() {
+export default function PricingCards({
+  initialLivePrices,
+}: {
+  // Fetched server-side by the pricing page so the first paint already
+  // shows the live Dodo price — otherwise the client-only fetch below
+  // renders the hardcoded $5 first and flips to $3.99 a beat later.
+  initialLivePrices?: Record<string, LivePrice | null>;
+}) {
   const { data: session } = useSession();
   const [authOpen, setAuthOpen] = useState(false);
   const [pendingPlan, setPendingPlan] = useState<string | null>(null);
   const [checkingOutKey, setCheckingOutKey] = useState<string | null>(null);
-  const [livePrices, setLivePrices] = useState<Record<string, LivePrice | null>>({});
+  const [livePrices, setLivePrices] = useState<Record<string, LivePrice | null>>(
+    initialLivePrices ?? {},
+  );
 
   useEffect(() => {
+    // Still refetch client-side even with initial data — the page itself
+    // may be served from a stale 5-minute cache, and this keeps the price
+    // fresh without another flash (it only ever replaces one live price
+    // with a newer live price, never falls back to the hardcoded one).
     fetch("/api/billing/plans")
       .then((r) => r.json())
       .then((d) => {
@@ -160,6 +178,11 @@ export default function PricingCards() {
               <p className="mt-1 text-sm text-muted-foreground">{plan.description}</p>
 
               <div className="mt-4 mb-6">
+                {plan.compareAtPrice && !plan.comingSoon && (
+                  <span className="mr-2 text-lg text-muted-foreground line-through">
+                    {plan.compareAtPrice}
+                  </span>
+                )}
                 <span className="text-3xl font-bold tracking-tight">{plan.price}</span>
                 {plan.period && (
                   <span className="ml-1 text-sm text-muted-foreground">/{plan.period}</span>

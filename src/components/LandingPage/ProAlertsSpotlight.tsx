@@ -34,7 +34,7 @@ const inbox = [
 // Falls back to the static "$5/mo" if Dodo has a hiccup or the plan has no
 // product configured, so the CTA never renders blank.
 async function getProCtaLabel(): Promise<string> {
-  const fallback = "Get instant alerts — $5/mo";
+  const fallback = "Get instant alerts — $3.99/mo";
   try {
     const res = await fetch(new URL("/api/billing/plans", env.BACKEND_API_URL), {
       next: { revalidate: 300 },
