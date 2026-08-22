@@ -136,6 +136,7 @@ export type JobListResponse = {
     experience_level?: string;
     location?: string;
     company_slug?: string;
+    platform?: string;
     sort?: string;
   };
   facets: {
