@@ -18,6 +18,7 @@ import {
   ShieldCheck,
   Bell,
   Crown,
+  KeyRound,
 } from "lucide-react";
 
 type NavItem = {
@@ -36,6 +37,7 @@ const seekerNav: NavItem[] = [
   { label: "Companies", href: "/dashboard/seeker/companies", icon: Building2 },
   { label: "Alerts", href: "/dashboard/seeker/alerts", icon: Bell, proBadge: true },
   { label: "Talent Profile", href: "/dashboard/seeker/talent-profile", icon: UserCircle },
+  { label: "API Keys", href: "/dashboard/seeker/api-keys", icon: KeyRound },
 ];
 
 const hirerNav: NavItem[] = [
