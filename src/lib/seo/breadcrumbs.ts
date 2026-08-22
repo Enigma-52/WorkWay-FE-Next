@@ -342,3 +342,21 @@ export function buildLocationOnlyDetailBreadcrumb(
     },
   ];
 }
+
+export function buildMcpBreadcrumb(): BreadcrumbItem[] {
+  return [
+    ...buildHomeBreadcrumb(),
+    {
+      name: "MCP",
+      href: "/mcp",
+    },
+  ];
+}
+
+export function buildMcpSubpageBreadcrumb(name: string): BreadcrumbItem[] {
+  return [...buildMcpBreadcrumb(), { name }];
+}
+
+export function buildFeatureBreadcrumb(name: string): BreadcrumbItem[] {
+  return [...buildHomeBreadcrumb(), { name }];
+}

@@ -16,6 +16,12 @@ import {
   Newspaper,
   Wrench,
   FileText,
+  Plug,
+  Bell,
+  Bookmark,
+  UserRound,
+  KeyRound,
+  Terminal,
 } from "lucide-react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { Button } from "@/components/ui/button";
@@ -41,13 +47,74 @@ const EXPLORE_LINKS = [
   { href: "/tools/ats-finder", label: "ATS Finder", description: "Find any company's careers page", icon: Wrench },
 ];
 
+const FEATURE_LINKS = [
+  { href: "/mcp", label: "WorkWay MCP", description: "Search jobs from inside Claude", icon: Plug },
+  { href: "/mcp/tools", label: "MCP Tools", description: "All nine tools, with examples", icon: Terminal },
+  { href: "/mcp/api-keys", label: "API Keys", description: "Create, scope & revoke keys", icon: KeyRound },
+  { href: "/features/job-alerts", label: "Job Alerts", description: "Email the moment a company posts", icon: Bell },
+  { href: "/features/saved-jobs", label: "Saved Jobs", description: "Keep roles in one place", icon: Bookmark },
+  { href: "/features/talent-profile", label: "Talent Profile", description: "Get found by companies", icon: UserRound },
+];
+
 const TRAILING_LINKS = [{ href: "/pricing", label: "Pricing" }];
+
+type NavLink = {
+  href: string;
+  label: string;
+  description: string;
+  icon: React.ComponentType<{ className?: string }>;
+};
+
+// Explore and Features are the same menu with different contents, so the
+// markup lives here once rather than being duplicated per trigger.
+function NavDropdown({ label, links }: { label: string; links: NavLink[] }) {
+  return (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger asChild>
+        <button
+          type="button"
+          className="group flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors outline-none"
+        >
+          {label}
+          <ChevronDown className="w-3.5 h-3.5 transition-transform group-data-[state=open]:rotate-180" />
+        </button>
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Portal>
+        <DropdownMenu.Content
+          align="start"
+          sideOffset={12}
+          className="z-50 w-[560px] rounded-xl border border-border bg-card p-3 shadow-lg data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95"
+        >
+          <div className="grid grid-cols-2 gap-1">
+            {links.map(({ href, label: itemLabel, description, icon: Icon }) => (
+              <DropdownMenu.Item key={href} asChild>
+                <Link
+                  href={href}
+                  className="flex items-start gap-3 rounded-lg px-3 py-2.5 outline-none hover:bg-background/80 focus:bg-background/80 transition-colors"
+                >
+                  <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center mt-0.5">
+                    <Icon className="w-4 h-4 text-primary" />
+                  </span>
+                  <span>
+                    <span className="block text-sm font-medium">{itemLabel}</span>
+                    <span className="block text-xs text-muted-foreground">{description}</span>
+                  </span>
+                </Link>
+              </DropdownMenu.Item>
+            ))}
+          </div>
+        </DropdownMenu.Content>
+      </DropdownMenu.Portal>
+    </DropdownMenu.Root>
+  );
+}
 
 const Navbar = () => {
   const { data: session, status } = useSession();
   const [authOpen, setAuthOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileExploreOpen, setMobileExploreOpen] = useState(false);
+  const [mobileFeaturesOpen, setMobileFeaturesOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur-sm">
@@ -68,43 +135,8 @@ const Navbar = () => {
             </a>
           ))}
 
-          <DropdownMenu.Root>
-            <DropdownMenu.Trigger asChild>
-              <button
-                type="button"
-                className="group flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors outline-none"
-              >
-                Explore
-                <ChevronDown className="w-3.5 h-3.5 transition-transform group-data-[state=open]:rotate-180" />
-              </button>
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Portal>
-              <DropdownMenu.Content
-                align="start"
-                sideOffset={12}
-                className="z-50 w-[560px] rounded-xl border border-border bg-card p-3 shadow-lg data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95"
-              >
-                <div className="grid grid-cols-2 gap-1">
-                  {EXPLORE_LINKS.map(({ href, label, description, icon: Icon }) => (
-                    <DropdownMenu.Item key={href} asChild>
-                      <Link
-                        href={href}
-                        className="flex items-start gap-3 rounded-lg px-3 py-2.5 outline-none hover:bg-background/80 focus:bg-background/80 transition-colors"
-                      >
-                        <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center mt-0.5">
-                          <Icon className="w-4 h-4 text-primary" />
-                        </span>
-                        <span>
-                          <span className="block text-sm font-medium">{label}</span>
-                          <span className="block text-xs text-muted-foreground">{description}</span>
-                        </span>
-                      </Link>
-                    </DropdownMenu.Item>
-                  ))}
-                </div>
-              </DropdownMenu.Content>
-            </DropdownMenu.Portal>
-          </DropdownMenu.Root>
+          <NavDropdown label="Explore" links={EXPLORE_LINKS} />
+          <NavDropdown label="Features" links={FEATURE_LINKS} />
 
           {TRAILING_LINKS.map(({ href, label }) => (
             <a key={href} href={href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
@@ -180,6 +212,30 @@ const Navbar = () => {
           {mobileExploreOpen && (
             <div className="pl-3 flex flex-col gap-1 border-l border-border ml-1">
               {EXPLORE_LINKS.map(({ href, label }) => (
+                <a
+                  key={href}
+                  href={href}
+                  className="py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {label}
+                </a>
+              ))}
+            </div>
+          )}
+
+          <button
+            type="button"
+            className="flex items-center justify-between py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            onClick={() => setMobileFeaturesOpen((v) => !v)}
+            aria-expanded={mobileFeaturesOpen}
+          >
+            Features
+            <ChevronDown className={`w-4 h-4 transition-transform ${mobileFeaturesOpen ? "rotate-180" : ""}`} />
+          </button>
+          {mobileFeaturesOpen && (
+            <div className="pl-3 flex flex-col gap-1 border-l border-border ml-1">
+              {FEATURE_LINKS.map(({ href, label }) => (
                 <a
                   key={href}
                   href={href}

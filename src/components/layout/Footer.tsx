@@ -100,6 +100,24 @@ const Footer = () => {
                 Blog
               </a>
               <a
+                href="/mcp"
+                className="transition-colors hover:text-foreground"
+              >
+                WorkWay MCP
+              </a>
+              <a
+                href="/features/job-alerts"
+                className="transition-colors hover:text-foreground"
+              >
+                Job Alerts
+              </a>
+              <a
+                href="/features/talent-profile"
+                className="transition-colors hover:text-foreground"
+              >
+                Talent Profile
+              </a>
+              <a
                 href="/tools/ats-finder"
                 className="transition-colors hover:text-foreground"
               >
