@@ -50,6 +50,7 @@ export default function JobsPageClient({ data }: Props) {
   const location = getParam(searchParams, "location", "");
   const country = getParam(searchParams, "country", "all");
   const posted = getParam(searchParams, "posted", "all");
+  const platform = getParam(searchParams, "platform", "all");
 
   const buildParamsUrl = useCallback(
     (next: Record<string, string | null>) => {
@@ -94,7 +95,7 @@ export default function JobsPageClient({ data }: Props) {
   };
 
   const handleApply = useCallback(
-    (filters: { q: string; domain: string; employmentType: string; experienceLevel: string; location: string; country: string; posted: string }) => {
+    (filters: { q: string; domain: string; employmentType: string; experienceLevel: string; location: string; country: string; posted: string; platform: string }) => {
       const next = {
         q: filters.q || null,
         domain: filters.domain,
@@ -103,6 +104,7 @@ export default function JobsPageClient({ data }: Props) {
         location: filters.location || null,
         country: filters.country || null,
         posted: filters.posted,
+        platform: filters.platform,
         page: "1",
       };
       requireAuthOrRun(next, () => {
@@ -115,6 +117,7 @@ export default function JobsPageClient({ data }: Props) {
           location: filters.location || null,
           country: filters.country || null,
           posted: filters.posted,
+          platform: filters.platform,
         });
         if (filters.q.trim()) {
           track("Search Performed", { query: filters.q.trim() });
@@ -133,6 +136,7 @@ export default function JobsPageClient({ data }: Props) {
       location: null,
       country: null,
       posted: null,
+      platform: null,
       page: "1",
     });
   };
@@ -145,6 +149,7 @@ export default function JobsPageClient({ data }: Props) {
     location,
     country !== "all",
     posted !== "all",
+    platform !== "all",
   ].filter(Boolean).length;
 
   const { jobs, meta, applied_filters, facets } = data;
@@ -227,6 +232,7 @@ export default function JobsPageClient({ data }: Props) {
               location={location}
               country={country}
               posted={posted}
+              platform={platform}
               onApply={handleApply}
               onClear={clearFilters}
               activeCount={activeFiltersCount}
