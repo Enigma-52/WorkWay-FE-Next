@@ -40,6 +40,7 @@ function buildListQuery(
   const company_slug = getSingleParam(sp.company_slug, "");
   const sort = getSingleParam(sp.sort, "recent");
   const posted = getSingleParam(sp.posted, "all");
+  const platform = getSingleParam(sp.platform, "all");
 
   const query: Record<string, string | number> = {
     page: Number(page) || 1,
@@ -54,6 +55,7 @@ function buildListQuery(
   if (country) query.country = country;
   if (company_slug) query.company_slug = company_slug;
   if (posted && posted !== "all") query.posted = posted;
+  if (platform && platform !== "all") query.platform = platform;
   return query;
 }
 
@@ -103,6 +105,7 @@ export async function generateMetadata({
     qs.set("experience_level", String(query.experience_level));
   if (query.location) qs.set("location", String(query.location));
   if (query.posted) qs.set("posted", String(query.posted));
+  if (query.platform) qs.set("platform", String(query.platform));
   const path = qs.toString() ? `/jobs?${qs.toString()}` : "/jobs";
 
   return buildPageMetadata({
