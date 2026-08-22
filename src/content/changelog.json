@@ -1,6 +1,16 @@
 {
   "entries": [
     {
+      "id": "2026-08-22-source-filter",
+      "date": "2026-08-22",
+      "title": "Filter jobs by source",
+      "tag": "Update",
+      "icon": "search",
+      "highlights": [
+        "Added a **Source** filter to Jobs — narrow listings to Greenhouse, Ashby, or Y Combinator postings."
+      ]
+    },
+    {
       "id": "2026-08-08-talent-directory",
       "date": "2026-08-08",
       "title": "Talent Profiles directory & smarter job browsing",
