@@ -25,6 +25,11 @@ const EXPERIENCE_LEVELS = [
   "Director",
 ];
 const EMPLOYMENT_TYPES = ["Full-Time", "Part-Time", "Contract"];
+const PLATFORMS = [
+  { value: "greenhouse", label: "Greenhouse" },
+  { value: "ashby", label: "Ashby" },
+  { value: "ycombinator", label: "YC" },
+];
 const POSTED_OPTIONS = [
   { value: "today", label: "Today" },
   { value: "3d", label: "Last 3 days" },
@@ -40,6 +45,7 @@ export type AppliedFilters = {
   location: string;
   country: string;
   posted: string;
+  platform: string;
 };
 
 export type JobsListFiltersProps = {
@@ -51,6 +57,7 @@ export type JobsListFiltersProps = {
   location: string;
   country: string;
   posted: string;
+  platform: string;
   onApply: (filters: AppliedFilters) => void;
   onClear: () => void;
   activeCount: number;
@@ -65,6 +72,7 @@ export function JobsListFilters({
   location,
   country,
   posted,
+  platform,
   onApply,
   onClear,
   activeCount,
@@ -77,6 +85,7 @@ export function JobsListFilters({
   const [draftExperienceLevel, setDraftExperienceLevel] = useState(experienceLevel || "all");
   const [draftLocation, setDraftLocation] = useState(location);
   const [draftPosted, setDraftPosted] = useState(posted || "all");
+  const [draftPlatform, setDraftPlatform] = useState(platform || "all");
 
   // Sync draft when committed values change (e.g. after clear or external nav)
   useEffect(() => { setDraftQ(q); }, [q]);
@@ -85,6 +94,7 @@ export function JobsListFilters({
   useEffect(() => { setDraftExperienceLevel(experienceLevel || "all"); }, [experienceLevel]);
   useEffect(() => { setDraftLocation(location); }, [location]);
   useEffect(() => { setDraftPosted(posted || "all"); }, [posted]);
+  useEffect(() => { setDraftPlatform(platform || "all"); }, [platform]);
 
   const handleApply = () => {
     onApply({
@@ -95,6 +105,7 @@ export function JobsListFilters({
       location: draftLocation,
       country,
       posted: draftPosted,
+      platform: draftPlatform,
     });
   };
 
@@ -109,6 +120,7 @@ export function JobsListFilters({
       location: draftLocation,
       country: cca3 ?? "",
       posted: draftPosted,
+      platform: draftPlatform,
     });
   };
 
@@ -187,6 +199,20 @@ export function JobsListFilters({
           </SelectContent>
         </Select>
 
+        <Select value={draftPlatform} onValueChange={setDraftPlatform}>
+          <SelectTrigger className="w-full md:w-[150px] bg-secondary border-border rounded-lg" aria-label="Filter by source">
+            <SelectValue placeholder="Source" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All sources</SelectItem>
+            {PLATFORMS.map((p) => (
+              <SelectItem key={p.value} value={p.value}>
+                {p.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
         <div className="relative w-full md:flex-1 md:w-auto md:min-w-[160px] md:max-w-[220px]">
           <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
           <Input
@@ -243,7 +269,7 @@ export function JobsListFilters({
             <Badge
               variant="secondary"
               className="gap-1 font-mono text-xs cursor-pointer hover:bg-secondary/80"
-              onClick={() => onApply({ q: "", domain, employmentType, experienceLevel, location, country, posted })}
+              onClick={() => onApply({ q: "", domain, employmentType, experienceLevel, location, country, posted, platform })}
             >
               {q}
               <X className="h-3 w-3" />
@@ -253,7 +279,7 @@ export function JobsListFilters({
             <Badge
               variant="secondary"
               className="gap-1 font-mono text-xs cursor-pointer hover:bg-secondary/80"
-              onClick={() => onApply({ q, domain: "all", employmentType, experienceLevel, location, country, posted })}
+              onClick={() => onApply({ q, domain: "all", employmentType, experienceLevel, location, country, posted, platform })}
             >
               Domain: {domain}
               <X className="h-3 w-3" />
@@ -263,7 +289,7 @@ export function JobsListFilters({
             <Badge
               variant="secondary"
               className="gap-1 font-mono text-xs cursor-pointer hover:bg-secondary/80"
-              onClick={() => onApply({ q, domain, employmentType, experienceLevel: "all", location, country, posted })}
+              onClick={() => onApply({ q, domain, employmentType, experienceLevel: "all", location, country, posted, platform })}
             >
               {experienceLevel}
               <X className="h-3 w-3" />
@@ -273,9 +299,19 @@ export function JobsListFilters({
             <Badge
               variant="secondary"
               className="gap-1 font-mono text-xs cursor-pointer hover:bg-secondary/80"
-              onClick={() => onApply({ q, domain, employmentType: "all", experienceLevel, location, country, posted })}
+              onClick={() => onApply({ q, domain, employmentType: "all", experienceLevel, location, country, posted, platform })}
             >
               {employmentType}
+              <X className="h-3 w-3" />
+            </Badge>
+          )}
+          {platform && platform !== "all" && (
+            <Badge
+              variant="secondary"
+              className="gap-1 font-mono text-xs cursor-pointer hover:bg-secondary/80"
+              onClick={() => onApply({ q, domain, employmentType, experienceLevel, location, country, posted, platform: "all" })}
+            >
+              {PLATFORMS.find((p) => p.value === platform)?.label ?? platform}
               <X className="h-3 w-3" />
             </Badge>
           )}
@@ -283,7 +319,7 @@ export function JobsListFilters({
             <Badge
               variant="secondary"
               className="gap-1 font-mono text-xs cursor-pointer hover:bg-secondary/80"
-              onClick={() => onApply({ q, domain, employmentType, experienceLevel, location: "", country, posted })}
+              onClick={() => onApply({ q, domain, employmentType, experienceLevel, location: "", country, posted, platform })}
             >
               {location}
               <X className="h-3 w-3" />
@@ -293,7 +329,7 @@ export function JobsListFilters({
             <Badge
               variant="secondary"
               className="gap-1 font-mono text-xs cursor-pointer hover:bg-secondary/80"
-              onClick={() => onApply({ q, domain, employmentType, experienceLevel, location, country: "", posted })}
+              onClick={() => onApply({ q, domain, employmentType, experienceLevel, location, country: "", posted, platform })}
             >
               {country}
               <X className="h-3 w-3" />
@@ -303,7 +339,7 @@ export function JobsListFilters({
             <Badge
               variant="secondary"
               className="gap-1 font-mono text-xs cursor-pointer hover:bg-secondary/80"
-              onClick={() => onApply({ q, domain, employmentType, experienceLevel, location, country, posted: "all" })}
+              onClick={() => onApply({ q, domain, employmentType, experienceLevel, location, country, posted: "all", platform })}
             >
               {POSTED_OPTIONS.find((o) => o.value === posted)?.label ?? posted}
               <X className="h-3 w-3" />
