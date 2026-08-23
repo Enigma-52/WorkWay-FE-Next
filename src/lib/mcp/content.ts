@@ -31,7 +31,7 @@ export const MCP_TOOLS: McpTool[] = [
     kind: "read",
     summary: "Search live openings across every indexed company.",
     description:
-      "The core tool. Searches active job listings pulled straight from company ATS boards, with filters for text, domain, location, country, company, employment type, experience level, ATS source, and recency. Results are paginated and every job carries both its original apply link and its WorkWay page.",
+      "The core tool. Searches active job listings pulled straight from company ATS boards, with filters for text, domain, location, country, company, employment type, experience level, ATS source, skill, and recency. Results are paginated and every job carries both its original apply link and its WorkWay page. Each result is metadata only — call get_job_details for the full description of a specific role.",
     params: [
       { name: "query", type: "string", description: "Free text matched against job title and company name." },
       { name: "domain", type: "string", description: "Domain slug from list_domains, e.g. software-engineering." },
@@ -42,6 +42,7 @@ export const MCP_TOOLS: McpTool[] = [
       { name: "experience_level", type: "Intern … Director", description: "Seniority band. One of Intern, Junior, Mid-level, Senior, Staff, Lead, Manager, Director." },
       { name: "platform", type: "greenhouse | ashby | ycombinator", description: "Restrict to a single ATS source." },
       { name: "posted", type: "today | 3d | 7d | 30d", description: "Only roles posted within this window." },
+      { name: "skill", type: "string", description: "Skill slug, e.g. python or kubernetes." },
       { name: "page", type: "integer", description: "1-based page number. Defaults to 1." },
       { name: "limit", type: "integer", description: "Results per page, 1–50. Defaults to 20." },
     ],
@@ -65,6 +66,33 @@ export const MCP_TOOLS: McpTool[] = [
     }
   ],
   "cta": "Browse more roles and save searches at https://workway.dev/jobs"
+}`,
+  },
+  {
+    slug: "get-job-details",
+    name: "get_job_details",
+    kind: "read",
+    summary: "The full description, skills, and pay for one role.",
+    description:
+      "Fetches one job by slug with its full description text, required skills, and compensation if the posting lists one — everything search_jobs deliberately leaves out to keep list responses light. Use this before reasoning about a specific role: comparing it against a talent profile, checking a requirement, or summarizing responsibilities.",
+    params: [
+      { name: "job_slug", type: "string", required: true, description: "Job slug exactly as returned by search_jobs." },
+    ],
+    example: `Does that Staff Engineer role at Ping Identity need a security clearance?`,
+    sampleResponse: `{
+  "title": "Staff Software Engineer",
+  "company": "Ping Identity",
+  "location": "USA - Remote",
+  "domain": "Software Engineering",
+  "employment_type": "Full-Time",
+  "experience_level": "Staff",
+  "skills": [{ "name": "Kubernetes", "slug": "kubernetes" }],
+  "compensation": "$180K - $220K",
+  "description": "About the role:\\nWe're looking for...\\n\\nRequirements:\\n5+ years...",
+  "source": "greenhouse",
+  "apply_url": "https://job-boards.greenhouse.io/pingidentity/jobs/8676157002",
+  "workway_url": "https://workway.dev/job/ping-identity-staff-software-engineer-8676157002",
+  "slug": "ping-identity-staff-software-engineer-8676157002"
 }`,
   },
   {
@@ -170,6 +198,18 @@ export const MCP_TOOLS: McpTool[] = [
 }`,
   },
   {
+    slug: "unsave-job",
+    name: "unsave_job",
+    kind: "write",
+    summary: "Remove a role from your saved list.",
+    description: "Removes a job from the saved-jobs list on the account that owns the API key.",
+    params: [
+      { name: "job_slug", type: "string", required: true, description: "Job slug, as returned by search_jobs or list_saved_jobs." },
+    ],
+    example: `Unsave that Ping Identity role.`,
+    sampleResponse: `Removed "ping-identity-staff-software-engineer-8676157002" from your saved jobs.`,
+  },
+  {
     slug: "follow-company",
     name: "follow_company",
     kind: "write",
@@ -182,6 +222,18 @@ export const MCP_TOOLS: McpTool[] = [
     example: `Follow Figma so I hear about new roles there.`,
     sampleResponse: `Now following Figma — it's saved to your follows at https://workway.dev/dashboard/seeker/alerts. Instant email alerts the moment they post a new role are a Pro feature.`,
     note: "Never plan-gated. The follow itself always succeeds; only the instant email delivery requires Pro.",
+  },
+  {
+    slug: "unfollow-company",
+    name: "unfollow_company",
+    kind: "write",
+    summary: "Stop tracking a company.",
+    description: "Stops following a company on the account that owns the API key. Instant email alerts for that company, if any were active, stop too.",
+    params: [
+      { name: "company", type: "string", required: true, description: "Company slug, e.g. stripe." },
+    ],
+    example: `Unfollow Figma.`,
+    sampleResponse: `Unfollowed "figma".`,
   },
   {
     slug: "list-alerts",
@@ -199,6 +251,57 @@ export const MCP_TOOLS: McpTool[] = [
     { "company": "Figma", "slug": "figma", "workway_url": "https://workway.dev/company/figma" }
   ],
   "dashboard_url": "https://workway.dev/dashboard/seeker/alerts"
+}`,
+  },
+  {
+    slug: "log-application",
+    name: "log_application",
+    kind: "write",
+    summary: "Record that you applied to a job.",
+    description:
+      "Logs a job application on the account that owns the API key, so it shows up on the applications dashboard. The job is resolved by slug first, so the logged record always carries the real title and company rather than anything supplied by the caller.",
+    params: [
+      { name: "job_slug", type: "string", required: true, description: "Job slug exactly as returned by search_jobs." },
+    ],
+    example: `I just applied to that Ping Identity role, log it.`,
+    sampleResponse: `Logged your application to "Staff Software Engineer" at Ping Identity. Track it at https://workway.dev/dashboard/seeker/applications`,
+  },
+  {
+    slug: "update-application-status",
+    name: "update_application_status",
+    kind: "write",
+    summary: "Move an application forward, or add notes.",
+    description:
+      "Updates the status and/or notes on a previously logged application. Only the fields supplied are changed. Requires log_application to have been called for that job first.",
+    params: [
+      { name: "job_slug", type: "string", required: true, description: "Job slug of a previously logged application." },
+      { name: "status", type: "Applied | Interview | Offer | Rejected", description: "New application status." },
+      { name: "notes", type: "string", description: "Free-text notes, e.g. interview feedback." },
+    ],
+    example: `Move the Ping Identity application to Interview.`,
+    sampleResponse: `Updated "ping-identity-staff-software-engineer-8676157002" to Interview.`,
+  },
+  {
+    slug: "list-applications",
+    name: "list_applications",
+    kind: "read",
+    summary: "Every application you have logged, with status.",
+    description: "Lists every job application logged on the account that owns the API key, with its current status and notes.",
+    params: [],
+    example: `What's the status of my applications?`,
+    sampleResponse: `{
+  "count": 3,
+  "applications": [
+    {
+      "title": "Staff Software Engineer",
+      "company": "Ping Identity",
+      "status": "Interview",
+      "notes": "Recruiter call went well",
+      "applied_at": "2026-08-20T12:00:00.000Z",
+      "workway_url": "https://workway.dev/job/ping-identity-staff-software-engineer-8676157002"
+    }
+  ],
+  "dashboard_url": "https://workway.dev/dashboard/seeker/applications"
 }`,
   },
   {
@@ -254,7 +357,7 @@ export const MCP_FAQS = [
   {
     question: "What is the WorkWay MCP server?",
     answer:
-      "It is a Model Context Protocol server that exposes WorkWay's job search and account features as tools an AI assistant can call directly. Once connected, you can search openings, save roles, follow companies, and manage your talent profile from inside a conversation instead of switching to a browser tab.",
+      "It is a Model Context Protocol server that exposes WorkWay's job search and account features as tools an AI assistant can call directly. Once connected, you can search openings, read full job descriptions, save roles, follow companies, track applications, and manage your talent profile from inside a conversation instead of switching to a browser tab.",
   },
   {
     question: "Which AI clients can connect to it?",

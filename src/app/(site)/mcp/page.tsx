@@ -12,6 +12,7 @@ import {
   Bell,
   UserRound,
   Link2,
+  ClipboardCheck,
 } from "lucide-react";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import { buildBreadcrumbJsonLd, buildFaqJsonLd } from "@/lib/seo/jsonld";
@@ -52,7 +53,7 @@ const CAPABILITIES = [
   {
     icon: Search,
     title: "Search the real feed",
-    body: "Every open role indexed from company ATS boards, filterable by domain, seniority, location, country, source and recency — the same index the site searches.",
+    body: "Every open role indexed from company ATS boards, filterable by domain, seniority, location, country, source, skill and recency — the same index the site searches. Pull the full description, required skills and pay for any one role to reason about a fit.",
   },
   {
     icon: Link2,
@@ -68,6 +69,11 @@ const CAPABILITIES = [
     icon: Bell,
     title: "Follow companies",
     body: "Track employers you care about. On Pro you get an email the moment they post something new, instead of finding out a week later.",
+  },
+  {
+    icon: ClipboardCheck,
+    title: "Track applications",
+    body: "Log a role as applied, move it through Applied, Interview, Offer or Rejected, and add notes — all from the chat, synced to your dashboard.",
   },
   {
     icon: UserRound,
@@ -169,8 +175,8 @@ export default function McpPage() {
             What you can do with it
           </h2>
           <p className="mt-3 max-w-2xl text-muted-foreground">
-            Ten tools, covering the whole loop from finding a role to tracking
-            the company that posted it.
+            Sixteen tools, covering the whole loop from finding a role to
+            tracking your application and the company that posted it.
           </p>
 
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
