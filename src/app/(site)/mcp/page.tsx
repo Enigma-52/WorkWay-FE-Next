@@ -148,6 +148,16 @@ export default function McpPage() {
                 Browse the tools
               </Link>
             </div>
+
+            <a
+              href="https://docs.workway.dev"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex items-center gap-1 font-mono text-xs text-muted-foreground hover:text-primary transition-colors"
+            >
+              Full developer docs at docs.workway.dev
+              <ArrowRight className="h-3 w-3" />
+            </a>
           </div>
         </div>
       </section>
