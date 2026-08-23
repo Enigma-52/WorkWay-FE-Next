@@ -200,7 +200,7 @@ ${faqSection}
 ## Underlying REST API
 
 The MCP tools call the same services as WorkWay's public HTTP API, so results
-never diverge from the website. Base URL: \`https://api.workway.dev\`
+never diverge from the website. Base URL: \`https://www.workway.dev\`
 
 - \`GET /api/job/list\` — paginated job search (q, domain, location, country, company_slug, employment_type, experience_level, platform, posted, page, limit, sort)
 - \`GET /api/job/details?slug=\` — one job with full description and related roles

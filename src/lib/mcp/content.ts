@@ -2,7 +2,7 @@
 // here mirrors the registered tool schemas in WorkWay--BE/mcp/tools/*.js —
 // update both together when a tool's arguments change.
 
-export const MCP_ENDPOINT = "https://api.workway.dev/mcp";
+export const MCP_ENDPOINT = "https://www.workway.dev/api/mcp";
 export const API_KEYS_PATH = "/dashboard/seeker/api-keys";
 
 export type McpToolParam = {
