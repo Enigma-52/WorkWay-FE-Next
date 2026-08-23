@@ -8,7 +8,10 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const body = await req.json();
   const res = await fetch(new URL(`/api/applications/${id}`, env.BACKEND_API_URL), {
     method: "PATCH",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "x-internal-api-secret": process.env.INTERNAL_API_SECRET || "",
+    },
     body: JSON.stringify({ ...body, user_id: session.user.dbId }),
   });
   const data = await res.json();

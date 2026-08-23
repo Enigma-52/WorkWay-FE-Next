@@ -7,6 +7,7 @@ export async function GET() {
 
   const res = await fetch(new URL(`/api/user/me?user_id=${session.user.dbId}`, env.BACKEND_API_URL), {
     cache: "no-store",
+    headers: { "x-internal-api-secret": process.env.INTERNAL_API_SECRET || "" },
   });
   const data = await res.json();
   return Response.json(data, { status: res.status });
@@ -24,7 +25,10 @@ export async function PATCH(req: Request) {
   // guessing their email.
   const res = await fetch(new URL("/api/user/me", env.BACKEND_API_URL), {
     method: "PATCH",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "x-internal-api-secret": process.env.INTERNAL_API_SECRET || "",
+    },
     body: JSON.stringify({ ...body, email: session.user.email }),
   });
   const data = await res.json();

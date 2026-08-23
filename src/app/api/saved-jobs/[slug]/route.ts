@@ -7,7 +7,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ slug
   const { slug } = await params;
   const res = await fetch(
     new URL(`/api/saved-jobs/${slug}?user_id=${session.user.dbId}`, env.BACKEND_API_URL),
-    { method: "DELETE" }
+    { method: "DELETE", headers: { "x-internal-api-secret": process.env.INTERNAL_API_SECRET || "" } }
   );
   const data = await res.json();
   return Response.json(data, { status: res.status });

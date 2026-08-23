@@ -11,7 +11,9 @@ export async function GET(req: Request) {
   if (searchParams.get("alert_type")) qs.set("alert_type", searchParams.get("alert_type")!);
   if (searchParams.get("company_slug")) qs.set("company_slug", searchParams.get("company_slug")!);
 
-  const res = await fetch(new URL(`/api/alerts?${qs}`, env.BACKEND_API_URL));
+  const res = await fetch(new URL(`/api/alerts?${qs}`, env.BACKEND_API_URL), {
+    headers: { "x-internal-api-secret": process.env.INTERNAL_API_SECRET || "" },
+  });
   const data = await res.json();
   return Response.json(data, { status: res.status });
 }
@@ -23,7 +25,10 @@ export async function POST(req: Request) {
   const body = await req.json();
   const res = await fetch(new URL("/api/alerts", env.BACKEND_API_URL), {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "x-internal-api-secret": process.env.INTERNAL_API_SECRET || "",
+    },
     body: JSON.stringify({ ...body, user_id: session.user.dbId }),
   });
   const data = await res.json();

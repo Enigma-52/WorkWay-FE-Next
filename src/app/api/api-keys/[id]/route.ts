@@ -9,7 +9,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   // belonging to someone else returns 404 rather than revoking anything.
   const res = await fetch(
     new URL(`/api/api-keys/${id}?user_id=${session.user.dbId}`, env.BACKEND_API_URL),
-    { method: "DELETE" }
+    { method: "DELETE", headers: { "x-internal-api-secret": process.env.INTERNAL_API_SECRET || "" } }
   );
   const data = await res.json();
   return Response.json(data, { status: res.status });

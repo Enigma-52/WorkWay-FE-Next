@@ -9,7 +9,10 @@ export async function POST(req: Request) {
   const body = await req.json();
   const res = await fetch(new URL("/api/applications", env.BACKEND_API_URL), {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "x-internal-api-secret": process.env.INTERNAL_API_SECRET || "",
+    },
     body: JSON.stringify({ ...body, user_id: session.user.dbId }),
   });
   const data = await res.json();
@@ -22,7 +25,8 @@ export async function GET() {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
   const res = await fetch(
-    new URL(`/api/applications?user_id=${session.user.dbId}`, env.BACKEND_API_URL)
+    new URL(`/api/applications?user_id=${session.user.dbId}`, env.BACKEND_API_URL),
+    { headers: { "x-internal-api-secret": process.env.INTERNAL_API_SECRET || "" } }
   );
   const data = await res.json();
   return Response.json(data, { status: res.status });
