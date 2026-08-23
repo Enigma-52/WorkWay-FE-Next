@@ -16,6 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { MCP_ENDPOINT } from "@/lib/mcp/content";
 
 type ApiKey = {
   id: number;
@@ -34,8 +35,6 @@ const EXPIRY_OPTIONS = [
   { label: "90 days", value: "90" },
   { label: "1 year", value: "365" },
 ];
-
-const MCP_ENDPOINT = "https://api.workway.dev/mcp";
 
 function formatDate(iso: string | null) {
   if (!iso) return null;
