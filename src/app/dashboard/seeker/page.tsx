@@ -13,7 +13,10 @@ async function fetchCount(path: string, userId: string) {
   try {
     const res = await fetch(
       new URL(`${path}?user_id=${userId}`, env.BACKEND_API_URL).toString(),
-      { cache: "no-store" }
+      {
+        cache: "no-store",
+        headers: { "x-internal-api-secret": process.env.INTERNAL_API_SECRET || "" },
+      }
     );
     if (!res.ok) return 0;
     const data = await res.json();
