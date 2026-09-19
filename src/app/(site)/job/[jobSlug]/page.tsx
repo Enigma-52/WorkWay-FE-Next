@@ -8,27 +8,35 @@ import { buildJobPostingJsonLd, buildBreadcrumbJsonLd } from "@/lib/seo/jsonld";
 import { buildJobDetailBreadcrumb } from "@/lib/seo/breadcrumbs";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import type { JobDetails, JobInsights, SalaryInsightRow } from "@/types/jobs";
-import type { CompanyListResponse } from "@/lib/api/contracts";
+import { cache } from "react";
 
 type SalaryInsightsResponse = {
   by_domain: { domain: string; avg_salary: number; count: number }[];
   by_experience_level: { level: string; avg_salary: number; count: number }[];
 };
 
-async function fetchJobInsights(job: JobDetails): Promise<JobInsights> {
-  const [companyRes, salaryRes] = await Promise.all([
-    backendGet<CompanyListResponse>("/api/company", {
-      query: { q: job.company, limit: 1 },
-      forwardHeaders: false,
-      revalidate: 3600,
-    }).catch(() => null),
-    backendGet<SalaryInsightsResponse>("/api/job/salary-insights", {
-      forwardHeaders: false,
-      revalidate: 3600,
-    }).catch(() => null),
-  ]);
+// generateMetadata and JobPage both need the same job; revalidate: false
+// opts out of Next's fetch dedupe, so without React.cache every pageview
+// hit /api/job/details twice.
+const fetchJobDetails = cache((jobSlug: string) =>
+  backendGet<JobDetails>("/api/job/details", {
+    query: { slug: jobSlug },
+    forwardHeaders: false,
+    revalidate: false,
+  })
+);
 
-  const companyOpenJobs = companyRes?.companies?.[0]?.jobs_open_count;
+async function fetchJobInsights(job: JobDetails): Promise<JobInsights> {
+  // The company's open-role count comes back on the details payload itself
+  // (company_open_jobs) — previously this ran a full /api/company name search
+  // per pageview just to read one number.
+  const salaryRes = await backendGet<SalaryInsightsResponse>("/api/job/salary-insights", {
+    forwardHeaders: false,
+    revalidate: 3600,
+  }).catch(() => null);
+
+  const companyOpenJobs =
+    typeof job.company_open_jobs === "number" ? job.company_open_jobs : undefined;
   const domainSalary: SalaryInsightRow | undefined = salaryRes?.by_domain.find(
     (r) => r.domain === job.domain
   );
@@ -53,11 +61,7 @@ export async function generateMetadata({
   params,
 }: JobPageProps): Promise<Metadata> {
   const { jobSlug } = await params;
-  const job = await backendGet<JobDetails>("/api/job/details", {
-    query: { slug: jobSlug },
-    forwardHeaders: false,
-    revalidate: false,
-  }).catch(() => null);
+  const job = await fetchJobDetails(jobSlug).catch(() => null);
 
   if (!job) {
     return {
@@ -94,11 +98,7 @@ export async function generateMetadata({
 
 export default async function JobPage({ params }: JobPageProps) {
   const { jobSlug } = await params;
-  const job = await backendGet<JobDetails>("/api/job/details", {
-    query: { slug: jobSlug },
-    forwardHeaders: false,
-    revalidate: false,
-  }).catch(() => null);
+  const job = await fetchJobDetails(jobSlug).catch(() => null);
 
   if (!job || !job.slug) {
     notFound();

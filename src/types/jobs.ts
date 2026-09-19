@@ -96,6 +96,7 @@ export type SkillJobGroup = {
 };
 
 export type JobDetails = JobListing & {
+  company_open_jobs?: number | null;
   similarJobsByDomain?: JobListing[];
   otherJobsByCompany?: JobListing[];
   jobsBySkill?: SkillJobGroup[];

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cache } from "react";
 import { notFound } from "next/navigation";
 import CompanyPageClient from "@/components/dynamic/CompanyPageClient";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
@@ -19,6 +20,17 @@ import type { CompanyDetails } from "@/types/jobs";
 // fully dynamic instead — see job/[jobSlug]/page.tsx for the same fix.
 export const dynamic = "force-dynamic";
 
+// Shared by generateMetadata and CompanyPage — revalidate: false opts out of
+// Next's fetch dedupe, so without React.cache each pageview hit the backend
+// twice for the same company.
+const fetchCompanyDetails = cache((companySlug: string) =>
+  backendGet<CompanyDetails>("/api/company/details", {
+    query: { slug: companySlug },
+    forwardHeaders: false,
+    revalidate: false,
+  })
+);
+
 type CompanyPageProps = {
   params: Promise<{ companySlug: string }>;
 };
@@ -27,11 +39,7 @@ export async function generateMetadata({
   params,
 }: CompanyPageProps): Promise<Metadata> {
   const { companySlug } = await params;
-  const company = await backendGet<CompanyDetails>("/api/company/details", {
-    query: { slug: companySlug },
-    forwardHeaders: false,
-    revalidate: false,
-  }).catch(() => null);
+  const company = await fetchCompanyDetails(companySlug).catch(() => null);
 
   if (!company) {
     return buildPageMetadata({
@@ -82,11 +90,7 @@ export async function generateMetadata({
 
 export default async function CompanyPage({ params }: CompanyPageProps) {
   const { companySlug } = await params;
-  const company = await backendGet<CompanyDetails>("/api/company/details", {
-    query: { slug: companySlug },
-    forwardHeaders: false,
-    revalidate: false,
-  }).catch(() => null);
+  const company = await fetchCompanyDetails(companySlug).catch(() => null);
 
   if (!company || !company.name) {
     notFound();

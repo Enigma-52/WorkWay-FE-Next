@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
+import { Suspense, cache } from "react";
 import { backendGet } from "@/lib/api/server-client";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import {
@@ -59,6 +59,19 @@ function buildListQuery(
   return query;
 }
 
+// generateMetadata and JobsListSection both need the same list response for
+// the same searchParams. Without React.cache the two calls are separate
+// fetches (revalidate: false opts out of Next's fetch dedupe), so every
+// pageview hit the backend twice — this collapses them into one per render.
+const fetchJobList = cache((queryKey: string) => {
+  const query = JSON.parse(queryKey) as Record<string, string | number>;
+  return backendGet<JobListResponse>("/api/job/list", {
+    query,
+    revalidate: JOB_LIST_REVALIDATE,
+    forwardHeaders: false,
+  });
+});
+
 const EMPTY_LIST_RESPONSE: JobListResponse = {
   jobs: [],
   meta: {
@@ -82,11 +95,7 @@ export async function generateMetadata({
 }: JobsPageProps): Promise<Metadata> {
   const sp = await searchParams;
   const query = buildListQuery(sp);
-  const data = await backendGet<JobListResponse>("/api/job/list", {
-    query: query as Record<string, string | number>,
-    revalidate: JOB_LIST_REVALIDATE,
-    forwardHeaders: false,
-  }).catch(() => null);
+  const data = await fetchJobList(JSON.stringify(query)).catch(() => null);
 
   const total = data?.meta?.total ?? 0;
   const title = "Find Jobs — Search Open Roles | WorkWay";
@@ -123,11 +132,9 @@ async function JobsListSection({
   const sp = await searchParams;
   const query = buildListQuery(sp);
 
-  const data = await backendGet<JobListResponse>("/api/job/list", {
-    query: query as Record<string, string | number>,
-    revalidate: JOB_LIST_REVALIDATE,
-    forwardHeaders: false,
-  }).catch(() => EMPTY_LIST_RESPONSE);
+  const data = await fetchJobList(JSON.stringify(query)).catch(
+    () => EMPTY_LIST_RESPONSE
+  );
 
   const payload: JobListResponse =
     data?.jobs && Array.isArray(data.jobs)
