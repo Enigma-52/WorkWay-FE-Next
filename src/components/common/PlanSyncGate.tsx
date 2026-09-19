@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
+import { fetchBootstrap } from "@/lib/bootstrap";
 
 /**
  * The session JWT caches `plan_key`/`roles` at sign-in and only changes when
@@ -12,7 +13,8 @@ import { useSession } from "next-auth/react";
  *
  * Mounted app-wide: on every session load (fresh login, page reload, tab
  * refocus — whenever NextAuth re-hydrates the session) this checks the real
- * DB value via `/api/user/me` and calls `update()` if it's drifted, so the
+ * DB value (via the shared /api/me/bootstrap request) and calls `update()` if
+ * it's drifted, so the
  * fix lands everywhere `session.user.planKey`/`roles` are read, not just
  * one page.
  */
@@ -26,8 +28,8 @@ export default function PlanSyncGate() {
     if (lastChecked.current === session.user.dbId) return;
     lastChecked.current = session.user.dbId;
 
-    fetch("/api/user/me")
-      .then((r) => (r.ok ? r.json() : null))
+    fetchBootstrap(session.user.dbId)
+      .then((boot) => boot?.me ?? null)
       .then((fresh) => {
         if (!fresh) return;
         const rolesChanged = JSON.stringify(fresh.roles ?? []) !== JSON.stringify(session.user.roles ?? []);

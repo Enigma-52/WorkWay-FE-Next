@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from "react";
 import { useSession } from "next-auth/react";
+import { fetchBootstrap } from "@/lib/bootstrap";
 
 type JobStatusContextValue = {
   savedSlugs: Set<string>;
@@ -38,14 +39,15 @@ export function JobStatusProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    // Fetch both in parallel — only slugs matter, full data is in the dashboard
-    Promise.all([
-      fetch("/api/saved-jobs").then((r) => r.json()).catch(() => ({ saved_jobs: [] })),
-      fetch("/api/applications").then((r) => r.json()).catch(() => ({ applications: [] })),
-    ]).then(([savedData, appsData]) => {
-      setSavedSlugs(new Set((savedData.saved_jobs ?? []).map((j: any) => j.job_slug as string)));
-      setAppliedSlugs(new Set((appsData.applications ?? []).map((a: any) => a.job_slug as string)));
-    }).catch(() => {}).finally(() => setReady(true));
+    // Only slugs matter here (full data lives in the dashboard); they ride on
+    // the shared bootstrap request alongside the user row PlanSyncGate needs.
+    fetchBootstrap(session.user.dbId)
+      .then((boot) => {
+        if (!boot) return;
+        setSavedSlugs(new Set(boot.saved_slugs));
+        setAppliedSlugs(new Set(boot.applied_slugs));
+      })
+      .finally(() => setReady(true));
   }, [session?.user?.dbId, status]);
 
   const addSaved = useCallback((slug: string) => {

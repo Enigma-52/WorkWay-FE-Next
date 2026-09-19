@@ -95,8 +95,18 @@ function DomainJobList({
   );
 }
 
+// Only the top few domains start expanded. Every open panel fetches its own
+// page of jobs on mount, and with all panels open a company like OpenAI fired
+// 26 parallel /api/company/jobs requests per pageview — each queued behind
+// the browser's 6-connection limit and each a backend query. Collapsed
+// panels mount (and fetch) only when the visitor opens them.
+const DEFAULT_OPEN_DOMAINS = 3;
+
 export function DomainAccordion({ companySlug, domainStats }: DomainAccordionProps) {
   const sorted = [...domainStats].sort((a, b) => b.count - a.count);
+  const [open, setOpen] = useState<string[]>(() =>
+    sorted.slice(0, DEFAULT_OPEN_DOMAINS).map((s) => s.domain)
+  );
 
   if (sorted.length === 0) {
     return (
@@ -109,7 +119,8 @@ export function DomainAccordion({ companySlug, domainStats }: DomainAccordionPro
   return (
     <Accordion
       type="multiple"
-      defaultValue={sorted.map((s) => s.domain)}
+      value={open}
+      onValueChange={setOpen}
       className="space-y-3"
     >
       {sorted.map((stat) => (
@@ -131,11 +142,13 @@ export function DomainAccordion({ companySlug, domainStats }: DomainAccordionPro
           </AccordionTrigger>
 
           <AccordionContent className="pb-0">
-            <DomainJobList
-              companySlug={companySlug}
-              domain={stat.domain}
-              totalCount={stat.count}
-            />
+            {open.includes(stat.domain) && (
+              <DomainJobList
+                companySlug={companySlug}
+                domain={stat.domain}
+                totalCount={stat.count}
+              />
+            )}
           </AccordionContent>
         </AccordionItem>
       ))}

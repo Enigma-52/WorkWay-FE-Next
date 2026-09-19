@@ -2,13 +2,7 @@
 
 import { useMemo, useRef, useState } from "react";
 import { Globe, X } from "lucide-react";
-import countries from "world-countries";
-
-type CountryOption = { cca3: string; name: string };
-
-const COUNTRY_OPTIONS: CountryOption[] = countries
-  .map((c) => ({ cca3: c.cca3, name: c.name.common }))
-  .sort((a, b) => a.name.localeCompare(b.name));
+import { COUNTRY_OPTIONS, type CountryOption } from "@/data/countries";
 
 const BY_CODE = new Map(COUNTRY_OPTIONS.map((c) => [c.cca3, c.name]));
 

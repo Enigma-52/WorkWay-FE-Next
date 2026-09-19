@@ -15,7 +15,12 @@ type AppProvidersProps = {
 
 export default function AppProviders({ children }: AppProvidersProps) {
   return (
-    <SessionProvider>
+    // NextAuth re-fetches /api/auth/session whenever the tab regains focus
+    // (and once more right after mount in practice), which showed up as two
+    // sequential session round-trips on every page before any gated data
+    // fetch could start. Plan/role drift is already handled explicitly by
+    // PlanSyncGate, so the focus refetch buys nothing here.
+    <SessionProvider refetchOnWindowFocus={false}>
       <JobStatusProvider>
         {children}
         <GuestPromoModal />
