@@ -16,7 +16,7 @@ const SkillCard = ({
 }: SkillCardProps) => {
   return (
     <div>
-      <Link href={`/skill/${slug}`} className="group block">
+      <Link prefetch={false} href={`/skill/${slug}`} className="group block">
         <div className="relative overflow-hidden rounded-xl border border-border bg-card p-6 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_40px_hsl(82_100%_55%/0.15)]">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 

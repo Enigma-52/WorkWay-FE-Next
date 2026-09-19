@@ -32,7 +32,7 @@ export default function FeaturedSection({
       </div>
       <div className="flex flex-wrap gap-2">
         {companies.map((company) => (
-          <Link
+          <Link prefetch={false}
             href={`/company/${company.slug}`}
             key={company.id}
             className="flex items-center gap-2 rounded-lg border border-border bg-secondary/50 px-3 py-2 transition-all hover:border-primary/50 hover:bg-secondary"

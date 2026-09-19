@@ -110,7 +110,7 @@ export function JobCard({ job }: JobCardProps) {
       <div className="relative flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex gap-4 min-w-0 flex-1">
           {/* Company Logo */}
-          <Link href={`/job/${job.slug}`} className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full">
+          <Link prefetch={false} href={`/job/${job.slug}`} className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full">
             {job.company_logo_url ? (
               <Image
                 src={job.company_logo_url}
@@ -135,7 +135,7 @@ export function JobCard({ job }: JobCardProps) {
           </Link>
           {/* Job Info */}
           <div className="flex flex-col gap-2 min-w-0">
-            <Link href={`/job/${job.slug}`} onClick={trackCardClick}>
+            <Link prefetch={false} href={`/job/${job.slug}`} onClick={trackCardClick}>
               <h2 className="font-display text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                 {job.title}
               </h2>
@@ -252,7 +252,7 @@ export function JobCard({ job }: JobCardProps) {
             {skillsList.length > 0 ? (
               <div className="mt-3 flex flex-wrap gap-1.5">
                 {skillsList.slice(0, 10).map((s) => (
-                  <Link
+                  <Link prefetch={false}
                     key={s.slug}
                     href={`/skill/${s.slug}`}
                     className="inline-flex items-center rounded-md border border-border bg-muted/60 px-2 py-0.5 text-xs text-muted-foreground hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-colors"
@@ -269,7 +269,7 @@ export function JobCard({ job }: JobCardProps) {
             ) : null}
 
             {displayDesc ? (
-              <Link href={`/job/${job.slug}`} className="mt-4 block">
+              <Link prefetch={false} href={`/job/${job.slug}`} className="mt-4 block">
                 <p className="text-sm text-muted-foreground line-clamp-2">
                   {displayDesc}
                 </p>

@@ -493,7 +493,7 @@ export default async function ProfilePage({ params }: Props) {
                     {skills.map((skill) => {
                       const { name, slug } = skillParts(skill);
                       return slug ? (
-                        <Link key={slug} href={`/skill/${slug}`}>
+                        <Link prefetch={false} key={slug} href={`/skill/${slug}`}>
                           <Badge
                             variant="secondary"
                             className="cursor-pointer px-3 py-1 text-sm transition-colors hover:bg-secondary/60"

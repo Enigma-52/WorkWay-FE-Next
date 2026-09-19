@@ -35,7 +35,7 @@ export function TalentCard({ profile }: { profile: TalentProfile }) {
   const skills = profile.skills ?? [];
 
   return (
-    <Link
+    <Link prefetch={false}
       href={`/p/${profile.username}`}
       className="group relative flex flex-col gap-4 rounded-lg border border-border bg-card p-6 transition-all duration-300 hover:border-primary/40 hover:glow-subtle"
     >

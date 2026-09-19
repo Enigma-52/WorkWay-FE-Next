@@ -158,7 +158,7 @@ const row3: Company[] = [
 ];
 
 const Pill = ({ name, slug, logo }: Company) => (
-  <Link
+  <Link prefetch={false}
     href={`/company/${slug}`}
     className="group flex items-center justify-center shrink-0 mx-3"
   >

@@ -472,7 +472,7 @@ export default function CompaniesPage() {
                         )}
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
-                        <Link
+                        <Link prefetch={false}
                           href={`/company/${company.slug}`}
                           className="text-xs text-muted-foreground hover:text-foreground transition-colors"
                           target="_blank"
@@ -593,7 +593,7 @@ export default function CompaniesPage() {
                       </div>
                       <div className="flex items-center gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-all">
                         {alert.company_slug && (
-                          <Link
+                          <Link prefetch={false}
                             href={`/company/${alert.company_slug}`}
                             className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
                           >
@@ -683,7 +683,7 @@ export default function CompaniesPage() {
                           name={company.name}
                           size={7}
                         />
-                        <Link
+                        <Link prefetch={false}
                           href={`/company/${company.slug}`}
                           className="text-sm font-medium truncate hover:text-primary transition-colors"
                         >
@@ -691,7 +691,7 @@ export default function CompaniesPage() {
                         </Link>
                       </div>
                       {company.totalOpenRoles > 0 && (
-                        <Link
+                        <Link prefetch={false}
                           href={`/company/${company.slug}`}
                           className="shrink-0 flex items-center gap-1.5 text-[11px] text-muted-foreground hover:text-primary transition-colors"
                         >
@@ -714,7 +714,7 @@ export default function CompaniesPage() {
                             className="flex items-center gap-3 px-4 py-3 border-b border-border last:border-0 hover:bg-secondary/10 transition-colors group"
                           >
                             <div className="flex-1 min-w-0">
-                              <Link
+                              <Link prefetch={false}
                                 href={`/job/${job.slug}`}
                                 className="text-sm font-medium truncate block hover:text-primary transition-colors"
                               >

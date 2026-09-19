@@ -71,7 +71,7 @@ const JobCard = ({
       {/* Full-card link: crawlable <a href>, kept behind nested interactive
           elements (skill tags, save button) via z-index so both stay clickable
           without nesting <a> inside <a>. */}
-      <Link
+      <Link prefetch={false}
         href={`/job/${slug}`}
         aria-label={title}
         className="absolute inset-0 z-0 cursor-pointer"
@@ -191,7 +191,7 @@ const JobCard = ({
       {skillsList.length > 0 ? (
         <div className="mt-2 flex flex-wrap gap-1.5">
           {skillsList.slice(0, 8).map((s) => (
-            <Link
+            <Link prefetch={false}
               key={s.slug}
               href={`/skill/${s.slug}`}
               className="relative z-10 inline-flex items-center rounded-md border border-border bg-muted/60 px-2 py-0.5 text-xs text-muted-foreground hover:bg-primary/10 hover:text-primary transition-colors"

@@ -111,7 +111,7 @@ export default function SavedJobsPage() {
                         )}
                       </div>
                       <div className="min-w-0">
-                        <Link
+                        <Link prefetch={false}
                           href={`/job/${job.job_slug}`}
                           className="font-medium text-sm hover:text-primary transition-colors truncate block leading-tight"
                         >

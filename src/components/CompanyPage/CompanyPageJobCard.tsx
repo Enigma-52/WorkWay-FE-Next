@@ -55,7 +55,7 @@ export function JobCard({ job }: JobCardProps) {
 
   return (
     <div className="group flex flex-col px-5 py-4 hover:bg-secondary/50 transition-all duration-200 border-b border-border last:border-b-0 relative">
-      <Link
+      <Link prefetch={false}
         href={`/job/${job.slug}`}
         className="flex items-center justify-between flex-1 min-w-0"
       >

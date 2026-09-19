@@ -40,10 +40,13 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
     { label: "Domains", value: domainStats.length, icon: Users },
   ];
 
-  // Check follow status once session loads
+  // Check follow status once session loads. Keyed on the stable user id
+  // rather than the session object (which NextAuth replaces on every
+  // re-fetch/update(), re-running this and fetching twice per pageview).
+  const dbId = session?.user?.dbId ?? null;
   useEffect(() => {
     if (status === "loading") return;
-    if (!session?.user?.dbId || !(company as any).slug) {
+    if (!dbId || !(company as any).slug) {
       setCheckDone(true);
       return;
     }
@@ -57,7 +60,7 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
       })
       .catch(() => {})
       .finally(() => setCheckDone(true));
-  }, [session, status, (company as any).slug]);
+  }, [dbId, status, (company as any).slug]);
 
   async function handleFollow() {
     if (!session) {

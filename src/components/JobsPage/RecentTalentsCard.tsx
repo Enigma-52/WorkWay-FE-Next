@@ -46,7 +46,7 @@ export default function RecentTalentsCard() {
       ) : (
         <div className="space-y-3">
           {profiles.map((profile) => (
-            <Link
+            <Link prefetch={false}
               key={profile.id}
               href={`/p/${profile.username}`}
               className="group flex items-center gap-3 -mx-1 rounded-lg px-1 py-1 transition-colors hover:bg-secondary/50"

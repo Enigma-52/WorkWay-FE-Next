@@ -96,7 +96,7 @@ function highlightSkills(text: string, skills: Skill[]): ReactNode {
       );
       if (skill) {
         result.push(
-          <Link
+          <Link prefetch={false}
             key={`skill-${result.length}`}
             href={`/skill/${skill.slug}`}
             className="rounded py-0.5 font-medium text-primary"

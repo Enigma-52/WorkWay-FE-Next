@@ -124,14 +124,14 @@ export default function JobViewFeed({
                 </div>
                 <div className="mt-0.5 text-foreground">
                   <span className="text-muted-foreground">viewed </span>
-                  <Link
+                  <Link prefetch={false}
                     href={`/job/${e.job_slug}`}
                     className="font-semibold underline underline-offset-2 hover:text-primary"
                   >
                     {e.job_title}
                   </Link>{" "}
                   <span className="text-muted-foreground">at </span>
-                  <Link
+                  <Link prefetch={false}
                     href={`/company/${e.company.toLowerCase().replace(/ /g, '-')}`}
                     className="font-semibold underline underline-offset-2 hover:text-primary"
                   >

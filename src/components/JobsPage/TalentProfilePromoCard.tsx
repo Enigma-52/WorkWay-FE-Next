@@ -15,8 +15,12 @@ export default function TalentProfilePromoCard() {
   const [profileState, setProfileState] = useState<ProfileState>("loading");
   const [username, setUsername] = useState<string | null>(null);
 
+  // Keyed on the stable user id, not the session object: NextAuth hands out
+  // a new session object after every re-fetch/update(), which re-ran this
+  // effect and fetched the profile twice per pageview.
+  const dbId = session?.user?.dbId ?? null;
   useEffect(() => {
-    if (!session) {
+    if (!dbId) {
       setProfileState("none");
       return;
     }
@@ -31,7 +35,7 @@ export default function TalentProfilePromoCard() {
         }
       })
       .catch(() => setProfileState("none"));
-  }, [session]);
+  }, [dbId]);
 
   const isPublished = profileState === "published";
 
@@ -63,7 +67,7 @@ export default function TalentProfilePromoCard() {
 
       {isPublished ? (
         <Button size="sm" className="w-full" asChild>
-          <Link href={`/p/${username}`}>View my profile</Link>
+          <Link prefetch={false} href={`/p/${username}`}>View my profile</Link>
         </Button>
       ) : session ? (
         <Button size="sm" className="w-full" asChild>

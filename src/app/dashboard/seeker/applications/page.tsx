@@ -234,7 +234,7 @@ export default function ApplicationsPage() {
 
                     {/* Actions */}
                     <td className="px-4 py-3 text-right">
-                      <Link
+                      <Link prefetch={false}
                         href={`/job/${app.job_slug}`}
                         className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground opacity-0 group-hover:opacity-100 transition-all"
                       >

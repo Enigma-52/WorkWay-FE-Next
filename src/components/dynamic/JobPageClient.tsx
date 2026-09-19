@@ -355,7 +355,7 @@ export default function JobPageClient({ job, insights }: Props) {
                       {job.skills
                         .filter((skill) => skill.slug && skill.name)
                         .map((skill) => (
-                          <Link key={skill.slug} href={`/skill/${skill.slug}`}>
+                          <Link prefetch={false} key={skill.slug} href={`/skill/${skill.slug}`}>
                             <JobBadge
                               variant="default"
                               className="cursor-pointer hover:bg-primary/10 transition-colors"
@@ -760,7 +760,7 @@ export default function JobPageClient({ job, insights }: Props) {
                 {jobsBySkill.map((group) => (
                   <div key={group.skill_slug}>
                     <div className="mb-4 flex items-center justify-between">
-                      <Link
+                      <Link prefetch={false}
                         href={`/skill/${group.skill_slug}`}
                         className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-semibold transition-colors hover:bg-primary/10"
                       >
@@ -786,7 +786,7 @@ export default function JobPageClient({ job, insights }: Props) {
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {remainingSkills.map((skill) => (
-                      <Link
+                      <Link prefetch={false}
                         key={skill.slug}
                         href={`/skill/${skill.slug}`}
                         className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1.5 text-sm text-foreground transition-colors hover:border-primary/30 hover:bg-primary/5 hover:text-primary"

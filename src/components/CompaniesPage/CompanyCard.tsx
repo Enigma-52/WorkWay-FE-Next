@@ -47,7 +47,7 @@ export default function CompanyCard({ company }: CompanyCardProps) {
         <span className="font-mono text-sm text-muted-foreground">
           {company.jobs_open_count ?? 0} open jobs
         </span>
-        <Link
+        <Link prefetch={false}
           href={`/company/${company.slug}`}
           className="flex items-center gap-1 text-sm font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100"
         >
