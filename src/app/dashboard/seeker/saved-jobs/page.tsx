@@ -156,7 +156,7 @@ export default function SavedJobsPage() {
 
                   {/* Actions */}
                   <td className="px-4 py-3">
-                    <div className="flex items-center justify-end gap-1.5 opacity-0 group-hover:opacity-100 transition-all">
+                    <div className="flex items-center justify-end gap-1.5 pointer-fine:opacity-0 pointer-fine:group-hover:opacity-100 transition-all">
                       {job.job_url && (
                         <a
                           href={job.job_url}

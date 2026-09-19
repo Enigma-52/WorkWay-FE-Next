@@ -199,11 +199,18 @@ export default function JobsPageClient({ data }: Props) {
       {/* Main content */}
       <main className="container mx-auto py-8 md:py-12">
         <div className="grid gap-8 lg:grid-cols-[300px_minmax(0,1fr)_360px]">
-          {/* Sidebar facets - hidden on small screens, show on lg */}
-          <div className="hidden lg:block lg:sticky lg:top-24 lg:self-start space-y-4">
-            <SiteStatsCard />
-            <RecentTalentsCard />
-            <LatestChangelogCard />
+          {/* Left column. On phones the widgets drop below the job list
+              (grid `order`) instead of being removed — the same DOM renders
+              at every width, so mobile visitors and mobile-first crawlers get
+              the same content as desktop. Only the facet sidebar stays
+              desktop-only: the filter selects above the list already cover it. */}
+          <div className="order-2 space-y-4 lg:order-none lg:sticky lg:top-24 lg:self-start">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+              <SiteStatsCard />
+              <RecentTalentsCard />
+              <LatestChangelogCard />
+            </div>
+            <div className="hidden lg:block">
             <JobsFacetsSidebar
               domains={facets.domains}
               employmentTypes={facets.employment_types}
@@ -221,9 +228,10 @@ export default function JobsPageClient({ data }: Props) {
                 handleSidebarFilter("experience_level")(v)
               }
             />
+            </div>
           </div>
 
-          <div className="min-w-0 space-y-6">
+          <div className="order-1 min-w-0 space-y-6 lg:order-none">
             <JobsListFilters
               q={q}
               domain={domain}
@@ -302,10 +310,12 @@ export default function JobsPageClient({ data }: Props) {
             )}
           </div>
 
-          {/* Live activity feed - right sidebar on large screens */}
-          <div className="hidden lg:block lg:sticky lg:top-24 lg:self-start space-y-4">
-            <TalentProfilePromoCard />
-            <JobViewFeed />
+          {/* Right column — below the list on phones, sticky rail on lg. */}
+          <div className="order-3 lg:order-none lg:sticky lg:top-24 lg:self-start">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+              <TalentProfilePromoCard />
+              <JobViewFeed />
+            </div>
           </div>
         </div>
       </main>

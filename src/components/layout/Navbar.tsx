@@ -156,10 +156,11 @@ const Navbar = () => {
           {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
 
-        {/* CTA */}
-        {status === "loading" ? (
-          <div className="h-8 w-24 rounded-md bg-muted animate-pulse" />
-        ) : session ? (
+        {/* CTA. While the session resolves (always the case in the SSR HTML,
+            so also what crawlers and the first paint show) render the
+            logged-out CTA rather than a grey placeholder box; signed-in
+            visitors see it swap to Dashboard once hydration finishes. */}
+        {status !== "loading" && session ? (
           <div className="flex items-center gap-2">
             <Button size="sm" className="gap-1" asChild>
               <Link href="/dashboard">
@@ -187,13 +188,15 @@ const Navbar = () => {
         )}
       </div>
 
+      {/* Rows are min-h-11 (44px) — the mobile tap-target minimum; the old
+          py-2 text-sm rows measured 36px. */}
       {mobileMenuOpen && (
-        <nav className="md:hidden border-t bg-background px-6 py-3 flex flex-col gap-1">
+        <nav className="md:hidden border-t bg-background px-4 py-2 flex flex-col">
           {PRIMARY_LINKS.map(({ href, label }) => (
             <a
               key={href}
               href={href}
-              className="py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="flex min-h-11 items-center px-2 text-base text-muted-foreground hover:text-foreground transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
               {label}
@@ -202,7 +205,7 @@ const Navbar = () => {
 
           <button
             type="button"
-            className="flex items-center justify-between py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="flex min-h-11 items-center justify-between px-2 text-base text-muted-foreground hover:text-foreground transition-colors"
             onClick={() => setMobileExploreOpen((v) => !v)}
             aria-expanded={mobileExploreOpen}
           >
@@ -210,12 +213,12 @@ const Navbar = () => {
             <ChevronDown className={`w-4 h-4 transition-transform ${mobileExploreOpen ? "rotate-180" : ""}`} />
           </button>
           {mobileExploreOpen && (
-            <div className="pl-3 flex flex-col gap-1 border-l border-border ml-1">
+            <div className="ml-3 flex flex-col border-l border-border pl-3">
               {EXPLORE_LINKS.map(({ href, label }) => (
                 <a
                   key={href}
                   href={href}
-                  className="py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  className="flex min-h-11 items-center text-[15px] text-muted-foreground hover:text-foreground transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {label}
@@ -226,7 +229,7 @@ const Navbar = () => {
 
           <button
             type="button"
-            className="flex items-center justify-between py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="flex min-h-11 items-center justify-between px-2 text-base text-muted-foreground hover:text-foreground transition-colors"
             onClick={() => setMobileFeaturesOpen((v) => !v)}
             aria-expanded={mobileFeaturesOpen}
           >
@@ -234,12 +237,12 @@ const Navbar = () => {
             <ChevronDown className={`w-4 h-4 transition-transform ${mobileFeaturesOpen ? "rotate-180" : ""}`} />
           </button>
           {mobileFeaturesOpen && (
-            <div className="pl-3 flex flex-col gap-1 border-l border-border ml-1">
+            <div className="ml-3 flex flex-col border-l border-border pl-3">
               {FEATURE_LINKS.map(({ href, label }) => (
                 <a
                   key={href}
                   href={href}
-                  className="py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  className="flex min-h-11 items-center text-[15px] text-muted-foreground hover:text-foreground transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {label}
@@ -252,7 +255,7 @@ const Navbar = () => {
             <a
               key={href}
               href={href}
-              className="py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="flex min-h-11 items-center px-2 text-base text-muted-foreground hover:text-foreground transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
               {label}

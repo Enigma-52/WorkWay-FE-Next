@@ -15,7 +15,7 @@ const bads = [
 
 const ForEmployers = () => {
   return (
-    <section className="relative py-32 bg-surface/30 border-y border-border/60">
+    <section className="relative py-16 md:py-32 bg-surface/30 border-y border-border/60">
       <div className="mx-auto max-w-7xl px-6">
         <div className="text-center max-w-2xl mx-auto mb-16">
           <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-4">

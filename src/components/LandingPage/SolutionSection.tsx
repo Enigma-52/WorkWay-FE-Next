@@ -12,7 +12,7 @@ const SolutionSection = () => {
   ];
 
   return (
-    <section className="py-28 md:py-36 relative overflow-hidden">
+    <section className="py-16 md:py-36 relative overflow-hidden">
       {/* Ambient glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-primary/[0.03] rounded-full blur-[120px]" />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />

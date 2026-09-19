@@ -26,7 +26,7 @@ const sources = [
 
 const SourcesSection = () => {
   return (
-    <section className="relative py-32 noise">
+    <section className="relative py-16 md:py-32 noise">
       <div className="mx-auto max-w-5xl px-6">
         <div className="max-w-2xl mb-14">
           <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-4">

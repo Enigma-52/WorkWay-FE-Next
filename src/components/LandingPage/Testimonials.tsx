@@ -52,7 +52,7 @@ const Testimonials = ({ variant = "full" }: { variant?: "full" | "compact" }) =>
   const items = variant === "compact" ? TESTIMONIALS.slice(0, 3) : TESTIMONIALS;
 
   return (
-    <section className={variant === "full" ? "relative py-32" : "relative py-20"}>
+    <section className={variant === "full" ? "relative py-16 md:py-32" : "relative py-12 md:py-20"}>
       <div className={variant === "full" ? "relative mx-auto max-w-7xl px-6" : "relative mx-auto max-w-6xl px-6"}>
         <div className="mx-auto max-w-2xl text-center mb-16">
           <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-4">

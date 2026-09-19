@@ -250,7 +250,7 @@ export function JobCard({ job }: JobCardProps) {
 
             {/* Skill tags (separate links so no nested anchors) */}
             {skillsList.length > 0 ? (
-              <div className="mt-3 flex flex-wrap gap-1.5">
+              <div className="mt-3 flex flex-wrap gap-1.5 [&>a:nth-child(n+6)]:hidden sm:[&>a:nth-child(n+6)]:inline-flex">
                 {skillsList.slice(0, 10).map((s) => (
                   <Link prefetch={false}
                     key={s.slug}
@@ -260,11 +260,16 @@ export function JobCard({ job }: JobCardProps) {
                     {s.name}
                   </Link>
                 ))}
+                {skillsList.length > 5 ? (
+                  <span className="text-xs text-muted-foreground py-0.5 sm:hidden">
+                    +{skillsList.length - 5}
+                  </span>
+                  ) : null}
                 {skillsList.length > 10 ? (
-                  <span className="text-xs text-muted-foreground py-0.5">
+                  <span className="hidden text-xs text-muted-foreground py-0.5 sm:inline">
                     +{skillsList.length - 10}
                   </span>
-                ) : null}
+                  ) : null}
               </div>
             ) : null}
 

@@ -591,7 +591,7 @@ export default function CompaniesPage() {
                           </span>
                         </div>
                       </div>
-                      <div className="flex items-center gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-all">
+                      <div className="flex items-center gap-1 shrink-0 pointer-fine:opacity-0 pointer-fine:group-hover:opacity-100 transition-all">
                         {alert.company_slug && (
                           <Link prefetch={false}
                             href={`/company/${alert.company_slug}`}
@@ -744,7 +744,7 @@ export default function CompaniesPage() {
                               href={job.url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="shrink-0 p-1.5 rounded-md text-muted-foreground opacity-0 group-hover:opacity-100 hover:text-primary hover:bg-secondary transition-all"
+                              className="shrink-0 p-1.5 rounded-md text-muted-foreground pointer-fine:opacity-0 pointer-fine:group-hover:opacity-100 hover:text-primary hover:bg-secondary transition-all"
                               title="Apply"
                             >
                               <ExternalLink className="w-3.5 h-3.5" />

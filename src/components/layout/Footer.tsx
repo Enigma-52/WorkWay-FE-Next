@@ -146,11 +146,14 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Legal Column */}
-          <div className="hidden md:flex flex-col items-center md:items-end text-center md:text-right">
+          {/* Legal Column — was hidden below md, which removed the
+              privacy/terms/refund links from every phone view (and from
+              mobile-first crawls). Compact wrapped row on small screens,
+              the original column from md up. */}
+          <div className="flex flex-col items-center md:items-end text-center md:text-right">
             <h3 className="mb-4 text-sm font-medium">Legal</h3>
 
-            <div className="flex flex-col gap-3 text-sm text-muted-foreground">
+            <div className="flex flex-wrap justify-center gap-x-4 gap-y-3 text-sm text-muted-foreground md:flex-col md:justify-end md:gap-3">
               <a
                 href="/privacy-policy"
                 className="transition-colors hover:text-foreground"

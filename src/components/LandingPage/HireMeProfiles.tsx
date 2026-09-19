@@ -69,7 +69,7 @@ const HireMeProfiles = () => {
   const samplePath = `/p/${SAMPLE_USERNAME}`;
 
   return (
-    <section className="relative py-32 noise">
+    <section className="relative py-16 md:py-32 noise">
       <div className="mx-auto max-w-6xl px-6">
         {/* Header */}
         <div className="mx-auto max-w-2xl text-center">

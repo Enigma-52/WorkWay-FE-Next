@@ -162,7 +162,7 @@ const Pill = ({ name, slug, logo }: Company) => (
     href={`/company/${slug}`}
     className="group flex items-center justify-center shrink-0 mx-3"
   >
-    <div className="flex items-center gap-3 rounded-2xl border border-border/60 bg-surface/40 backdrop-blur px-6 py-4 hover:bg-surface-elevated hover:border-brand/30 transition-all duration-300">
+    <div className="flex items-center gap-2.5 rounded-xl border border-border/60 bg-surface/40 backdrop-blur px-4 py-2.5 sm:gap-3 sm:rounded-2xl sm:px-6 sm:py-4 hover:bg-surface-elevated hover:border-brand/30 transition-all duration-300">
       <Image
         src={logo}
         alt=""
@@ -172,7 +172,7 @@ const Pill = ({ name, slug, logo }: Company) => (
         sizes="32px"
         loading="lazy"
       />
-      <span className="font-display text-2xl tracking-tight whitespace-nowrap text-foreground/85 group-hover:text-foreground transition-colors">
+      <span className="font-display text-lg sm:text-2xl tracking-tight whitespace-nowrap text-foreground/85 group-hover:text-foreground transition-colors">
         {name}
       </span>
     </div>
@@ -197,9 +197,9 @@ function Row({ items, reverse }: { items: Company[]; reverse?: boolean }) {
 }
 
 const CompanyLogoScroll = () => (
-  <section className="relative py-24 border-y border-border/60 bg-surface/30">
+  <section className="relative py-12 md:py-24 border-y border-border/60 bg-surface/30">
     <div className="absolute inset-0 bg-radial-gradient pointer-events-none opacity-50" />
-    <div className="relative mx-auto max-w-7xl px-6 mb-12 text-center">
+    <div className="relative mx-auto max-w-7xl px-6 mb-8 text-center md:mb-12">
       <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-muted-foreground">
         <span className="h-px w-8 bg-border" />
         Companies hiring on WorkWay

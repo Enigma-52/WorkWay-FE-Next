@@ -54,7 +54,7 @@ const ProAlertsSpotlight = async () => {
   const ctaLabel = await getProCtaLabel();
 
   return (
-    <section className="relative py-32 overflow-hidden">
+    <section className="relative py-16 md:py-32 overflow-hidden">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-brand/10 blur-[140px] pointer-events-none" />
       <div className="relative mx-auto max-w-6xl px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-center">

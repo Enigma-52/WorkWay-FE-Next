@@ -11,6 +11,24 @@
   }
 }
 
+/* Tailwind v4's `container` is only a max-width — no centering and no
+   gutter (v3 configs usually added `padding: 1rem`). Below the `sm`
+   breakpoint it has no max-width either, so every `container` without an
+   explicit `px-*` rendered flush against the phone's edge. Give it the same
+   gutter the hand-padded `max-w-7xl` sections already use
+   (px-4 sm:px-6 lg:px-8) so both layouts line up; explicit `px-*` classes on
+   the same element still win as before. */
+@utility container {
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @variant sm {
+    padding-inline: 1.5rem;
+  }
+  @variant lg {
+    padding-inline: 2rem;
+  }
+}
+
 /* -----------------------------
    THEME MAPPING (TAILWIND v4)
 ----------------------------- */

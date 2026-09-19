@@ -122,6 +122,13 @@ const JobSection = ({
   content,
   skills = [],
 }: JobSectionProps) => {
+  // Some ATS descriptions come through with lines that are only a stray
+  // backslash (markdown line-break escapes) or whitespace — drop those and
+  // strip a trailing "\" so they don't render as empty bullets.
+  const lines = content
+    .map((item) => item.replace(/\\+\s*$/, "").trim())
+    .filter((item) => item.length > 0);
+  if (lines.length === 0) return null;
   return (
     <section className="job-card">
       <h3
@@ -131,12 +138,12 @@ const JobSection = ({
         {heading.length > 80 ? heading.slice(0, 80).trim() + "…" : heading}
       </h3>
       <ul className="space-y-3">
-        {content.map((item, i) => (
+        {lines.map((item, i) => (
           <li
             key={i}
             className="flex items-start gap-3 text-muted-foreground leading-relaxed"
           >
-            {content.length > 1 && (
+            {lines.length > 1 && (
               <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
             )}
             <span className="break-words [overflow-wrap:anywhere]">

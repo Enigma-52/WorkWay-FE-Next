@@ -18,7 +18,7 @@ const pains = [
 
 const ProblemSection = () => {
   return (
-    <section className="relative py-32 noise">
+    <section className="relative py-16 md:py-32 noise">
       <div className="mx-auto max-w-6xl px-6">
         <div className="text-center mb-16">
           <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-4">

@@ -42,7 +42,7 @@ const features = [
 
 const Features = () => {
   return (
-    <section id="features" className="relative py-32">
+    <section id="features" className="relative py-16 md:py-32">
       <div className="absolute inset-0 bg-radial-gradient opacity-40 pointer-events-none" />
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="text-center max-w-2xl mx-auto mb-20">

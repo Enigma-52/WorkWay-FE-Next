@@ -3,7 +3,7 @@ import { ArrowRight, Search, Sparkles } from "lucide-react";
 
 const Hero = () => {
   return (
-    <section className="relative overflow-hidden pt-10 pb-24 sm:pt-10 sm:pb-32 noise">
+    <section className="relative overflow-hidden pt-8 pb-16 sm:pt-10 sm:pb-32 noise">
       <div className="absolute inset-0 grid-bg pointer-events-none" />
       <div className="absolute inset-0 bg-hero-gradient pointer-events-none" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-brand/10 blur-[120px] pointer-events-none" />

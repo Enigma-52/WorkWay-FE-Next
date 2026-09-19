@@ -149,7 +149,7 @@ export default function TalentsPageClient({ data }: Props) {
               </div>
 
               <Select value={category} onValueChange={setFilter("category")}>
-                <SelectTrigger className="w-full md:w-[190px] bg-secondary border-border rounded-lg" aria-label="Filter by job title">
+                <SelectTrigger className="w-[calc(50%-0.375rem)] md:w-[190px] bg-secondary border-border rounded-lg" aria-label="Filter by job title">
                   <SelectValue placeholder="Job titles" />
                 </SelectTrigger>
                 <SelectContent>
@@ -163,7 +163,7 @@ export default function TalentsPageClient({ data }: Props) {
               </Select>
 
               <Select value={skills} onValueChange={setFilter("skills")}>
-                <SelectTrigger className="w-full md:w-[160px] bg-secondary border-border rounded-lg" aria-label="Filter by skill">
+                <SelectTrigger className="w-[calc(50%-0.375rem)] md:w-[160px] bg-secondary border-border rounded-lg" aria-label="Filter by skill">
                   <SelectValue placeholder="Skills" />
                 </SelectTrigger>
                 <SelectContent>
@@ -177,7 +177,7 @@ export default function TalentsPageClient({ data }: Props) {
               </Select>
 
               <Select value={languages} onValueChange={setFilter("languages")}>
-                <SelectTrigger className="w-full md:w-[160px] bg-secondary border-border rounded-lg" aria-label="Filter by language">
+                <SelectTrigger className="w-[calc(50%-0.375rem)] md:w-[160px] bg-secondary border-border rounded-lg" aria-label="Filter by language">
                   <SelectValue placeholder="Languages" />
                 </SelectTrigger>
                 <SelectContent>
@@ -191,7 +191,7 @@ export default function TalentsPageClient({ data }: Props) {
               </Select>
 
               <Select value={experienceLevel} onValueChange={setFilter("experience_level")}>
-                <SelectTrigger className="w-full md:w-[150px] bg-secondary border-border rounded-lg" aria-label="Filter by experience level">
+                <SelectTrigger className="w-[calc(50%-0.375rem)] md:w-[150px] bg-secondary border-border rounded-lg" aria-label="Filter by experience level">
                   <SelectValue placeholder="Experience" />
                 </SelectTrigger>
                 <SelectContent>
@@ -205,7 +205,7 @@ export default function TalentsPageClient({ data }: Props) {
               </Select>
 
               <Select value={availabilityStatus} onValueChange={setFilter("availability_status")}>
-                <SelectTrigger className="w-full md:w-[170px] bg-secondary border-border rounded-lg" aria-label="Filter by availability">
+                <SelectTrigger className="w-[calc(50%-0.375rem)] md:w-[170px] bg-secondary border-border rounded-lg" aria-label="Filter by availability">
                   <SelectValue placeholder="Availability" />
                 </SelectTrigger>
                 <SelectContent>

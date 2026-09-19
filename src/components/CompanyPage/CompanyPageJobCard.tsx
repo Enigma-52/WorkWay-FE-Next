@@ -54,14 +54,17 @@ export function JobCard({ job }: JobCardProps) {
   };
 
   return (
-    <div className="group flex flex-col px-5 py-4 hover:bg-secondary/50 transition-all duration-200 border-b border-border last:border-b-0 relative">
+    // Phones: title/meta stack above the date + actions row (the fixed-width
+    // actions block was squeezing the title into ~100px and truncating it to
+    // "Model Po…"). From sm up it is the original single row.
+    <div className="group flex flex-col px-4 py-4 hover:bg-secondary/50 transition-all duration-200 border-b border-border last:border-b-0 relative sm:px-5">
       <Link prefetch={false}
         href={`/job/${job.slug}`}
-        className="flex items-center justify-between flex-1 min-w-0"
+        className="flex flex-col gap-3 flex-1 min-w-0 sm:flex-row sm:items-center sm:justify-between sm:gap-0"
       >
         <div className="flex-1 min-w-0 pr-2">
           <div className="flex items-center gap-2 flex-wrap">
-            <h3 className="font-medium text-foreground group-hover:text-primary transition-colors truncate">
+            <h3 className="font-medium text-foreground group-hover:text-primary transition-colors line-clamp-2 sm:truncate">
               {job.title}
             </h3>
             {isApplied && (
@@ -71,7 +74,7 @@ export function JobCard({ job }: JobCardProps) {
               </span>
             )}
           </div>
-          <div className="flex items-center gap-4 mt-1.5 text-sm text-muted-foreground flex-wrap">
+          <div className="flex items-center gap-x-3 gap-y-1.5 mt-1.5 text-sm text-muted-foreground flex-wrap sm:gap-4">
             <span className="inline-flex items-center gap-1.5">
               <MapPin className="w-3.5 h-3.5" />
               {job.location}
@@ -91,7 +94,7 @@ export function JobCard({ job }: JobCardProps) {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center justify-between gap-2 shrink-0 sm:justify-start">
           <span className="text-xs text-muted-foreground font-mono" suppressHydrationWarning>
             {formatDate(job.updated_at)}
           </span>
@@ -103,12 +106,12 @@ export function JobCard({ job }: JobCardProps) {
             location={job.location}
             employmentType={job.employment_type}
             jobUrl={job.url}
-            className="opacity-0 group-hover:opacity-100 transition-opacity"
+            className="pointer-fine:opacity-0 pointer-fine:group-hover:opacity-100 transition-opacity"
           />
           <Button
             size="sm"
             variant="ghost"
-            className="opacity-0 group-hover:opacity-100 transition-opacity hover:bg-primary hover:text-primary-foreground"
+            className="pointer-fine:opacity-0 pointer-fine:group-hover:opacity-100 transition-opacity hover:bg-primary hover:text-primary-foreground"
             asChild
           >
             <a href={job.url} target="_blank" rel="noopener noreferrer">

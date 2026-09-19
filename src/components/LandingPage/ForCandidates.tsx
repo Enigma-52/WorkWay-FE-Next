@@ -27,7 +27,7 @@ const ForCandidates = () => {
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
       viewport={{ once: true, margin: "-100px" }}
-      className="py-28 md:py-36"
+      className="py-16 md:py-36"
     >
       <div className="container px-4">
         <div className="max-w-5xl mx-auto">

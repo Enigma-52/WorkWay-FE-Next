@@ -112,7 +112,7 @@ const JobCard = ({
           location={location}
           employmentType={employment_type}
           jobUrl={url ?? null}
-          className="relative z-10 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+          className="relative z-10 pointer-fine:opacity-0 pointer-fine:group-hover:opacity-100 transition-opacity shrink-0"
         />
       </div>
 
@@ -189,7 +189,7 @@ const JobCard = ({
       </div>
 
       {skillsList.length > 0 ? (
-        <div className="mt-2 flex flex-wrap gap-1.5">
+        <div className="mt-2 flex flex-wrap gap-1.5 [&>a:nth-child(n+6)]:hidden sm:[&>a:nth-child(n+6)]:inline-flex">
           {skillsList.slice(0, 8).map((s) => (
             <Link prefetch={false}
               key={s.slug}
@@ -199,11 +199,16 @@ const JobCard = ({
               {s.name}
             </Link>
           ))}
+          {skillsList.length > 5 ? (
+            <span className="text-xs text-muted-foreground py-0.5 sm:hidden">
+              +{skillsList.length - 5}
+            </span>
+            ) : null}
           {skillsList.length > 8 ? (
-            <span className="text-xs text-muted-foreground py-0.5">
+            <span className="hidden text-xs text-muted-foreground py-0.5 sm:inline">
               +{skillsList.length - 8}
             </span>
-          ) : null}
+            ) : null}
         </div>
       ) : null}
     </div>

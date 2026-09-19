@@ -17,7 +17,7 @@ const WhatWeAreNot = () => {
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
       viewport={{ once: true, margin: "-100px" }}
-      className="py-28 md:py-36 border-y border-white/[0.04]"
+      className="py-16 md:py-36 border-y border-white/[0.04]"
     >
       <div className="container px-4">
         <div className="max-w-3xl mx-auto text-center">

@@ -22,7 +22,7 @@ const AISection = () => {
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
       viewport={{ once: true, margin: "-100px" }}
-      className="py-28 md:py-36 border-y border-white/[0.04] relative"
+      className="py-16 md:py-36 border-y border-white/[0.04] relative"
     >
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-primary/[0.02] rounded-full blur-[100px]" />
 

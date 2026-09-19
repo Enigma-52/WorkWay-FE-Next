@@ -14,7 +14,7 @@ const SocialProof = () => {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7 }}
       viewport={{ once: true, margin: "-100px" }}
-      className="py-20 border-y border-white/[0.06]"
+      className="py-12 md:py-20 border-y border-white/[0.06]"
     >
       <div className="container px-4">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-3xl mx-auto">

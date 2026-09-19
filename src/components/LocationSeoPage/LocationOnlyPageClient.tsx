@@ -153,7 +153,7 @@ export default function LocationOnlyPageClient({ data, location }: Props) {
           </div>
 
           {/* Center — filters + job list */}
-          <div className="min-w-0 space-y-6">
+          <div className="order-1 min-w-0 space-y-6 lg:order-none">
             {/* Role + Location selectors */}
             <div className="space-y-5 md:space-y-4">
               <div className="flex flex-wrap items-center gap-y-4 gap-x-3 md:gap-y-3">
@@ -347,7 +347,9 @@ export default function LocationOnlyPageClient({ data, location }: Props) {
           </div>
 
           {/* Right sidebar — live activity feed */}
-          <div className="hidden lg:block lg:sticky lg:top-24 lg:self-start">
+          {/* Live feed — below the list on phones (grid order), sticky rail on lg.
+              Same DOM at every width so mobile-first crawlers see it too. */}
+          <div className="order-3 lg:order-none lg:sticky lg:top-24 lg:self-start">
             <JobViewFeed />
           </div>
         </div>

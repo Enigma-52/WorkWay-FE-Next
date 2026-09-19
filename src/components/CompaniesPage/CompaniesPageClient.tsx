@@ -159,7 +159,10 @@ export default function CompaniesPageClient({
 
           {displayedCompanies.length > 0 ? (
             <>
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {/* Explicit grid-cols-1: an implicit single column is `auto`-sized
+                  and grew to a card's min-content width (418px on a 393px phone),
+                  which made the whole page scroll sideways. */}
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {displayedCompanies.map((company) => (
                   <CompanyCard key={company.id} company={company} />
                 ))}
